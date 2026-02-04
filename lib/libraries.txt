@@ -1,0 +1,3 @@
+static libraries that belong in this directory:
+
+- libraylib.a
