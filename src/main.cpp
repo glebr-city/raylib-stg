@@ -1,7 +1,15 @@
 #include <array>
 #include <iostream>
+#include <memory>
 #include <raylib.h>
 #include <raymath.h>
+#include <vector>
+
+#include "Player.h"
+#include "../include/StepThinker.h"
+
+constexpr int gameScreenWidth = 120;
+constexpr int gameScreenHeight = 180;
 
 std::array<int, 3> AdjustLetterbox() {
     int zoomFactor = 1;
@@ -9,15 +17,13 @@ std::array<int, 3> AdjustLetterbox() {
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
     float aspectRatio = static_cast<float>(screenHeight) / static_cast<float>(screenWidth);
-    //std::cout << "thingy: "+ std::to_string(aspectRatio) << std::endl;
     if (aspectRatio < 1.5f) {
-        zoomFactor = screenHeight / 180;
+        zoomFactor = screenHeight / gameScreenHeight;
     } else {
-        zoomFactor = screenWidth / 120;
+        zoomFactor = screenWidth / gameScreenWidth;
     }
-    letterboxSize.x = ((screenWidth) - (120 * zoomFactor)) / 2;
-    letterboxSize.y = ((screenHeight) - (180 * zoomFactor)) / 2;
-    std::cout << "letterbox size: " << std::to_string(letterboxSize.x) << "    " << std::to_string(letterboxSize.y) << std::endl;
+    letterboxSize.x = ((screenWidth) - (gameScreenWidth * zoomFactor)) / 2;
+    letterboxSize.y = ((screenHeight) - (gameScreenHeight * zoomFactor)) / 2;
     const int x = floor(letterboxSize.x);
     const int y = floor(letterboxSize.y);
     return {zoomFactor, x, y};
@@ -26,10 +32,11 @@ std::array<int, 3> AdjustLetterbox() {
 int main() {
     ChangeDirectory(GetApplicationDirectory());
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(120, 180, "raylib");
-    int zoomFactor = 1;//std::min(GetScreenHeight() / 180, GetScreenWidth() / 120);
+    InitWindow(gameScreenWidth * 3, gameScreenHeight * 3, "raylib");
+    SetWindowMinSize(gameScreenWidth, gameScreenHeight);
+    int zoomFactor = 3;
     Vector2 letterboxSize = {0, 0};
-    Texture2D playerSpriteSheet = LoadTexture("resources/playerSpriteSheet.png");
+    const Texture2D playerSpriteSheet = LoadTexture("resources/playerSpriteSheet.png");
     Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
     Camera2D camera = { 0 };
     camera.zoom = zoomFactor; // NOLINT(*-narrowing-conversions)
@@ -48,6 +55,14 @@ int main() {
             camera.zoom = zoomFactor;
         }
         currentFrame++;
+        std::vector<std::unique_ptr<StepThinker>> tempArray;
+        tempArray.push_back(std::make_unique<Player>());
+        tempArray.push_back(std::make_unique<StepThinker>());
+        for (auto& step_thinker : tempArray) {
+            step_thinker->PreStep();
+        }
+        //Player::PreStep();
+        //StepThinker::PreStep();
         playerPosition.y += 0.25f;
         if (currentFrame % 20 == 0) {
             playerRect.x = static_cast<int>(playerRect.x + (playerRect.width)) % playerSpriteSheet.width; // NOLINT(*-narrowing-conversions)
@@ -55,7 +70,7 @@ int main() {
         BeginDrawing();
         ClearBackground(BLACK);
         //DrawRectangleRec(playerRect, DARKGRAY);
-        BeginScissorMode(letterboxSize.x, letterboxSize.y, 120 * zoomFactor, 180.0f * zoomFactor);
+        BeginScissorMode(letterboxSize.x, letterboxSize.y, gameScreenWidth * zoomFactor, gameScreenHeight * zoomFactor);
         BeginMode2D(camera);
         DrawRectangle(0, 0, 10000, 10000, DARKGRAY);
         DrawTextureRec(playerSpriteSheet, playerRect, playerPosition, WHITE);
