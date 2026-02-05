@@ -6,6 +6,16 @@ add_executable(raylib_stg src/main.cpp
         src/Player.cpp
         include/Player.h
         include/GlobalVariables.h
+        include/InputHandler.cpp
+        include/InputHandler.h
+        src/Bullet.cpp
+        include/Bullet.h
+        src/SimpleBullet.cpp
+        include/SimpleBullet.h
+        src/SpriteHandler.cpp
+        include/SpriteHandler.h
+        src/SimpleBullet1.cpp
+        include/SimpleBullet1.h
 )
 
 

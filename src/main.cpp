@@ -9,6 +9,8 @@
 #include <StepThinker.h>
 
 #include "GlobalVariables.h"
+#include "SimpleBullet1.h"
+#include "SpriteHandler.h"
 
 std::vector<std::unique_ptr<StepThinker>> step_thinkers;
 
@@ -19,9 +21,9 @@ std::array<int, 3> AdjustLetterbox() {
     int screenHeight = GetScreenHeight();
     float aspectRatio = static_cast<float>(screenHeight) / static_cast<float>(screenWidth);
     if (aspectRatio < 1.5f) {
-        zoomFactor = screenHeight / gameHeight();
+        zoomFactor = std::fmaxf(2.0f, floor(screenHeight / gameHeight() / 2) * 2);
     } else {
-        zoomFactor = screenWidth / gameWidth();
+        zoomFactor = std::fmaxf(2.0f, floor(screenWidth / gameWidth() / 2) * 2);
     }
     letterboxSize.x = ((screenWidth) - (gameWidth() * zoomFactor)) / 2;
     letterboxSize.y = ((screenHeight) - (gameHeight() * zoomFactor)) / 2;
@@ -33,21 +35,28 @@ std::array<int, 3> AdjustLetterbox() {
 int main() {
     ChangeDirectory(GetApplicationDirectory());
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(gameWidth() * 3, gameHeight() * 3, "raylib");
-    SetWindowMinSize(gameWidth(), gameHeight());
-    int zoomFactor = 3;
+    InitWindow(1280, 1280, "raylib");
+    SetWindowMinSize(gameWidth() * 2, gameHeight() * 2);
+    SpriteHandler::InitAnimatedSprites(); //Need to initialise this after the window.
+    int zoomFactor = 2;
     Vector2 letterboxSize = {0, 0};
     Camera2D camera = { 0 };
     camera.zoom = zoomFactor; // NOLINT(*-narrowing-conversions)
     camera.offset = {letterboxSize.x, letterboxSize.y};
 
-    step_thinkers.push_back(std::make_unique<Player>(Vector2()));
+    step_thinkers.push_back(std::make_unique<Player>(Vector2 {60, 140}));
     step_thinkers.push_back(std::make_unique<StepThinker>());
 
-    SetTargetFPS(60);
+    SetTargetFPS(120);
+    std::array<int, 3> resizeValues = AdjustLetterbox();
+    zoomFactor = resizeValues[0];
+    letterboxSize.x = static_cast<float>(resizeValues[1]);
+    letterboxSize.y = static_cast<float>(resizeValues[2]);
+    camera.offset = {letterboxSize.x, letterboxSize.y};
+    camera.zoom = zoomFactor;
     while (!WindowShouldClose()) {
         if (IsWindowResized()) {
-            std::array<int, 3> resizeValues = AdjustLetterbox();
+            resizeValues = AdjustLetterbox();
             zoomFactor = resizeValues[0];
             letterboxSize.x = static_cast<float>(resizeValues[1]);
             letterboxSize.y = static_cast<float>(resizeValues[2]);
@@ -55,21 +64,22 @@ int main() {
             camera.zoom = zoomFactor;
         }
         currentStep()++;
-        //Player::PreStep();
-        //StepThinker::PreStep();
+        SpriteHandler::AdvanceAnimation();
         BeginDrawing();
+        if (currentStep() % 20 == 0) {
+            float tempX = currentStep() % 120;
+            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, 0}, Vector2 {0, 1}));
+        }
         ClearBackground(BLACK);
+        DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth() * zoomFactor + 2, gameHeight() * zoomFactor + 2, DARKGRAY);
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth() * zoomFactor, gameHeight() * zoomFactor);
         BeginMode2D(camera);
-        DrawRectangle(0, 0, 10000, 10000, DARKGRAY);
         for (auto& step_thinker : step_thinkers) {
             step_thinker->PreStep();
         }
         EndMode2D();
         EndScissorMode();
-        //DrawRectangleRec(letterboxLeft, BLACK);
-        //DrawRectangleRec(letterboxRight, BLACK);
-        DrawText("raylib text 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18", 100, 100, 50, RAYWHITE);
+        DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);
         EndDrawing();
     }
 
