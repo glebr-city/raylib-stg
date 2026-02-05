@@ -5,6 +5,7 @@ add_executable(raylib_stg src/main.cpp
         include/StepThinker.h
         src/Player.cpp
         include/Player.h
+        include/GlobalVariables.h
 )
 
 

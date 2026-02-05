@@ -6,9 +6,13 @@
 #define RAYLIB_STG_PLAYER_H
 #include <StepThinker.h>
 
+#include "raylib.h"
+
 
 class Player : public StepThinker{
     public:
+    explicit Player(Vector2 pos);
+
     void PreStep() override;
 };
 

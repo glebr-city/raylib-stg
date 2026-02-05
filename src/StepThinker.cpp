@@ -7,6 +7,7 @@
 #include <iostream>
 #include <ostream>
 
-    void StepThinker::PreStep() {
-        std::cout << "StepThinker PreStep" << std::endl;
+#include "GlobalVariables.h"
+
+void StepThinker::PreStep() {
 };
