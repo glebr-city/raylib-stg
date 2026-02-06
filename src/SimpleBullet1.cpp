@@ -27,11 +27,11 @@ SimpleBullet1::SimpleBullet1(GameObjectHandler & handler, const Vector2 pos, con
 }
 
 void SimpleBullet1::PreStep() {
-    position = Vector2Add(position, direction * speed);
     SpriteHandler::DrawMyAnimatedSprite(sprite, position, color);
 }
 
 void SimpleBullet1::doPhysics(Vector2 playerPosition) {
+    position = Vector2Add(position, direction * speed);
     if (Vector2Distance(position, playerPosition) <= radius) {
         std::cout << currentStep() << ": Bullet collided!!!!!!!!!!!" << std::endl;
     }

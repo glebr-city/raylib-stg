@@ -13,8 +13,8 @@
 #include "raymath.h"
 #include "SpriteHandler.h"
 Vector2 position;
-constexpr float speed = 1.25f;
-constexpr float focusSpeed = 0.6f;
+constexpr float speed = 0.6f;
+constexpr float focusSpeed = 0.25f;
 const float* currentSpeed = &speed;
 bool leftDown = false;
 bool rightDown = false;
@@ -80,10 +80,13 @@ void Player::PreStep() {
     }
     playerRect.y = -inputVector.x * playerRect.height;
     Vector2Normalize(inputVector);
-    position += inputVector * *currentSpeed;
-    position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth()),static_cast<float>(gameHeight())});
     Vector2 spritePosition {position.x - 6.5f, position.y - 6.5f};
     DrawTextureRec(playerSpriteSheet, playerRect, spritePosition, WHITE);
 
     //std::cout << "Player PreStep, " << std::to_string(leftKeys[0]) << std::endl;
+}
+
+void Player::doPhysics(Vector2 pos) {
+    position += inputVector * *currentSpeed;
+    position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth()),static_cast<float>(gameHeight())});
 }

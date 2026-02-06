@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 
+#include "Player.h"
 #include "raylib.h"
 
 
@@ -16,12 +17,13 @@ class StepThinker;
 class GameObjectHandler {
 private:
     std::vector<std::unique_ptr<StepThinker>> step_thinkers;
+    int stepCount = 1;
 public:
-    GameObjectHandler();
+    GameObjectHandler(int _stepCount);
     virtual ~GameObjectHandler();
     void addStepThinker(std::unique_ptr<StepThinker> thinker);
-    void doPreStep();
-    void doPhysics(Vector2 playerPosition);
+    void doPreStep(Player player);
+    void doPhysics(Player player, Vector2 playerPosition);
     int getObjectCount();
 };
 

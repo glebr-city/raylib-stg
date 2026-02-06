@@ -11,7 +11,7 @@
 class SimpleBullet1 : public SimpleBullet{
     private:
     static constexpr float radius = 2.5f;
-    static constexpr float speed = 1;
+    static constexpr float speed = 0.4f;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 position{};
     Vector2 direction{};
