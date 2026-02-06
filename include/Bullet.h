@@ -11,6 +11,7 @@
 
 class Bullet  : public StepThinker, PhysicsObject{
 public:
+ void doPhysics(Vector2 playerPosition) override = 0;
  Bullet(Vector2 pos);
 private:
  static const float radius;

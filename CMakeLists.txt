@@ -19,7 +19,9 @@ add_executable(raylib_stg src/main.cpp
         src/PhysicsObject.cpp
         include/PhysicsObject.h
         src/GameObject.cpp
-        src/GameObject.h
+        include/GameObject.h
+        src/GameObjectHandler.cpp
+        include/GameObjectHandler.h
 )
 
 target_sources(raylib_stg
@@ -29,6 +31,9 @@ target_sources(raylib_stg
 
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+cmake_policy(SET CMP0076 NEW)
+
 
 
 add_library(raylib STATIC IMPORTED)

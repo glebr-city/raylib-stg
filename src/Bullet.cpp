@@ -4,6 +4,7 @@
 
 #include <Bullet.h>
 
+
 Bullet::Bullet(const Vector2 pos) {
     position = pos;
 }

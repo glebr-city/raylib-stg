@@ -3,9 +3,5 @@
 //
 
 #include "../include/PhysicsObject.h"
-
+#include <GameObject.h>
 #include "raylib.h"
-
-void PhysicsObject::doPhysics(Vector2 playerPos) {
-
-}

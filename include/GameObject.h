@@ -6,8 +6,13 @@
 #define RAYLIB_STG_GAMEOBJECT_H
 
 
+class GameObjectHandler;
+
 class GameObject {
-    virtual ~GameObject() = default;
+protected:
+    GameObject() = default;
+public:
+    virtual ~GameObject();
 };
 
 

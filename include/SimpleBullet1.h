@@ -10,16 +10,19 @@
 
 class SimpleBullet1 : public SimpleBullet{
     private:
-    static constexpr float radius = 1;
-    static constexpr float speed = 1.0f;
-    Vector2 position;
-    Vector2 direction;
+    static constexpr float radius = 2.5f;
+    static constexpr float speed = 0.1f;
+    Vector2 position{};
+    Vector2 direction{};
     Color color = WHITE;
 public:
-    SimpleBullet1(const Vector2 pos, const Vector2 dir);
-    SimpleBullet1(const Vector2 pos, const Vector2 dir, Color col);
+    SimpleBullet1(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir);
+    SimpleBullet1(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir, Color col);
+    //static void Create(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir);
+    //static void Create(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir, Color col);
 private:
-    void PreStep();
+    void PreStep() override;
+    void doPhysics(Vector2 playerPosition) override;
 };
 
 

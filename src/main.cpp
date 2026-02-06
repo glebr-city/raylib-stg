@@ -8,13 +8,13 @@
 #include <Player.h>
 #include <StepThinker.h>
 
+#include "GameObjectHandler.h"
 #include "GlobalVariables.h"
 #include "PhysicsObject.h"
 #include "SimpleBullet1.h"
 #include "SpriteHandler.h"
 
-std::vector<std::unique_ptr<StepThinker>> step_thinkers;
-std::vector<std::unique_ptr<PhysicsObject>> physics_objects;
+
 
 std::array<int, 3> AdjustLetterbox() {
     int zoomFactor = 1;
@@ -54,9 +54,10 @@ int main() {
     camera.offset = {letterboxSize.x, letterboxSize.y};
 
     Player player {Vector2 {60, 140}};
+    GameObjectHandler gameObjectHandler = GameObjectHandler();
 
 
-    SetTargetFPS(120);
+    SetTargetFPS(1000);
     std::array<int, 3> resizeValues = AdjustLetterbox();
     zoomFactor = resizeValues[0];
     letterboxSize.x = static_cast<float>(resizeValues[1]);
@@ -76,36 +77,37 @@ int main() {
         SpriteHandler::AdvanceAnimation();
         BeginDrawing();
 
-        if (currentStep() % 23 == 0) {
+        if (currentStep() % 5 == 0) {
             int tempCurrentStep = currentStep();
             float tempX = (65 - static_cast<float>(tempCurrentStep % 50) / 5);
-            SimpleBullet1 tempBullet = SimpleBullet1 {Vector2 {tempX, -1}, Vector2 {0, 1}, RED};
+            SimpleBullet1 {gameObjectHandler, Vector2 {tempX, -1}, Vector2 {0, 1}, RED};
             //CreateObject(tempBullet, tempBullet);
         }
 
-        if (currentStep() % 20 == 0) {
+        if (currentStep() % 2 == 0) {
             int tempCurrentStep = currentStep();
             float tempX = (tempCurrentStep % 240 + static_cast<float>(tempCurrentStep % 30 / 3)) / 2;
             Color clr {160, 160, 160, 255};
-            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
+            //step_thinkers->push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
+            SimpleBullet1 {gameObjectHandler, Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
             tempX = 120 - tempX;
-            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
-        } else if (currentStep() % 20 == 3) {
+            SimpleBullet1 {gameObjectHandler, Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
+        } else if (currentStep() % 5 == 3) {
             int tempCurrentStep = currentStep();
             float tempX = (tempCurrentStep % 240 + static_cast<float>(tempCurrentStep % 30 / 3)) / 2;
             Color clr {255, 100, 100, 255};
             tempX = 90 - (static_cast<int>(floor(tempX)) % 20);
-            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
+            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
             tempX = 30 + (static_cast<int>(floor(tempX)) % 20);
-            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
+            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
         }  else if (currentStep() % 20 == 10) {
             int tempCurrentStep = currentStep();
             float tempX = (tempCurrentStep % 240 + static_cast<float>(tempCurrentStep % 30 / 3)) / 2;
             Color clr {255, 75, 75, 255};
             tempX = 120 - (static_cast<int>(floor(tempX)) % 20);
-            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
+            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
             tempX = (static_cast<int>(floor(tempX)) % 20);
-            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
+            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
         }
 
         ClearBackground(BLACK);
@@ -113,16 +115,15 @@ int main() {
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth() * zoomFactor, gameHeight() * zoomFactor);
         BeginMode2D(camera);
         player.PreStep();
-        for (auto& step_thinker : step_thinkers) {
-            step_thinker->PreStep();
-            //step_thinker->doPhysics(player.getPosition());
-        }
+        gameObjectHandler.doPreStep();
         EndMode2D();
         EndScissorMode();
-        std::string tempStr = std::to_string(zoomFactor);
-        //tempStr.append("\n ");
-        DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);
+        std::string tempStr = "Bullet Count: ";
+        tempStr.append(std::to_string(gameObjectHandler.getObjectCount()));
+        DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);
+        //DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);
         DrawFPS(100, 150);
         EndDrawing();
+        gameObjectHandler.doPhysics(player.getPosition());
     }
 }

@@ -75,7 +75,6 @@ void Player::PreStep() {
     else if (InputHandler::CheckInputsReleased(focusKeys)) {
         currentSpeed = &speed;
     }
-
     if (currentStep() % 40 == 0) {
         playerRect.x = static_cast<int>(playerRect.x + playerRect.width) % playerSpriteSheet.width; // NOLINT(*-narrowing-conversions)
     }

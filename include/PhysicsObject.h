@@ -8,12 +8,11 @@
 #include "raylib.h"
 
 
-class PhysicsObject : public GameObject {
+class PhysicsObject{
 public:
-    ~PhysicsObject() override = delete;
+    virtual ~PhysicsObject() = default;
 
-private:
-    virtual void doPhysics(Vector2 playerPos);
+    virtual void doPhysics(Vector2 playerPosition) = 0;
 };
 
 
