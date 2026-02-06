@@ -6,7 +6,7 @@ add_executable(raylib_stg src/main.cpp
         src/Player.cpp
         include/Player.h
         include/GlobalVariables.h
-        include/InputHandler.cpp
+        src/InputHandler.cpp
         include/InputHandler.h
         src/Bullet.cpp
         include/Bullet.h
@@ -16,10 +16,20 @@ add_executable(raylib_stg src/main.cpp
         include/SpriteHandler.h
         src/SimpleBullet1.cpp
         include/SimpleBullet1.h
+        src/PhysicsObject.cpp
+        include/PhysicsObject.h
+        src/GameObject.cpp
+        src/GameObject.h
 )
 
+target_sources(raylib_stg
+        PUBLIC
+        src/main.cpp
+)
 
 set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 
 add_library(raylib STATIC IMPORTED)
 set_target_properties(raylib PROPERTIES

@@ -13,7 +13,9 @@
 #include "raymath.h"
 #include "SpriteHandler.h"
 Vector2 position;
-constexpr float speed = 0.75f;
+constexpr float speed = 1.25f;
+constexpr float focusSpeed = 0.6f;
+const float* currentSpeed = &speed;
 bool leftDown = false;
 bool rightDown = false;
 bool upDown = false;
@@ -23,6 +25,7 @@ static constexpr std::array<KeyboardKey, 3> leftKeys = {KEY_P, KEY_LEFT, KEY_A};
 static constexpr std::array<KeyboardKey, 3> rightKeys = {KEY_RIGHT, KEY_RIGHT_BRACKET, KEY_D};
 static constexpr std::array<KeyboardKey, 3> upKeys = {KEY_UP, KEY_RIGHT_ALT, KEY_W};
 static constexpr std::array<KeyboardKey, 3> downKeys = {KEY_DOWN, KEY_LEFT_BRACKET, KEY_S};
+static constexpr std::array<KeyboardKey, 3> focusKeys = {KEY_LEFT_SHIFT, KEY_RIGHT_SHIFT, KEY_SPACE};
 Vector2 inputVector {0, 0};
 Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 
@@ -31,7 +34,9 @@ Player::Player(Vector2 pos) {
     position = pos;
 }
 
-
+Vector2 Player::getPosition() {
+    return position;
+}
 void Player::PreStep() {
     if (InputHandler::CheckInputsPressed(leftKeys))
         inputVector.x = -1;
@@ -65,14 +70,18 @@ void Player::PreStep() {
             inputVector.y = 0;
     }
 
-
+    if (InputHandler::CheckInputsPressed(focusKeys))
+        currentSpeed = &focusSpeed;
+    else if (InputHandler::CheckInputsReleased(focusKeys)) {
+        currentSpeed = &speed;
+    }
 
     if (currentStep() % 40 == 0) {
         playerRect.x = static_cast<int>(playerRect.x + playerRect.width) % playerSpriteSheet.width; // NOLINT(*-narrowing-conversions)
     }
     playerRect.y = -inputVector.x * playerRect.height;
     Vector2Normalize(inputVector);
-    position += inputVector * speed;
+    position += inputVector * *currentSpeed;
     position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth()),static_cast<float>(gameHeight())});
     Vector2 spritePosition {position.x - 6.5f, position.y - 6.5f};
     DrawTextureRec(playerSpriteSheet, playerRect, spritePosition, WHITE);

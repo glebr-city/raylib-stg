@@ -10,8 +10,9 @@
 class SimpleBullet : public Bullet {
 public:
     SimpleBullet(Vector2 pos);
+    void doPhysics(Vector2 playerPos) override;
 private:
-    static const float radius;
+    static constexpr float radius = 0.5f;
     Vector2 position{};
 
 };

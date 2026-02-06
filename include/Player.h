@@ -14,6 +14,7 @@ class Player : public StepThinker{
     explicit Player(Vector2 pos);
 
     void PreStep() override;
+    Vector2 getPosition();
 };
 
 

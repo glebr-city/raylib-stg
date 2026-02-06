@@ -2,7 +2,7 @@
 // Created by g on 05/02/2026.
 //
 
-#include "InputHandler.h"
+#include "../include/InputHandler.h"
 
 #include <algorithm>
 
