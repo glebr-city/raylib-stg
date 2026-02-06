@@ -30,6 +30,7 @@ class SpriteHandler{
 private:
     public:
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos);
+    static void DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos, Color col);
     static void AdvanceAnimation();
     static void InitAnimatedSprites();
 };

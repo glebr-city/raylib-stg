@@ -75,8 +75,7 @@ void Player::PreStep() {
     position += inputVector * speed;
     position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth()),static_cast<float>(gameHeight())});
     Vector2 spritePosition {position.x - 6.5f, position.y - 6.5f};
-    SpriteHandler::DrawMyAnimatedSprite(BULLET_1_RED, position);
-    /*DrawTextureRec(playerSpriteSheet, playerRect, spritePosition, WHITE);*/
+    DrawTextureRec(playerSpriteSheet, playerRect, spritePosition, WHITE);
 
     //std::cout << "Player PreStep, " << std::to_string(leftKeys[0]) << std::endl;
 }

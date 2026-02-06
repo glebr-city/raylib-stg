@@ -12,7 +12,13 @@ SimpleBullet1::SimpleBullet1(const Vector2 pos, const Vector2 dir) : SimpleBulle
     direction = dir;
 }
 
+SimpleBullet1::SimpleBullet1(const Vector2 pos, const Vector2 dir, Color col) : SimpleBullet(pos) {
+    position = pos;
+    direction = dir;
+    color = col;
+}
+
 void SimpleBullet1::PreStep() {
     position = Vector2Add(position, direction * speed);
-    SpriteHandler::DrawMyAnimatedSprite(BULLET_1_RED, position);
+    SpriteHandler::DrawMyAnimatedSprite(BULLET_1_RED, position, color);
 }

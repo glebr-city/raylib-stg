@@ -67,8 +67,12 @@ int main() {
         SpriteHandler::AdvanceAnimation();
         BeginDrawing();
         if (currentStep() % 20 == 0) {
-            float tempX = currentStep() % 120;
-            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, 0}, Vector2 {0, 1}));
+            int tempCurrentStep = currentStep();
+            float tempX = tempCurrentStep % 120;
+            int r = std::max(50, tempCurrentStep % 170);
+            int g = std::max(50, tempCurrentStep % 200);
+            int b = std::max(50, tempCurrentStep % 230);
+            step_thinkers.push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, 0}, Vector2 {0, 1}, Color {r, g, b, 255}));
         }
         ClearBackground(BLACK);
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth() * zoomFactor + 2, gameHeight() * zoomFactor + 2, DARKGRAY);
