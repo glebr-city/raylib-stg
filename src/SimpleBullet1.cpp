@@ -28,8 +28,7 @@ SimpleBullet1::SimpleBullet1(GameObjectHandler & handler, const Vector2 pos, con
 
 void SimpleBullet1::PreStep() {
     position = Vector2Add(position, direction * speed);
-    SpriteHandler::DrawMyAnimatedSprite(BULLET_1_RED, position, color);
-    DrawCircle(position.x, position.y, radius, color);
+    SpriteHandler::DrawMyAnimatedSprite(sprite, position, color);
 }
 
 void SimpleBullet1::doPhysics(Vector2 playerPosition) {

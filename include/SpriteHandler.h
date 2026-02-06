@@ -12,7 +12,8 @@
 #include "StepThinker.h"
 
 typedef enum {
-    BULLET_1_RED = 0
+    BULLET_1_MONOCHROME = 0,
+    BULLET_SMALL_MONOCHROME = 1,
 } ANIMATED_SPRITES;
 
 struct MyAnimatedSprite {
@@ -25,7 +26,7 @@ struct MyAnimatedSprite {
 
 
 
-    static std::array<std::unique_ptr<MyAnimatedSprite>, 1> animatedSprites;
+    static std::array<std::unique_ptr<MyAnimatedSprite>, 2> animatedSprites;
 class SpriteHandler{
 private:
     public:

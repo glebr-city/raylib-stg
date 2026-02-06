@@ -12,7 +12,8 @@
 
 void SpriteHandler::InitAnimatedSprites() {
    animatedSprites = {
-        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bullet1MonochromeSpriteSheet.png"), Rectangle {0,0,9,9}, 8})
+        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bullet1MonochromeSpriteSheet.png"), Rectangle {0,0,9,9}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/tinyBullet1SpriteSheet.png"), Rectangle {0,0,5,5}, 4})
     };
 }
 
@@ -26,7 +27,7 @@ void SpriteHandler::AdvanceAnimation() {
 
 void SpriteHandler::DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos) {
     Rectangle spriteRect = animatedSprites[animatedSpriteIndex]->spriteRect;
-    DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {pos.x - (spriteRect.width / 2) - 0.5f, pos.y - (spriteRect.height / 2) - 0.5f}, BLUE);
+    DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {pos.x - (spriteRect.width / 2) - 0.5f, pos.y - (spriteRect.height / 2) - 0.5f}, WHITE);
 }
 
 void SpriteHandler::DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos, Color col) {

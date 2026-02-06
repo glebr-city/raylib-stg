@@ -22,6 +22,9 @@ add_executable(raylib_stg src/main.cpp
         include/GameObject.h
         src/GameObjectHandler.cpp
         include/GameObjectHandler.h
+        src/SimpleBullet2.cpp
+        include/SimpleBullet2.h
+        include/SimpleBullet2.h
 )
 
 target_sources(raylib_stg

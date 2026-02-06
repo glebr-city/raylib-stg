@@ -11,10 +11,12 @@
 class SimpleBullet1 : public SimpleBullet{
     private:
     static constexpr float radius = 2.5f;
-    static constexpr float speed = 0.1f;
+    static constexpr float speed = 1;
+    static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 position{};
     Vector2 direction{};
     Color color = WHITE;
+
 public:
     SimpleBullet1(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir);
     SimpleBullet1(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir, Color col);

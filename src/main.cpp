@@ -12,6 +12,7 @@
 #include "GlobalVariables.h"
 #include "PhysicsObject.h"
 #include "SimpleBullet1.h"
+#include "SimpleBullet2.h"
 #include "SpriteHandler.h"
 
 
@@ -64,6 +65,9 @@ int main() {
     letterboxSize.y = static_cast<float>(resizeValues[2]);
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
+    for (int i = 0; i < 80000; i++) {
+        SimpleBullet2 {gameObjectHandler, Vector2{60, static_cast<float>(-i / 10)}, Vector2 {0, 1}, GREEN};
+    }
     while (!WindowShouldClose()) {
         if (IsWindowResized()) {
             resizeValues = AdjustLetterbox();
@@ -76,39 +80,12 @@ int main() {
         currentStep()++;
         SpriteHandler::AdvanceAnimation();
         BeginDrawing();
-
-        if (currentStep() % 5 == 0) {
-            int tempCurrentStep = currentStep();
-            float tempX = (65 - static_cast<float>(tempCurrentStep % 50) / 5);
-            SimpleBullet1 {gameObjectHandler, Vector2 {tempX, -1}, Vector2 {0, 1}, RED};
-            //CreateObject(tempBullet, tempBullet);
+        if (currentStep() % 10 == 0) {
+            float simpleBullet2TempX = currentStep() % 120;
+            SimpleBullet2 {gameObjectHandler, Vector2{60, -3}, Vector2 {0, 1}, GREEN};
         }
 
-        if (currentStep() % 2 == 0) {
-            int tempCurrentStep = currentStep();
-            float tempX = (tempCurrentStep % 240 + static_cast<float>(tempCurrentStep % 30 / 3)) / 2;
-            Color clr {160, 160, 160, 255};
-            //step_thinkers->push_back(std::make_unique<SimpleBullet1>(Vector2 {tempX, -1}, Vector2 {0, 1}, clr));
-            SimpleBullet1 {gameObjectHandler, Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
-            tempX = 120 - tempX;
-            SimpleBullet1 {gameObjectHandler, Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
-        } else if (currentStep() % 5 == 3) {
-            int tempCurrentStep = currentStep();
-            float tempX = (tempCurrentStep % 240 + static_cast<float>(tempCurrentStep % 30 / 3)) / 2;
-            Color clr {255, 100, 100, 255};
-            tempX = 90 - (static_cast<int>(floor(tempX)) % 20);
-            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
-            tempX = 30 + (static_cast<int>(floor(tempX)) % 20);
-            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
-        }  else if (currentStep() % 20 == 10) {
-            int tempCurrentStep = currentStep();
-            float tempX = (tempCurrentStep % 240 + static_cast<float>(tempCurrentStep % 30 / 3)) / 2;
-            Color clr {255, 75, 75, 255};
-            tempX = 120 - (static_cast<int>(floor(tempX)) % 20);
-            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
-            tempX = (static_cast<int>(floor(tempX)) % 20);
-            SimpleBullet1 {gameObjectHandler,Vector2 {tempX, -1}, Vector2 {0, 1}, clr};
-        }
+
 
         ClearBackground(BLACK);
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth() * zoomFactor + 2, gameHeight() * zoomFactor + 2, DARKGRAY);
