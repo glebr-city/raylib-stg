@@ -4,6 +4,7 @@
 
 #include <array>
 #include <GameObjectHandler.h>
+#include <iostream>
 
 #include <memory>
 #include <vector>
@@ -31,16 +32,6 @@ void GameObjectHandler::doPreStep(Player player) {
     }
 }
 
-/*void GameObjectHandler::doPhysics(Player player, Vector2 playerPosition) {
-    for (int i = 0; i < stepCount; i++) {
-        player.doPhysics(playerPosition);
-        playerPosition = player.getPosition();
-        for (auto& step_thinker : step_thinkers ) {
-            //for (int i = 0; i < stepCount; i++)
-                step_thinker->doPhysics(playerPosition);
-        }
-    }
-}*/
 
 void GameObjectHandler::doPhysics(Player player) {
         std::array<Vector2, 2> playerPosAndMovement = player.getPosAndMovement();
@@ -52,4 +43,16 @@ void GameObjectHandler::doPhysics(Player player) {
 
 int GameObjectHandler::getObjectCount() {
     return step_thinkers.size();
+}
+
+void GameObjectHandler::removeStepThinkers(int number) {
+    int a = step_thinkers.size();
+    number  = std::min(number, a);
+    step_thinkers.erase(step_thinkers.begin(), step_thinkers.begin() + number - 1);
+
+}
+
+void GameObjectHandler::clearStepThinkers() {
+    step_thinkers.clear();
+    std::cout << step_thinkers.size();
 }

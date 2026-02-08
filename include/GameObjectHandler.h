@@ -24,6 +24,8 @@ public:
     void doPreStep(Player player);
     void doPhysics(Player player);
     int getObjectCount();
+    void clearStepThinkers();
+    void removeStepThinkers(int number);
 };
 
 

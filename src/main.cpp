@@ -10,6 +10,7 @@
 
 #include "GameObjectHandler.h"
 #include "GlobalVariables.h"
+#include "InputHandler.h"
 #include "SimpleBullet1.h"
 #include "SimpleBullet2.h"
 #include "SpriteHandler.h"
@@ -35,6 +36,9 @@ std::array<int, 3> AdjustLetterbox() {
 }
 
 
+void startGame(GameObjectHandler* gameObjectHandler) {
+    gameObjectHandler->clearStepThinkers();
+}
 
 int main() {
     ChangeDirectory(GetApplicationDirectory());
@@ -47,11 +51,6 @@ int main() {
     Camera2D camera = { 0 };
     camera.zoom = zoomFactor; // NOLINT(*-narrowing-conversions)
     camera.offset = {letterboxSize.x, letterboxSize.y};
-
-    Player player {Vector2 {60, 140}};
-    GameObjectHandler gameObjectHandler = GameObjectHandler();
-
-
     SetTargetFPS(120);
     std::array<int, 3> resizeValues = AdjustLetterbox();
     zoomFactor = resizeValues[0];
@@ -59,23 +58,12 @@ int main() {
     letterboxSize.y = static_cast<float>(resizeValues[2]);
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
-    for (int i = 0; i < 1500; i++) {
-        SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
-        SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 20}, Vector2 {0, 1}, GREEN};
-        SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
-        SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 20}, Vector2 {0, 1}, GREEN};
-        SimpleBullet2 {gameObjectHandler, Vector2{static_cast<float>(i % 120), static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
-        SimpleBullet2 {gameObjectHandler, Vector2{120-static_cast<float>(i % 120), static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
-
-        SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
-        SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 50}, Vector2 {0, 1}, GREEN};
-        SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
-        SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 50}, Vector2 {0, 1}, GREEN};
-        SimpleBullet2 {gameObjectHandler, Vector2{static_cast<float>(i % 120), static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
-        SimpleBullet2 {gameObjectHandler, Vector2{120-static_cast<float>(i % 120), static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
+    static constexpr std::array<KeyboardKey, 3> restartKeys = {KEY_R, KEY_ESCAPE, KEY_BACKSPACE};
+    std::unique_ptr<GameObjectHandler> gameObjectHandler = std::make_unique<GameObjectHandler>();
+    Player player {Vector2 {60, 140}};
+    startGame(gameObjectHandler.get());
 
 
-    }
     while (!WindowShouldClose()) {
         if (IsWindowResized()) {
             resizeValues = AdjustLetterbox();
@@ -90,25 +78,45 @@ int main() {
         BeginDrawing();
         if (currentStep() % 10 == 0) {
             float simpleBullet2TempX = currentStep() % 120;
-            SimpleBullet2 {gameObjectHandler, Vector2{60, -3}, Vector2 {0, 1}, GREEN};
+            SimpleBullet2 {gameObjectHandler.get(), Vector2{60, -3}, Vector2 {0, 1}, GREEN};
         }
 
+        //Check if we should restart the game
+        if (InputHandler::CheckInputsPressed(restartKeys)) {
+            player.~Player();
+            player = Player{Vector2 {60, 140}};
+            startGame(gameObjectHandler.get());
+        }
 
+        if (currentStep() % 1000 == 0) {
+            for (int i = 0; i <= 20000; i++) {
+                SimpleBullet1 {gameObjectHandler.get(), Vector2{static_cast<float>(i % 120), -3}, Vector2 {0, 1}, GREEN};
+            }
+        } else if (currentStep() % 600 == 900) {
+            gameObjectHandler->removeStepThinkers(30000);
+        }
 
+        if (currentStep() % 600 == 0) {
+            for (int i = 0; i <= 20000; i++) {
+                SimpleBullet2 {gameObjectHandler.get(), Vector2{static_cast<float>(i % 120), -3}, Vector2 {0, 1}, ORANGE};
+            }
+        } else if (currentStep() % 600 == 500) {
+                gameObjectHandler->removeStepThinkers(30000);
+        }
 
         ClearBackground(BLACK);
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth() * zoomFactor + 2, gameHeight() * zoomFactor + 2, DARKGRAY);
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth() * zoomFactor, gameHeight() * zoomFactor);
         BeginMode2D(camera);
-        gameObjectHandler.doPreStep(player);
+        gameObjectHandler->doPreStep(player);
         EndMode2D();
         EndScissorMode();
         std::string tempStr = "Bullet Count: ";
-        tempStr.append(std::to_string(gameObjectHandler.getObjectCount()));
+        tempStr.append(std::to_string(gameObjectHandler->getObjectCount()));
         DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);
         //DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);
         DrawFPS(100, 150);
         EndDrawing();
-        gameObjectHandler.doPhysics(player);
+        gameObjectHandler->doPhysics(player);
     }
 }

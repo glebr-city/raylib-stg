@@ -10,9 +10,9 @@
 
 class SimpleBullet2 : public SimpleBullet {
 public:
-    SimpleBullet2(GameObjectHandler &handler, Vector2 pos, Vector2 dir);
+    SimpleBullet2(GameObjectHandler *handler, Vector2 pos, Vector2 dir);
 
-    SimpleBullet2(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir, Color col);
+    SimpleBullet2(GameObjectHandler *handler, const Vector2 pos, const Vector2 dir, Color col);
 
     void PreStep() override;
 
@@ -20,7 +20,7 @@ public:
 
 private:
     static constexpr float radius = 1.15f;
-    static constexpr float speed = 5;
+    static constexpr float speed = 3;
     static constexpr ANIMATED_SPRITES sprite = BULLET_SMALL_MONOCHROME;
     Vector2 position{};
     Vector2 direction{};

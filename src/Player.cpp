@@ -13,8 +13,8 @@
 #include "raymath.h"
 #include "SpriteHandler.h"
 Vector2 position;
-constexpr float speed = 0.6f;
-constexpr float focusSpeed = 0.25f;
+constexpr float speed = 1.8;
+constexpr float focusSpeed = 0.7;
 const float* currentSpeed = &speed;
 bool leftDown = false;
 bool rightDown = false;

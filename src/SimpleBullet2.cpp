@@ -10,17 +10,17 @@
 #include "GlobalVariables.h"
 #include "raymath.h"
 
-SimpleBullet2::SimpleBullet2(GameObjectHandler & handler, const Vector2 pos, const Vector2 dir) : SimpleBullet(pos) {
+SimpleBullet2::SimpleBullet2(GameObjectHandler* handler, const Vector2 pos, const Vector2 dir) : SimpleBullet(pos) {
     position = pos;
     direction = dir;
-    handler.addStepThinker(std::make_unique<SimpleBullet2>(*this));
+    handler->addStepThinker(std::make_unique<SimpleBullet2>(*this));
 }
 
-SimpleBullet2::SimpleBullet2(GameObjectHandler & handler, const Vector2 pos, const Vector2 dir, Color col) : SimpleBullet(pos) {
+SimpleBullet2::SimpleBullet2(GameObjectHandler* handler, const Vector2 pos, const Vector2 dir, Color col) : SimpleBullet(pos) {
     position = pos;
     direction = dir;
     color = col;
-    handler.addStepThinker(std::make_unique<SimpleBullet2>(*this));
+    handler->addStepThinker(std::make_unique<SimpleBullet2>(*this));
 }
 
 void SimpleBullet2::PreStep() {

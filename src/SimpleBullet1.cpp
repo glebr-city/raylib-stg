@@ -13,17 +13,17 @@
 #include "SpriteHandler.h"
 
 
-SimpleBullet1::SimpleBullet1(GameObjectHandler & handler, const Vector2 pos, const Vector2 dir) : SimpleBullet(pos) {
+SimpleBullet1::SimpleBullet1(GameObjectHandler* handler, const Vector2 pos, const Vector2 dir) : SimpleBullet(pos) {
     position = pos;
     direction = dir;
-    handler.addStepThinker(std::make_unique<SimpleBullet1>(*this));
+    handler->addStepThinker(std::make_unique<SimpleBullet1>(*this));
 }
 
-SimpleBullet1::SimpleBullet1(GameObjectHandler & handler, const Vector2 pos, const Vector2 dir, Color col) : SimpleBullet(pos) {
+SimpleBullet1::SimpleBullet1(GameObjectHandler* handler, const Vector2 pos, const Vector2 dir, Color col) : SimpleBullet(pos) {
     position = pos;
     direction = dir;
     color = col;
-    handler.addStepThinker(std::make_unique<SimpleBullet1>(*this));
+    handler->addStepThinker(std::make_unique<SimpleBullet1>(*this));
 }
 
 void SimpleBullet1::PreStep() {
