@@ -10,7 +10,6 @@
 
 #include "GameObjectHandler.h"
 #include "GlobalVariables.h"
-#include "PhysicsObject.h"
 #include "SimpleBullet1.h"
 #include "SimpleBullet2.h"
 #include "SpriteHandler.h"
@@ -50,7 +49,7 @@ int main() {
     camera.offset = {letterboxSize.x, letterboxSize.y};
 
     Player player {Vector2 {60, 140}};
-    GameObjectHandler gameObjectHandler = GameObjectHandler(4);
+    GameObjectHandler gameObjectHandler = GameObjectHandler();
 
 
     SetTargetFPS(120);
@@ -60,19 +59,19 @@ int main() {
     letterboxSize.y = static_cast<float>(resizeValues[2]);
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 1500; i++) {
         SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
-        //SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 20}, Vector2 {0, 1}, GREEN};
+        SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 20}, Vector2 {0, 1}, GREEN};
         SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
-        //SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 20}, Vector2 {0, 1}, GREEN};
+        SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 20}, Vector2 {0, 1}, GREEN};
         SimpleBullet2 {gameObjectHandler, Vector2{static_cast<float>(i % 120), static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
         SimpleBullet2 {gameObjectHandler, Vector2{120-static_cast<float>(i % 120), static_cast<float>(-i)}, Vector2 {0, 1}, GREEN};
 
         SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
-        //SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 50}, Vector2 {0, 1}, GREEN};
+        SimpleBullet1 {gameObjectHandler, Vector2{static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 50}, Vector2 {0, 1}, GREEN};
         SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
         SimpleBullet1 {gameObjectHandler, Vector2{120-static_cast<float>(i % 60) * 2, static_cast<float>(-i) - 50}, Vector2 {0, 1}, GREEN};
-        //SimpleBullet2 {gameObjectHandler, Vector2{static_cast<float>(i % 120), static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
+        SimpleBullet2 {gameObjectHandler, Vector2{static_cast<float>(i % 120), static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
         SimpleBullet2 {gameObjectHandler, Vector2{120-static_cast<float>(i % 120), static_cast<float>(-i) - 30}, Vector2 {0, 1}, GREEN};
 
 
@@ -110,6 +109,6 @@ int main() {
         //DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);
         DrawFPS(100, 150);
         EndDrawing();
-        gameObjectHandler.doPhysics(player, player.getPosition());
+        gameObjectHandler.doPhysics(player);
     }
 }

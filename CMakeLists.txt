@@ -16,8 +16,6 @@ add_executable(raylib_stg src/main.cpp
         include/SpriteHandler.h
         src/SimpleBullet1.cpp
         include/SimpleBullet1.h
-        src/PhysicsObject.cpp
-        include/PhysicsObject.h
         src/GameObject.cpp
         include/GameObject.h
         src/GameObjectHandler.cpp

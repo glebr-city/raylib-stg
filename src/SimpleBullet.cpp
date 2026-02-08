@@ -12,8 +12,6 @@
 SimpleBullet::SimpleBullet(const Vector2 pos) : Bullet(pos){}
 
 
-void SimpleBullet::doPhysics(Vector2 playerPos) {
-    if (Vector2Distance(position, playerPos) <= radius) {
-        std::cout << "Bullet collision!!!!!!!!!!!!" << std::endl;
-    }
+void SimpleBullet::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {
+    CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]));
 }

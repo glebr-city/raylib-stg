@@ -17,13 +17,12 @@ class StepThinker;
 class GameObjectHandler {
 private:
     std::vector<std::unique_ptr<StepThinker>> step_thinkers;
-    int stepCount = 1;
 public:
-    GameObjectHandler(int _stepCount);
+    GameObjectHandler();
     virtual ~GameObjectHandler();
     void addStepThinker(std::unique_ptr<StepThinker> thinker);
     void doPreStep(Player player);
-    void doPhysics(Player player, Vector2 playerPosition);
+    void doPhysics(Player player);
     int getObjectCount();
 };
 

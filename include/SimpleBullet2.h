@@ -16,11 +16,11 @@ public:
 
     void PreStep() override;
 
-    void doPhysics(Vector2 playerPosition);
+    void doPhysics(std::array<Vector2, 2> playerPosAndMovement);
 
 private:
     static constexpr float radius = 1.15f;
-    static constexpr float speed = 0.5f;
+    static constexpr float speed = 5;
     static constexpr ANIMATED_SPRITES sprite = BULLET_SMALL_MONOCHROME;
     Vector2 position{};
     Vector2 direction{};

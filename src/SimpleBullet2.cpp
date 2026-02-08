@@ -27,10 +27,9 @@ void SimpleBullet2::PreStep() {
     SpriteHandler::DrawMyAnimatedSprite(sprite, position, color);
 }
 
-void SimpleBullet2::doPhysics(Vector2 playerPosition) {
-    position = Vector2Add(position, direction * speed);
-    if (Vector2Distance(position, playerPosition) <= radius) {
-        std::cout << currentStep() << ": Bullet collided!!!!!!!!!!!" << std::endl;
+void SimpleBullet2::doPhysics(std::array<Vector2, 2> playerPosAndMovement) {
+    Vector2 playerFinalPoint = playerPosAndMovement[0] + (playerPosAndMovement[1] - Vector2Scale(direction, speed));
+    if (CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], playerFinalPoint))
         color = RED;
-    }
+    position = Vector2Add(position, direction * speed);
 }

@@ -16,8 +16,11 @@ class Player : public StepThinker{
     void PreStep() override;
 
     void doPhysics(Vector2 pos);
+    void doPhysics();
 
     Vector2 getPosition();
+    Vector2 getMovement();
+    std::array<Vector2, 2> getPosAndMovement();
 };
 
 

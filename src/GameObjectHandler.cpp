@@ -2,20 +2,19 @@
 // Created by g on 06/02/2026.
 //
 
+#include <array>
 #include <GameObjectHandler.h>
 
 #include <memory>
 #include <vector>
 
-#include "PhysicsObject.h"
 #include "Player.h"
 #include "StepThinker.h"
 
 std::vector<std::unique_ptr<StepThinker>> step_thinkers;
 
-GameObjectHandler::GameObjectHandler(int _stepCount) {
+GameObjectHandler::GameObjectHandler() {
     step_thinkers = std::vector<std::unique_ptr<StepThinker>>();
-    stepCount = _stepCount;
 }
 
 GameObjectHandler::~GameObjectHandler() = default;
@@ -32,7 +31,7 @@ void GameObjectHandler::doPreStep(Player player) {
     }
 }
 
-void GameObjectHandler::doPhysics(Player player, Vector2 playerPosition) {
+/*void GameObjectHandler::doPhysics(Player player, Vector2 playerPosition) {
     for (int i = 0; i < stepCount; i++) {
         player.doPhysics(playerPosition);
         playerPosition = player.getPosition();
@@ -41,6 +40,14 @@ void GameObjectHandler::doPhysics(Player player, Vector2 playerPosition) {
                 step_thinker->doPhysics(playerPosition);
         }
     }
+}*/
+
+void GameObjectHandler::doPhysics(Player player) {
+        std::array<Vector2, 2> playerPosAndMovement = player.getPosAndMovement();
+        for (auto& step_thinker : step_thinkers ) {
+            step_thinker->doPhysics(playerPosAndMovement);
+        }
+        player.doPhysics();
 }
 
 int GameObjectHandler::getObjectCount() {

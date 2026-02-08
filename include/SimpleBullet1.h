@@ -11,7 +11,7 @@
 class SimpleBullet1 : public SimpleBullet{
     private:
     static constexpr float radius = 2.5f;
-    static constexpr float speed = 0.4f;
+    static constexpr float speed = 2;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 position{};
     Vector2 direction{};
@@ -24,7 +24,7 @@ public:
     //static void Create(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir, Color col);
 private:
     void PreStep() override;
-    void doPhysics(Vector2 playerPosition) override;
+    void doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
 };
 
 

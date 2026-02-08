@@ -37,6 +37,15 @@ Player::Player(Vector2 pos) {
 Vector2 Player::getPosition() {
     return position;
 }
+
+Vector2 Player::getMovement() {
+    return Vector2Scale(inputVector, *currentSpeed);
+}
+
+std::array<Vector2, 2> Player::getPosAndMovement() {
+    return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
+}
+
 void Player::PreStep() {
     if (InputHandler::CheckInputsPressed(leftKeys))
         inputVector.x = -1;
@@ -87,6 +96,11 @@ void Player::PreStep() {
 }
 
 void Player::doPhysics(Vector2 pos) {
+    std::cout << "!!! Player::doPhysics should be called with no parameters.";
+    Player::doPhysics();
+}
+
+void Player::doPhysics() {
     position += inputVector * *currentSpeed;
     position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth()),static_cast<float>(gameHeight())});
 }
