@@ -7,6 +7,7 @@
 #include <iostream>
 #include <ostream>
 
+#include "DamageHandler.h"
 #include "GlobalVariables.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
@@ -47,8 +48,10 @@ void SimpleBullet1::doPreStep() {
 
 bool SimpleBullet1::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {
     Vector2 playerFinalPoint = playerPosAndMovement[0] + (playerPosAndMovement[1] - Vector2Scale(direction, speed));
-    if (CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], playerFinalPoint))
-        color = RED;
+    if (CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], playerFinalPoint)) {
+        DamageHandler::hitPlayer();
+        return false;
+    }
     position = Vector2Add(position, direction * speed);
     if (position.x < -2 || position.x > 122 || position.y < -100 || position.y > 182)
         return false;

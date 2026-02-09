@@ -8,6 +8,7 @@
 #include <Player.h>
 #include <StepThinker.h>
 
+#include "DamageHandler.h"
 #include "GlobalVariables.h"
 #include "InputHandler.h"
 #include "PhaseHelper.h"
@@ -58,6 +59,8 @@ int main() {
     std::unique_ptr<PhaseHelper> currentPhase = std::make_unique<TestPhase1>();
     static constexpr std::array<KeyboardKey, 3> restartKeys = {KEY_R, KEY_ESCAPE, KEY_BACKSPACE};
     Player player {Vector2 {60, 140}};
+    int _hitsTaken = 0;
+    DamageHandler::setPlayer(&player);
 
 
     while (!WindowShouldClose()) {
@@ -72,7 +75,9 @@ int main() {
         if (InputHandler::CheckInputsPressed(restartKeys)) {
             currentStep() = 0;
             player = Player {Vector2 {60, 140}};
+            hitsTaken = 0;
             currentPhase = std::make_unique<TestPhase1>();
+            DamageHandler::setPlayer(&player);
         }
         currentStep()++;
         SpriteHandler::AdvanceAnimation();
@@ -89,9 +94,11 @@ int main() {
         EndScissorMode();
         std::string tempStr = "Bullet Count: ";
         tempStr.append(std::to_string(currentPhase->getNumActive()));
+        tempStr.append(std::string(" \n Hits Taken: "));
+        tempStr.append(std::to_string(DamageHandler::getHitsTaken()));
         DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);
         /*DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);*/
-        DrawFPS(100, 150);
+        DrawFPS(100, 165);
         EndDrawing();
         currentPhase->doPhysics(&player);
         player.doPhysics();

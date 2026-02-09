@@ -24,6 +24,7 @@ add_executable(raylib_stg src/main.cpp
         include/PhaseHelper.h
         src/TestPhase1.cpp
         include/TestPhase1.h
+        include/DamageHandler.h
 )
 
 target_sources(raylib_stg
