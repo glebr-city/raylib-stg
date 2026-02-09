@@ -15,9 +15,9 @@
 }*/
 
 
-void StepThinker::PreStep() {
+void StepThinker::doPreStep() {
 };
 
-void StepThinker::doPhysics(std::array<Vector2, 2> playerPosAndMovement) {
-
+bool StepThinker::doPhysics(std::array<Vector2, 2> playerPosAndMovement) {
+    return true;
 }

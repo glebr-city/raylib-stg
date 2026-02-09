@@ -10,8 +10,17 @@
 
 class Bullet  : public StepThinker{
 public:
- void doPhysics(std::array<Vector2, 2> playerPosAndMovement) override = 0;
- Bullet(Vector2 pos);
+ bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override = 0;
+ Bullet() {
+  position = Vector2();
+ }
+ Bullet(Vector2 pos) {
+  position = pos;
+ }
+
+ virtual void spawn(const Vector2 _position) {
+  position = _position;
+ }
 private:
  static const float radius;
  Vector2 position{};

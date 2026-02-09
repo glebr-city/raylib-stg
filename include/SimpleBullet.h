@@ -10,8 +10,12 @@
 
 class SimpleBullet : public Bullet {
 public:
+    SimpleBullet();
     SimpleBullet(Vector2 pos);
-    void doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
+    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
+
+    void spawn(Vector2 _position) override;
+
 private:
     static constexpr float radius = 0.5f;
     Vector2 position{};

@@ -10,13 +10,19 @@
 
 class SimpleBullet2 : public SimpleBullet {
 public:
-    SimpleBullet2(GameObjectHandler *handler, Vector2 pos, Vector2 dir);
+    SimpleBullet2();
 
-    SimpleBullet2(GameObjectHandler *handler, const Vector2 pos, const Vector2 dir, Color col);
+    SimpleBullet2(Vector2 pos, Vector2 dir);
 
-    void PreStep() override;
+    SimpleBullet2(Vector2 pos, Vector2 dir, Color col);
 
-    void doPhysics(std::array<Vector2, 2> playerPosAndMovement);
+    void spawn(Vector2 pos, Vector2 dir);
+
+    void spawn(Vector2 pos, Vector2 dir, Color col);
+
+    void doPreStep() override;
+
+    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
 
 private:
     static constexpr float radius = 1.15f;

@@ -13,7 +13,7 @@ class Player : public StepThinker{
     public:
     explicit Player(Vector2 pos);
 
-    void PreStep() override;
+    void doPreStep() override;
 
     void doPhysics(Vector2 pos);
     void doPhysics();

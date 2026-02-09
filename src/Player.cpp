@@ -46,7 +46,7 @@ std::array<Vector2, 2> Player::getPosAndMovement() {
     return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
 }
 
-void Player::PreStep() {
+void Player::doPreStep() {
     if (InputHandler::CheckInputsPressed(leftKeys))
         inputVector.x = -1;
     else if (InputHandler::CheckInputsPressed(rightKeys))

@@ -7,8 +7,9 @@
 #include <memory>
 #include <vector>
 
-#include "Player.h"
-#include "raylib.h"
+#include "../../include/Player.h"
+#include "../../include/PoolingVector.h"
+#include "../../include/raylib.h"
 
 
 class PhysicsObject;
@@ -16,7 +17,7 @@ class StepThinker;
 
 class GameObjectHandler {
 private:
-    std::vector<std::unique_ptr<StepThinker>> step_thinkers;
+    std::vector<PoolingVector*> poolingVectors;
 public:
     GameObjectHandler();
     virtual ~GameObjectHandler();
@@ -25,6 +26,10 @@ public:
     void doPhysics(Player player);
     int getObjectCount();
     void clearStepThinkers();
+
+    template<class T>
+    void addPoolingVector(PoolingVector<T> *poolingVector);
+
     void removeStepThinkers(int number);
 };
 

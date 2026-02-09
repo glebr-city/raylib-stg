@@ -3,7 +3,6 @@
 //
 
 #include <GameObject.h>
-#include "GameObjectHandler.h"
 
 GameObject::~GameObject() = default;
 

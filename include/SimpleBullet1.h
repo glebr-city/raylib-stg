@@ -18,13 +18,15 @@ class SimpleBullet1 : public SimpleBullet{
     Color color = WHITE;
 
 public:
-    SimpleBullet1(GameObjectHandler*, const Vector2 pos, const Vector2 dir);
-    SimpleBullet1(GameObjectHandler*, const Vector2 pos, const Vector2 dir, Color col);
-    //static void Create(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir);
-    //static void Create(GameObjectHandler &handler, const Vector2 pos, const Vector2 dir, Color col);
-private:
-    void PreStep() override;
-    void doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
+    SimpleBullet1(const Vector2 pos, const Vector2 dir);
+
+    SimpleBullet1();
+
+    SimpleBullet1(const Vector2 pos, const Vector2 dir, Color col);
+    void spawn(Vector2 pos, Vector2 dir);
+    void spawn(Vector2 pos, Vector2 dir, Color col);
+    void doPreStep() override;
+    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
 };
 
 

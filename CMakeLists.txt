@@ -8,7 +8,6 @@ add_executable(raylib_stg src/main.cpp
         include/GlobalVariables.h
         src/InputHandler.cpp
         include/InputHandler.h
-        src/Bullet.cpp
         include/Bullet.h
         src/SimpleBullet.cpp
         include/SimpleBullet.h
@@ -18,11 +17,13 @@ add_executable(raylib_stg src/main.cpp
         include/SimpleBullet1.h
         src/GameObject.cpp
         include/GameObject.h
-        src/GameObjectHandler.cpp
-        include/GameObjectHandler.h
         src/SimpleBullet2.cpp
         include/SimpleBullet2.h
         include/SimpleBullet2.h
+        include/PoolingVector.h
+        include/PhaseHelper.h
+        src/TestPhase1.cpp
+        include/TestPhase1.h
 )
 
 target_sources(raylib_stg
