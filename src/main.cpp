@@ -69,6 +69,11 @@ int main() {
             camera.offset = {letterboxSize.x, letterboxSize.y};
             camera.zoom = zoomFactor;
         }
+        if (InputHandler::CheckInputsPressed(restartKeys)) {
+            currentStep() = 0;
+            player = Player {Vector2 {60, 140}};
+            currentPhase = std::make_unique<TestPhase1>();
+        }
         currentStep()++;
         SpriteHandler::AdvanceAnimation();
         BeginDrawing();

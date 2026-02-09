@@ -12,6 +12,8 @@ TestPhase1::TestPhase1() : simpleBullet1Pool(10000), simpleBullet2Pool(10000) {
 }
 
 bool TestPhase1::doPhysics(Player* player) {
+    if (currentStep() < 200)
+        return true;
     std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
     for (int i = -1; i < 182; i++) {
         if (i > 54 && i < 66) {
