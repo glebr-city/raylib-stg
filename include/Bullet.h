@@ -21,7 +21,8 @@ public:
  virtual void spawn(const Vector2 _position) {
   position = _position;
  }
-private:
+protected:
+ bool hasBeenGrazed = false;
  static const float radius;
  Vector2 position{};
 

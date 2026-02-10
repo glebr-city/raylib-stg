@@ -2,23 +2,32 @@
 // Created by g on 05/02/2026.
 //
 
-#ifndef RAYLIB_STG_CURRENTSTEP_H
-#define RAYLIB_STG_CURRENTSTEP_H
+#ifndef RAYLIB_STG_GLOBALVARIABLES_H
+#define RAYLIB_STG_GLOBALVARIABLES_H
+#include <memory>
+#include <utility>
 
-inline int& currentStep() {
-    static int currentStep = 0;
-    return currentStep;
-}
-
-inline int& gameHeight() {
-    static int gameHeight = 180;
-    return gameHeight;
-}
-
-inline int& gameWidth() {
-    static int gameWidth = 120;
-    return gameWidth;
-}
+#include "PhaseHelper.h"
 
 
-#endif //RAYLIB_STG_CURRENTSTEP_H
+class PhaseHelper;
+
+class GlobalVariables {
+    private:
+public:
+
+    static std::unique_ptr<PhaseHelper> currentPhase;
+    static int& currentStep();
+
+    static int& gameHeight();
+
+    static int& gameWidth();
+
+    static const int& grazeRadius();
+
+    static void setCurrentPhase(std::unique_ptr<PhaseHelper> newPhase);
+
+    static PhaseHelper *getCurrentPhase();
+};
+
+#endif //RAYLIB_STG_GLOBALVARIABLES_H

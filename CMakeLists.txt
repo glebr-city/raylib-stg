@@ -25,6 +25,7 @@ add_executable(raylib_stg src/main.cpp
         src/TestPhase1.cpp
         include/TestPhase1.h
         include/DamageHandler.h
+        src/GlobalVariables.cpp
 )
 
 target_sources(raylib_stg

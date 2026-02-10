@@ -16,10 +16,12 @@ public:
 
     void spawn(Vector2 _position) override;
 
-private:
+protected:
+    static constexpr int grazeValue = 20;
     static constexpr float radius = 0.5f;
-    Vector2 position{};
     ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
+private:
+    Vector2 position{};
 
 };
 

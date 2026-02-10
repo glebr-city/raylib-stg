@@ -10,6 +10,8 @@
 
 
 class Player : public StepThinker{
+private:
+    void startHyper();
     public:
     explicit Player(Vector2 pos);
 

@@ -52,6 +52,10 @@ bool SimpleBullet1::doPhysics(const std::array<Vector2, 2> playerPosAndMovement)
         DamageHandler::hitPlayer();
         return false;
     }
+    if (!hasBeenGrazed && CheckCollisionCircles(position, radius, playerFinalPoint, GlobalVariables::grazeRadius())) {
+        DamageHandler::grazePlayer(grazeValue);
+        hasBeenGrazed = true;
+    }
     position = Vector2Add(position, direction * speed);
     if (position.x < -2 || position.x > 122 || position.y < -100 || position.y > 182)
         return false;

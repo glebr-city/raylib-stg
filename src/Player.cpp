@@ -7,13 +7,15 @@
 #include <iostream>
 #include <Player.h>
 
+#include "DamageHandler.h"
 #include "GlobalVariables.h"
 #include "InputHandler.h"
+#include "PhaseHelper.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
 Vector2 position;
-constexpr float speed = 1.8;
+constexpr float speed = 1.6;
 constexpr float focusSpeed = 0.7;
 const float* currentSpeed = &speed;
 bool leftDown = false;
@@ -26,6 +28,7 @@ static constexpr std::array<KeyboardKey, 3> rightKeys = {KEY_RIGHT, KEY_RIGHT_BR
 static constexpr std::array<KeyboardKey, 3> upKeys = {KEY_UP, KEY_RIGHT_ALT, KEY_W};
 static constexpr std::array<KeyboardKey, 3> downKeys = {KEY_DOWN, KEY_LEFT_BRACKET, KEY_S};
 static constexpr std::array<KeyboardKey, 3> focusKeys = {KEY_LEFT_SHIFT, KEY_RIGHT_SHIFT, KEY_SPACE};
+static constexpr std::array<KeyboardKey, 3> hyperKeys = {KEY_X, KEY_LEFT_CONTROL, KEY_RIGHT_CONTROL};
 Vector2 inputVector {0, 0};
 Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 
@@ -84,7 +87,11 @@ void Player::doPreStep() {
     else if (InputHandler::CheckInputsReleased(focusKeys)) {
         currentSpeed = &speed;
     }
-    if (currentStep() % 40 == 0) {
+
+    if (InputHandler::CheckInputsPressed(hyperKeys) && currentGrazeMetre >= maxGrazeMetre)
+        startHyper();
+
+    if (GlobalVariables::currentStep() % 40 == 0) {
         playerRect.x = static_cast<int>(playerRect.x + playerRect.width) % playerSpriteSheet.width; // NOLINT(*-narrowing-conversions)
     }
     playerRect.y = -inputVector.x * playerRect.height;
@@ -102,5 +109,10 @@ void Player::doPhysics(Vector2 pos) {
 
 void Player::doPhysics() {
     position += inputVector * *currentSpeed;
-    position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth()),static_cast<float>(gameHeight())});
+    position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(GlobalVariables::gameWidth()),static_cast<float>(GlobalVariables::gameHeight())});
+}
+
+void Player::startHyper() {
+    GlobalVariables::getCurrentPhase()->startHyper();
+    //getCurrentPhase()->startHyper();
 }

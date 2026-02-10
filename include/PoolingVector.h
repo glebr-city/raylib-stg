@@ -18,6 +18,7 @@ public:
     virtual void doPhysics(std::array<Vector2, 2> playerPosAndMovement) = 0;
     [[nodiscard]] virtual int getVectorSize() const = 0;
     virtual int getNumActive() = 0;
+    virtual void setNumActive(int i) = 0;
 };
 template<typename T>
 class PoolingVector : public IPoolingVector{
@@ -68,6 +69,10 @@ class PoolingVector : public IPoolingVector{
 
     int getNumActive() override {
         return num_active;
+    }
+
+    void setNumActive(const int i) override {
+        num_active = i;
     }
 
 };

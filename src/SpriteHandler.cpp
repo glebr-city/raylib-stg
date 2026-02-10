@@ -19,7 +19,7 @@ void SpriteHandler::InitAnimatedSprites() {
 
 void SpriteHandler::AdvanceAnimation() {
     for (const std::unique_ptr<MyAnimatedSprite> &animated_sprite : animatedSprites) {
-        if (currentStep() % animated_sprite->frequency == 0) {
+        if (GlobalVariables::currentStep() % animated_sprite->frequency == 0) {
             animated_sprite->spriteRect.x = static_cast<float>(static_cast<int>(animated_sprite->spriteRect.x + animated_sprite->spriteRect.width) % animated_sprite->spriteSheet.width);
         }
     }
