@@ -7,17 +7,20 @@
 #include <memory>
 #include <utility>
 
+#include "DamageHandler.h"
 #include "PhaseHelper.h"
+#include "raylib.h"
+#include "PoolingVector.h"
+#include "PlayerBullet.h"
 
 
 class PhaseHelper;
 
 class GlobalVariables {
-    private:
-public:
-
+protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
-    static PoolingVector<PlayerBullet> playerBullets;
+    static std::unique_ptr<PoolingVector<PlayerBullet>> playerBullets;
+public:
 
     static int& currentStep();
 
@@ -29,9 +32,19 @@ public:
 
     static void setCurrentPhase(std::unique_ptr<PhaseHelper> newPhase);
 
-    static PhaseHelper *getCurrentPhase();
+    static PhaseHelper *getCurrentPhase() {
+        return currentPhase.get();
+    }
 
-    static void addPlayerBullet();
+    static void spawnPlayerBullet(Vector2 pos);
+
+    static PoolingVector<PlayerBullet>* getPlayerBullets() {
+        return playerBullets.get();
+    }
+
+    static void setCurrentGrazeMetre(int i) {
+        currentGrazeMetre = i;
+    }
 };
 
 #endif //RAYLIB_STG_GLOBALVARIABLES_H

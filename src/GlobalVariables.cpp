@@ -6,7 +6,7 @@
 
 #include "PhaseHelper.h"
 std::unique_ptr<PhaseHelper> GlobalVariables::currentPhase = nullptr;
-PoolingVector<PlayerBullet> GlobalVariables::playerBullets = {0};
+std::unique_ptr<PoolingVector<PlayerBullet>> GlobalVariables::playerBullets = std::make_unique<PoolingVector<PlayerBullet>>(50);
 int& GlobalVariables::currentStep() {
     static int currentStep = 0;
     return currentStep;
@@ -30,6 +30,8 @@ int& GlobalVariables::gameHeight() {
  void GlobalVariables::setCurrentPhase(std::unique_ptr<PhaseHelper> newPhase) {
     currentPhase.swap(newPhase);
 }
-PhaseHelper *GlobalVariables::getCurrentPhase() {
-    return currentPhase.get();
+
+void GlobalVariables::spawnPlayerBullet(Vector2 pos) {
+    playerBullets->spawn()->spawn(pos);
 }
+

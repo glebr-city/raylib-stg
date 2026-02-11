@@ -91,6 +91,7 @@ int main() {
         BeginMode2D(camera);
         DrawCircleLinesV(player.getPosition(), GlobalVariables::grazeRadius(), DARKGRAY);
         player.doPreStep();
+        GlobalVariables::getPlayerBullets()->doPreStep();
         GlobalVariables::getCurrentPhase()->doPreStep();
         EndMode2D();
         EndScissorMode();
@@ -104,6 +105,7 @@ int main() {
         /*DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);*/
         DrawFPS(100, 195);
         EndDrawing();
+        GlobalVariables::getPlayerBullets()->doPhysics();
         GlobalVariables::getCurrentPhase()->doPhysics(&player);
         player.doPhysics();
     }

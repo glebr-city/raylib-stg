@@ -11,7 +11,6 @@
 #include "GlobalVariables.h"
 #include "InputHandler.h"
 #include "PhaseHelper.h"
-#include "PlayerBullet.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
@@ -94,15 +93,11 @@ void Player::doPreStep() {
         startHyper();
     if (--currentFireCooldown <= 0 && InputHandler::CheckInputsDown(fireKeys)) {
         currentFireCooldown = fireCooldown;
-        playerBullets.emplace_back(position + Vector2 {0, 0});
+        GlobalVariables::spawnPlayerBullet(position);
     } else if (currentFireCooldown == fireCooldown - 5) {
-        playerBullets.emplace_back(position + Vector2 {0, 0});
+        GlobalVariables::spawnPlayerBullet(position);
     } else if (currentFireCooldown == fireCooldown - 10) {
-        playerBullets.emplace_back(position + Vector2 {0, 0});
-    }
-    //Render player bullets, then the player themselves.
-    for (auto& bullet : playerBullets) {
-        bullet.doPreStep();
+        GlobalVariables::spawnPlayerBullet(position);
     }
     SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), position); //Counting on digital movement only.
     Vector2Normalize(inputVector);
@@ -118,20 +113,10 @@ void Player::doPhysics(Vector2 pos) {
 void Player::doPhysics() {
     position += inputVector * *currentSpeed;
     position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(GlobalVariables::gameWidth()),static_cast<float>(GlobalVariables::gameHeight())});
-    //Do player bullet physics!
-    for (int i = 0; i < playerBullets.size();) {
-         if (!playerBullets[i].doPhysics()) {
-             playerBullets.erase(playerBullets.begin() + i);
-             continue;
-         }
-        i++;
-    }
 }
 
 void Player::startHyper() {
     GlobalVariables::getCurrentPhase()->startHyper();
+    GlobalVariables::setCurrentGrazeMetre(0);
 }
 
-std::vector<PlayerBullet>* Player::getPlayerBullets() {
-    return &playerBullets;
-}

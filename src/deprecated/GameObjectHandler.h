@@ -17,7 +17,7 @@ class StepThinker;
 
 class GameObjectHandler {
 private:
-    std::vector<PoolingVector*> poolingVectors;
+    std::vector<IPoolingVector*> poolingVectors;
 public:
     GameObjectHandler();
     virtual ~GameObjectHandler();

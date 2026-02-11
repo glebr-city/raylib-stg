@@ -61,6 +61,15 @@ class PoolingVector : public IPoolingVector{
             std::iter_swap(vector.begin() + i, vector.begin() + --num_active);
         }
     }
+    void doPhysics() {
+        for (int i = 0; i < num_active;) {
+            if (vector.at(i).doPhysics()) {
+                i++;
+                continue;
+            }
+            std::iter_swap(vector.begin() + i, vector.begin() + --num_active);
+        }
+    }
 
     T* spawn() {
         //std::cout << "Bullets active: "<< num_active << std::endl;

@@ -21,6 +21,10 @@ public:
         SpriteHandler::DrawMyAnimatedSprite(sprite, position);
     }
 
+    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
+        //std::cout << "!!! PlayerBullet::doPhysics should be called with no parameters." << std::endl;
+        return doPhysics();
+    }
     bool doPhysics() {
         if (position.y < -6) {
             return false;

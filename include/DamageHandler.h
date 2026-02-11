@@ -10,7 +10,7 @@
 
 static Player* player;
 inline int hitsTaken = 0;
-inline int maxGrazeMetre = 10;
+inline int maxGrazeMetre = 1023;
 inline int currentGrazeMetre = 0;
 class DamageHandler {
 private:
