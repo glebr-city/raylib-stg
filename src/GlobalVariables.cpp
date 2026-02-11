@@ -6,6 +6,7 @@
 
 #include "PhaseHelper.h"
 std::unique_ptr<PhaseHelper> GlobalVariables::currentPhase = nullptr;
+PoolingVector<PlayerBullet> GlobalVariables::playerBullets = {0};
 int& GlobalVariables::currentStep() {
     static int currentStep = 0;
     return currentStep;

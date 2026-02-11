@@ -8,7 +8,8 @@
 
 #include "GlobalVariables.h"
 
-TestPhase1::TestPhase1() : darkPurplePool(8000), simpleBullet1Pool(2000), orangePool(100), simpleBullet2Pool(100) {
+TestPhase1::TestPhase1() : movingDarkPurplePool(2000), darkPurplePool(2000), simpleBullet1Pool(2000), orangePool(100), simpleBullet2Pool(100) {
+    phasePools.push_back(&movingDarkPurplePool);
     phasePools.push_back(&darkPurplePool);
     phasePools.push_back(&simpleBullet1Pool);
     phasePools.push_back(&orangePool);
@@ -16,41 +17,51 @@ TestPhase1::TestPhase1() : darkPurplePool(8000), simpleBullet1Pool(2000), orange
 }
 
 bool TestPhase1::doPhysics(Player* player) {
-    if (currentStep() < 200)
+    if (GlobalVariables::currentStep() < 50)
         return true;
     std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
-    if (currentStep() % 9 == 0) {
-        for (int i = -1; i < 121; i += 12) {
-            if (currentStep() % 240 < 120) {
-                if (i < ((currentStep() % 120) + 16) && (i > (currentStep() % 120) - 16))
+    Color tempColour = Color {130, 20, 130, 255};
+    Color tempColour2 = Color {180, 80, 180, 255};
+    Color* currentColour = &tempColour;
+    if (GlobalVariables::currentStep() % 150 == 0) {
+        for (int y = -1; y > -9; y--) {
+            for (int i = 0; i < 9; i++) {
+                if (i == -y || i == -y-1)
                     continue;
-            } else if (i <= (120 - (currentStep() % 120) + 16) && (i >= 120 - (currentStep() % 120) - 16))
-                continue;
-            darkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i), 0}, Vector2{0,1}, DARKPURPLE);
-            darkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i+6), -6}, Vector2{0,1}, DARKPURPLE);
+                if (i == -y + 1 || i == -y - 2)
+                    currentColour = &tempColour2;
+                else {
+                    movingDarkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i * 15 + 10), static_cast<float>(y*15)}, Vector2{0.07, 0.997547}, DARKPURPLE);
+                    movingDarkPurplePool.spawn()->spawn(Vector2 {120-static_cast<float>(i * 15 + 4 + y), static_cast<float>(y*15-120)}, Vector2{-0.07, 0.997547}, DARKPURPLE);
+                    //Decorative bullets below
+                    movingDarkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i * 15 + 10), static_cast<float>(y*15)}, Vector2{-0.02,0.9998}, DARKPURPLE);
+                    movingDarkPurplePool.spawn()->spawn(Vector2 {120-static_cast<float>(i * 15 + 4 + y), static_cast<float>(y*15-120)}, Vector2{-0.02,0.9998}, DARKPURPLE);
+                }
+
+                darkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i * 15), static_cast<float>(y*15)}, Vector2{0, 1}, *currentColour);
+                darkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i * 15 + 8), static_cast<float>(y*15-8)}, Vector2{0, 1}, *currentColour);
+                darkPurplePool.spawn()->spawn(Vector2 {120-static_cast<float>(i * 15), static_cast<float>(y*15-120)}, Vector2{0, 1}, *currentColour);
+                darkPurplePool.spawn()->spawn(Vector2 {120-static_cast<float>(i * 15 - 8), static_cast<float>(y*15-112)}, Vector2{0, 1}, *currentColour);
+
+                currentColour = &tempColour;
+
+            }
         }
     }
+    if (false) {
+        for (int i = 0; i < 9; i++) {
+            if (i >= GlobalVariables::currentStep() % 8 - 1 && i <= GlobalVariables::currentStep() % 8 + 1)
+                continue;
+            darkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i * 16), 0}, Vector2{0, 1}, tempColour);
+            darkPurplePool.spawn()->spawn(Vector2 {static_cast<float>(i * 16 + 8), -8}, Vector2{0, 1}, tempColour);
+        }
+        darkPurplePool.spawn()->spawn(Vector2 {0, 180 - static_cast<float>(GlobalVariables::currentStep() % 8) * 3}, Vector2{1, 0}, tempColour);
+    }
+    //darkPurplePool.spawn()->spawn(Vector2 {120, 180 - static_cast<float>(currentStep() % 8 * 3)}, Vector2{-1, 0}, tempColour);
     /*simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 120), 0}, Vector2{0,1});
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 120), -4}, Vector2{0,1}, DARKGREEN);
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 120), 0}, Vector2{0,1});
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 120), -4}, Vector2{0,1}, DARKGREEN);*/
-
-    if (currentStep() % 40 == 0) {
-        float tempY = static_cast<float>((currentStep() % 20) / 10);
-        orangePool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 100), tempY-8}, Vector2{-0.4, 0.91652}, ORANGE);
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 100), tempY-4}, Vector2{-0.4, 0.91652}, YELLOW);
-        orangePool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 100) + 15, tempY-8}, Vector2{-0.4, 0.91652}, ORANGE);
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 100) + 15, tempY-12}, Vector2{-0.4, 0.91652}, YELLOW);
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 100) + 30, tempY-20}, Vector2{0, 1}, GREEN);
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 100) + 30, tempY-16}, Vector2{0, 1}, DARKGREEN);
-
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 100), tempY-12}, Vector2{0.4, 0.91652}, YELLOW);
-        orangePool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 100), tempY-8}, Vector2{0.4, 0.91652}, ORANGE);
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 100) - 15, tempY-12}, Vector2{0.4, 0.91652}, YELLOW);
-        orangePool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 100) - 15, tempY-8}, Vector2{0.4, 0.91652}, ORANGE);
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 100) - 30, tempY-20}, Vector2{0, 1}, GREEN);
-        simpleBullet2Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 100) - 30, tempY-16}, Vector2{0, 1}, DARKGREEN);
-    }
     for (auto pooling_vector: phasePools) {
         pooling_vector->doPhysics(playerPosAndMovement);
     }

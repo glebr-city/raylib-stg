@@ -11,29 +11,31 @@
 #include "GlobalVariables.h"
 #include "InputHandler.h"
 #include "PhaseHelper.h"
+#include "PlayerBullet.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
 Vector2 position;
 constexpr float speed = 1.6;
-constexpr float focusSpeed = 0.7;
+constexpr float focusSpeed = 0.85;
 const float* currentSpeed = &speed;
 bool leftDown = false;
 bool rightDown = false;
 bool upDown = false;
 bool downDown = false;
-static Texture2D playerSpriteSheet;
 static constexpr std::array<KeyboardKey, 3> leftKeys = {KEY_P, KEY_LEFT, KEY_A};
 static constexpr std::array<KeyboardKey, 3> rightKeys = {KEY_RIGHT, KEY_RIGHT_BRACKET, KEY_D};
 static constexpr std::array<KeyboardKey, 3> upKeys = {KEY_UP, KEY_RIGHT_ALT, KEY_W};
 static constexpr std::array<KeyboardKey, 3> downKeys = {KEY_DOWN, KEY_LEFT_BRACKET, KEY_S};
 static constexpr std::array<KeyboardKey, 3> focusKeys = {KEY_LEFT_SHIFT, KEY_RIGHT_SHIFT, KEY_SPACE};
-static constexpr std::array<KeyboardKey, 3> hyperKeys = {KEY_X, KEY_LEFT_CONTROL, KEY_RIGHT_CONTROL};
+static constexpr std::array<KeyboardKey, 3> hyperKeys = {KEY_X, KEY_LEFT_CONTROL, KEY_PERIOD};
+static constexpr std::array<KeyboardKey, 2> fireKeys = {KEY_Z, KEY_SLASH};
 Vector2 inputVector {0, 0};
 Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
+constexpr int fireCooldown = 30; //Frames to wait between player shots
+int currentFireCooldown = 0; //Frames remaining until the player may shoot again
 
 Player::Player(Vector2 pos) {
-    playerSpriteSheet = LoadTexture("resources/playerSpriteSheet.png");
     position = pos;
 }
 
@@ -90,29 +92,46 @@ void Player::doPreStep() {
 
     if (InputHandler::CheckInputsPressed(hyperKeys) && currentGrazeMetre >= maxGrazeMetre)
         startHyper();
-
-    if (GlobalVariables::currentStep() % 40 == 0) {
-        playerRect.x = static_cast<int>(playerRect.x + playerRect.width) % playerSpriteSheet.width; // NOLINT(*-narrowing-conversions)
+    if (--currentFireCooldown <= 0 && InputHandler::CheckInputsDown(fireKeys)) {
+        currentFireCooldown = fireCooldown;
+        playerBullets.emplace_back(position + Vector2 {0, 0});
+    } else if (currentFireCooldown == fireCooldown - 5) {
+        playerBullets.emplace_back(position + Vector2 {0, 0});
+    } else if (currentFireCooldown == fireCooldown - 10) {
+        playerBullets.emplace_back(position + Vector2 {0, 0});
     }
-    playerRect.y = -inputVector.x * playerRect.height;
+    //Render player bullets, then the player themselves.
+    for (auto& bullet : playerBullets) {
+        bullet.doPreStep();
+    }
+    SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), position); //Counting on digital movement only.
     Vector2Normalize(inputVector);
-    Vector2 spritePosition {position.x - 6.5f, position.y - 6.5f};
-    DrawTextureRec(playerSpriteSheet, playerRect, spritePosition, WHITE);
 
     //std::cout << "Player PreStep, " << std::to_string(leftKeys[0]) << std::endl;
 }
 
 void Player::doPhysics(Vector2 pos) {
     std::cout << "!!! Player::doPhysics should be called with no parameters.";
-    Player::doPhysics();
+    doPhysics();
 }
 
 void Player::doPhysics() {
     position += inputVector * *currentSpeed;
     position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(GlobalVariables::gameWidth()),static_cast<float>(GlobalVariables::gameHeight())});
+    //Do player bullet physics!
+    for (int i = 0; i < playerBullets.size();) {
+         if (!playerBullets[i].doPhysics()) {
+             playerBullets.erase(playerBullets.begin() + i);
+             continue;
+         }
+        i++;
+    }
 }
 
 void Player::startHyper() {
     GlobalVariables::getCurrentPhase()->startHyper();
-    //getCurrentPhase()->startHyper();
+}
+
+std::vector<PlayerBullet>* Player::getPlayerBullets() {
+    return &playerBullets;
 }

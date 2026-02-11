@@ -57,7 +57,7 @@ bool SimpleBullet1::doPhysics(const std::array<Vector2, 2> playerPosAndMovement)
         hasBeenGrazed = true;
     }
     position = Vector2Add(position, direction * speed);
-    if (position.x < -2 || position.x > 122 || position.y < -100 || position.y > 182)
+    if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
         return false;
     return true;
 }

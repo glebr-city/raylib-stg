@@ -26,6 +26,7 @@ add_executable(raylib_stg src/main.cpp
         include/TestPhase1.h
         include/DamageHandler.h
         src/GlobalVariables.cpp
+        include/PlayerBullet.h
 )
 
 target_sources(raylib_stg

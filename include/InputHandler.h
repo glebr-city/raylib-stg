@@ -12,8 +12,11 @@
 class InputHandler {
     public:
     static bool CheckInputsPressed(const std::array<KeyboardKey, 3> &keyArray);
+    static bool CheckInputsPressed(const std::array<KeyboardKey, 2> &keyArray);
     static bool CheckInputsDown(const std::array<KeyboardKey, 3> &keyArray);
+    static bool CheckInputsDown(const std::array<KeyboardKey, 2> &keyArray);
     static bool CheckInputsReleased(const std::array<KeyboardKey, 3> &keyArray);
+    static bool CheckInputsReleased(const std::array<KeyboardKey, 2> &keyArray);
 };
 
 

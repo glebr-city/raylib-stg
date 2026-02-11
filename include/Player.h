@@ -6,13 +6,15 @@
 #define RAYLIB_STG_PLAYER_H
 #include <StepThinker.h>
 
+#include "PlayerBullet.h"
 #include "raylib.h"
 
 
 class Player : public StepThinker{
 private:
     void startHyper();
-    public:
+
+public:
     explicit Player(Vector2 pos);
 
     void doPreStep() override;
@@ -23,6 +25,7 @@ private:
     Vector2 getPosition();
     Vector2 getMovement();
     std::array<Vector2, 2> getPosAndMovement();
+    std::vector<PlayerBullet> *getPlayerBullets();
 };
 
 

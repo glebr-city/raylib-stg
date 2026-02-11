@@ -12,6 +12,9 @@ class SimpleBullet : public Bullet {
 public:
     SimpleBullet();
     SimpleBullet(Vector2 pos);
+
+    void doPreStep();
+
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
 
     void spawn(Vector2 _position) override;
@@ -20,7 +23,7 @@ protected:
     static constexpr int grazeValue = 20;
     static constexpr float radius = 0.5f;
     ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
-private:
+protected:
     Vector2 position{};
 
 };
