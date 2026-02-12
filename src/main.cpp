@@ -88,8 +88,8 @@ int main() {
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
         BeginMode2D(camera);
         //DrawCircleLinesV(player.getPosition(), grazeRadius, DARKGRAY);
-        player.doPreStep();
         PlayerBullets::getPlayerBullets()->doPreStep();
+        player.doPreStep();
         SpawnedEnemies::doPreStep();
         GlobalVariables::getCurrentPhase()->doPreStep();
         EndMode2D();

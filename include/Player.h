@@ -14,6 +14,7 @@ class PlayerBullet;
 class Player : public StepThinker{
 private:
     void startHyper();
+    void endHyper();
 
 public:
     explicit Player(Vector2 pos);

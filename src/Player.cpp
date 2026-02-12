@@ -35,6 +35,8 @@ constexpr int fireCooldown = 30; //Frames to wait between player shots
 int currentFireCooldown = 0; //Frames remaining until the player may shoot again
 Texture2D grazeRadiusSprite;
 Texture2D grazeRadiusFillingSprite;
+int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
+bool hyperOn = false;
 
 Player::Player(Vector2 pos) {
     grazeRadiusSprite = LoadTexture("resources/grazeRadius.png");
@@ -93,15 +95,41 @@ void Player::doPreStep() {
         currentSpeed = &speed;
     }
 
-    if (InputHandler::CheckInputsPressed(hyperKeys) && currentGrazeMetre >= maxGrazeMetre)
-        startHyper();
-    if (--currentFireCooldown <= 0 && InputHandler::CheckInputsDown(fireKeys)) {
-        currentFireCooldown = fireCooldown;
-        PlayerBullets::spawnPlayerBullet(position);
-    } else if (currentFireCooldown == fireCooldown - 5) {
-        PlayerBullets::spawnPlayerBullet(position);
-    } else if (currentFireCooldown == fireCooldown - 10) {
-        PlayerBullets::spawnPlayerBullet(position);
+    if (InputHandler::CheckInputsPressed(hyperKeys)) {
+        if (!hyperOn) {
+            if (currentGrazeMetre >= maxGrazeMetre)
+                startHyper();
+        }
+        else {
+            endHyper();
+        }
+    }
+        if (InputHandler::CheckInputsDown(fireKeys)) {
+            if (--currentFireCooldown <= 0) {
+                if (hyperOn) {
+                    float xOffset;
+                    if (GlobalVariables::currentStep() % 51 < 26)
+                        xOffset = (static_cast<float>(GlobalVariables::currentStep() % 51)) - 12.5f;
+                    else
+                        xOffset = 41.66667f - (static_cast<float>((GlobalVariables::currentStep() % 51)));
+                    xOffset /= 50;
+                    PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {0, -3}), xOffset);
+                    //PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {xOffset, 0}));
+                    //PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {xOffset, 8}));
+                    currentFireCooldown = 5;
+                } else {
+                    currentFireCooldown = fireCooldown;
+                }
+            } else if (currentFireCooldown == fireCooldown - 5) {
+                PlayerBullets::spawnPlayerBullet(false, position);
+            } else if (currentFireCooldown == fireCooldown - 10) {
+                PlayerBullets::spawnPlayerBullet(false, position);
+            }
+        }
+    if (hyperOn) {
+        GlobalVariables::setGrazeMetre(std::max(0, GlobalVariables::getGrazeMetre() - hyperCostRate));
+        if (GlobalVariables::getGrazeMetre() <= 0)
+            endHyper();
     }
     DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
     float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
@@ -124,7 +152,13 @@ void Player::doPhysics() {
 }
 
 void Player::startHyper() {
-    GlobalVariables::getCurrentPhase()->startHyper();
+    GlobalVariables::getCurrentPhase()->cancelBullets();
+    hyperOn = true;
+}
+
+void Player::endHyper() {
+    GlobalVariables::getCurrentPhase()->cancelBullets();
+    hyperOn = false;
     GlobalVariables::setGrazeMetre(0);
 }
 

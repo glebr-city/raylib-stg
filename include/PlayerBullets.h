@@ -10,8 +10,12 @@
 class PlayerBullets {
     static std::unique_ptr<PoolingVector<PlayerBullet>> playerBullets;
 public:
-    static void spawnPlayerBullet(const Vector2 pos) {
-        playerBullets->spawn()->spawn(pos);
+    static void spawnPlayerBullet(bool isHyper, const Vector2 pos) {
+        playerBullets->spawn()->spawn(isHyper, pos);
+    }
+
+    static void spawnPlayerBullet(bool isHyper, const Vector2 pos, float _xSpeed) {
+        playerBullets->spawn()->spawn(isHyper, pos, _xSpeed);
     }
 
     static PoolingVector<PlayerBullet>* getPlayerBullets() {

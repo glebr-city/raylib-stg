@@ -14,6 +14,7 @@ void SpriteHandler::InitAnimatedSprites() {
    animatedSprites = {
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerSpriteSheet.png"), Rectangle {0,0,13,13}, 40}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerBulletSpriteSheet.png"), Rectangle {0,0,7,5}, 12}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerBulletHyperSpriteSheet.png"), Rectangle {0,0,15,10}, 12}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bullet1MonochromeSpriteSheet.png"), Rectangle {0,0,9,9}, 8}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/tinyBullet1SpriteSheet.png"), Rectangle {0,0,5,5}, 4})
     };

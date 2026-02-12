@@ -15,7 +15,7 @@
 
 class Bullet  : public StepThinker{
 protected:
- static constexpr int grazeValue = 20;
+ static constexpr int grazeValue = 40;
  bool CheckCollisionRoundBullet(Vector2 _center, float _radius, Vector2 p1, const Vector2 p2, int _grazeValue)
  {
   float dx = p1.x - p2.x;

@@ -49,7 +49,7 @@ class PhaseHelper : public StepThinker {
         return i;
     }
 
-    void startHyper() {
+    void cancelBullets() {
         for (const auto pooling_vector : phasePools) {
             pooling_vector->setNumActive(0);
         }
