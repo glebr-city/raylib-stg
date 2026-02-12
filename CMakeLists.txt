@@ -27,6 +27,14 @@ add_executable(raylib_stg src/main.cpp
         include/DamageHandler.h
         src/GlobalVariables.cpp
         include/PlayerBullet.h
+        include/GrazeConstants.h
+        include/PlayerBullets.h
+        src/PlayerBullets.cpp
+        include/Enemy.h
+        include/SpawnedEnemies.h
+        src/SpawnedEnemies.cpp
+        include/TestPhase2.h
+        include/OrbEnemy1.h
 )
 
 target_sources(raylib_stg

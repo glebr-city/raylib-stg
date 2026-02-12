@@ -2,19 +2,18 @@
 // Created by g on 04/02/2026.
 //
 
-#include <algorithm>
 #include <array>
 #include <iostream>
 #include <Player.h>
 
-#include "DamageHandler.h"
 #include "GlobalVariables.h"
 #include "InputHandler.h"
 #include "PhaseHelper.h"
+#include "PlayerBullets.h"
 #include "raylib.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
-Vector2 position;
+
 constexpr float speed = 1.6;
 constexpr float focusSpeed = 0.85;
 const float* currentSpeed = &speed;
@@ -29,12 +28,17 @@ static constexpr std::array<KeyboardKey, 3> downKeys = {KEY_DOWN, KEY_LEFT_BRACK
 static constexpr std::array<KeyboardKey, 3> focusKeys = {KEY_LEFT_SHIFT, KEY_RIGHT_SHIFT, KEY_SPACE};
 static constexpr std::array<KeyboardKey, 3> hyperKeys = {KEY_X, KEY_LEFT_CONTROL, KEY_PERIOD};
 static constexpr std::array<KeyboardKey, 2> fireKeys = {KEY_Z, KEY_SLASH};
+Vector2 position;
 Vector2 inputVector {0, 0};
 Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 constexpr int fireCooldown = 30; //Frames to wait between player shots
 int currentFireCooldown = 0; //Frames remaining until the player may shoot again
+Texture2D grazeRadiusSprite;
+Texture2D grazeRadiusFillingSprite;
 
 Player::Player(Vector2 pos) {
+    grazeRadiusSprite = LoadTexture("resources/grazeRadius.png");
+    grazeRadiusFillingSprite = LoadTexture("resources/grazeRadiusFillingSpriteSheet.png");
     position = pos;
 }
 
@@ -93,12 +97,16 @@ void Player::doPreStep() {
         startHyper();
     if (--currentFireCooldown <= 0 && InputHandler::CheckInputsDown(fireKeys)) {
         currentFireCooldown = fireCooldown;
-        GlobalVariables::spawnPlayerBullet(position);
+        PlayerBullets::spawnPlayerBullet(position);
     } else if (currentFireCooldown == fireCooldown - 5) {
-        GlobalVariables::spawnPlayerBullet(position);
+        PlayerBullets::spawnPlayerBullet(position);
     } else if (currentFireCooldown == fireCooldown - 10) {
-        GlobalVariables::spawnPlayerBullet(position);
+        PlayerBullets::spawnPlayerBullet(position);
     }
+    DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
+    float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
+    float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
+    DrawTextureRec(grazeRadiusFillingSprite, Rectangle{tempX, 22 - tempHeight, 22, tempHeight}, Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, WHITE);
     SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), position); //Counting on digital movement only.
     Vector2Normalize(inputVector);
 
@@ -112,11 +120,11 @@ void Player::doPhysics(Vector2 pos) {
 
 void Player::doPhysics() {
     position += inputVector * *currentSpeed;
-    position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(GlobalVariables::gameWidth()),static_cast<float>(GlobalVariables::gameHeight())});
+    position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth),static_cast<float>(gameHeight)});
 }
 
 void Player::startHyper() {
     GlobalVariables::getCurrentPhase()->startHyper();
-    GlobalVariables::setCurrentGrazeMetre(0);
+    GlobalVariables::setGrazeMetre(0);
 }
 

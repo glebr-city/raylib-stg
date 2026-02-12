@@ -8,12 +8,9 @@
 
 #include "GlobalVariables.h"
 
-TestPhase1::TestPhase1() : movingDarkPurplePool(2000), darkPurplePool(2000), simpleBullet1Pool(2000), orangePool(100), simpleBullet2Pool(100) {
+TestPhase1::TestPhase1() : PhaseHelper(phasePools), phasePools(), movingDarkPurplePool(200), darkPurplePool(400) {
     phasePools.push_back(&movingDarkPurplePool);
     phasePools.push_back(&darkPurplePool);
-    phasePools.push_back(&simpleBullet1Pool);
-    phasePools.push_back(&orangePool);
-    phasePools.push_back(&simpleBullet2Pool);
 }
 
 bool TestPhase1::doPhysics(Player* player) {

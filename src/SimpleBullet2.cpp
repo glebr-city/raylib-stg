@@ -14,12 +14,14 @@ void SimpleBullet2::spawn(const Vector2 pos, const Vector2 dir, const Color col)
     position = pos;
     direction = dir;
     color = col;
+    hasBeenGrazed = false;
 }
 
 void SimpleBullet2::spawn(const Vector2 pos, const Vector2 dir) {
     position = pos;
     direction = dir;
     color = GREEN;
+    hasBeenGrazed = false;
 }
 
 
@@ -45,7 +47,7 @@ void SimpleBullet2::doPreStep() {
 
 bool SimpleBullet2::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {
     Vector2 playerFinalPoint = playerPosAndMovement[0] + (playerPosAndMovement[1] - Vector2Scale(direction, speed));
-    if (CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], playerFinalPoint)) {
+    if (CheckCollisionRoundBullet(position, radius, playerPosAndMovement[0], playerFinalPoint, 20)) {
         DamageHandler::hitPlayer();
         return false;
     }

@@ -6,12 +6,12 @@
 #define RAYLIB_STG_DAMAGEHANDLER_H
 #include <algorithm>
 
+#include "GlobalVariables.h"
+#include "GrazeConstants.h"
 #include "Player.h"
 
 static Player* player;
 inline int hitsTaken = 0;
-inline int maxGrazeMetre = 1023;
-inline int currentGrazeMetre = 0;
 class DamageHandler {
 private:
     public:
@@ -33,13 +33,6 @@ private:
 
     static void grazePlayer(int i) {
         currentGrazeMetre = std::min(currentGrazeMetre + i, maxGrazeMetre);
-    }
-    static int getGrazeMetre() {
-        return currentGrazeMetre;
-    }
-
-    static void setGrazeMetre(int i) {
-        currentGrazeMetre = i;
     }
 };
 #endif //RAYLIB_STG_DAMAGEHANDLER_H

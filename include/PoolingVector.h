@@ -72,7 +72,9 @@ class PoolingVector : public IPoolingVector{
     }
 
     T* spawn() {
-        //std::cout << "Bullets active: "<< num_active << std::endl;
+        if (num_active >= vector.size()) {
+            num_active = 0;
+        }
         return &vector.at(num_active++);
     }
 

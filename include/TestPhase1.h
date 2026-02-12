@@ -11,11 +11,10 @@
 
 
 class TestPhase1 : public PhaseHelper {
-    PoolingVector<SimpleBullet1> simpleBullet1Pool;
+    private:
+    std::vector<IPoolingVector *> phasePools;
     PoolingVector<SimpleBullet1> movingDarkPurplePool;
     PoolingVector<SimpleBullet1> darkPurplePool;
-    PoolingVector<SimpleBullet2> orangePool;
-    PoolingVector<SimpleBullet2> simpleBullet2Pool;
 public:
     TestPhase1();
     bool doPhysics(Player *player) override;

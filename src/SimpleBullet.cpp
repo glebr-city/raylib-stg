@@ -23,6 +23,7 @@ bool SimpleBullet::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) 
     return !CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]));
 }
 
-void SimpleBullet::spawn(Vector2 _position) {
+void SimpleBullet::spawn(const Vector2 _position) {
     position = _position;
+    hasBeenGrazed = false;
 }
