@@ -39,6 +39,10 @@ public:
         return spawnedEnemies.get();
     }
 
+    static void clear() {
+        spawnedEnemies->clear();
+    }
+
 };
 
 #endif //RAYLIB_STG_SPAWNEDENEMIES_H

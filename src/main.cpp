@@ -10,8 +10,6 @@
 #include "InputHandler.h"
 #include "PhaseHelper.h"
 #include "PlayerBullets.h"
-#include "SimpleBullet1.h"
-#include "SimpleBullet2.h"
 #include "SpawnedEnemies.h"
 #include "SpriteHandler.h"
 #include "TestPhase2.h"
@@ -78,6 +76,7 @@ int main() {
             GlobalVariables::setCurrentPhase(std::make_unique<TestPhase2>());
             DamageHandler::setPlayer(&player);
             GlobalVariables::setGrazeMetre(0);
+            SpawnedEnemies::clear();
         }
         GlobalVariables::currentStep()++;
         SpriteHandler::AdvanceAnimation();

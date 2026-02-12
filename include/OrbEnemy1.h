@@ -16,6 +16,7 @@ protected:
     inline static const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
 public:
     OrbEnemy1(PoolingVector<SimpleBullet2>* _bulletPool) {
+        elapsedSteps = -1;
         bulletPool = _bulletPool;
         position = {-5, 30};
         collider = {-5, 30, 5, 5};
@@ -35,7 +36,7 @@ public:
             return false;
         collider.x = position.x;
         Vector2 playerFinalPos = Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]);
-        if (elapsedSteps % 40 == 0) {
+        if (elapsedSteps % 31 == 0) {
             bulletPool->spawn()->spawn(position, Vector2Normalize(playerFinalPos - position));
         }
         return true;

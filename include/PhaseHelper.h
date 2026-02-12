@@ -35,8 +35,6 @@ class PhaseHelper : public StepThinker {
                 return true;
             }
             std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
-            if (!phasePools.empty())
-                std::cout << phasePools.at(0)->getNumActive() << std::endl;
         for (auto* pool : phasePools) {
             pool->doPhysics(playerPosAndMovement);
         }
