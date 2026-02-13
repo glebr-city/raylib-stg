@@ -22,7 +22,6 @@ public:
 protected:
     static constexpr float radius = 0.5f;
     ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
-protected:
     Vector2 position{};
 
 };

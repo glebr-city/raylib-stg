@@ -47,7 +47,7 @@ void SimpleBullet2::doPreStep() {
 
 bool SimpleBullet2::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {
     Vector2 playerFinalPoint = playerPosAndMovement[0] + (playerPosAndMovement[1] - Vector2Scale(direction, speed));
-    if (CheckCollisionRoundBullet(position, radius, playerPosAndMovement[0], playerFinalPoint, 20)) {
+    if (CheckCollisionRoundBullet(position, radius, playerPosAndMovement[0], playerFinalPoint, grazeValue)) {
         DamageHandler::hitPlayer();
         return false;
     }

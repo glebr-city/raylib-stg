@@ -67,6 +67,7 @@ public:
             currentSprite = sprite;
             collider = Rectangle {colliderOffsetX, colliderOffsetY, 7, 10};
         }
+        xSpeed = 0;
         position = _position;
         hasBeenGrazed = false;
     }

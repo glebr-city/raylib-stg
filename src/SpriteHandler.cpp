@@ -14,7 +14,9 @@ void SpriteHandler::InitAnimatedSprites() {
    animatedSprites = {
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerSpriteSheet.png"), Rectangle {0,0,13,13}, 40}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerBulletSpriteSheet.png"), Rectangle {0,0,7,5}, 12}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerBulletHyperSpriteSheet.png"), Rectangle {0,0,15,10}, 12}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerBulletHyperSpriteSheet.png"), Rectangle {0,0,15,10}, 18}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/grazeRadiusFilledSpriteSheet.png"), Rectangle {0,0,22,22}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/hyperAuraSpriteSheet.png"), Rectangle {0,0,17,17}, 2}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bullet1MonochromeSpriteSheet.png"), Rectangle {0,0,9,9}, 8}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/tinyBullet1SpriteSheet.png"), Rectangle {0,0,5,5}, 4})
     };
@@ -37,6 +39,12 @@ void SpriteHandler::DrawMyAnimatedSprite(int animatedSpriteIndex, int yOffset, V
     Rectangle spriteRect = animatedSprites[animatedSpriteIndex]->spriteRect;
     spriteRect.y += yOffset;
     DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {pos.x - (spriteRect.width / 2), pos.y - (spriteRect.height / 2)}, WHITE);
+}
+
+void SpriteHandler::DrawMyAnimatedSprite(int animatedSpriteIndex, int yOffset, Vector2 pos, Color col) {
+    Rectangle spriteRect = animatedSprites[animatedSpriteIndex]->spriteRect;
+    spriteRect.y += yOffset;
+    DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {pos.x - (spriteRect.width / 2), pos.y - (spriteRect.height / 2)}, col);
 }
 
 

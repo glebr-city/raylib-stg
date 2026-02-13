@@ -15,8 +15,10 @@ typedef enum {
     PLAYER = 0,
     PLAYER_BULLET = 1,
     PLAYER_BULLET_HYPER = 2,
-    BULLET_1_MONOCHROME = 3,
-    BULLET_SMALL_MONOCHROME = 4,
+    PLAYER_GRAZE_FILLED = 3,
+    PLAYER_HYPER_AURA = 4,
+    BULLET_1_MONOCHROME = 5,
+    BULLET_SMALL_MONOCHROME = 6,
 } ANIMATED_SPRITES;
 
 struct MyAnimatedSprite {
@@ -29,13 +31,15 @@ struct MyAnimatedSprite {
 
 
 
-    static std::array<std::unique_ptr<MyAnimatedSprite>, 5> animatedSprites;
+    static std::array<std::unique_ptr<MyAnimatedSprite>, 7> animatedSprites;
 class SpriteHandler{
 private:
     public:
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos);
 
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, int yOffset, Vector2 pos);
+
+    static void DrawMyAnimatedSprite(int animatedSpriteIndex, int yOffset, Vector2 pos, Color col);
 
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos, Color col);
     static void AdvanceAnimation();

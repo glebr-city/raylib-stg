@@ -31,6 +31,8 @@ private:
     Vector2 position{};
     Vector2 direction{};
     Color color = WHITE;
+protected:
+    static constexpr int grazeValue = 100;
 
 };
 

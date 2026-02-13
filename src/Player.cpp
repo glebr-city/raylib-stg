@@ -33,14 +33,17 @@ Vector2 inputVector {0, 0};
 Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 constexpr int fireCooldown = 30; //Frames to wait between player shots
 int currentFireCooldown = 0; //Frames remaining until the player may shoot again
+bool wishToShoot = false; //Rudimentary buffer!
 Texture2D grazeRadiusSprite;
 Texture2D grazeRadiusFillingSprite;
+ANIMATED_SPRITES grazeRadiusFilledSprite = PLAYER_GRAZE_FILLED;
+ANIMATED_SPRITES hyperAuraSprite = PLAYER_HYPER_AURA;
 int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
 bool hyperOn = false;
 
 Player::Player(Vector2 pos) {
     grazeRadiusSprite = LoadTexture("resources/grazeRadius.png");
-    grazeRadiusFillingSprite = LoadTexture("resources/grazeRadiusFillingSpriteSheet.png");
+    grazeRadiusFillingSprite = LoadTexture("resources/grazeRadiusFilling.png");
     position = pos;
 }
 
@@ -104,29 +107,47 @@ void Player::doPreStep() {
             endHyper();
         }
     }
-        if (InputHandler::CheckInputsDown(fireKeys)) {
-            if (--currentFireCooldown <= 0) {
-                if (hyperOn) {
-                    float xOffset;
-                    if (GlobalVariables::currentStep() % 51 < 26)
-                        xOffset = (static_cast<float>(GlobalVariables::currentStep() % 51)) - 12.5f;
-                    else
-                        xOffset = 41.66667f - (static_cast<float>((GlobalVariables::currentStep() % 51)));
-                    xOffset /= 50;
-                    PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {0, -3}), xOffset);
-                    //PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {xOffset, 0}));
-                    //PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {xOffset, 8}));
-                    currentFireCooldown = 5;
-                } else {
-                    currentFireCooldown = fireCooldown;
-                }
-            } else if (currentFireCooldown == fireCooldown - 5) {
-                PlayerBullets::spawnPlayerBullet(false, position);
-            } else if (currentFireCooldown == fireCooldown - 10) {
-                PlayerBullets::spawnPlayerBullet(false, position);
-            }
+    if (InputHandler::CheckInputsDown(fireKeys)) {
+        wishToShoot = true;
+    }
+
+    if (--currentFireCooldown <= 0 && wishToShoot) {
+        wishToShoot = false;
+        if (hyperOn) {
+            float xOffset;
+            if (GlobalVariables::currentStep() % 51 < 26)
+                xOffset = (static_cast<float>(GlobalVariables::currentStep() % 51)) - 12.5f;
+            else
+                xOffset = 41.66667f - (static_cast<float>((GlobalVariables::currentStep() % 51)));
+            xOffset /= 50;
+            PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {0, -3}), xOffset);
+            currentFireCooldown = 5;
+        } else {
+            PlayerBullets::spawnPlayerBullet(false, position);
+            currentFireCooldown = fireCooldown;
         }
+    } else if (currentFireCooldown == fireCooldown - 7) {
+        PlayerBullets::spawnPlayerBullet(false, position);
+    } else if (currentFireCooldown == fireCooldown - 14) {
+        PlayerBullets::spawnPlayerBullet(false, position);
+    } else if (currentFireCooldown == fireCooldown - 24) {
+        wishToShoot = false;
+    }
     if (hyperOn) {
+        float xOffset;
+        xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
+        const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
+        Color hyperGhostColour = {200, 200, 0, tempAlpha};
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, 1}), hyperGhostColour);
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, 1}), hyperGhostColour);
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, xOffset}), hyperGhostColour);
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, xOffset}), hyperGhostColour);
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {0, xOffset}), hyperGhostColour);
+        xOffset /= 2;
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, 1}), hyperGhostColour);
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, 1}), hyperGhostColour);
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, xOffset}), hyperGhostColour);
+        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, xOffset}), hyperGhostColour);
         GlobalVariables::setGrazeMetre(std::max(0, GlobalVariables::getGrazeMetre() - hyperCostRate));
         if (GlobalVariables::getGrazeMetre() <= 0)
             endHyper();
@@ -134,11 +155,12 @@ void Player::doPreStep() {
     DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
     float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
     float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
-    DrawTextureRec(grazeRadiusFillingSprite, Rectangle{tempX, 22 - tempHeight, 22, tempHeight}, Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, WHITE);
+    if (GlobalVariables::getGrazeMetre() < maxGrazeMetre)
+        DrawTextureRec(grazeRadiusFillingSprite, Rectangle{tempX, 22 - tempHeight, 22, tempHeight}, Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, WHITE);
+    else
+        SpriteHandler::DrawMyAnimatedSprite(grazeRadiusFilledSprite, position);
     SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), position); //Counting on digital movement only.
     Vector2Normalize(inputVector);
-
-    //std::cout << "Player PreStep, " << std::to_string(leftKeys[0]) << std::endl;
 }
 
 void Player::doPhysics(Vector2 pos) {
