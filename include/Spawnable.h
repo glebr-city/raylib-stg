@@ -7,8 +7,13 @@
 #include "StepThinker.h"
 
 class Spawnable : public StepThinker {
+protected:
+    Vector2 position{};
     public:
     virtual void spawn(Vector2 _position) = 0;
+    Vector2 getPosition() override {
+        return position;
+    }
 };
 
 #endif //RAYLIB_STG_SPAWNABLE_H

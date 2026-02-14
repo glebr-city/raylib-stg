@@ -14,11 +14,11 @@ class SimpleBullet1 : public SimpleBullet{
     static constexpr float speed = 1.5f;
     static constexpr int grazeValue = 5;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
-    Vector2 position{};
     Vector2 direction{};
     Color color = WHITE;
 
 public:
+    using StepThinker::doPhysics;
     SimpleBullet1(const Vector2 pos, const Vector2 dir);
 
     SimpleBullet1();

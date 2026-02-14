@@ -8,6 +8,7 @@
 
 #include "Player.h"
 #include "PoolingVector.h"
+#include "ScoreItemHandler.h"
 #include "StepThinker.h"
 
 
@@ -34,7 +35,7 @@ class PhaseHelper : public StepThinker {
                 }
                 return true;
             }
-            std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
+            const std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
         for (auto* pool : phasePools) {
             pool->doPhysics(playerPosAndMovement);
         }
@@ -50,7 +51,11 @@ class PhaseHelper : public StepThinker {
     }
 
     void cancelBullets() {
+        std::cout << "cancelling bullets, " << phasePools.size() << std::endl;
         for (const auto pooling_vector : phasePools) {
+            for (const auto& pos : pooling_vector->getActivePositions()) {
+                ScoreItemHandler::spawn(pos, pooling_vector->getValue());
+            }
             pooling_vector->setNumActive(0);
         }
         currentWaitSteps = 60;

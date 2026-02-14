@@ -37,6 +37,10 @@ add_executable(raylib_stg src/main.cpp
         include/OrbEnemy1.h
         include/ScoreItem.h
         include/Spawnable.h
+        include/ScoreItemHandler.h
+        src/ScoreItemHandler.cpp
+        include/ScoreHandler.h
+        src/ScoreHandler.cpp
 )
 
 target_sources(raylib_stg

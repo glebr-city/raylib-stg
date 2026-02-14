@@ -22,9 +22,9 @@ public:
     void doPreStep() override;
 
     void doPhysics(Vector2 pos);
-    void doPhysics();
+    bool doPhysics() override;
 
-    Vector2 getPosition();
+    Vector2 getPosition() override;
     Vector2 getMovement();
     std::array<Vector2, 2> getPosAndMovement();
 };

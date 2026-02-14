@@ -173,9 +173,10 @@ void Player::doPhysics(Vector2 pos) {
     doPhysics();
 }
 
-void Player::doPhysics() {
+bool Player::doPhysics() {
     position += inputVector * *currentSpeed;
     position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth),static_cast<float>(gameHeight)});
+    return true;
 }
 
 void Player::startHyper() {

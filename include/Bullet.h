@@ -11,7 +11,6 @@
 #include "GrazeConstants.h"
 #include "raylib.h"
 #include "Spawnable.h"
-#include "StepThinker.h"
 
 
 class Bullet  : public Spawnable{
@@ -51,11 +50,11 @@ public:
  Bullet() {
   position = Vector2();
  }
- Bullet(Vector2 pos) {
+ Bullet(const Vector2 pos) {
   position = pos;
  }
 
- virtual void spawn(const Vector2 _position) override {
+ void spawn(const Vector2 _position) override {
   position = _position;
   hasBeenGrazed = false;
  }
@@ -63,7 +62,6 @@ protected:
  bool hasBeenGrazed = false;
  static const float radius;
  Vector2 position{};
-
 };
 
 

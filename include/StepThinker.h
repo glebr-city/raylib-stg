@@ -15,6 +15,8 @@ class StepThinker : public GameObject{
 public:
     virtual void doPreStep();
     virtual bool doPhysics(std::array<Vector2, 2> playerPosAndMovement);
+    virtual bool doPhysics();
+    virtual Vector2 getPosition();
 };
 
 

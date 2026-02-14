@@ -87,11 +87,12 @@ int main() {
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
         BeginMode2D(camera);
-        //DrawCircleLinesV(player.getPosition(), grazeRadius, DARKGRAY);
+        ScoreItemHandler::doPreStep();
         PlayerBullets::getPlayerBullets()->doPreStep();
         player.doPreStep();
         SpawnedEnemies::doPreStep();
         GlobalVariables::getCurrentPhase()->doPreStep();
+        ScoreHandler::doPreStep();
         EndMode2D();
         EndScissorMode();
         std::string tempStr = "Bullet Count: ";
@@ -104,6 +105,7 @@ int main() {
         /*DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);*/
         DrawFPS(100, 195);
         EndDrawing();
+        ScoreItemHandler::doPhysics(&player);
         PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics(&player);
         GlobalVariables::getCurrentPhase()->doPhysics(&player);

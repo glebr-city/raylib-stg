@@ -4,7 +4,6 @@
 
 #include "../include/SimpleBullet2.h"
 
-#include <iostream>
 
 #include "DamageHandler.h"
 #include "GlobalVariables.h"

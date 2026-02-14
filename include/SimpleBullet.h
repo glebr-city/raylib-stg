@@ -13,16 +13,17 @@ public:
     SimpleBullet();
     SimpleBullet(Vector2 pos);
 
-    void doPreStep();
+    void doPreStep() override;
 
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
 
     void spawn(Vector2 _position) override;
 
+    Vector2 getPosition() override;
+
 protected:
     static constexpr float radius = 0.5f;
     ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
-    Vector2 position{};
 
 };
 

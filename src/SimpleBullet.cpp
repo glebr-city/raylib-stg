@@ -27,3 +27,7 @@ void SimpleBullet::spawn(const Vector2 _position) {
     position = _position;
     hasBeenGrazed = false;
 }
+
+Vector2 SimpleBullet::getPosition() {
+    return position;
+}
