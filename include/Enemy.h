@@ -8,7 +8,7 @@
 #include "PlayerBullet.h"
 #include "PlayerBullets.h"
 
-class Enemy : public StepThinker {
+class Enemy : public Spawnable {
 protected:
     Vector2 position = {};
     static inline const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
@@ -38,6 +38,10 @@ public:
 
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
         return !checkPlayerBulletCollision();
+    }
+
+    void spawn(const Vector2 _position) override {
+        position = _position;
     }
 };
 #endif //RAYLIB_STG_ENEMY_H

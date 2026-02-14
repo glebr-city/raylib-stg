@@ -10,10 +10,11 @@
 #include "DamageHandler.h"
 #include "GrazeConstants.h"
 #include "raylib.h"
+#include "Spawnable.h"
 #include "StepThinker.h"
 
 
-class Bullet  : public StepThinker{
+class Bullet  : public Spawnable{
 protected:
  static constexpr int grazeValue = 40;
  bool CheckCollisionRoundBullet(const Vector2 _center, const float _radius, const Vector2 p1, const Vector2 p2, const int _grazeValue)
@@ -54,7 +55,7 @@ public:
   position = pos;
  }
 
- virtual void spawn(const Vector2 _position) {
+ virtual void spawn(const Vector2 _position) override {
   position = _position;
   hasBeenGrazed = false;
  }

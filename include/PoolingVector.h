@@ -5,7 +5,6 @@
 #ifndef RAYLIB_STG_POOLINGVECTOR_H
 #define RAYLIB_STG_POOLINGVECTOR_H
 #include <iostream>
-#include <ostream>
 #include <vector>
 
 #include "StepThinker.h"

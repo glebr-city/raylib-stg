@@ -10,11 +10,12 @@
 #include "InputHandler.h"
 #include "PhaseHelper.h"
 #include "PlayerBullets.h"
+#include "ScoreItem.h"
 #include "SpawnedEnemies.h"
 #include "SpriteHandler.h"
 #include "TestPhase2.h"
 
-
+PoolingVector<ScoreItem> spawnedScoreItems = PoolingVector<ScoreItem>(10000);
 std::array<int, 3> AdjustLetterbox() {
     int zoomFactor = 1;
     Vector2 letterboxSize = {0, 0};
@@ -56,7 +57,6 @@ int main() {
     GlobalVariables::setCurrentPhase(std::make_unique<TestPhase2>());
     static constexpr std::array<KeyboardKey, 3> restartKeys = {KEY_R, KEY_ESCAPE, KEY_BACKSPACE};
     Player player {Vector2 {60, 140}};
-    int _hitsTaken = 0;
     DamageHandler::setPlayer(&player);
 
 

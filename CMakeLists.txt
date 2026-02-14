@@ -35,6 +35,8 @@ add_executable(raylib_stg src/main.cpp
         src/SpawnedEnemies.cpp
         include/TestPhase2.h
         include/OrbEnemy1.h
+        include/ScoreItem.h
+        include/Spawnable.h
 )
 
 target_sources(raylib_stg

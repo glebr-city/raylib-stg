@@ -36,6 +36,8 @@ int currentFireCooldown = 0; //Frames remaining until the player may shoot again
 bool wishToShoot = false; //Rudimentary buffer!
 Texture2D grazeRadiusSprite;
 Texture2D grazeRadiusFillingSprite;
+Texture2D hyperRingSprite;
+Rectangle hyperRingRect = {6300, 0, 180, 180};
 ANIMATED_SPRITES grazeRadiusFilledSprite = PLAYER_GRAZE_FILLED;
 ANIMATED_SPRITES hyperAuraSprite = PLAYER_HYPER_AURA;
 int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
@@ -44,6 +46,7 @@ bool hyperOn = false;
 Player::Player(Vector2 pos) {
     grazeRadiusSprite = LoadTexture("resources/grazeRadius.png");
     grazeRadiusFillingSprite = LoadTexture("resources/grazeRadiusFilling.png");
+    hyperRingSprite = LoadTexture("resources/growingRingSpriteSheet.png");
     position = pos;
 }
 
@@ -152,6 +155,8 @@ void Player::doPreStep() {
         if (GlobalVariables::getGrazeMetre() <= 0)
             endHyper();
     }
+    hyperRingRect.x = std::min(6300.0f, hyperRingRect.x + 180);
+    DrawTextureRec(hyperRingSprite, hyperRingRect, Vector2 {position.x - 90, position.y - 90}, WHITE);
     DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
     float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
     float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
@@ -174,11 +179,13 @@ void Player::doPhysics() {
 }
 
 void Player::startHyper() {
+    hyperRingRect.x = 0;
     GlobalVariables::getCurrentPhase()->cancelBullets();
     hyperOn = true;
 }
 
 void Player::endHyper() {
+    hyperRingRect.x = 0;
     GlobalVariables::getCurrentPhase()->cancelBullets();
     hyperOn = false;
     GlobalVariables::setGrazeMetre(0);
