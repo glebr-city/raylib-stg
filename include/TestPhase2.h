@@ -23,11 +23,10 @@ public:
 
     bool doPhysics(Player *_player) override {
         if (stepsElapsed % 20 == 0) {
-            //miscellaneousBulletPool->spawn()->spawn(Vector2 {static_cast<float>(stepsElapsed % 120), 1}, Vector2 {0, 1}, RED);
-            //phasePools.at(1).get()->spawn()->spawn(Vector2 {static_cast<float>(stepsElapsed % 120), 1}, Vector2 {0, 1}, RED);
+            miscellaneousBulletPool->spawn().spawn(Vector2 {static_cast<float>(stepsElapsed % 120), 1}, Vector2 {0, 1}, RED);
         }
         if (stepsElapsed % 120 == 0) {
-            //SpawnedEnemies::spawnEnemy(std::make_unique<OrbEnemy1>(orbBulletPool.get()));
+            SpawnedEnemies::spawnEnemy(std::make_unique<OrbEnemy1>(orbBulletPool.get()));
         }
         stepsElapsed++;
         return PhaseHelper::doPhysics(_player);

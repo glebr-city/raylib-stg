@@ -22,8 +22,7 @@ private:
     static void hitPlayer() {
         hitsTaken++;
         player->getHit();
-        //For some reason, calling anything on the current phase when taking a hit seems to cause a double free scenario. How strange!
-        GlobalVariables::getCurrentPhase()->clearBullets();
+        GlobalVariables::getCurrentPhase()->hitPlayer();
     }
 
     static int getHitsTaken() {

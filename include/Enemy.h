@@ -43,5 +43,9 @@ public:
     void spawn(const Vector2 _position) override {
         position = _position;
     }
+
+    void spawn(const Vector2 _position, int scoreValue) override {
+        position = _position;
+    }
 };
 #endif //RAYLIB_STG_ENEMY_H

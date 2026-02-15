@@ -23,6 +23,7 @@ class ScoreHandler {
   }
   public:
   static void resetScore() {
+    currentMultiplier = 1;
     currentScore = 0;
     setString();
   }

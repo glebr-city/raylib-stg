@@ -75,7 +75,8 @@ int main() {
             GlobalVariables::currentStep() = 0;
             player.reset(Vector2 {60, 140});
             hitsTaken = 0;
-            GlobalVariables::setCurrentPhase(std::make_unique<TestPhase2>());
+            auto newPhase = std::make_unique<TestPhase2>();
+            GlobalVariables::setCurrentPhase(std::move(newPhase));
             DamageHandler::setPlayer(&player);
             GlobalVariables::setGrazeMetre(0);
             SpawnedEnemies::clear();
@@ -97,7 +98,7 @@ int main() {
         PlayerBullets::getPlayerBullets()->doPreStep();
         player.doPreStep();
         SpawnedEnemies::doPreStep();
-        //GlobalVariables::getCurrentPhase()->doPreStep();
+        GlobalVariables::getCurrentPhase()->doPreStep();
         HUDHandler::doPreStep(player.getPosition());
         EndMode2D();
         EndScissorMode();
@@ -114,8 +115,7 @@ int main() {
         ScoreItemHandler::doPhysics(&player);
         PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics(&player);
-        //GlobalVariables::getCurrentPhase()->doPhysics(&player);
+        GlobalVariables::getCurrentPhase()->doPhysics(&player);
         player.doPhysics();
     }
-    GlobalVariables::deleteEverything();
 }

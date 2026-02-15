@@ -14,6 +14,7 @@
 
 class PhaseHelper : public StepThinker {
     protected:
+        bool playerHit = false;
         int currentWaitSteps = 0; //Don't spawn bullets for a while after a hyper.
         std::vector<std::shared_ptr<IPoolingVector>> phasePools;
 
@@ -29,6 +30,11 @@ class PhaseHelper : public StepThinker {
         }
 
         virtual bool doPhysics(Player* player) {
+            if (playerHit) {
+                clearBullets();
+                playerHit = false;
+                return true;
+            }
             if (--currentWaitSteps > 0) {
                 for (auto& pool : phasePools) {
                     pool->setNumActive(0);
@@ -41,6 +47,10 @@ class PhaseHelper : public StepThinker {
         }
             return true;
     };
+
+    void hitPlayer() {
+        playerHit = true;
+    }
 
     int getNumActive() {
         int i = 0;

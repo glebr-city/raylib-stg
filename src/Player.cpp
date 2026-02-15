@@ -202,6 +202,7 @@ void Player::endHyper() {
 void Player::getHit() {
     hyperOn = false;
     GlobalVariables::setGrazeMetre(0);
+    ScoreHandler::setMultiplier(1);
     currentHyperRingColour = RED;
     hyperRingRect.x = 0;
 }
