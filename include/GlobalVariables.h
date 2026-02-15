@@ -32,6 +32,11 @@ public:
     static void setGrazeMetre(int i) {
         currentGrazeMetre = i;
     }
+
+    static void deleteEverything() {
+        //This is a leak. I don't understand how to fix this. Help!
+        currentPhase.release();
+    }
 };
 
 #endif //RAYLIB_STG_GLOBALVARIABLES_H

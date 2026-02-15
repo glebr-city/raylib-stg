@@ -9,8 +9,6 @@
 #include <array>
 
 #include "ScoreItem.h"
-#include "Spawnable.h"
-#include "StepThinker.h"
 
 class IPoolingVector {
 public:

@@ -17,7 +17,6 @@
 #include "SpriteHandler.h"
 #include "TestPhase2.h"
 
-PoolingVector<ScoreItem> spawnedScoreItems = PoolingVector<ScoreItem>(10000);
 std::array<int, 3> AdjustLetterbox() {
     int zoomFactor = 1;
     Vector2 letterboxSize = {0, 0};
@@ -118,4 +117,5 @@ int main() {
         GlobalVariables::getCurrentPhase()->doPhysics(&player);
         player.doPhysics();
     }
+    GlobalVariables::deleteEverything();
 }

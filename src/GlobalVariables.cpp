@@ -14,7 +14,7 @@ int& GlobalVariables::currentStep() {
 
 
  void GlobalVariables::setCurrentPhase(std::unique_ptr<PhaseHelper> newPhase) {
-    currentPhase.swap(newPhase);
+    currentPhase = std::move(newPhase);
 }
 
 
