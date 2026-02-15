@@ -51,7 +51,6 @@ class PhaseHelper : public StepThinker {
     }
 
     void cancelBullets() {
-        std::cout << "cancelling bullets, " << phasePools.size() << std::endl;
         for (const auto pooling_vector : phasePools) {
             for (const auto& pos : pooling_vector->getActivePositions()) {
                 ScoreItemHandler::spawn(pos, pooling_vector->getValue());

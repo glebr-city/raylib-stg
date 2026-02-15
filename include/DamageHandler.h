@@ -28,10 +28,12 @@ private:
     }
 
     static void grazePlayer() {
+        ScoreHandler::addScore(5);
         currentGrazeMetre = std::min(currentGrazeMetre + 20, maxGrazeMetre);
     }
 
-    static void grazePlayer(int i) {
+    static void grazePlayer(const int i) {
+        ScoreHandler::addScore(std::floor(i / 4) * ScoreHandler::getMultiplier());
         currentGrazeMetre = std::min(currentGrazeMetre + i, maxGrazeMetre);
     }
 };

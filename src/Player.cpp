@@ -137,10 +137,10 @@ void Player::doPreStep() {
         wishToShoot = false;
     }
     if (hyperOn) {
-        float xOffset;
-        xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
+        ScoreHandler::setMultiplier(1 + (static_cast<float>(currentGrazeMetre) * 0.0040408));
+        float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
         const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
-        Color hyperGhostColour = {200, 200, 0, tempAlpha};
+        const Color hyperGhostColour = {200, 200, 0, tempAlpha};
         SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, 1}), hyperGhostColour);
         SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, 1}), hyperGhostColour);
         SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, xOffset}), hyperGhostColour);
@@ -190,5 +190,6 @@ void Player::endHyper() {
     GlobalVariables::getCurrentPhase()->cancelBullets();
     hyperOn = false;
     GlobalVariables::setGrazeMetre(0);
+    ScoreHandler::setMultiplier(1);
 }
 

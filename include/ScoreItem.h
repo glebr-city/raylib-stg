@@ -10,7 +10,7 @@
 #include "Spawnable.h"
 #include "SpriteHandler.h"
 
-enum VALUE {
+enum VALUESPRITE {
     DARK_SMALL = 0,
     DARK_MEDIUM = 8,
     DARK_LARGE = 16,
@@ -25,7 +25,8 @@ protected:
     float antiGravityXVelocity = 0; //Moving left and right before being sucked up!
     float currentAntiGravity = 0; //The item moves up when spawned. Once this is 0, it is sucked up.
     Vector2 position{};
-    VALUE value = DARK_SMALL;
+    int value = 0;
+    VALUESPRITE valueSprite = DARK_SMALL;
     public:
     using StepThinker::doPhysics;
     ScoreItem() {
@@ -35,7 +36,7 @@ protected:
         position = _position;
     }
     void doPreStep() override {
-        SpriteHandler::DrawMyAnimatedSprite(SCORE_ITEM, value, position);
+        SpriteHandler::DrawMyAnimatedSprite(SCORE_ITEM, valueSprite, position);
     }
 
     bool doPhysics(const std::array<Vector2, 2> playerPosAndMovement) override {
@@ -46,7 +47,7 @@ protected:
             return true;
         }
         if (Vector2DistanceSqr(position, playerPosAndMovement.at(0)) < speed * speed) {
-            ScoreHandler::addScore(std::max(10, value * 2));
+            ScoreHandler::addScore(std::max(10, value * 50));
             return false;
         }
         position += Vector2Normalize(Vector2Subtract(playerPosAndMovement.at(0), position)) * speed;
@@ -70,10 +71,20 @@ protected:
         position = _position;
 
         int divided = static_cast<int>(std::floor(static_cast<double>(_value) / 10));
-        switch (divided) {
-            case 2: value = DARK_MEDIUM; break;
-            case 3: value = DARK_MEDIUM; break;
-            default: value = DARK_SMALL; break;
+        std::cout << divided << std::endl;
+        value = divided;
+        if (divided <= 5) {
+            valueSprite = DARK_SMALL;
+        } else if (divided <= 10) {
+            valueSprite = DARK_MEDIUM;
+        } else if (divided <= 20) {
+            valueSprite = DARK_LARGE;
+        } else if (divided <= 30) {
+            valueSprite = LIGHT_SMALL;
+        } else if (divided <= 40) {
+            valueSprite = LIGHT_MEDIUM;
+        } else {
+            valueSprite = LIGHT_LARGE;
         }
     }
 };
