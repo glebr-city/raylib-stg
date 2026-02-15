@@ -43,11 +43,9 @@ ANIMATED_SPRITES hyperAuraSprite = PLAYER_HYPER_AURA;
 int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
 bool hyperOn = false;
 
-Player::Player(Vector2 pos) {
-    hyperOn = false;
+Player::Player(const Vector2 pos) {
     hyperRingSprite = LoadTexture("resources/growingRingSpriteSheet.png");
-    grazeRadiusFillingSprite = SpriteHandler::getStaticSprite(PLAYER_GRAZE_FILLING);
-    position = pos;
+    reset(pos);
 }
 
 Vector2 Player::getPosition() {
@@ -60,6 +58,12 @@ Vector2 Player::getMovement() {
 
 std::array<Vector2, 2> Player::getPosAndMovement() {
     return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
+}
+
+void Player::reset(const Vector2 pos) {
+    hyperOn = false;
+    grazeRadiusFillingSprite = SpriteHandler::getStaticSprite(PLAYER_GRAZE_FILLING);
+    position = pos;
 }
 
 void Player::doPreStep() {

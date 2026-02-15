@@ -12,9 +12,8 @@
 
 class TestPhase1 : public PhaseHelper {
     private:
-    std::vector<IPoolingVector *> phasePools;
-    PoolingVector<SimpleBullet1> movingDarkPurplePool;
-    PoolingVector<SimpleBullet1> darkPurplePool;
+    std::unique_ptr<PoolingVector<SimpleBullet1>> movingDarkPurplePool;
+    std::unique_ptr<PoolingVector<SimpleBullet1>> darkPurplePool;
 public:
     TestPhase1();
     bool doPhysics(Player *player) override;

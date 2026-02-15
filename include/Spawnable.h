@@ -11,6 +11,7 @@ protected:
     Vector2 position{};
     public:
     virtual void spawn(Vector2 _position) = 0;
+    virtual void spawn(Vector2 _position, int _scoreValue) = 0;
     Vector2 getPosition() override {
         return position;
     }

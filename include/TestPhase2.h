@@ -10,22 +10,24 @@
 
 class TestPhase2 : public PhaseHelper {
 private:
-    std::vector<IPoolingVector*> phasePools;
-    PoolingVector<SimpleBullet2> orbBulletPool;
-    PoolingVector<SimpleBullet1> miscellaneousBulletPool;
+    std::shared_ptr<PoolingVector<SimpleBullet2>> orbBulletPool;
+    std::shared_ptr<PoolingVector<SimpleBullet1>> miscellaneousBulletPool;
     int stepsElapsed{};
 public:
-    TestPhase2() : PhaseHelper(phasePools), orbBulletPool(200, 30), miscellaneousBulletPool(2000, 5) {
-        phasePools.push_back(&orbBulletPool);
-        phasePools.push_back(&miscellaneousBulletPool);
+    TestPhase2() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>>()) {
+        orbBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(200, 30);
+        miscellaneousBulletPool = std::make_shared<PoolingVector<SimpleBullet1> >(200, 5);
+        phasePools.push_back(orbBulletPool);
+        phasePools.push_back(miscellaneousBulletPool);
     }
 
     bool doPhysics(Player *_player) override {
         if (stepsElapsed % 20 == 0) {
-            miscellaneousBulletPool.spawn()->spawn(Vector2 {static_cast<float>(stepsElapsed % 120), 1}, Vector2 {0, 1}, RED);
+            //miscellaneousBulletPool->spawn()->spawn(Vector2 {static_cast<float>(stepsElapsed % 120), 1}, Vector2 {0, 1}, RED);
+            //phasePools.at(1).get()->spawn()->spawn(Vector2 {static_cast<float>(stepsElapsed % 120), 1}, Vector2 {0, 1}, RED);
         }
         if (stepsElapsed % 120 == 0) {
-            SpawnedEnemies::spawnEnemy(std::make_unique<OrbEnemy1>(&orbBulletPool));
+            //SpawnedEnemies::spawnEnemy(std::make_unique<OrbEnemy1>(orbBulletPool.get()));
         }
         stepsElapsed++;
         return PhaseHelper::doPhysics(_player);

@@ -19,10 +19,10 @@ public:
         if (activePlayerBullets <= 0) {
             return false;
         }
-        std::vector<PlayerBullet>* playerBulletsVector = PlayerBullets::getPlayerBullets()->getVector();
+        std::vector<PlayerBullet>& playerBulletsVector = PlayerBullets::getPlayerBullets()->getVector();
 
         for (int i = 0; i < activePlayerBullets;) {
-            const Rectangle *bulletCollider = playerBulletsVector->at(i).getCollider();
+            const Rectangle *bulletCollider = playerBulletsVector.at(i).getCollider();
             if (CheckCollisionRecs(collider, *bulletCollider)) {
                 PlayerBullets::destroyPlayerBullet(i);
                 return true;

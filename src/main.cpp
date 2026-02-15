@@ -73,7 +73,7 @@ int main() {
         if (InputHandler::CheckInputsPressed(restartKeys)) {
             LifeHandler::resetLives();
             GlobalVariables::currentStep() = 0;
-            player = Player {Vector2 {60, 140}};
+            player.reset(Vector2 {60, 140});
             hitsTaken = 0;
             GlobalVariables::setCurrentPhase(std::make_unique<TestPhase2>());
             DamageHandler::setPlayer(&player);
@@ -112,7 +112,7 @@ int main() {
         DrawFPS(100, 195);
         EndDrawing();
         ScoreItemHandler::doPhysics(&player);
-        PlayerBullets::getPlayerBullets()->doPhysics();
+        //PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics(&player);
         GlobalVariables::getCurrentPhase()->doPhysics(&player);
         player.doPhysics();

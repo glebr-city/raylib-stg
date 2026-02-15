@@ -19,6 +19,8 @@ private:
 public:
     explicit Player(Vector2 pos);
 
+    void reset(Vector2 pos);
+
     void doPreStep() override;
 
     void doPhysics(Vector2 pos);

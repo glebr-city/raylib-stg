@@ -15,28 +15,28 @@
 class PhaseHelper : public StepThinker {
     protected:
         int currentWaitSteps = 0; //Don't spawn bullets for a while after a hyper.
-        std::vector<IPoolingVector*>& phasePools;
+        std::vector<std::shared_ptr<IPoolingVector>> phasePools;
 
     public:
-        PhaseHelper(std::vector<IPoolingVector*>& _phasePools) : phasePools(_phasePools) {
-            this->phasePools = _phasePools;
+        PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>> _phasePools){
+            this->phasePools = std::move(_phasePools);
         }
 
         void doPreStep() override {
-            for (auto* pool : phasePools) {
+            for (auto& pool : phasePools) {
                 pool->doPreStep();
             }
         }
 
         virtual bool doPhysics(Player* player) {
             if (--currentWaitSteps > 0) {
-                for (auto* pool : phasePools) {
+                for (auto& pool : phasePools) {
                     pool->setNumActive(0);
                 }
                 return true;
             }
             const std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
-        for (auto* pool : phasePools) {
+        for (auto& pool : phasePools) {
             pool->doPhysics(playerPosAndMovement);
         }
             return true;
@@ -44,21 +44,21 @@ class PhaseHelper : public StepThinker {
 
     int getNumActive() {
         int i = 0;
-        for (const auto pooling_vector : phasePools) {
+        for (const auto& pooling_vector : phasePools) {
             i += pooling_vector->getNumActive();
         }
         return i;
     }
 
     void clearBullets() { //Clear bullets and set cooldown timer on spawning more.
-        for (const auto pooling_vector : phasePools) {
+        for (const auto& pooling_vector : phasePools) {
             pooling_vector->setNumActive(0);
         }
         currentWaitSteps = 60;
     }
 
     void cancelBullets() { //Clear bullets AND spawn score items.
-        for (const auto pooling_vector : phasePools) {
+        for (const auto& pooling_vector : phasePools) {
             for (const auto& pos : pooling_vector->getActivePositions()) {
                 ScoreItemHandler::spawn(pos, pooling_vector->getValue());
             }

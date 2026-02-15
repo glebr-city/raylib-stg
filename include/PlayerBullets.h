@@ -11,21 +11,21 @@ class PlayerBullets {
     static std::unique_ptr<PoolingVector<PlayerBullet>> playerBullets;
 public:
     static void spawnPlayerBullet(bool isHyper, const Vector2 pos) {
-        playerBullets->spawn()->spawn(isHyper, pos);
+        playerBullets->spawn().spawn(isHyper, pos);
     }
 
     static void spawnPlayerBullet(bool isHyper, const Vector2 pos, float _xSpeed) {
-        playerBullets->spawn()->spawn(isHyper, pos, _xSpeed);
+        playerBullets->spawn().spawn(isHyper, pos, _xSpeed);
     }
 
     static PoolingVector<PlayerBullet>* getPlayerBullets() {
         return playerBullets.get();
     }
 
-    static void destroyPlayerBullet(int i) {
-        std::vector<PlayerBullet>* bulletVector = playerBullets->getVector();
+    static void destroyPlayerBullet(const int i) {
+        std::vector<PlayerBullet>& bulletVector = playerBullets->getVector();
         playerBullets->setNumActive(playerBullets->getNumActive() - 1);
-        std::iter_swap(bulletVector->begin() + i, bulletVector->begin() + playerBullets->getNumActive());
+        //std::iter_swap(bulletVector.begin() + i, bulletVector.begin() + playerBullets->getNumActive());
     }
 
 

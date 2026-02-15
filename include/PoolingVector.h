@@ -58,8 +58,8 @@ class PoolingVector : public IPoolingVector{
         }
     }
 
-    std::vector<T>* getVector() {
-        return &vector;
+    std::vector<T>& getVector() {
+        return vector;
     }
 
     int getVectorSize() const override{
@@ -103,11 +103,11 @@ class PoolingVector : public IPoolingVector{
         }
     }
 
-    T* spawn() {
+    T& spawn() {
         if (num_active >= vector.size()) {
             num_active = 0;
         }
-        return &vector.at(num_active++);
+        return vector.at(num_active++);
     }
 
     int getNumActive() override {
