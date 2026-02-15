@@ -27,6 +27,7 @@ public:
     Vector2 getPosition() override;
     Vector2 getMovement();
     std::array<Vector2, 2> getPosAndMovement();
+    void getHit();
 };
 
 

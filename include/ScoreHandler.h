@@ -10,8 +10,6 @@
 #include "raylib.h"
 class ScoreHandler {
   private:
-  static const Color scoreColour;
-  static const Color multiplierColour;
   static std::string scoreStr;
   static u_long currentScore;
   static float currentMultiplier;
@@ -24,7 +22,13 @@ class ScoreHandler {
     }
   }
   public:
-
+  static void resetScore() {
+    currentScore = 0;
+    setString();
+  }
+  static std::string getString() {
+    return scoreStr;
+  }
   static void setMultiplier(const float _multiplier) {
     currentMultiplier = _multiplier;
   }
@@ -38,13 +42,6 @@ class ScoreHandler {
     setString();
   }
 
-  static void doPreStep() {
-    DrawText(scoreStr.c_str(), 0, 0, 0, scoreColour);
-    if (currentMultiplier > 1) {
-      std::string tempStr = "x" + std::to_string(static_cast<int>(std::round(currentMultiplier * 100)));
-      tempStr.insert(tempStr.length() - 2, ".");
-      DrawText(tempStr.c_str(), 0, 8, 0, multiplierColour);
-    }
-  }
+
 };
 #endif //RAYLIB_STG_SCOREHANDLER_H

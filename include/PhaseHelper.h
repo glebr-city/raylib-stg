@@ -50,7 +50,14 @@ class PhaseHelper : public StepThinker {
         return i;
     }
 
-    void cancelBullets() {
+    void clearBullets() { //Clear bullets and set cooldown timer on spawning more.
+        for (const auto pooling_vector : phasePools) {
+            pooling_vector->setNumActive(0);
+        }
+        currentWaitSteps = 60;
+    }
+
+    void cancelBullets() { //Clear bullets AND spawn score items.
         for (const auto pooling_vector : phasePools) {
             for (const auto& pos : pooling_vector->getActivePositions()) {
                 ScoreItemHandler::spawn(pos, pooling_vector->getValue());

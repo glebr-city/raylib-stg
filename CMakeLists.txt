@@ -41,6 +41,10 @@ add_executable(raylib_stg src/main.cpp
         src/ScoreItemHandler.cpp
         include/ScoreHandler.h
         src/ScoreHandler.cpp
+        include/HUDHandler.h
+        include/HUDHandler.cpp
+        include/LifeHandler.h
+        include/LifeHandler.cpp
 )
 
 target_sources(raylib_stg

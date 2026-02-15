@@ -21,6 +21,8 @@ private:
 
     static void hitPlayer() {
         hitsTaken++;
+        player->getHit();
+        GlobalVariables::getCurrentPhase()->clearBullets();
     }
 
     static int getHitsTaken() {

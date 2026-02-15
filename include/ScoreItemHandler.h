@@ -14,6 +14,10 @@ private:
 
     public:
 
+    static void clear() {
+        scoreItemPool.setNumActive(0);
+    }
+
     static void doPreStep() {
         scoreItemPool.doPreStep();
     }

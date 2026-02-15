@@ -34,19 +34,19 @@ Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 constexpr int fireCooldown = 30; //Frames to wait between player shots
 int currentFireCooldown = 0; //Frames remaining until the player may shoot again
 bool wishToShoot = false; //Rudimentary buffer!
-Texture2D grazeRadiusSprite;
-Texture2D grazeRadiusFillingSprite;
 Texture2D hyperRingSprite;
+Texture2D* grazeRadiusFillingSprite;
 Rectangle hyperRingRect = {6300, 0, 180, 180};
+auto currentHyperRingColour = WHITE; //Using the same effect for Hyper and for taking damage.
 ANIMATED_SPRITES grazeRadiusFilledSprite = PLAYER_GRAZE_FILLED;
 ANIMATED_SPRITES hyperAuraSprite = PLAYER_HYPER_AURA;
 int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
 bool hyperOn = false;
 
 Player::Player(Vector2 pos) {
-    grazeRadiusSprite = LoadTexture("resources/grazeRadius.png");
-    grazeRadiusFillingSprite = LoadTexture("resources/grazeRadiusFilling.png");
+    hyperOn = false;
     hyperRingSprite = LoadTexture("resources/growingRingSpriteSheet.png");
+    grazeRadiusFillingSprite = SpriteHandler::getStaticSprite(PLAYER_GRAZE_FILLING);
     position = pos;
 }
 
@@ -137,7 +137,7 @@ void Player::doPreStep() {
         wishToShoot = false;
     }
     if (hyperOn) {
-        ScoreHandler::setMultiplier(1 + (static_cast<float>(currentGrazeMetre) * 0.0040408));
+        ScoreHandler::setMultiplier(1 + std::min(9.0, (currentGrazeMetre) * 0.005));
         float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
         const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
         const Color hyperGhostColour = {200, 200, 0, tempAlpha};
@@ -156,12 +156,13 @@ void Player::doPreStep() {
             endHyper();
     }
     hyperRingRect.x = std::min(6300.0f, hyperRingRect.x + 180);
-    DrawTextureRec(hyperRingSprite, hyperRingRect, Vector2 {position.x - 90, position.y - 90}, WHITE);
-    DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
+    DrawTextureRec(hyperRingSprite, hyperRingRect, Vector2 {position.x - 90, position.y - 90}, currentHyperRingColour);
+    //DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
+    SpriteHandler::DrawStaticSprite(PLAYER_GRAZE_RADIUS, position);
     float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
     float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
     if (GlobalVariables::getGrazeMetre() < maxGrazeMetre)
-        DrawTextureRec(grazeRadiusFillingSprite, Rectangle{tempX, 22 - tempHeight, 22, tempHeight}, Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, WHITE);
+        DrawTextureRec(*grazeRadiusFillingSprite, Rectangle{tempX, 22 - tempHeight, 22, tempHeight}, Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, WHITE);
     else
         SpriteHandler::DrawMyAnimatedSprite(grazeRadiusFilledSprite, position);
     SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), position); //Counting on digital movement only.
@@ -180,6 +181,7 @@ bool Player::doPhysics() {
 }
 
 void Player::startHyper() {
+    currentHyperRingColour = WHITE;
     hyperRingRect.x = 0;
     GlobalVariables::getCurrentPhase()->cancelBullets();
     hyperOn = true;
@@ -191,5 +193,12 @@ void Player::endHyper() {
     hyperOn = false;
     GlobalVariables::setGrazeMetre(0);
     ScoreHandler::setMultiplier(1);
+}
+
+void Player::getHit() {
+    hyperOn = false;
+    GlobalVariables::setGrazeMetre(0);
+    currentHyperRingColour = RED;
+    hyperRingRect.x = 0;
 }
 

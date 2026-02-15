@@ -6,10 +6,8 @@
 #define RAYLIB_STG_SPRITEHANDLER_H
 #include <array>
 #include <memory>
-#include <vector>
 
 #include "raylib.h"
-#include "StepThinker.h"
 
 typedef enum {
     PLAYER = 0,
@@ -23,6 +21,12 @@ typedef enum {
     BULLET_SMALL_MONOCHROME = 8,
 } ANIMATED_SPRITES;
 
+typedef enum {
+    PLAYER_GRAZE_RADIUS = 0,
+    PLAYER_GRAZE_FILLING = 1,
+    LIFE_ICON = 2,
+} STATIC_SPRITES;
+
 struct MyAnimatedSprite {
     Texture2D spriteSheet;
     Rectangle spriteRect;
@@ -31,21 +35,31 @@ struct MyAnimatedSprite {
     : spriteSheet(_spriteSheet), spriteRect(_spriteRect), frequency(_frequency) {}
 };
 
+struct MyStaticSprite {
+    Texture2D spriteTexture;
+    Vector2 spriteSize;
+};
 
 
-    static std::array<std::unique_ptr<MyAnimatedSprite>, 9> animatedSprites;
+
 class SpriteHandler{
 private:
+    static std::array<std::unique_ptr<MyAnimatedSprite>, 9> animatedSprites;
+    static std::array<std::unique_ptr<MyStaticSprite>, 3> staticSprites;
     public:
+    static Texture2D* getStaticSprite(int staticSpriteIndex);
+    static void DrawStaticSprite(int staticSpriteIndex, Vector2 pos);
+    static void DrawStaticSprite(int staticSpriteIndex, int yOffset, Vector2 pos);
+    static void DrawStaticSprite(int staticSpriteIndex, int yOffset, Vector2 pos, Color col);
+    static void DrawStaticSprite(int staticSpriteIndex, Vector2 pos, Color col);
+
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos);
-
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, int yOffset, Vector2 pos);
-
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, int yOffset, Vector2 pos, Color col);
-
     static void DrawMyAnimatedSprite(int animatedSpriteIndex, Vector2 pos, Color col);
     static void AdvanceAnimation();
-    static void InitAnimatedSprites();
+
+    static void InitSprites();
 };
 
 

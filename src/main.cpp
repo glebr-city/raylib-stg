@@ -7,7 +7,9 @@
 
 #include "DamageHandler.h"
 #include "GlobalVariables.h"
+#include "HUDHandler.h"
 #include "InputHandler.h"
+#include "LifeHandler.h"
 #include "PhaseHelper.h"
 #include "PlayerBullets.h"
 #include "ScoreItem.h"
@@ -41,7 +43,7 @@ int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(1280, 1280, "raylib");
     SetWindowMinSize(gameWidth * 2, gameHeight * 2);
-    SpriteHandler::InitAnimatedSprites(); //Need to initialise this after the window.
+    SpriteHandler::InitSprites(); //Need to initialise this after the window.
     int zoomFactor = 2;
     Vector2 letterboxSize = {0, 0};
     Camera2D camera = { 0 };
@@ -70,6 +72,7 @@ int main() {
             camera.zoom = zoomFactor;
         }
         if (InputHandler::CheckInputsPressed(restartKeys)) {
+            LifeHandler::resetLives();
             GlobalVariables::currentStep() = 0;
             player = Player {Vector2 {60, 140}};
             hitsTaken = 0;
@@ -77,7 +80,11 @@ int main() {
             DamageHandler::setPlayer(&player);
             GlobalVariables::setGrazeMetre(0);
             SpawnedEnemies::clear();
+            ScoreItemHandler::clear();
+            ScoreHandler::resetScore();
         }
+        if (IsKeyPressed(KEY_ESCAPE))
+            CloseWindow();
         GlobalVariables::currentStep()++;
         SpriteHandler::AdvanceAnimation();
         BeginDrawing();
@@ -92,7 +99,7 @@ int main() {
         player.doPreStep();
         SpawnedEnemies::doPreStep();
         GlobalVariables::getCurrentPhase()->doPreStep();
-        ScoreHandler::doPreStep();
+        HUDHandler::doPreStep(player.getPosition());
         EndMode2D();
         EndScissorMode();
         std::string tempStr = "Bullet Count: ";
