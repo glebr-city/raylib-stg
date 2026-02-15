@@ -7,9 +7,9 @@
 
 #include "GlobalVariables.h"
 
-TestPhase1::TestPhase1() : PhaseHelper(std::vector<std::unique_ptr<IPoolingVector>>()) {
-    movingDarkPurplePool = std::make_unique<PoolingVector<SimpleBullet1>>(200, 5);
-    darkPurplePool = std::make_unique<PoolingVector<SimpleBullet1>>(200, 5);
+TestPhase1::TestPhase1() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>>()) {
+    movingDarkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(200, 5);
+    darkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(200, 5);
     phasePools.push_back(std::move(movingDarkPurplePool));
     phasePools.push_back(std::move(darkPurplePool));
 }

@@ -25,7 +25,7 @@ public:
     static void destroyPlayerBullet(const int i) {
         std::vector<PlayerBullet>& bulletVector = playerBullets->getVector();
         playerBullets->setNumActive(playerBullets->getNumActive() - 1);
-        //std::iter_swap(bulletVector.begin() + i, bulletVector.begin() + playerBullets->getNumActive());
+        std::iter_swap(bulletVector.begin() + i, bulletVector.begin() + playerBullets->getNumActive());
     }
 
 

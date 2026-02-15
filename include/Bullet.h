@@ -13,8 +13,9 @@
 #include "Spawnable.h"
 
 
-class Bullet  : public Spawnable{
+class Bullet  : public Spawnable {
 protected:
+ int scoreValue = 0;
  static constexpr int grazeValue = 40;
  bool CheckCollisionRoundBullet(const Vector2 _center, const float _radius, const Vector2 p1, const Vector2 p2, const int _grazeValue)
  {
@@ -58,6 +59,14 @@ public:
   position = _position;
   hasBeenGrazed = false;
  }
+
+ void spawn(const Vector2 _position, int _scoreValue) override {
+  position = _position;
+  hasBeenGrazed = false;
+  scoreValue = _scoreValue;
+ }
+
+
 protected:
  bool hasBeenGrazed = false;
  static const float radius;

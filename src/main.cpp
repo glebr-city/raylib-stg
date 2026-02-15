@@ -97,12 +97,12 @@ int main() {
         PlayerBullets::getPlayerBullets()->doPreStep();
         player.doPreStep();
         SpawnedEnemies::doPreStep();
-        GlobalVariables::getCurrentPhase()->doPreStep();
+        //GlobalVariables::getCurrentPhase()->doPreStep();
         HUDHandler::doPreStep(player.getPosition());
         EndMode2D();
         EndScissorMode();
         std::string tempStr = "Bullet Count: ";
-        tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
+        //tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
         tempStr.append(std::string(" \nHits Taken: "));
         tempStr.append(std::to_string(DamageHandler::getHitsTaken()));
         tempStr.append("\nCurrent Graze: ");
@@ -112,9 +112,9 @@ int main() {
         DrawFPS(100, 195);
         EndDrawing();
         ScoreItemHandler::doPhysics(&player);
-        //PlayerBullets::getPlayerBullets()->doPhysics();
+        PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics(&player);
-        GlobalVariables::getCurrentPhase()->doPhysics(&player);
+        //GlobalVariables::getCurrentPhase()->doPhysics(&player);
         player.doPhysics();
     }
     GlobalVariables::deleteEverything();

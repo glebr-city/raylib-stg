@@ -12,8 +12,8 @@
 
 class TestPhase1 : public PhaseHelper {
     private:
-    std::unique_ptr<PoolingVector<SimpleBullet1>> movingDarkPurplePool;
-    std::unique_ptr<PoolingVector<SimpleBullet1>> darkPurplePool;
+    std::shared_ptr<PoolingVector<SimpleBullet1>> movingDarkPurplePool;
+    std::shared_ptr<PoolingVector<SimpleBullet1>> darkPurplePool;
 public:
     TestPhase1();
     bool doPhysics(Player *player) override;
