@@ -57,7 +57,7 @@ class PoolingVector : public IPoolingVector{
         std::vector<Vector2> activePositions;
         std::transform(
         storage.begin(), 
-        storage.end(), 
+        storage.begin() + num_active,
         std::back_inserter(activePositions),
         [](T& elem) { 
             return elem.getPosition();

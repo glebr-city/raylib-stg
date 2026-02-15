@@ -17,7 +17,7 @@ private:
     void endHyper();
 
 public:
-    explicit Player(Vector2 pos);
+    Player(Vector2 pos);
 
     void reset(Vector2 pos);
 

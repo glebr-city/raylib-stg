@@ -14,12 +14,17 @@ static Player* player;
 inline int hitsTaken = 0;
 class DamageHandler {
 private:
+    static const int mercyInvincibilityDuration = 60;
+    static int stepHit;
     public:
     static void setPlayer(Player* _player) {
         player = _player;
     }
 
     static void hitPlayer() {
+        if (GlobalVariables::currentStep() - stepHit < mercyInvincibilityDuration)
+            return;
+        stepHit = GlobalVariables::currentStep();
         hitsTaken++;
         player->getHit();
         GlobalVariables::getCurrentPhase()->hitPlayer();

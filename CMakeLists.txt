@@ -45,6 +45,9 @@ add_executable(raylib_stg src/main.cpp
         include/HUDHandler.cpp
         include/LifeHandler.h
         include/LifeHandler.cpp
+        src/DamageHandler.cpp
+        include/GameHandler.h
+        src/GameHandler.cpp
 )
 
 target_sources(raylib_stg

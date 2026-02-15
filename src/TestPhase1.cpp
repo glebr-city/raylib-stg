@@ -8,10 +8,10 @@
 #include "GlobalVariables.h"
 
 TestPhase1::TestPhase1() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>>()) {
-    movingDarkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(200, 5);
-    darkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(200, 5);
-    phasePools.push_back(std::move(movingDarkPurplePool));
-    phasePools.push_back(std::move(darkPurplePool));
+    movingDarkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
+    darkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
+    phasePools.push_back(movingDarkPurplePool);
+    phasePools.push_back(darkPurplePool);
 }
 
 bool TestPhase1::doPhysics(Player* player) {
@@ -60,8 +60,6 @@ bool TestPhase1::doPhysics(Player* player) {
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 120), -4}, Vector2{0,1}, DARKGREEN);
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 120), 0}, Vector2{0,1});
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 120), -4}, Vector2{0,1}, DARKGREEN);*/
-    for (auto& pooling_vector: phasePools) {
-        pooling_vector->doPhysics(playerPosAndMovement);
-    }
+    PhaseHelper::doPhysics(player);
     return true;
 }

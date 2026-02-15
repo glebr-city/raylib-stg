@@ -6,6 +6,7 @@
 #include <Player.h>
 
 #include "DamageHandler.h"
+#include "GameHandler.h"
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
 #include "InputHandler.h"
@@ -15,6 +16,7 @@
 #include "ScoreItem.h"
 #include "SpawnedEnemies.h"
 #include "SpriteHandler.h"
+#include "TestPhase1.h"
 #include "TestPhase2.h"
 
 std::array<int, 3> AdjustLetterbox() {
@@ -53,12 +55,10 @@ int main() {
     zoomFactor = resizeValues[0];
     letterboxSize.x = static_cast<float>(resizeValues[1]);
     letterboxSize.y = static_cast<float>(resizeValues[2]);
+    static constexpr std::array<KeyboardKey, 3> restartKeys = {KEY_R, KEY_ESCAPE, KEY_BACKSPACE};
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
-    GlobalVariables::setCurrentPhase(std::make_unique<TestPhase2>());
-    static constexpr std::array<KeyboardKey, 3> restartKeys = {KEY_R, KEY_ESCAPE, KEY_BACKSPACE};
-    Player player {Vector2 {60, 140}};
-    DamageHandler::setPlayer(&player);
+    GameHandler::restartGame();
 
 
     while (!WindowShouldClose()) {
@@ -71,17 +71,7 @@ int main() {
             camera.zoom = zoomFactor;
         }
         if (InputHandler::CheckInputsPressed(restartKeys)) {
-            LifeHandler::resetLives();
-            GlobalVariables::currentStep() = 0;
-            player.reset(Vector2 {60, 140});
-            hitsTaken = 0;
-            auto newPhase = std::make_unique<TestPhase2>();
-            GlobalVariables::setCurrentPhase(std::move(newPhase));
-            DamageHandler::setPlayer(&player);
-            GlobalVariables::setGrazeMetre(0);
-            SpawnedEnemies::clear();
-            ScoreItemHandler::clear();
-            ScoreHandler::resetScore();
+            GameHandler::restartGame();
         }
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();
@@ -94,16 +84,11 @@ int main() {
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
         BeginMode2D(camera);
-        ScoreItemHandler::doPreStep();
-        PlayerBullets::getPlayerBullets()->doPreStep();
-        player.doPreStep();
-        SpawnedEnemies::doPreStep();
-        GlobalVariables::getCurrentPhase()->doPreStep();
-        HUDHandler::doPreStep(player.getPosition());
+        GameHandler::doPreStep();
         EndMode2D();
         EndScissorMode();
         std::string tempStr = "Bullet Count: ";
-        //tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
+        tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
         tempStr.append(std::string(" \nHits Taken: "));
         tempStr.append(std::to_string(DamageHandler::getHitsTaken()));
         tempStr.append("\nCurrent Graze: ");
@@ -112,10 +97,6 @@ int main() {
         /*DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);*/
         DrawFPS(100, 195);
         EndDrawing();
-        ScoreItemHandler::doPhysics(&player);
-        PlayerBullets::getPlayerBullets()->doPhysics();
-        SpawnedEnemies::doPhysics(&player);
-        GlobalVariables::getCurrentPhase()->doPhysics(&player);
-        player.doPhysics();
+        GameHandler::doPhysics();
     }
 }

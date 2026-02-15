@@ -4,6 +4,7 @@
 
 #ifndef RAYLIB_STG_GLOBALVARIABLES_H
 #define RAYLIB_STG_GLOBALVARIABLES_H
+#include <cstdint>
 #include <memory>
 #include "PhaseHelper.h"
 inline int currentGrazeMetre = 0;
@@ -17,7 +18,7 @@ protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
 public:
 
-    static int& currentStep();
+    static std::uint32_t& currentStep();
 
     static void setCurrentPhase(std::unique_ptr<PhaseHelper> newPhase);
 
@@ -31,11 +32,6 @@ public:
 
     static void setGrazeMetre(int i) {
         currentGrazeMetre = i;
-    }
-
-    static void deleteEverything() {
-        //This is a leak. I don't understand how to fix this. Help!
-        currentPhase.release();
     }
 };
 

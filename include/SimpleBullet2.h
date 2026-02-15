@@ -33,7 +33,7 @@ private:
     Vector2 direction{};
     Color color = WHITE;
 protected:
-    static constexpr int grazeValue = 100;
+    static constexpr int grazeValue = 1000;
 
 };
 

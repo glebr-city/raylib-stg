@@ -6,8 +6,10 @@
 #include <iostream>
 #include <Player.h>
 
+#include "GameHandler.h"
 #include "GlobalVariables.h"
 #include "InputHandler.h"
+#include "LifeHandler.h"
 #include "PhaseHelper.h"
 #include "PlayerBullets.h"
 #include "raylib.h"
@@ -44,6 +46,7 @@ int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mod
 bool hyperOn = false;
 
 Player::Player(const Vector2 pos) {
+    hyperRingRect.x = 6300;
     hyperRingSprite = LoadTexture("resources/growingRingSpriteSheet.png");
     reset(pos);
 }
@@ -141,7 +144,7 @@ void Player::doPreStep() {
         wishToShoot = false;
     }
     if (hyperOn) {
-        ScoreHandler::setMultiplier(1 + std::min(9.0, (currentGrazeMetre) * 0.005));
+        ScoreHandler::setMultiplier(1 + std::min(9.0, (currentGrazeMetre) * 0.006));
         float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
         const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
         const Color hyperGhostColour = {200, 200, 0, tempAlpha};
@@ -200,6 +203,8 @@ void Player::endHyper() {
 }
 
 void Player::getHit() {
+    if (!LifeHandler::canSpawnPlayer())
+        GameHandler::restartGame();
     hyperOn = false;
     GlobalVariables::setGrazeMetre(0);
     ScoreHandler::setMultiplier(1);

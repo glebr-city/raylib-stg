@@ -45,7 +45,6 @@ void SimpleBullet2::doPreStep() {
 }
 
 bool SimpleBullet2::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {
-    std::cout << "SimpleBullet2::doPhysics: " << GlobalVariables::getCurrentPhase() << std::endl;
     Vector2 playerFinalPoint = playerPosAndMovement[0] + (playerPosAndMovement[1] - Vector2Scale(direction, speed));
     if (CheckCollisionRoundBullet(position, radius, playerPosAndMovement[0], playerFinalPoint, grazeValue)) {
         DamageHandler::hitPlayer();
