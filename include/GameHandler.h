@@ -8,6 +8,7 @@
 #include "LifeHandler.h"
 #include "SpawnedEnemies.h"
 #include "TestPhase1.h"
+#include "TestPhase2.h"
 
 // Generic name, but this is what loads levels and such!
 class GameHandler {
@@ -16,14 +17,14 @@ class GameHandler {
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
-        GlobalVariables::setCurrentPhase(std::make_unique<TestPhase1>());
+        GlobalVariables::setCurrentPhase(std::make_unique<TestPhase2>());
         player =  {Vector2 {60, 140}};
         DamageHandler::setPlayer(&player);
         LifeHandler::resetLives();
         GlobalVariables::currentStep() = 0;
         player.reset(Vector2 {60, 140});
         hitsTaken = 0;
-        auto newPhase = std::make_unique<TestPhase1>();
+        auto newPhase = std::make_unique<TestPhase2>();
         GlobalVariables::setCurrentPhase(std::move(newPhase));
         DamageHandler::setPlayer(&player);
         GlobalVariables::setGrazeMetre(0);

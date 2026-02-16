@@ -173,7 +173,6 @@ void Player::doPreStep() {
     else
         SpriteHandler::DrawMyAnimatedSprite(grazeRadiusFilledSprite, position);
     SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), position); //Counting on digital movement only.
-    Vector2Normalize(inputVector);
 }
 
 void Player::doPhysics(Vector2 pos) {
@@ -182,7 +181,7 @@ void Player::doPhysics(Vector2 pos) {
 }
 
 bool Player::doPhysics() {
-    position += inputVector * *currentSpeed;
+    position += Vector2Normalize(inputVector) * *currentSpeed;
     position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth),static_cast<float>(gameHeight)});
     return true;
 }

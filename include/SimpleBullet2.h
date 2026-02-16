@@ -28,12 +28,12 @@ public:
 
 private:
     static constexpr float radius = 1.15f;
-    static constexpr float speed = 2.5f;
+    static constexpr float speed = 2;
     static constexpr ANIMATED_SPRITES sprite = BULLET_SMALL_MONOCHROME;
     Vector2 direction{};
     Color color = WHITE;
 protected:
-    static constexpr int grazeValue = 1000;
+    static constexpr int grazeValue = 30;
 
 };
 

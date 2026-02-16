@@ -56,7 +56,7 @@ protected:
             return false;
         }
         position += Vector2Normalize(Vector2Subtract(playerPosAndMovement.at(0), position)) * speed;
-        speed += 0.03f - 0.0000001f * distanceSQ;
+        speed += 0.03f - 0.0000003f * distanceSQ;
         return true;
     }
 
