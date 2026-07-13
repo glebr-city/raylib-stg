@@ -48,6 +48,8 @@ add_executable(raylib_stg src/main.cpp
         src/DamageHandler.cpp
         include/GameHandler.h
         src/GameHandler.cpp
+        include/DiagonalTankPhase1.h
+        include/DiagonalTank.h
 )
 
 target_sources(raylib_stg

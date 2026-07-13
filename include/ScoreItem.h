@@ -38,7 +38,7 @@ protected:
         position = _position;
     }
     void doPreStep() override {
-        SpriteHandler::DrawMyAnimatedSprite(SCORE_ITEM, valueSprite, position);
+        SpriteHandler::QueueMyAnimatedSprite({SCORE_ITEM, position, valueSprite});
     }
 
     bool doPhysics(const std::array<Vector2, 2> playerPosAndMovement) override {

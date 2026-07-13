@@ -15,6 +15,7 @@ private:
     int stepsElapsed{};
 public:
     TestPhase2() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>>()) {
+        phaseName = "TestPhase2";
         orbBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(200, 30);
         miscellaneousBulletPool = std::make_shared<PoolingVector<SimpleBullet1>>(200, 5);
         phasePools.push_back(miscellaneousBulletPool);

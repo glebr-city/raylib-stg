@@ -16,7 +16,7 @@ SimpleBullet::SimpleBullet() {
 SimpleBullet::SimpleBullet(const Vector2 pos) : Bullet(pos){}
 
 void SimpleBullet::doPreStep() {
-    SpriteHandler::DrawMyAnimatedSprite(sprite, position);
+    SpriteHandler::QueueMyAnimatedSprite({sprite, position});
 }
 
 bool SimpleBullet::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {

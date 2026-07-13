@@ -65,7 +65,7 @@ std::array<Vector2, 2> Player::getPosAndMovement() {
 
 void Player::reset(const Vector2 pos) {
     hyperOn = false;
-    grazeRadiusFillingSprite = SpriteHandler::getStaticSprite(PLAYER_GRAZE_FILLING);
+    grazeRadiusFillingSprite = SpriteHandler::getStaticSpriteTexture(PLAYER_GRAZE_FILLING);
     position = pos;
 }
 
@@ -143,21 +143,22 @@ void Player::doPreStep() {
     } else if (currentFireCooldown == fireCooldown - 24) {
         wishToShoot = false;
     }
-    if (hyperOn) {
+    if (hyperOn)
+    {
         ScoreHandler::setMultiplier(1 + std::min(9.0, (currentGrazeMetre) * 0.006));
         float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
         const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
         const Color hyperGhostColour = {200, 200, 0, tempAlpha};
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, 1}), hyperGhostColour);
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, 1}), hyperGhostColour);
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, xOffset}), hyperGhostColour);
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, xOffset}), hyperGhostColour);
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {0, xOffset}), hyperGhostColour);
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {xOffset, 1}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER, .col = hyperGhostColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, 1}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER, .col = hyperGhostColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER,  .col = hyperGhostColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER,  .col = hyperGhostColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {0, xOffset}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER, .col = hyperGhostColour});
         xOffset /= 2;
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, 1}), hyperGhostColour);
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, 1}), hyperGhostColour);
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {xOffset, xOffset}), hyperGhostColour);
-        SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), Vector2Add(position, {-xOffset, xOffset}), hyperGhostColour);
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {xOffset, 1}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER, .col = hyperGhostColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, 1}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER, .col = hyperGhostColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER, .col = hyperGhostColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x * 13), .l =LAYER_PLAYER, .col = hyperGhostColour});
         GlobalVariables::setGrazeMetre(std::max(0, GlobalVariables::getGrazeMetre() - hyperCostRate));
         if (GlobalVariables::getGrazeMetre() <= 0)
             endHyper();
@@ -165,14 +166,14 @@ void Player::doPreStep() {
     hyperRingRect.x = std::min(6300.0f, hyperRingRect.x + 180);
     DrawTextureRec(hyperRingSprite, hyperRingRect, Vector2 {position.x - 90, position.y - 90}, currentHyperRingColour);
     //DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
-    SpriteHandler::DrawStaticSprite(PLAYER_GRAZE_RADIUS, position);
+    SpriteHandler::QueueMyStaticSprite({.i = PLAYER_GRAZE_RADIUS, .pos = position, .l = LAYER_PLAYER});
     float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
     float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
     if (GlobalVariables::getGrazeMetre() < maxGrazeMetre)
         DrawTextureRec(*grazeRadiusFillingSprite, Rectangle{tempX, 22 - tempHeight, 22, tempHeight}, Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, WHITE);
     else
-        SpriteHandler::DrawMyAnimatedSprite(grazeRadiusFilledSprite, position);
-    SpriteHandler::DrawMyAnimatedSprite(PLAYER, static_cast<int>(-inputVector.x * 13), position); //Counting on digital movement only.
+        SpriteHandler::QueueMyAnimatedSprite({grazeRadiusFilledSprite, position});
+    SpriteHandler::QueueMyAnimatedSprite({PLAYER,  position, static_cast<int>(-inputVector.x * 13), LAYER_PLAYER,}); //Counting on digital movement only.
 }
 
 void Player::doPhysics(Vector2 pos) {

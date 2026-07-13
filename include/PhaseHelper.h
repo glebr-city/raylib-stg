@@ -14,9 +14,14 @@
 
 class PhaseHelper : public StepThinker {
     protected:
+        STATIC_SPRITES background = DEFAULT_BACKGROUND;
+        std::string phaseName = "Unnamed Phase"; //Phase name. For debug purposes?
         bool playerHit = false;
         int currentWaitSteps = 0; //Don't spawn bullets for a while after a hyper.
         std::vector<std::shared_ptr<IPoolingVector>> phasePools;
+        Vector2 defaultScrollVector; //Scrolling for the background and grounded enemies!
+        Vector2 currentScrollVector; //Scrolling for the background and grounded enemies!
+        Vector2 currentBackgroundPosition;
 
     public:
         PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>> _phasePools){
@@ -27,6 +32,10 @@ class PhaseHelper : public StepThinker {
             for (auto& pool : phasePools) {
                 pool->doPreStep();
             }
+            currentBackgroundPosition += currentScrollVector;
+            MyStaticSprite* backgroundSprite = SpriteHandler::getStaticSprite(background);
+            DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition.x, backgroundSprite->spriteSize.y - 180 - currentBackgroundPosition.y, 120, 180}, Vector2(0, 0), WHITE);
+            //SpriteHandler::QueueMyStaticSprite({background, Vector2Add(currentBackgroundPosition, Vector2(0, 0))});
         }
 
         virtual bool doPhysics(Player* player) {
@@ -78,6 +87,16 @@ class PhaseHelper : public StepThinker {
             pooling_vector->setNumActive(0);
         }
         currentWaitSteps = 60;
+    }
+
+    std::string getPhaseName()
+    {
+        return phaseName;
+    }
+
+    Vector2 getScrollVector() //Get the phase's (current) scroll vector; used by grounded enemies and the background.
+    {
+        return currentScrollVector;
     }
 };
 

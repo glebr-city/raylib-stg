@@ -11,7 +11,7 @@
 
 class OrbEnemy1 : public Enemy {
 protected:
-    int elapsedSteps = -1;
+    u_int elapsedSteps = -1;
     PoolingVector<SimpleBullet2>* bulletPool;
     inline static const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
 public:
@@ -23,7 +23,7 @@ public:
     }
 
     void doPreStep() override  {
-        SpriteHandler::DrawMyAnimatedSprite(sprite, position);
+        SpriteHandler::QueueMyAnimatedSprite({sprite, position});
     }
 
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {

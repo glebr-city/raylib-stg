@@ -45,7 +45,7 @@ SimpleBullet1::SimpleBullet1(const Vector2 pos, const Vector2 dir, Color col) : 
 }
 
 void SimpleBullet1::doPreStep() {
-    SpriteHandler::DrawMyAnimatedSprite(sprite, position, color);
+    SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .col = color});
 }
 
 bool SimpleBullet1::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {

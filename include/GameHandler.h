@@ -4,6 +4,7 @@
 
 #ifndef RAYLIB_STG_GAMEHANDLER_H
 #define RAYLIB_STG_GAMEHANDLER_H
+#include "DiagonalTankPhase1.h"
 #include "HUDHandler.h"
 #include "LifeHandler.h"
 #include "SpawnedEnemies.h"
@@ -17,14 +18,14 @@ class GameHandler {
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
-        GlobalVariables::setCurrentPhase(std::make_unique<TestPhase2>());
+        GlobalVariables::setCurrentPhase(std::make_unique<DiagonalTankPhase1>());
         player =  {Vector2 {60, 140}};
         DamageHandler::setPlayer(&player);
         LifeHandler::resetLives();
         GlobalVariables::currentStep() = 0;
         player.reset(Vector2 {60, 140});
         hitsTaken = 0;
-        auto newPhase = std::make_unique<TestPhase2>();
+        auto newPhase = std::make_unique<DiagonalTankPhase1>();
         GlobalVariables::setCurrentPhase(std::move(newPhase));
         DamageHandler::setPlayer(&player);
         GlobalVariables::setGrazeMetre(0);

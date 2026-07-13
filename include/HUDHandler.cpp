@@ -17,7 +17,7 @@ void HUDHandler::doPreStep(Vector2 playerPos)  {
     const std::string scoreStr = ScoreHandler::getString();
     const float currentMultiplier = ScoreHandler::getMultiplier();
     DrawText(scoreStr.c_str(), 0, yOffset, 0, scoreColour);
-    SpriteHandler::DrawStaticSprite(LIFE_ICON, Vector2 {105, static_cast<float>(yOffset + 5)}, scoreColour);
+    SpriteHandler::QueueMyStaticSprite({.i = LIFE_ICON, .pos = Vector2 {105, static_cast<float>(yOffset + 5)}, .col = scoreColour});
     std::string lifeStr = "x" + std::to_string(LifeHandler::getCurrentLives());
     DrawText(lifeStr.c_str(), 109, yOffset, 0, scoreColour);
     if (currentMultiplier > 1) {

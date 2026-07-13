@@ -38,7 +38,7 @@ public:
     }
 
     void doPreStep() override {
-        SpriteHandler::DrawMyAnimatedSprite(currentSprite, position);
+        SpriteHandler::QueueMyAnimatedSprite({currentSprite, position});
     }
 
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {

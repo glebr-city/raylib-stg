@@ -16,7 +16,7 @@ class ScoreHandler {
   static void setString() {
     scoreStr = std::to_string(currentScore);
     if (scoreStr.length() > 3) {
-      for (long i = scoreStr.length() - 3; i > 0; i -= 3) {
+      for (long i = static_cast<long>(scoreStr.length()) - 3; i > 0; i -= 3) {
         scoreStr.insert(i, ".");
       }
     }

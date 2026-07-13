@@ -85,9 +85,11 @@ int main() {
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
         BeginMode2D(camera);
         GameHandler::doPreStep();
+        SpriteHandler::DrawSprites();
         EndMode2D();
         EndScissorMode();
-        std::string tempStr = "Bullet Count: ";
+        std::string tempStr = GlobalVariables::getCurrentPhase()->getPhaseName();
+        tempStr.append("\nBullet Count: ");
         tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
         tempStr.append(std::string(" \nHits Taken: "));
         tempStr.append(std::to_string(DamageHandler::getHitsTaken()));
