@@ -18,7 +18,7 @@ public:
     {
         phaseName = "Diagonal Tanks";
         background = DIAGONAL_TANK_BACKGROUND;
-        diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(200, 30);
+        diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(55, 30);
         defaultScrollVector = Vector2(0, 0.2f);
         currentScrollVector = defaultScrollVector;
         phasePools.push_back(diagonalTankBulletPool);

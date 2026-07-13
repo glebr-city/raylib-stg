@@ -36,6 +36,7 @@ class DiagonalTank : public Enemy
         elapsedSteps++;
         position += GlobalVariables::getCurrentPhase()->getScrollVector();
         if (checkPlayerBulletCollision()) {
+            die();
             return false;
         }
         if (isMoving)

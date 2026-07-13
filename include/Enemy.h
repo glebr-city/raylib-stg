@@ -13,6 +13,7 @@ protected:
     Vector2 position = {};
     static inline const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Rectangle collider = {}; //The Enemy's collider
+    int scoreValue = 50;
 public:
     [[nodiscard]] bool checkPlayerBulletCollision() const {
         const int activePlayerBullets = PlayerBullets::getPlayerBullets()->getNumActive();
@@ -46,6 +47,11 @@ public:
 
     void spawn(const Vector2 _position, int scoreValue) override {
         position = _position;
+    }
+
+    void die()
+    {
+        ScoreHandler::addScore(scoreValue);
     }
 };
 #endif //RAYLIB_STG_ENEMY_H
