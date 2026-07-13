@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <memory>
 #include "PhaseHelper.h"
+#include <raylib.h>
+#include "SpriteHandlerEnums.h"
 inline int currentGrazeMetre = 0;
 inline const int gameWidth = 120;
 inline const int gameHeight = 180;
@@ -32,6 +34,16 @@ public:
 
     static void setGrazeMetre(int i) {
         currentGrazeMetre = i;
+    }
+
+    static STATIC_SPRITES* getCurrentBackgroundSprite()
+    {
+        return currentPhase->getBackgroundSprite();
+    }
+
+    static Vector2* getCurrentBackgroundPosition()
+    {
+        return currentPhase->getBackgroundPosition();
     }
 };
 

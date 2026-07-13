@@ -29,10 +29,10 @@ public:
         {
             for (int rowNumber = 0; rowNumber < 3; rowNumber++)
             {
-                for (int i = 0; i < 12; i++)
+                for (int i = 0; i < 8; i++)
                 {
-                    std::unique_ptr<DiagonalTank> newTank = std::make_unique<DiagonalTank>(diagonalTankBulletPool.get(), 360 + i * 5 + rowNumber * 10);
-                    newTank->spawn(Vector2(i * 9 - 29, i * -9 + rowNumber * -9 + 10));
+                    std::unique_ptr<DiagonalTank> newTank = std::make_unique<DiagonalTank>(diagonalTankBulletPool.get(), 360 + i * 8 + rowNumber * 24);
+                    newTank->spawn(Vector2(i * 17 - 31, i * -17 + rowNumber * -21 + 17));
                     SpawnedEnemies::spawnEnemy(std::move(newTank));
                 }
             }

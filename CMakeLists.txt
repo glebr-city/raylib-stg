@@ -50,6 +50,7 @@ add_executable(raylib_stg src/main.cpp
         src/GameHandler.cpp
         include/DiagonalTankPhase1.h
         include/DiagonalTank.h
+        include/SpriteHandlerEnums.h
 )
 
 target_sources(raylib_stg

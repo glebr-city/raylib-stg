@@ -33,8 +33,8 @@ class PhaseHelper : public StepThinker {
                 pool->doPreStep();
             }
             currentBackgroundPosition += currentScrollVector;
-            MyStaticSprite* backgroundSprite = SpriteHandler::getStaticSprite(background);
-            DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition.x, backgroundSprite->spriteSize.y - 180 - currentBackgroundPosition.y, 120, 180}, Vector2(0, 0), WHITE);
+            //MyStaticSprite* backgroundSprite = SpriteHandler::getStaticSprite(background);
+            //DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition.x, backgroundSprite->spriteSize.y - 180 - currentBackgroundPosition.y, 120, 180}, Vector2(0, 0), WHITE);
             //SpriteHandler::QueueMyStaticSprite({background, Vector2Add(currentBackgroundPosition, Vector2(0, 0))});
         }
 
@@ -97,6 +97,16 @@ class PhaseHelper : public StepThinker {
     Vector2 getScrollVector() //Get the phase's (current) scroll vector; used by grounded enemies and the background.
     {
         return currentScrollVector;
+    }
+
+    STATIC_SPRITES* getBackgroundSprite()
+    {
+        return &background;
+    }
+
+    Vector2* getBackgroundPosition()
+    {
+        return &currentBackgroundPosition;
     }
 };
 

@@ -19,17 +19,17 @@ class DiagonalTank : public Enemy
     DiagonalTank(PoolingVector<SimpleBullet2>* _bulletPool, const u_int _stopAndFireDelay = 0) {
         elapsedSteps = -1;
         bulletPool = _bulletPool;
-        position = {-5, 30};
-        collider = {-5, 30, 5, 5};
+        position = {0, 0};
+        collider = {0, 0, 13, 13};
         stopAndFireDelay = _stopAndFireDelay;
     }
 
     void doPreStep() override
     {
         if (isMoving)
-            SpriteHandler::QueueMyAnimatedSprite({sprite, position});
+            SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_GROUNDED});
         else
-            SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .yOffset = 9, .l = LAYER_GROUNDED});
+            SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .yOffset = 1, .l = LAYER_GROUNDED});
     }
 
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
@@ -52,7 +52,13 @@ class DiagonalTank : public Enemy
             isMoving = false;
         } else if (elapsedSteps == stopAndFireDelay + 60)
         {
-            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position));
+            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), RED);
+        } else if (elapsedSteps == stopAndFireDelay + 90)
+        {
+            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), RED);
+        } else if (elapsedSteps == stopAndFireDelay + 120)
+        {
+            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), RED);
         }
         return true;
     }

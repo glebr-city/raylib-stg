@@ -16,13 +16,13 @@ void HUDHandler::doPreStep(Vector2 playerPos)  {
         yOffset = 165;
     const std::string scoreStr = ScoreHandler::getString();
     const float currentMultiplier = ScoreHandler::getMultiplier();
-    DrawText(scoreStr.c_str(), 0, yOffset, 0, scoreColour);
+    SpriteHandler::QueueText({scoreStr, Vector2{0, static_cast<float>(yOffset)}, 0, scoreColour});
     SpriteHandler::QueueMyStaticSprite({.i = LIFE_ICON, .pos = Vector2 {105, static_cast<float>(yOffset + 5)}, .col = scoreColour});
     std::string lifeStr = "x" + std::to_string(LifeHandler::getCurrentLives());
-    DrawText(lifeStr.c_str(), 109, yOffset, 0, scoreColour);
+    SpriteHandler::QueueText({lifeStr, Vector2{109, static_cast<float>(yOffset)}, 0, scoreColour});
     if (currentMultiplier > 1) {
         std::string tempStr = "x" + std::to_string(static_cast<int>(std::round(currentMultiplier * 100)));
         tempStr.insert(tempStr.length() - 2, ".");
-        DrawText(tempStr.c_str(), 0, yOffset+7, 0, multiplierColour);
+        SpriteHandler::QueueText({tempStr, Vector2{0, static_cast<float>(yOffset + 7)}, 0, multiplierColour});
     }
 }
