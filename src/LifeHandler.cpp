@@ -1,4 +1,4 @@
-#include "LifeHandler.h"
+#include "../include/LifeHandler.h"
 //
 // Created by g on 15/02/2026.
 //

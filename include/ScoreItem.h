@@ -52,7 +52,7 @@ protected:
         float distanceSQ = Vector2DistanceSqr(position, playerPosAndMovement.at(0));
         if (distanceSQ < speed * speed) {
             std::cout << std::max(10, value * 50) << " " << stepsElapsed << std::endl;
-            ScoreHandler::addScore(std::max(10, value * 50));
+            ScoreHandler::addScore(std::max(10, value * 50), false);
             return false;
         }
         position += Vector2Normalize(Vector2Subtract(playerPosAndMovement.at(0), position)) * speed;
@@ -68,7 +68,7 @@ protected:
         value = DARK_SMALL;
     }
 
-    void spawn(const Vector2 _position, const int _value) {
+    void spawn(const Vector2 _position, const u_int _value) {
         int xAsInt = static_cast<int>(std::floor(_position.x));
         int yAsInt = static_cast<int>(std::floor(_position.y));
         currentAntiGravity = 1;

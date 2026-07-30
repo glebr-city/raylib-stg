@@ -44,13 +44,18 @@ add_executable(raylib_stg src/main.cpp
         include/HUDHandler.h
         include/HUDHandler.cpp
         include/LifeHandler.h
-        include/LifeHandler.cpp
+        src/LifeHandler.cpp
         src/DamageHandler.cpp
         include/GameHandler.h
         src/GameHandler.cpp
         include/DiagonalTankPhase1.h
         include/DiagonalTank.h
         include/SpriteHandlerEnums.h
+        include/Enemy1.h
+        include/RNGHandler.h
+        include/BigEnemy1.h
+        include/SimpleBullet3.h
+        src/SimpleBullet3.cpp
 )
 
 target_sources(raylib_stg

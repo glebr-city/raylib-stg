@@ -22,6 +22,7 @@ class PhaseHelper : public StepThinker {
         Vector2 defaultScrollVector; //Scrolling for the background and grounded enemies!
         Vector2 currentScrollVector; //Scrolling for the background and grounded enemies!
         Vector2 currentBackgroundPosition;
+        u_int stepsElapsed = 0;
 
     public:
         PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>> _phasePools){
@@ -108,6 +109,13 @@ class PhaseHelper : public StepThinker {
     {
         return &currentBackgroundPosition;
     }
+
+    u_int getStepsElapsed()
+    {
+        return stepsElapsed;
+    }
+
+    virtual void enemyKilled(u_int _id) = 0;
 };
 
 

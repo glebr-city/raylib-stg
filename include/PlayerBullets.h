@@ -28,6 +28,11 @@ public:
         std::iter_swap(bulletVector.begin() + i, bulletVector.begin() + playerBullets->getNumActive());
     }
 
+    static void clearPlayerBullets()
+    {
+        playerBullets->setNumActive(0);
+    }
+
 
 };
 #endif //RAYLIB_STG_PLAYERBULLETS_H

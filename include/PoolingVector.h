@@ -27,6 +27,7 @@ template<typename T>
 class PoolingVector : public IPoolingVector{
     std::size_t scoreItemValue = 0UL; //For spawning score items... I don't know what the best way to handle this is!
     std::size_t num_active = 0UL;
+    std::size_t spawnIndex = 0UL; //The index of the next object to spawn -- allows for looping through the vector.
     std::vector<T> storage;
     public:
 		// Main Constructor
@@ -82,6 +83,7 @@ class PoolingVector : public IPoolingVector{
 				} else {
 					num_active--;
 					std::swap(storage.at(i), storage.at(num_active));
+				    spawnIndex = num_active;
 				}
 			}
     }
@@ -94,15 +96,17 @@ class PoolingVector : public IPoolingVector{
 				} else {
 					num_active--;
 					std::swap(storage.at(i), storage.at(num_active));
+				    spawnIndex = num_active;
 				}
 			}
     }
 
     T& spawn() {
-        if (num_active >= this->storage.size()) {
-            num_active = 0;
-        }
-        return storage.at(num_active++);
+        if (num_active < this->storage.size()) {
+            spawnIndex = num_active++;
+        } else
+            spawnIndex = ++spawnIndex % this->storage.size();
+        return storage.at(spawnIndex);
     }
 
     int getNumActive() final {
@@ -110,7 +114,8 @@ class PoolingVector : public IPoolingVector{
     }
 
     void setNumActive(std::size_t i) final {
-        num_active = (i <= storage.size()) ? i : storage.size();
+		    num_active = (i <= storage.size()) ? i : storage.size();
+		    spawnIndex = num_active;
     }
 
 };

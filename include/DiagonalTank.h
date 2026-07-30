@@ -36,7 +36,7 @@ class DiagonalTank : public Enemy
         elapsedSteps++;
         position += GlobalVariables::getCurrentPhase()->getScrollVector();
         if (checkPlayerBulletCollision()) {
-            die();
+            takeDamage();
             return false;
         }
         if (isMoving)
@@ -46,20 +46,20 @@ class DiagonalTank : public Enemy
         }
         if (position.x > 125)
             return false;
-        collider.x = position.x;
-        collider.y = position.y;
+        collider.x = position.x - collider.width / 2;
+        collider.y = position.y - collider.height / 2;
         Vector2 playerFinalPos = Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]);
         if (elapsedSteps == stopAndFireDelay) {
             isMoving = false;
         } else if (elapsedSteps == stopAndFireDelay + 60)
         {
-            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), RED);
+            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
         } else if (elapsedSteps == stopAndFireDelay + 90)
         {
-            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), RED);
+            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
         } else if (elapsedSteps == stopAndFireDelay + 120)
         {
-            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), RED);
+            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
         }
         return true;
     }

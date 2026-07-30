@@ -17,6 +17,10 @@ typedef enum {
     BULLET_1_MONOCHROME = 7,
     BULLET_SMALL_MONOCHROME = 8,
     DIAGONAL_TANK = 9,
+    ENEMY_1 = 10,
+    SPINNING_ROD_MONOCHROME = 11,
+    SPINNING_OVAL_MONOCHROME = 12,
+    BIG_ENEMY_1 = 13,
 } ANIMATED_SPRITES;
 
 typedef enum {
@@ -61,6 +65,7 @@ struct SpriteParametres {
     Color col = WHITE;
     bool corner = false; //centre pivot by default, otherwise, top-left corner.
     Rectangle rect; //Optional!
+    bool flashing = false; //For damage animations!
 };
 
 struct TextParametres {

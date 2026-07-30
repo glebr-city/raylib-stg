@@ -7,5 +7,5 @@
 
 inline const int maxGrazeMetre = 2200;
 inline const int grazeRadius = 11;
-inline const int grazeRadiusSQ = 11 * 11;
+inline const int grazeRadiusSQ = grazeRadius * grazeRadius;
 #endif //RAYLIB_STG_GRAZECONSTANTS_H

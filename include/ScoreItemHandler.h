@@ -29,8 +29,8 @@ private:
     static void spawn(const Vector2 _position) {
         scoreItemPool.spawn().spawn(_position);
     }
-    static void spawn(const Vector2 _position, const int _value) {
-        scoreItemPool.spawn().spawn(_position, static_cast<int>(floor(_value * ScoreHandler::getMultiplier())));
+    static void spawn(const Vector2 _position, const u_int _value) {
+        scoreItemPool.spawn().spawn(_position, static_cast<u_int>(floor(_value * ScoreHandler::getMultiplier())));
     }
 
 

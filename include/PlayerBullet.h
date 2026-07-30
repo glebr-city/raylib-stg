@@ -7,6 +7,9 @@
 #include "SimpleBullet.h"
 
 class PlayerBullet : public SimpleBullet {
+private:
+    static inline const float SPEED = 4;
+    static inline const float HYPER_SPEED = 4;
     protected:
     //static const ANIMATED_SPRITES sprite = PLAYER_BULLET;
     static inline const ANIMATED_SPRITES sprite = PLAYER_BULLET;
@@ -15,6 +18,7 @@ class PlayerBullet : public SimpleBullet {
     static inline const float colliderOffsetX = -3.5f;
     static inline const float colliderOffsetY = -2.5f;
     float xSpeed = 0;
+    float ySpeed = 0;
     Rectangle collider{-1000, -1000, 0, 0};
 public:
     PlayerBullet() : PlayerBullet(false) {};
@@ -49,7 +53,7 @@ public:
         if (position.y < -6) {
             return false;
         }
-        position.y -= 4;
+        position.y -= ySpeed;
         position.x += xSpeed;
         collider.x = position.x + colliderOffsetX;
         collider.y = position.y + colliderOffsetY;
@@ -63,9 +67,11 @@ public:
         if (isHyper) {
             currentSprite = hyperSprite;
             collider = Rectangle {colliderOffsetX, colliderOffsetY, 16, 10};
+            ySpeed = HYPER_SPEED;
         } else {
             currentSprite = sprite;
             collider = Rectangle {colliderOffsetX, colliderOffsetY, 7, 10};
+            ySpeed = SPEED;
         }
         xSpeed = 0;
         position = _position;
@@ -73,16 +79,8 @@ public:
     }
 
     void spawn(const bool isHyper, const Vector2 _position, float _xSpeed) {
-        if (isHyper) {
-            currentSprite = hyperSprite;
-            collider = Rectangle {colliderOffsetX, colliderOffsetY, 16, 10};
-        } else {
-            currentSprite = sprite;
-            collider = Rectangle {colliderOffsetX, colliderOffsetY, 7, 10};
-        }
-        position = _position;
+        spawn(isHyper, _position);
         xSpeed = _xSpeed;
-        hasBeenGrazed = false;
     }
 };
 #endif //RAYLIB_STG_PLAYERBULLET_H

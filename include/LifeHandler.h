@@ -4,6 +4,8 @@
 
 #ifndef RAYLIB_STG_LIFEHANDLER_H
 #define RAYLIB_STG_LIFEHANDLER_H
+#include <limits.h>
+
 #include "DamageHandler.h"
 #include "GlobalVariables.h"
 #include "raylib.h"
@@ -11,8 +13,8 @@
 class LifeHandler {
 private:
     static int currentLives;
-    static const int maxLives = 9;
-    static const int startingLives = 3;
+    static const int maxLives = INT_MAX;
+    static const int startingLives = INT_MAX;
 public:
     static void resetLives() {
         currentLives = startingLives;

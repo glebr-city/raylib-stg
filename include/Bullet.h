@@ -60,7 +60,7 @@ public:
   hasBeenGrazed = false;
  }
 
- void spawn(const Vector2 _position, int _scoreValue) override {
+ void spawn(const Vector2 _position, u_int _scoreValue) override {
   position = _position;
   hasBeenGrazed = false;
   scoreValue = _scoreValue;

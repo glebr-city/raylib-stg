@@ -4,16 +4,28 @@
 
 #ifndef RAYLIB_STG_ENEMY_H
 #define RAYLIB_STG_ENEMY_H
-#include "StepThinker.h"
+
 #include "PlayerBullet.h"
 #include "PlayerBullets.h"
 
+struct EnemySpawnParametres
+{
+    Vector2 pos = {};
+    u_int scoreValue = 50;
+    u_int id = 0;
+};
+
+
 class Enemy : public Spawnable {
+private:
+    const u_int HIT_FLASH_DURATION = 120;
 protected:
     Vector2 position = {};
     static inline const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Rectangle collider = {}; //The Enemy's collider
-    int scoreValue = 50;
+    u_int scoreValue = 50;
+    u_int id = 0; //Special IDs for keeping track of specific enemies, used by PhaseHelpers.
+    int currentFlashDuration = 0;
 public:
     [[nodiscard]] bool checkPlayerBulletCollision() const {
         const int activePlayerBullets = PlayerBullets::getPlayerBullets()->getNumActive();
@@ -34,24 +46,53 @@ public:
     }
 
     void doPreStep() override {
-        SpriteHandler::QueueMyAnimatedSprite({sprite, position});
+        if (currentFlashDuration > 0)
+        {
+            currentFlashDuration--;
+            SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .flashing = true});
+        }
+        else
+            SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position});
     }
 
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
         return !checkPlayerBulletCollision();
     }
 
-    void spawn(const Vector2 _position) override {
-        position = _position;
+    void spawn(const EnemySpawnParametres _params) {
+        position = _params.pos;
+        collider.x = position.x;
+        collider.y = position.y;
+        scoreValue = _params.scoreValue;
+        id = _params.id;
     }
 
-    void spawn(const Vector2 _position, int scoreValue) override {
-        position = _position;
+    void spawn(Vector2 _position) override
+    {
+        spawn(EnemySpawnParametres{_position});
     }
 
+    void spawn(Vector2 _position, u_int _scoreValue) override
+    {
+        spawn(EnemySpawnParametres{_position});
+    }
+
+
+    virtual bool takeDamage() // Return false to kill the enemy.
+    {
+        startDamageAnimation();
+        die();
+        return false;
+    }
+
+    virtual void startDamageAnimation()
+    {
+        currentFlashDuration = HIT_FLASH_DURATION;
+    }
     void die()
     {
         ScoreHandler::addScore(scoreValue);
+        GlobalVariables::getCurrentPhase()->enemyKilled(id);
     }
 };
 #endif //RAYLIB_STG_ENEMY_H

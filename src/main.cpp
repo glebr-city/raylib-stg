@@ -59,6 +59,7 @@ int main() {
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
     GameHandler::restartGame();
+    bool DEBUG_highFramerate = false;
 
 
     while (!WindowShouldClose()) {
@@ -72,6 +73,11 @@ int main() {
         }
         if (InputHandler::CheckInputsPressed(restartKeys)) {
             GameHandler::restartGame();
+        }
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            DEBUG_highFramerate = !DEBUG_highFramerate;
+            DEBUG_highFramerate ? SetTargetFPS(360) : SetTargetFPS(120);
         }
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();
@@ -91,8 +97,8 @@ int main() {
         std::string tempStr = GlobalVariables::getCurrentPhase()->getPhaseName();
         tempStr.append("\nBullet Count: ");
         tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
-        tempStr.append(std::string(" \nHits Taken: "));
-        tempStr.append(std::to_string(DamageHandler::getHitsTaken()));
+        tempStr.append(std::string(" \nSteps Elapsed: "));
+        tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getStepsElapsed()));
         tempStr.append("\nCurrent Graze: ");
         tempStr.append(std::to_string(GlobalVariables::getGrazeMetre()));
         DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);

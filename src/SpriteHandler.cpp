@@ -9,7 +9,7 @@
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
 
-std::array<std::unique_ptr<MyAnimatedSprite>, 10> SpriteHandler::animatedSprites;
+std::array<std::unique_ptr<MyAnimatedSprite>, 14> SpriteHandler::animatedSprites;
 std::array<std::unique_ptr<MyStaticSprite>, 5> SpriteHandler::staticSprites;
 
 std::array<std::vector<SpriteParametres>, LAYER_COUNT> staticLayers;
@@ -26,8 +26,12 @@ void SpriteHandler::InitSprites() {
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/growingRingSpriteSheet.png"), Rectangle {0,0,180,180}, 1}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/scoreItemSpriteSheet.png"), Rectangle {0,0,8,8}, 12}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bullet1MonochromeSpriteSheet.png"), Rectangle {0,0,9,9}, 8}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/tinyBullet1SpriteSheet.png"), Rectangle {0,0,5,5}, 4}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/diagonalTankSpriteSheet.png"), Rectangle {0,0,15,15}, 30})
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/tinyBullet1SpriteSheet.png"), Rectangle {0,0,5,5}, 10}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/diagonalTankSpriteSheet.png"), Rectangle {0,0,15,15}, 30}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/enemy1SpriteSheet.png"), Rectangle {0,0,10,10}, 30}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/spinningRodMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/spinningOvalMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bigEnemy1SpriteSheet.png"), Rectangle {0,0,25,19}, 30}),
     };
     staticSprites = {
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/grazeRadius.png"), Vector2 {22, 22}}),
@@ -80,7 +84,9 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
             const int animatedSpriteIndex = opts.i;
             const int yOffset = opts.yOffset;
             const Vector2 pos = opts.pos;
-            const Color col = opts.col;
+            Color col = opts.col;
+            if (opts.flashing && GlobalVariables::currentStep() % 31 > 15)
+                col = RED;
             Rectangle spriteRect;
             if (opts.rect.width == 0) //Hacky and with poor performance...
             {

@@ -131,7 +131,7 @@ void Player::doPreStep() {
                 xOffset = 41.66667f - (static_cast<float>((GlobalVariables::currentStep() % 51)));
             xOffset /= 50;
             PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {0, -3}), xOffset);
-            currentFireCooldown = 5;
+            currentFireCooldown = 4;
         } else {
             PlayerBullets::spawnPlayerBullet(false, position);
             currentFireCooldown = fireCooldown;
@@ -165,8 +165,6 @@ void Player::doPreStep() {
     }
     hyperRingRect.x = std::min(6300.0f, hyperRingRect.x + 180);
     SpriteHandler::QueueMyAnimatedSprite({.i=PLAYER_HYPER_RING, .pos=Vector2 {position.x - 90, position.y - 90}, .l=LAYER_PLAYER, .col=currentHyperRingColour, .corner = true, .rect=hyperRingRect});
-    //DrawTextureRec(hyperRingSprite, hyperRingRect, Vector2 {position.x - 90, position.y - 90}, currentHyperRingColour);
-    //DrawTextureV(grazeRadiusSprite, Vector2 {position.x - grazeRadius, position.y - grazeRadius}, WHITE);
     SpriteHandler::QueueMyStaticSprite({.i = PLAYER_GRAZE_RADIUS, .pos = position, .l = LAYER_PLAYER});
     float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
     float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
