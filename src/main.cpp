@@ -3,21 +3,13 @@
 #include <memory>
 #include <raylib.h>
 
-#include <Player.h>
-
-#include "DamageHandler.h"
 #include "GameHandler.h"
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
 #include "InputHandler.h"
-#include "LifeHandler.h"
 #include "PhaseHelper.h"
-#include "PlayerBullets.h"
-#include "ScoreItem.h"
-#include "SpawnedEnemies.h"
 #include "SpriteHandler.h"
-#include "TestPhase1.h"
-#include "TestPhase2.h"
+#include "SoundHandler.h"
 
 std::array<int, 3> AdjustLetterbox() {
     int zoomFactor = 1;
@@ -44,7 +36,9 @@ int main() {
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(1280, 1280, "raylib");
     SetWindowMinSize(gameWidth * 2, gameHeight * 2);
+    InitAudioDevice();
     SpriteHandler::InitSprites(); //Need to initialise this after the window.
+    SoundHandler::InitSounds();
     int zoomFactor = 2;
     Vector2 letterboxSize = {0, 0};
     Camera2D camera = { 0 };

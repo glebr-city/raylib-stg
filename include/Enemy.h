@@ -89,10 +89,16 @@ public:
     {
         currentFlashDuration = HIT_FLASH_DURATION;
     }
+
     void die()
     {
         ScoreHandler::addScore(scoreValue);
         GlobalVariables::getCurrentPhase()->enemyKilled(id);
+    }
+
+    virtual void despawn()
+    {
+        GlobalVariables::getCurrentPhase()->enemyDespawned(id);
     }
 };
 #endif //RAYLIB_STG_ENEMY_H

@@ -135,5 +135,9 @@ public:
             break;
         }
     }
+    void enemyDespawned(u_int _id) override
+    {
+
+    }
 };
 #endif //RAYLIB_STG_DIAGONALTANKPHASE1_H

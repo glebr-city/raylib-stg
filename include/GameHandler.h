@@ -23,6 +23,7 @@ private:
         PlayerBullets::clearPlayerBullets();
         DamageHandler::setPlayer(&player);
         LifeHandler::resetLives();
+        SoundHandler::StopAllSounds();
         GlobalVariables::currentStep() = 0;
         player.reset(Vector2 {60, 140});
         hitsTaken = 0;

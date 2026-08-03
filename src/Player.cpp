@@ -133,12 +133,15 @@ void Player::doPreStep() {
             PlayerBullets::spawnPlayerBullet(true, Vector2Add(position, Vector2 {0, -3}), xOffset);
             currentFireCooldown = 4;
         } else {
+            SoundHandler::PlaySound(SLIDE_4);
             PlayerBullets::spawnPlayerBullet(false, position);
             currentFireCooldown = fireCooldown;
         }
     } else if (currentFireCooldown == fireCooldown - 7) {
+        //SoundHandler::PlaySound(SLIDE_3);
         PlayerBullets::spawnPlayerBullet(false, position);
     } else if (currentFireCooldown == fireCooldown - 14) {
+        //SoundHandler::PlaySound(SLIDE_3);
         PlayerBullets::spawnPlayerBullet(false, position);
     } else if (currentFireCooldown == fireCooldown - 24) {
         wishToShoot = false;

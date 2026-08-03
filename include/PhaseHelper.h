@@ -116,6 +116,7 @@ class PhaseHelper : public StepThinker {
     }
 
     virtual void enemyKilled(u_int _id) = 0;
+    virtual void enemyDespawned(u_int _id) = 0;
 };
 
 

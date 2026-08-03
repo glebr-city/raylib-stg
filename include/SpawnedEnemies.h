@@ -8,7 +8,6 @@
 #include <memory>
 
 #include "Enemy.h"
-#include "OrbEnemy1.h"
 #include "Player.h"
 class SpawnedEnemies {
     static std::unique_ptr<std::vector<std::unique_ptr<Enemy>>> spawnedEnemies;
@@ -28,6 +27,7 @@ public:
                 e++;
                 continue;
             }
+            spawnedEnemies->at(e)->despawn();
             spawnedEnemies->erase(spawnedEnemies->begin() + e);
         }
     }

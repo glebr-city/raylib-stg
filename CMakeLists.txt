@@ -56,6 +56,8 @@ add_executable(raylib_stg src/main.cpp
         include/BigEnemy1.h
         include/SimpleBullet3.h
         src/SimpleBullet3.cpp
+        include/SoundHandler.h
+        src/SoundHandler.cpp
 )
 
 target_sources(raylib_stg

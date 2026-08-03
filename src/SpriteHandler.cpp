@@ -9,8 +9,8 @@
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
 
-std::array<std::unique_ptr<MyAnimatedSprite>, 14> SpriteHandler::animatedSprites;
-std::array<std::unique_ptr<MyStaticSprite>, 5> SpriteHandler::staticSprites;
+std::array<std::unique_ptr<MyAnimatedSprite>, 14> animatedSprites;
+std::array<std::unique_ptr<MyStaticSprite>, 5> staticSprites;
 
 std::array<std::vector<SpriteParametres>, LAYER_COUNT> staticLayers;
 std::array<std::vector<SpriteParametres>, LAYER_COUNT> animatedLayers;
@@ -18,27 +18,27 @@ std::vector<TextParametres> textLayer;
 
 void SpriteHandler::InitSprites() {
    animatedSprites = {
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerSpriteSheet.png"), Rectangle {0,0,13,13}, 40}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerBulletSpriteSheet.png"), Rectangle {0,0,7,5}, 12}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/playerBulletHyperSpriteSheet.png"), Rectangle {0,0,15,10}, 18}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/grazeRadiusFilledSpriteSheet.png"), Rectangle {0,0,22,22}, 8}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/hyperAuraSpriteSheet.png"), Rectangle {0,0,17,17}, 2}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/growingRingSpriteSheet.png"), Rectangle {0,0,180,180}, 1}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/scoreItemSpriteSheet.png"), Rectangle {0,0,8,8}, 12}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bullet1MonochromeSpriteSheet.png"), Rectangle {0,0,9,9}, 8}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/tinyBullet1SpriteSheet.png"), Rectangle {0,0,5,5}, 10}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/diagonalTankSpriteSheet.png"), Rectangle {0,0,15,15}, 30}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/enemy1SpriteSheet.png"), Rectangle {0,0,10,10}, 30}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/spinningRodMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/spinningOvalMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/bigEnemy1SpriteSheet.png"), Rectangle {0,0,25,19}, 30}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/playerSpriteSheet.png"), Rectangle {0,0,13,13}, 40}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/playerBulletSpriteSheet.png"), Rectangle {0,0,7,5}, 12}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/playerBulletHyperSpriteSheet.png"), Rectangle {0,0,15,10}, 18}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/grazeRadiusFilledSpriteSheet.png"), Rectangle {0,0,22,22}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/hyperAuraSpriteSheet.png"), Rectangle {0,0,17,17}, 2}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/growingRingSpriteSheet.png"), Rectangle {0,0,180,180}, 1}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/scoreItemSpriteSheet.png"), Rectangle {0,0,8,8}, 12}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/bullet1MonochromeSpriteSheet.png"), Rectangle {0,0,9,9}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/tinyBullet1SpriteSheet.png"), Rectangle {0,0,5,5}, 10}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/diagonalTankSpriteSheet.png"), Rectangle {0,0,15,15}, 30}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/enemy1SpriteSheet.png"), Rectangle {0,0,10,10}, 30}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/spinningRodMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/spinningOvalMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/bigEnemy1SpriteSheet.png"), Rectangle {0,0,31,19}, 30}),
     };
     staticSprites = {
-        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/grazeRadius.png"), Vector2 {22, 22}}),
-        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/grazeRadiusFilling.png"), Vector2 {22, 22}}),
-        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/lifeIcon.png"), Vector2{5, 6}}),
-        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/defaultBackground.png"), Vector2{0, 0}}),
-        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/diagonalTankBackground.png"), Vector2{0, 0}})
+        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/grazeRadius.png"), Vector2 {22, 22}}),
+        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/grazeRadiusFilling.png"), Vector2 {22, 22}}),
+        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/lifeIcon.png"), Vector2{5, 6}}),
+        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/defaultBackground.png"), Vector2{0, 0}}),
+        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/diagonalTankBackground.png"), Vector2{0, 0}})
     };
 }
 

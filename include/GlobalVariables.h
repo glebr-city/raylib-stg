@@ -8,6 +8,8 @@
 #include <memory>
 #include "PhaseHelper.h"
 #include <raylib.h>
+
+#include "SoundHandler.h"
 #include "SpriteHandlerEnums.h"
 inline int currentGrazeMetre = 0;
 inline const int gameWidth = 120;
@@ -45,6 +47,7 @@ public:
     {
         return currentPhase->getBackgroundPosition();
     }
+
 };
 
 #endif //RAYLIB_STG_GLOBALVARIABLES_H

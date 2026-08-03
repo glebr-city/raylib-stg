@@ -16,8 +16,6 @@
 
 class SpriteHandler{
 private:
-    static std::array<std::unique_ptr<MyAnimatedSprite>, 14> animatedSprites;
-    static std::array<std::unique_ptr<MyStaticSprite>, 5> staticSprites;
     public:
     static MyStaticSprite* getStaticSprite(int staticSpriteIndex);
     static Texture2D* getStaticSpriteTexture(int staticSpriteIndex);

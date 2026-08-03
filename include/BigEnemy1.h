@@ -12,6 +12,7 @@ class BigEnemy1 : public Enemy1
 private:
     static inline const int SCORE_VALUE = 700;
     static inline const ANIMATED_SPRITES sprite = BIG_ENEMY_1;
+    uint8_t humIndex = 254;
     PoolingVector<SimpleBullet3>* bullet1Pool;
     PoolingVector<SimpleBullet1>* bullet2Pool;
     const uint8_t maxHealth = 20;
@@ -21,6 +22,7 @@ private:
         if (--health <= 0)
         {
             die();
+            SoundHandler::StopSound(HUM_1, 1);
             return false;
         }
         startDamageAnimation();
@@ -31,6 +33,8 @@ private:
     {
         if (currentState.fireRate == 0)
             return;
+        if (!SoundHandler::IsSoundPlaying(HUM_1, humIndex))
+            humIndex = SoundHandler::PlaySound(HUM_1, true);
         Vector2 bulletSpawnPos = {position.x, position.y - 5};
         float elapsedStepsOffsetThing = std::min(static_cast<float>(elapsedSteps % 60) / 60, 1.0f);
         if (elapsedSteps % 120 < 60)
@@ -93,6 +97,12 @@ private:
             bullet1Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, bulletSpawnPos)), RED);
         }
     }
+
+    void despawn() override
+    {
+        SoundHandler::StopSound(HUM_1);
+        Enemy::despawn();
+    }
 public:
     BigEnemy1(PoolingVector<SimpleBullet3>* _bullet1Pool, PoolingVector<SimpleBullet1>* _bullet2Pool,const std::vector<Enemy1State>& _stateVector) : Enemy1({}, _stateVector)
     {
@@ -101,7 +111,7 @@ public:
         bullet1Pool = _bullet1Pool;
         bullet2Pool = _bullet2Pool;
         position = {0, 0};
-        collider = {0, 0, 25, 19};
+        collider = {0, 0, 31, 19};
         stateVector = _stateVector;
         enterNewState(0);
     }

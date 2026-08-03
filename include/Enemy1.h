@@ -5,6 +5,7 @@
 #ifndef RAYLIB_STG_ENEMY1_H
 #include "Enemy.h"
 #include "SimpleBullet2.h"
+#include "SoundHandler.h"
 
 struct Enemy1State //Enemy1 can only do a few things, and all of them can be specified here; pass a Vector of Enemy1States when spawning.
 {
@@ -33,6 +34,7 @@ protected:
         const Vector2 playerFinalPos = Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]);
         if (currentState.fireRate > 0 && elapsedSteps % currentState.fireRate == 0)
         {
+            SoundHandler::PlaySound(THUMP_1);
             Vector2 bulletSpawnPos = {position.x - 5, position.y};
             bulletPool->spawn().spawn(bulletSpawnPos, Vector2Normalize(Vector2Subtract({playerFinalPos.x - 1, playerFinalPos.y}, bulletSpawnPos)), RED);
             bulletSpawnPos = {position.x + 5, position.y};
