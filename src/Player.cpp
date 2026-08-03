@@ -193,6 +193,8 @@ void Player::startHyper() {
     currentHyperRingColour = WHITE;
     hyperRingRect.x = 0;
     GlobalVariables::getCurrentPhase()->cancelBullets();
+    SoundHandler::StopSound(PLAYER_HYPER_3, 0);
+    SoundHandler::PlaySound(PLAYER_HYPER_1, false, 0);
     hyperOn = true;
 }
 
@@ -200,17 +202,22 @@ void Player::endHyper() {
     hyperRingRect.x = 0;
     GlobalVariables::getCurrentPhase()->cancelBullets();
     hyperOn = false;
+    SoundHandler::StopSound(PLAYER_HYPER_1, 0);
+    SoundHandler::PlaySound(PLAYER_HYPER_2, false, 0);
     GlobalVariables::setGrazeMetre(0);
     ScoreHandler::setMultiplier(1);
 }
 
 void Player::getHit() {
     if (!LifeHandler::canSpawnPlayer())
+    {
         GameHandler::restartGame();
+        return;
+    }
+    SoundHandler::PlaySound(PLAYER_HIT);
     hyperOn = false;
     GlobalVariables::setGrazeMetre(0);
     ScoreHandler::setMultiplier(1);
     currentHyperRingColour = RED;
     hyperRingRect.x = 0;
 }
-

@@ -53,12 +53,15 @@ class DiagonalTank : public Enemy
             isMoving = false;
         } else if (elapsedSteps == stopAndFireDelay + 60)
         {
+            SoundHandler::PlaySound(BANG_1);
             bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
         } else if (elapsedSteps == stopAndFireDelay + 90)
         {
+            SoundHandler::PlaySound(BANG_2);
             bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
         } else if (elapsedSteps == stopAndFireDelay + 120)
         {
+            SoundHandler::PlaySound(BANG_1);
             bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
         }
         return true;

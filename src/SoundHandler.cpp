@@ -8,7 +8,7 @@
 
 #include "GlobalVariables.h"
 const uint8_t MAX_OVERLAP = 2; //How many instances of the same sound can play at a time?
-std::array<Sound, 6> sounds;
+std::array<Sound, 14> sounds;
 std::vector<std::array<Sound, MAX_OVERLAP>> currentSounds;
 
 void SoundHandler::InitSounds()
@@ -20,6 +20,14 @@ void SoundHandler::InitSounds()
         LoadSound("resources/sounds/slide2.mp3"),
         LoadSound("resources/sounds/slide3.mp3"),
         LoadSound("resources/sounds/slide4.mp3"),
+        LoadSound("resources/sounds/bang1.mp3"),
+        LoadSound("resources/sounds/bang2.mp3"),
+        LoadSound("resources/sounds/playerHit.mp3"),
+        LoadSound("resources/sounds/playerHyper.mp3"),
+        LoadSound("resources/sounds/playerHyper2.mp3"),
+        LoadSound("resources/sounds/playerHyper3.mp3"),
+        LoadSound("resources/sounds/playerGraze1.mp3"),
+        LoadSound("resources/sounds/playerGraze2.mp3"),
     };
     currentSounds = {};
     for (int j = 0; j < sounds.size(); j++)
@@ -56,16 +64,56 @@ uint8_t SoundHandler::PlaySound(const SOUNDS i, bool loop, const uint8_t index)
         ::PlaySound(currentSounds[i][index]);
         return index;
     }
-    for (uint8_t j = 0; j < MAX_OVERLAP; j++)
+    std::array<uint, MAX_OVERLAP> frameCounts{};
+    for (uint8_t j = 0; j < MAX_OVERLAP; j++) //See if any Sounds are free.
     {
         if (!::IsSoundPlaying(currentSounds[i][j]))
         {
             ::PlaySound(currentSounds[i][j]);
             return j;
         }
+        frameCounts[j] = currentSounds[i][j].frameCount;
     }
-    ::PlaySound(currentSounds[i][0]);
+    uint16_t largestFrameCount = 0;
+    uint8_t largestIndex = 0;
+    for (uint8_t _frameCount = 0; _frameCount < MAX_OVERLAP; _frameCount++) //No sounds are free; find the one farthest into its playback, and restart it.
+    {
+        if (frameCounts[_frameCount] > largestFrameCount)
+        {
+            largestFrameCount = frameCounts[_frameCount];
+            largestIndex = _frameCount;
+        }
+    }
+    ::PlaySound(currentSounds[i][largestIndex]);
     return 0;
+}
+
+SOUNDS SoundHandler::PlayAnySound(const std::vector<SOUNDS>& i, bool loop, uint8_t index)
+{
+    if (index < MAX_OVERLAP)
+    {
+        for (const SOUNDS _sound : i)
+        {
+            if (!IsSoundPlaying(_sound, index))
+            {
+                PlaySound(_sound, loop, index);
+                return _sound;
+            }
+        }
+        PlaySound(i[0], loop, index);
+        return i[0];
+    }
+    for (const SOUNDS _sound : i)
+    {
+        if (!IsSoundPlaying(_sound))
+        {
+            PlaySound(_sound, loop);
+            return _sound;
+        }
+    }
+    PlaySound(i[0], loop);
+    return i[0];
+
 }
 
 void SoundHandler::StopSound(const SOUNDS i, const uint8_t index)

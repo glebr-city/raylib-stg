@@ -18,6 +18,7 @@ class GameHandler {
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
+        PhaseRef newPhaseRef = {};
         GlobalVariables::setCurrentPhase(std::make_unique<DiagonalTankPhase1>());
         player =  {Vector2 {60, 140}};
         PlayerBullets::clearPlayerBullets();

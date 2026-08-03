@@ -93,6 +93,8 @@ int main() {
         tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
         tempStr.append(std::string(" \nSteps Elapsed: "));
         tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getStepsElapsed()));
+        tempStr.append(" \nStage Coordinates: ");
+        tempStr.append("(" + std::to_string(GlobalVariables::getCurrentBackgroundPosition()->x) + ", " + std::to_string(GlobalVariables::getCurrentBackgroundPosition()->y) + ")");
         tempStr.append("\nCurrent Graze: ");
         tempStr.append(std::to_string(GlobalVariables::getGrazeMetre()));
         DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);

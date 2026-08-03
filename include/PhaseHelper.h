@@ -12,6 +12,7 @@
 #include "StepThinker.h"
 
 
+
 class PhaseHelper : public StepThinker {
     protected:
         STATIC_SPRITES background = DEFAULT_BACKGROUND;
@@ -117,6 +118,12 @@ class PhaseHelper : public StepThinker {
 
     virtual void enemyKilled(u_int _id) = 0;
     virtual void enemyDespawned(u_int _id) = 0;
+};
+
+struct PhaseRef //Used to list PhaseHelpers without loading them in their entirety.
+{
+    std::string name = "Unnamed Phase";
+    bool (initPhase)();
 };
 
 

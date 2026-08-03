@@ -41,7 +41,19 @@ private:
 
     static void grazePlayer(const int i) {
         ScoreHandler::addScore(std::floor(i / 4) * ScoreHandler::getMultiplier());
-        currentGrazeMetre = std::min(currentGrazeMetre + i, maxGrazeMetre);
+        if (currentGrazeMetre >= maxGrazeMetre)
+        {
+            SoundHandler::PlayAnySound({PLAYER_GRAZE_1, PLAYER_GRAZE_2}, true, 0);
+            return;
+        }
+        if (currentGrazeMetre + i < maxGrazeMetre)
+        {
+            SoundHandler::PlayAnySound({PLAYER_GRAZE_1, PLAYER_GRAZE_2}, true, 0);
+            currentGrazeMetre = currentGrazeMetre + i;
+            return;
+        }
+        currentGrazeMetre = maxGrazeMetre;
+        SoundHandler::PlaySound(PLAYER_HYPER_3, false, 0);
     }
 };
 #endif //RAYLIB_STG_DAMAGEHANDLER_H
