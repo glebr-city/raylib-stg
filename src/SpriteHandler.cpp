@@ -5,6 +5,8 @@
 #include "../include/SpriteHandler.h"
 
 #include <iostream>
+
+#include "BackgroundHandler.h"
 #include "SpriteHandlerEnums.h"
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
@@ -53,9 +55,9 @@ void SpriteHandler::AdvanceAnimation() {
 void SpriteHandler::DrawSprites() //Draws queued sprites!
 {
     //First, we draw the background.
-    const MyStaticSprite* backgroundSprite = getStaticSprite(*GlobalVariables::getCurrentBackgroundSprite());
-    const Vector2* currentBackgroundPosition = GlobalVariables::getCurrentBackgroundPosition();
-    DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition->x, backgroundSprite->spriteSize.y - 180 - currentBackgroundPosition->y, 120, 180}, Vector2(0, 0), WHITE);
+    const MyStaticSprite* backgroundSprite = getStaticSprite(BackgroundHandler::GetBackgroundSprite());
+    const Vector2 currentBackgroundPosition = BackgroundHandler::GetBackgroundPosition();
+    DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition.x, backgroundSprite->spriteSize.y - 180 - currentBackgroundPosition.y, 120, 180}, Vector2(0, 0), WHITE);
     for (int i = 0; i < LAYER_COUNT; i++)
     {
         for (const SpriteParametres& opts : staticLayers[i]) //Draw every static sprite on the given layer.

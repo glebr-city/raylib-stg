@@ -50,15 +50,7 @@ public:
         currentGrazeMetre = i;
     }
 
-    static STATIC_SPRITES* getCurrentBackgroundSprite()
-    {
-        return currentPhase->getBackgroundSprite();
-    }
 
-    static Vector2* getCurrentBackgroundPosition()
-    {
-        return currentPhase->getBackgroundPosition();
-    }
 
 };
 

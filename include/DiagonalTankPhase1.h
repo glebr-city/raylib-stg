@@ -19,21 +19,18 @@ private:
     std::shared_ptr<PoolingVector<SimpleBullet3>> bigEnemy1Bullet1Pool;
     std::shared_ptr<PoolingVector<SimpleBullet1>> bigEnemy1Bullet2Pool;
 public:
-    DiagonalTankPhase1() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>>())
+    DiagonalTankPhase1() : PhaseHelper({0, 0.2f})
     {
         phaseName = "Diagonal Tanks";
-        background = DIAGONAL_TANK_BACKGROUND;
         diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(55, 30);
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30, 30);
         bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(100, 30);
         bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100, 30);
-        defaultScrollVector = Vector2(0, 0.2f);
-        currentScrollVector = defaultScrollVector;
-        phasePools.push_back(diagonalTankBulletPool);
-        phasePools.push_back(enemy1BulletPool);
-        phasePools.push_back(bigEnemy1Bullet1Pool);
-        phasePools.push_back(bigEnemy1Bullet2Pool);
-        currentBackgroundPosition = {0, 0};
+        BackgroundHandler::SetBackgroundSprite(DIAGONAL_TANK_BACKGROUND);
+        BackgroundHandler::SetBackgroundPosition({0, 0});
+        BackgroundHandler::SetScrollVector(defaultScrollVector);
+        GlobalPools::AddPools({diagonalTankBulletPool, enemy1BulletPool, bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool});
+
     }
     bool doPhysics(Player* _player) override
     {

@@ -5,16 +5,16 @@
 #include "../include/TestPhase1.h"
 
 
+#include "BackgroundHandler.h"
 #include "GlobalVariables.h"
 
-TestPhase1::TestPhase1() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>>()) {
+TestPhase1::TestPhase1() : PhaseHelper({0, 0.2f}) {
     phaseName = "TestPhase1";
     movingDarkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
     darkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
-    phasePools.push_back(movingDarkPurplePool);
-    phasePools.push_back(darkPurplePool);
-    defaultScrollVector = Vector2(0, 0.2f);
-    currentScrollVector = defaultScrollVector;
+    GlobalPools::AddPools({movingDarkPurplePool, darkPurplePool});
+    BackgroundHandler::SetScrollVector(defaultScrollVector);
+    BackgroundHandler::SetBackgroundSprite({});
 }
 
 bool TestPhase1::doPhysics(Player* player) {

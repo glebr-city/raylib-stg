@@ -58,6 +58,10 @@ add_executable(raylib_stg src/main.cpp
         src/SimpleBullet3.cpp
         include/SoundHandler.h
         src/SoundHandler.cpp
+        include/GlobalPools.h
+        include/GlobalPools.cpp
+        include/BackgroundHandler.h
+        src/BackgroundHandler.cpp
 )
 
 target_sources(raylib_stg

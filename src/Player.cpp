@@ -60,7 +60,8 @@ Vector2 Player::getMovement() {
 }
 
 std::array<Vector2, 2> Player::getPosAndMovement() {
-    return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
+    return std::array<Vector2, 2>{ position, {}};
+    //return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
 }
 
 void Player::reset(const Vector2 pos) {

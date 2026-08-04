@@ -11,6 +11,8 @@
 #include <iterator>
 #include <cstddef>
 
+#include "raylib.h"
+
 class IPoolingVector {
 public:
     virtual ~IPoolingVector() = default;

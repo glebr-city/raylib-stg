@@ -4,6 +4,7 @@
 
 #ifndef RAYLIB_STG_DIAGONALTANK_H
 #define RAYLIB_STG_DIAGONALTANK_H
+#include "BackgroundHandler.h"
 #include "Enemy.h"
 #include "SimpleBullet2.h"
 
@@ -34,7 +35,7 @@ class DiagonalTank : public Enemy
 
     bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
         elapsedSteps++;
-        position += GlobalVariables::getCurrentPhase()->getScrollVector();
+        position += BackgroundHandler::GetScrollVector();
         if (checkPlayerBulletCollision()) {
             takeDamage();
             return false;
