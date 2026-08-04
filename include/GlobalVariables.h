@@ -15,16 +15,28 @@ inline int currentGrazeMetre = 0;
 inline const int gameWidth = 120;
 inline const int gameHeight = 180;
 
+typedef enum {
+    DIAGONAL_TANKS = 0,
+    TEST_PHASE_1,
+
+    PHASE_COUNT
+} PHASES;
 
 class PhaseHelper;
 class GlobalVariables {
 protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
+    static const std::array<PhaseRef, 2> phases;
 public:
+
+    //static std::array<PhaseRef, 2> getPhaseList(){return {};};
+
+    static PhaseRef getPhase(const PHASES _index);
+
 
     static std::uint32_t& currentStep();
 
-    static void setCurrentPhase(std::unique_ptr<PhaseHelper> newPhase);
+    static void setCurrentPhase(const PHASES _desiredPhase);
 
     static PhaseHelper *getCurrentPhase() {
         return currentPhase.get();

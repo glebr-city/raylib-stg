@@ -17,6 +17,8 @@ class TestPhase1 : public PhaseHelper {
 public:
     TestPhase1();
     bool doPhysics(Player *player) override;
+    void enemyDespawned(u_int _id) override {};
+    void enemyKilled(u_int _id) override {};
 };
 
 

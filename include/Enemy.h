@@ -94,6 +94,7 @@ public:
     {
         ScoreHandler::addScore(scoreValue);
         GlobalVariables::getCurrentPhase()->enemyKilled(id);
+        GlobalVariables::getCurrentPhase()->enemyDespawned(id);
     }
 
     virtual void despawn()

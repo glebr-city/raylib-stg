@@ -123,7 +123,7 @@ class PhaseHelper : public StepThinker {
 struct PhaseRef //Used to list PhaseHelpers without loading them in their entirety.
 {
     std::string name = "Unnamed Phase";
-    bool (initPhase)();
+    PhaseHelper* (*initPhase)();
 };
 
 

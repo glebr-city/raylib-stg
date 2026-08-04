@@ -211,7 +211,7 @@ void Player::endHyper() {
 void Player::getHit() {
     if (!LifeHandler::canSpawnPlayer())
     {
-        GameHandler::restartGame();
+        GameHandler::RestartGame();
         return;
     }
     SoundHandler::PlaySound(PLAYER_HIT);

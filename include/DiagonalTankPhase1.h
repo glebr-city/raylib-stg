@@ -7,6 +7,7 @@
 #include "BigEnemy1.h"
 #include "DiagonalTank.h"
 #include "Enemy1.h"
+#include "GameHandler.h"
 #include "PhaseHelper.h"
 #include "SpawnedEnemies.h"
 
@@ -137,7 +138,20 @@ public:
     }
     void enemyDespawned(u_int _id) override
     {
-
+        switch (_id)
+        {
+        case 5:
+            if (stepsElapsed > 1200)
+            {
+                std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {95, 25}, .speed = 100,}, {.desiredPos = {-10, 30}, .speed = 100, .fireRate = 30, .despawn = true},};
+                std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool.get(), enemy1StateVector);
+                newEnemy->spawn({Vector2(-15, 0), 50});
+                SpawnedEnemies::spawnEnemy(std::move(newEnemy));
+                GameHandler::SwitchPhase(TEST_PHASE_1);
+            }
+            break;
+        default: break;
+        }
     }
 };
 #endif //RAYLIB_STG_DIAGONALTANKPHASE1_H

@@ -52,7 +52,7 @@ int main() {
     static constexpr std::array<KeyboardKey, 3> restartKeys = {KEY_R, KEY_ESCAPE, KEY_BACKSPACE};
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
-    GameHandler::restartGame();
+    GameHandler::RestartGame();
     bool DEBUG_highFramerate = false;
 
 
@@ -66,7 +66,7 @@ int main() {
             camera.zoom = zoomFactor;
         }
         if (InputHandler::CheckInputsPressed(restartKeys)) {
-            GameHandler::restartGame();
+            GameHandler::RestartGame();
         }
         if (IsKeyPressed(KEY_ENTER))
         {

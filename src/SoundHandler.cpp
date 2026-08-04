@@ -8,7 +8,7 @@
 
 #include "GlobalVariables.h"
 const uint8_t MAX_OVERLAP = 2; //How many instances of the same sound can play at a time?
-std::array<Sound, 14> sounds;
+std::array<Sound, SOUND_COUNT> sounds;
 std::vector<std::array<Sound, MAX_OVERLAP>> currentSounds;
 
 void SoundHandler::InitSounds()
@@ -37,9 +37,7 @@ void SoundHandler::InitSounds()
         for (int k = 0; k < MAX_OVERLAP; k++)
         {
             currentSounds[j][k] = LoadSoundAlias(sounds[j]);
-            std::cout << "Thing 0: " << IsSoundValid(currentSounds[j][k]) << std::endl;
         }
-        std::cout << "Thing 1: " << IsSoundValid(currentSounds.at(0).at(0)) << std::endl;
     }
 
 };

@@ -4,22 +4,18 @@
 
 #ifndef RAYLIB_STG_GAMEHANDLER_H
 #define RAYLIB_STG_GAMEHANDLER_H
-#include "DiagonalTankPhase1.h"
 #include "HUDHandler.h"
 #include "LifeHandler.h"
 #include "SpawnedEnemies.h"
-#include "TestPhase1.h"
-#include "TestPhase2.h"
 
 // Generic name, but this is what loads levels and such!
 class GameHandler {
     static Player player;
     static bool shouldRestartGame;
+    static PHASES desiredPhase;
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
-        PhaseRef newPhaseRef = {};
-        GlobalVariables::setCurrentPhase(std::make_unique<DiagonalTankPhase1>());
         player =  {Vector2 {60, 140}};
         PlayerBullets::clearPlayerBullets();
         DamageHandler::setPlayer(&player);
@@ -28,8 +24,7 @@ private:
         GlobalVariables::currentStep() = 0;
         player.reset(Vector2 {60, 140});
         hitsTaken = 0;
-        auto newPhase = std::make_unique<DiagonalTankPhase1>();
-        GlobalVariables::setCurrentPhase(std::move(newPhase));
+        GlobalVariables::setCurrentPhase(desiredPhase);
         DamageHandler::setPlayer(&player);
         GlobalVariables::setGrazeMetre(0);
         SpawnedEnemies::clear();
@@ -37,9 +32,15 @@ private:
         ScoreHandler::resetScore();
     }
 public:
-    static void restartGame() {
+    static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {
+        desiredPhase = _desiredPhase;
         shouldRestartGame = true;
+    }
 
+    static void SwitchPhase(const PHASES _desiredPhase = DIAGONAL_TANKS)
+    {
+        desiredPhase = _desiredPhase;
+        GlobalVariables::setCurrentPhase(_desiredPhase);
     }
 
     static void doPreStep() {

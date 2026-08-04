@@ -9,14 +9,14 @@
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
 
-std::array<std::unique_ptr<MyAnimatedSprite>, 14> animatedSprites;
-std::array<std::unique_ptr<MyStaticSprite>, 5> staticSprites;
+std::array<std::unique_ptr<MyAnimatedSprite>, ANIMATED_SPRITE_COUNT> animatedSprites;
+std::array<std::unique_ptr<MyStaticSprite>, STATIC_SPRITE_COUNT> staticSprites;
 
 std::array<std::vector<SpriteParametres>, LAYER_COUNT> staticLayers;
 std::array<std::vector<SpriteParametres>, LAYER_COUNT> animatedLayers;
 std::vector<TextParametres> textLayer;
 
-void SpriteHandler::InitSprites() {
+void SpriteHandler::InitSprites() { //It would be nice to initialise these as const. but they need to be loaded AFTER the screen is set up. TODO: CHECK AFTER PACKING ASSETS INTO EXECUTABLE
    animatedSprites = {
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/playerSpriteSheet.png"), Rectangle {0,0,13,13}, 40}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/playerBulletSpriteSheet.png"), Rectangle {0,0,7,5}, 12}),

@@ -13,19 +13,21 @@
 typedef enum
 {
     THUMP_1 = 0,
-    HUM_1 = 1,
-    SLIDE_1 = 2,
-    SLIDE_2 = 3,
-    SLIDE_3 = 4,
-    SLIDE_4 = 5,
-    BANG_1 = 6,
-    BANG_2 = 7,
-    PLAYER_HIT = 8,
-    PLAYER_HYPER_1 = 9,
-    PLAYER_HYPER_2 = 10,
-    PLAYER_HYPER_3 = 11,
-    PLAYER_GRAZE_1 = 12,
-    PLAYER_GRAZE_2 = 13,
+    HUM_1,
+    SLIDE_1,
+    SLIDE_2,
+    SLIDE_3,
+    SLIDE_4,
+    BANG_1,
+    BANG_2,
+    PLAYER_HIT,
+    PLAYER_HYPER_1,
+    PLAYER_HYPER_2,
+    PLAYER_HYPER_3,
+    PLAYER_GRAZE_1,
+    PLAYER_GRAZE_2,
+
+    SOUND_COUNT
 } SOUNDS;
 
 class SoundHandler
