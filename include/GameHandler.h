@@ -40,7 +40,15 @@ public:
     static void SwitchPhase(const PHASES _desiredPhase = DIAGONAL_TANKS)
     {
         desiredPhase = _desiredPhase;
+        std::vector<std::shared_ptr<IPoolingVector>> transientPools = {};
+        std::vector<std::shared_ptr<IPoolingVector>>* phasePools = GlobalVariables::getCurrentPhase()->getPhasePools();
+        for (auto & phasePool : *phasePools)
+        {
+            if (phasePool.use_count() > 2)
+                transientPools.emplace_back(std::move(phasePool));
+        }
         GlobalVariables::setCurrentPhase(_desiredPhase);
+        GlobalVariables::getCurrentPhase()->addPhasePools(&transientPools);
     }
 
     static void doPreStep() {

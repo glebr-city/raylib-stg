@@ -13,9 +13,12 @@ TestPhase1::TestPhase1() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVecto
     darkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
     phasePools.push_back(movingDarkPurplePool);
     phasePools.push_back(darkPurplePool);
+    defaultScrollVector = Vector2(0, 0.2f);
+    currentScrollVector = defaultScrollVector;
 }
 
 bool TestPhase1::doPhysics(Player* player) {
+    stepsElapsed++;
     if (GlobalVariables::currentStep() < 50)
         return true;
     std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();

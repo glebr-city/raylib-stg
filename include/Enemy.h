@@ -94,12 +94,16 @@ public:
     {
         ScoreHandler::addScore(scoreValue);
         GlobalVariables::getCurrentPhase()->enemyKilled(id);
-        GlobalVariables::getCurrentPhase()->enemyDespawned(id);
     }
 
     virtual void despawn()
     {
-        GlobalVariables::getCurrentPhase()->enemyDespawned(id);
+        //GlobalVariables::getCurrentPhase()->enemyDespawned(id);
+    }
+
+     [[nodiscard]] u_int GetID() const
+    {
+        return id;
     }
 };
 #endif //RAYLIB_STG_ENEMY_H

@@ -28,7 +28,9 @@ public:
                 continue;
             }
             spawnedEnemies->at(e)->despawn();
+            const u_int id = spawnedEnemies->at(e)->GetID();
             spawnedEnemies->erase(spawnedEnemies->begin() + e);
+            GlobalVariables::getCurrentPhase()->enemyDespawned(id);
         }
     }
     static void spawnEnemy(std::unique_ptr<Enemy> _enemy) { //Add an enemy to the vector.

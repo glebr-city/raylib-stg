@@ -12,11 +12,11 @@ class DiagonalTank : public Enemy
     private:
     static inline const ANIMATED_SPRITES sprite = DIAGONAL_TANK;
     u_int elapsedSteps;
-    PoolingVector<SimpleBullet2>* bulletPool;
+    std::shared_ptr<PoolingVector<SimpleBullet2>> bulletPool;
     bool isMoving = true;
     u_int stopAndFireDelay = 0; //How many steps to wait before stopping and firing
     public:
-    DiagonalTank(PoolingVector<SimpleBullet2>* _bulletPool, const u_int _stopAndFireDelay = 0) {
+    DiagonalTank(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const u_int _stopAndFireDelay = 0) {
         elapsedSteps = -1;
         bulletPool = _bulletPool;
         position = {0, 0};

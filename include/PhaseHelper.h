@@ -53,7 +53,7 @@ class PhaseHelper : public StepThinker {
                 return true;
             }
             const std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
-        for (auto& pool : phasePools) {
+        for (const auto& pool : phasePools) {
             pool->doPhysics(playerPosAndMovement);
         }
             return true;
@@ -63,7 +63,8 @@ class PhaseHelper : public StepThinker {
         playerHit = true;
     }
 
-    int getNumActive() {
+    [[nodiscard]] int getNumActive() const
+    {
         int i = 0;
         for (const auto& pooling_vector : phasePools) {
             i += pooling_vector->getNumActive();
@@ -118,6 +119,19 @@ class PhaseHelper : public StepThinker {
 
     virtual void enemyKilled(u_int _id) = 0;
     virtual void enemyDespawned(u_int _id) = 0;
+
+    std::vector<std::shared_ptr<IPoolingVector>>* getPhasePools()
+    {
+        return &phasePools;
+    }
+
+    void addPhasePools(std::vector<std::shared_ptr<IPoolingVector>>* _phasePools)
+    {
+        phasePools.reserve(phasePools.size() + _phasePools->size());
+        phasePools.insert(phasePools.end(), 
+            std::make_move_iterator(_phasePools->begin()),
+            std::make_move_iterator(_phasePools->end()));
+    }
 };
 
 struct PhaseRef //Used to list PhaseHelpers without loading them in their entirety.

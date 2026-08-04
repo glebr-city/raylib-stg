@@ -16,7 +16,6 @@ const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
 
 PhaseRef GlobalVariables::getPhase(const PHASES _index)
 {
-    std::cout << "Count: " << phases.size() << std::endl;
     return phases[_index];
 }
 

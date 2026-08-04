@@ -19,7 +19,7 @@ struct Enemy1State //Enemy1 can only do a few things, and all of them can be spe
 class Enemy1 : public Enemy
 {
 private:
-    PoolingVector<SimpleBullet2>* bulletPool;
+    std::shared_ptr<PoolingVector<SimpleBullet2>> bulletPool;
 protected:
     static inline const ANIMATED_SPRITES sprite = ENEMY_1;
     u_int elapsedSteps;
@@ -43,7 +43,7 @@ protected:
     }
 
 public:
-    Enemy1(PoolingVector<SimpleBullet2>* _bulletPool, const std::vector<Enemy1State>& _stateVector) {
+    Enemy1(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const std::vector<Enemy1State>& _stateVector) {
         elapsedSteps = -1;
         bulletPool = _bulletPool;
         position = {0, 0};
