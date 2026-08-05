@@ -15,8 +15,6 @@ add_executable(raylib_stg src/main.cpp
         include/SpriteHandler.h
         src/SimpleBullet1.cpp
         include/SimpleBullet1.h
-        src/GameObject.cpp
-        include/GameObject.h
         src/SimpleBullet2.cpp
         include/SimpleBullet2.h
         include/SimpleBullet2.h
@@ -62,6 +60,9 @@ add_executable(raylib_stg src/main.cpp
         include/GlobalPools.cpp
         include/BackgroundHandler.h
         src/BackgroundHandler.cpp
+        include/Phase2.h
+        include/PlayerHandler.h
+        src/PlayerHandler.cpp
 )
 
 target_sources(raylib_stg

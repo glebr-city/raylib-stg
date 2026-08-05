@@ -5,6 +5,6 @@
 #include "GameHandler.h"
 
 #include "Player.h"
-Player GameHandler::player = Player(Vector2 {60, 140});
 bool GameHandler::shouldRestartGame = false;
+bool GameHandler::shouldSwitchPhase = false;
 PHASES GameHandler::desiredPhase = DIAGONAL_TANKS;

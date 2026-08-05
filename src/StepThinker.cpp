@@ -18,7 +18,7 @@
 void StepThinker::doPreStep() {
 };
 
-Vector2 StepThinker::getPosition() {
+Vector2 StepThinker::GetPosition() {
     std::cout << "!!! StepThinker::getPosition() always returns {0, 0} !";
     return Vector2{};
 }
@@ -27,6 +27,3 @@ bool StepThinker::doPhysics() {
     return true;
 }
 
-bool StepThinker::doPhysics(std::array<Vector2, 2> playerPosAndMovement) {
-    return true;
-}

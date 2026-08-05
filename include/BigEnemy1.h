@@ -13,8 +13,8 @@ private:
     static inline const int SCORE_VALUE = 700;
     static inline const ANIMATED_SPRITES sprite = BIG_ENEMY_1;
     uint8_t humIndex = 254;
-    PoolingVector<SimpleBullet3>* bullet1Pool;
-    PoolingVector<SimpleBullet1>* bullet2Pool;
+    std::shared_ptr<PoolingVector<SimpleBullet3>> bullet1Pool;
+    std::shared_ptr<PoolingVector<SimpleBullet1>> bullet2Pool;
     const uint8_t maxHealth = 20;
     uint8_t health = maxHealth;
     bool takeDamage() override
@@ -29,7 +29,7 @@ private:
         return true;
     }
 
-    void handleShooting(Enemy1State currentState, std::array<Vector2, 2> playerPosAndMovement) override
+    void handleShooting(Enemy1State currentState) override
     {
         if (currentState.fireRate == 0)
             return;
@@ -73,7 +73,7 @@ private:
         if (elapsedSteps % currentState.fireRate == 0)
         {
             bulletSpawnPos = {position.x - 5, position.y};
-            const Vector2 playerFinalPos = Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]);
+            const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
             Vector2 bulletSpawnDir = Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, bulletSpawnPos));
             if (elapsedSteps % 100 > 50)
                 bulletSpawnDir.x = bulletSpawnDir.x - 0.25f + (static_cast<float>((elapsedSteps % 50)) + 1) / 480;
@@ -104,7 +104,7 @@ private:
         Enemy::despawn();
     }
 public:
-    BigEnemy1(PoolingVector<SimpleBullet3>* _bullet1Pool, PoolingVector<SimpleBullet1>* _bullet2Pool,const std::vector<Enemy1State>& _stateVector) : Enemy1({}, _stateVector)
+    BigEnemy1(const std::shared_ptr<PoolingVector<SimpleBullet3>>& _bullet1Pool, const std::shared_ptr<PoolingVector<SimpleBullet1>>& _bullet2Pool,const std::vector<Enemy1State>& _stateVector) : Enemy1({}, _stateVector, 750)
     {
         scoreValue = SCORE_VALUE;
         elapsedSteps = -1;

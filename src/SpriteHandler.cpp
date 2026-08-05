@@ -5,6 +5,7 @@
 #include "../include/SpriteHandler.h"
 
 #include <iostream>
+#include <vector>
 
 #include "BackgroundHandler.h"
 #include "SpriteHandlerEnums.h"

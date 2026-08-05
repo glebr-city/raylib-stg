@@ -45,11 +45,7 @@ public:
         SpriteHandler::QueueMyAnimatedSprite({currentSprite, position});
     }
 
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
-        //std::cout << "!!! PlayerBullet::doPhysics should be called with no parameters." << std::endl;
-        return doPhysics();
-    }
-    bool doPhysics() {
+    bool doPhysics() override {
         if (position.y < -6) {
             return false;
         }

@@ -10,20 +10,19 @@
 
 class SimpleBullet2 : public SimpleBullet {
 public:
-    using StepThinker::doPhysics;
     SimpleBullet2();
 
     SimpleBullet2(Vector2 pos, Vector2 dir);
 
     SimpleBullet2(Vector2 pos, Vector2 dir, Color col);
 
+    bool doPhysics() override;
     void spawn(Vector2 pos, Vector2 dir);
 
     void spawn(Vector2 pos, Vector2 dir, Color col);
 
     void doPreStep() override;
 
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
 
 
 private:

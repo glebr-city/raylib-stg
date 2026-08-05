@@ -13,28 +13,34 @@
 #include "Spawnable.h"
 
 
+
+
 class Bullet  : public Spawnable {
 protected:
  int scoreValue = 0;
  static constexpr int grazeValue = 40;
  bool CheckCollisionRoundBullet(const Vector2 _center, const float _radius, const Vector2 p1, const Vector2 p2, const int _grazeValue)
  {
-  float dx = p1.x - p2.x;
-  float dy = p1.y - p2.y;
+  const float dx = p1.x - p2.x;
+  const float dy = p1.y - p2.y;
+  float dx2;
+  float dy2;
 
   if ((std::fabsf(dx) + std::fabsf(dy)) <= FLT_EPSILON)
   {
-   return CheckCollisionCircles(p1, 0, _center, _radius);
+   dx2 = (p1.x - _center.x);
+   dy2 = (p1.y - _center.y);
+
+  } else
+  {
+   const float lengthSQ = ((dx*dx) + (dy*dy));
+   float dotProduct = (((_center.x - p1.x)*(p2.x - p1.x)) + ((_center.y - p1.y)*(p2.y - p1.y)))/(lengthSQ);
+   if (dotProduct > 1.0f) dotProduct = 1.0f;
+   else if (dotProduct < 0.0f) dotProduct = 0.0f;
+   dx2 = (p1.x - (dotProduct*(dx))) - _center.x;
+   dy2 = (p1.y - (dotProduct*(dy))) - _center.y;
   }
 
-  const float lengthSQ = ((dx*dx) + (dy*dy));
-  float dotProduct = (((_center.x - p1.x)*(p2.x - p1.x)) + ((_center.y - p1.y)*(p2.y - p1.y)))/(lengthSQ);
-
-  if (dotProduct > 1.0f) dotProduct = 1.0f;
-  else if (dotProduct < 0.0f) dotProduct = 0.0f;
-
-  const float dx2 = (p1.x - (dotProduct*(dx))) - _center.x;
-  const float dy2 = (p1.y - (dotProduct*(dy))) - _center.y;
   const float distanceSQ = ((dx2*dx2) + (dy2*dy2));
   const float radiusSQ = _radius * _radius;
   if (distanceSQ <= radiusSQ + grazeRadiusSQ) {
@@ -47,7 +53,7 @@ protected:
   return (distanceSQ <= radiusSQ);
  }
 public:
- bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override = 0;
+ bool doPhysics() override = 0;
  Bullet() {
   position = Vector2();
  }

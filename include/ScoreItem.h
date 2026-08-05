@@ -20,6 +20,8 @@ enum VALUESPRITE {
     LIGHT_LARGE = 40
 };
 
+inline const int scoreItemMultiplier = 20;
+
 class ScoreItem : public Spawnable {
 protected:
     int stepsElapsed = 0;
@@ -41,21 +43,21 @@ protected:
         SpriteHandler::QueueMyAnimatedSprite({SCORE_ITEM, position, valueSprite});
     }
 
-    bool doPhysics(const std::array<Vector2, 2> playerPosAndMovement) override {
+    bool doPhysics() override {
         stepsElapsed++;
+        const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
         if (currentAntiGravity > 0) {
-            position.x += ((position.x - playerPosAndMovement.at(0).x) * currentAntiGravity / 50);
+            position.x += ((position.x - playerFinalPos.x) * currentAntiGravity / 50);
             position.y -= currentAntiGravity;
             currentAntiGravity -= 0.04f;
             return true;
         }
-        float distanceSQ = Vector2DistanceSqr(position, playerPosAndMovement.at(0));
+        const float distanceSQ = Vector2DistanceSqr(position, playerFinalPos);
         if (distanceSQ < speed * speed) {
-            std::cout << std::max(10, value * 50) << " " << stepsElapsed << std::endl;
-            ScoreHandler::addScore(std::max(10, value * 50), false);
+            ScoreHandler::addScore(std::max(10, value * scoreItemMultiplier), false);
             return false;
         }
-        position += Vector2Normalize(Vector2Subtract(playerPosAndMovement.at(0), position)) * speed;
+        position += Vector2Normalize(Vector2Subtract(playerFinalPos, position)) * speed;
         speed += 0.03f - 0.0000003f * distanceSQ;
         return true;
     }
@@ -68,7 +70,7 @@ protected:
         value = DARK_SMALL;
     }
 
-    void spawn(const Vector2 _position, const u_int _value) {
+    void spawn(const Vector2 _position, const u_int _value) override {
         int xAsInt = static_cast<int>(std::floor(_position.x));
         int yAsInt = static_cast<int>(std::floor(_position.y));
         currentAntiGravity = 1;

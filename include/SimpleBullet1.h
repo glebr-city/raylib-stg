@@ -27,7 +27,7 @@ public:
     void spawn(Vector2 pos, Vector2 dir);
     void spawn(Vector2 pos, Vector2 dir, Color col);
     void doPreStep() override;
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
+    bool doPhysics() override;
 };
 
 

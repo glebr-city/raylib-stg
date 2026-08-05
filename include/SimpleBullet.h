@@ -15,12 +15,12 @@ public:
 
     void doPreStep() override;
 
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override;
+    bool doPhysics() override;
 
     void spawn(Vector2 _position) override;
 
 
-    Vector2 getPosition() override;
+    Vector2 GetPosition() override;
 
 
 

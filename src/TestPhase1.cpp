@@ -17,11 +17,9 @@ TestPhase1::TestPhase1() : PhaseHelper({0, 0.2f}) {
     BackgroundHandler::SetBackgroundSprite({});
 }
 
-bool TestPhase1::doPhysics(Player* player) {
-    stepsElapsed++;
+bool TestPhase1::doPhysics() {
     if (GlobalVariables::currentStep() < 50)
         return true;
-    std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
     Color tempColour = Color {130, 20, 130, 255};
     Color tempColour2 = Color {180, 80, 180, 255};
     Color* currentColour = &tempColour;
@@ -64,6 +62,6 @@ bool TestPhase1::doPhysics(Player* player) {
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(currentStep() % 120), -4}, Vector2{0,1}, DARKGREEN);
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 120), 0}, Vector2{0,1});
     simpleBullet1Pool.spawn()->spawn(Vector2 {static_cast<float>(120 - currentStep() % 120), -4}, Vector2{0,1}, DARKGREEN);*/
-    PhaseHelper::doPhysics(player);
+    PhaseHelper::doPhysics();
     return true;
 }

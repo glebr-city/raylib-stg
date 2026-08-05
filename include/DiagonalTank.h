@@ -33,7 +33,7 @@ class DiagonalTank : public Enemy
             SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .yOffset = 1, .l = LAYER_GROUNDED});
     }
 
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
+    bool doPhysics() override {
         elapsedSteps++;
         position += BackgroundHandler::GetScrollVector();
         if (checkPlayerBulletCollision()) {
@@ -49,18 +49,18 @@ class DiagonalTank : public Enemy
             return false;
         collider.x = position.x - collider.width / 2;
         collider.y = position.y - collider.height / 2;
-        Vector2 playerFinalPos = Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]);
+        Vector2 playerFinalPos = PlayerHandler::GetPlayer()->GetFinalPos();
         if (elapsedSteps == stopAndFireDelay) {
             isMoving = false;
-        } else if (elapsedSteps == stopAndFireDelay + 60)
+        } else if (elapsedSteps == stopAndFireDelay + 60 && Vector2DistanceSqr(position, playerFinalPos) > bulletSealRadiusSQ)
         {
             SoundHandler::PlaySound(BANG_1);
             bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
-        } else if (elapsedSteps == stopAndFireDelay + 90)
+        } else if (elapsedSteps == stopAndFireDelay + 90 && Vector2DistanceSqr(position, playerFinalPos) > bulletSealRadiusSQ)
         {
             SoundHandler::PlaySound(BANG_2);
             bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);
-        } else if (elapsedSteps == stopAndFireDelay + 120)
+        } else if (elapsedSteps == stopAndFireDelay + 120 && Vector2DistanceSqr(position, playerFinalPos) > bulletSealRadiusSQ)
         {
             SoundHandler::PlaySound(BANG_1);
             bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position), YELLOW);

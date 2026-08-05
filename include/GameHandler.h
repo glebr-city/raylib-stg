@@ -7,30 +7,45 @@
 #include "BackgroundHandler.h"
 #include "HUDHandler.h"
 #include "LifeHandler.h"
+#include "PlayerHandler.h"
+#include "SoundHandler.h"
 #include "SpawnedEnemies.h"
 
 // Generic name, but this is what loads levels and such!
 class GameHandler {
-    static Player player;
     static bool shouldRestartGame;
+    static bool shouldSwitchPhase;
     static PHASES desiredPhase;
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
-        player =  {Vector2 {60, 140}};
+        PlayerHandler::SetPlayer(std::make_shared<Player>(Vector2{60, 140}));
         PlayerBullets::clearPlayerBullets();
-        DamageHandler::setPlayer(&player);
         LifeHandler::resetLives();
         SoundHandler::StopAllSounds();
         GlobalVariables::currentStep() = 0;
-        player.reset(Vector2 {60, 140});
+        GlobalPools::Clear();
+        PlayerHandler::GetPlayer().get()->reset(Vector2 {60, 140});
         hitsTaken = 0;
         GlobalVariables::setCurrentPhase(desiredPhase);
-        DamageHandler::setPlayer(&player);
+        BackgroundHandler::SetBackgroundPosition(GlobalVariables::getCurrentPhase()->getDefaultBackgroundPosition());
+        BackgroundHandler::SetBackgroundSprite(GlobalVariables::getCurrentPhase()->getDefaultBackgroundSprite());
+        BackgroundHandler::SetScrollVector(GlobalVariables::getCurrentPhase()->getDefaultScrollVector());
         GlobalVariables::setGrazeMetre(0);
         SpawnedEnemies::clear();
         ScoreItemHandler::clear();
         ScoreHandler::resetScore();
+    }
+    static void actuallySwitchPhase()
+    {
+        shouldSwitchPhase = false;
+        const std::vector<std::shared_ptr<IPoolingVector>>* pools = GlobalPools::GetPools();
+        for (uint i = 0; i < pools->size(); i++)
+        {
+            if (pools->at(i).use_count() <= 2 && pools->at(i)->getNumActive() == 0)
+                GlobalPools::RemoveAt(i);
+        }
+        GlobalVariables::setCurrentPhase(desiredPhase);
     }
 public:
     static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {
@@ -40,17 +55,8 @@ public:
 
     static void SwitchPhase(const PHASES _desiredPhase = DIAGONAL_TANKS)
     {
+        shouldSwitchPhase = true;
         desiredPhase = _desiredPhase;
-        //std::vector<std::shared_ptr<IPoolingVector>> transientPools = {};
-        //std::vector<std::shared_ptr<IPoolingVector>>* phasePools = GlobalVariables::getCurrentPhase()->getPhasePools();
-        const std::vector<std::shared_ptr<IPoolingVector>>* pools = GlobalPools::GetPools();
-        for (uint i = 0; i < pools->size(); i++)
-        {
-            if (pools->at(i).use_count() <= 2)
-                GlobalPools::RemoveAt(i);
-        }
-        GlobalVariables::setCurrentPhase(_desiredPhase);
-        //GlobalVariables::getCurrentPhase()->addPhasePools(&transientPools);
     }
 
     static void doPreStep() {
@@ -59,20 +65,25 @@ public:
         BackgroundHandler::ScrollBackground();
         ScoreItemHandler::doPreStep();
         PlayerBullets::getPlayerBullets()->doPreStep();
-        player.doPreStep();
+       PlayerHandler::GetPlayer().get()->doPreStep();
         SpawnedEnemies::doPreStep();
         GlobalPools::doPreStep();
         GlobalVariables::getCurrentPhase()->doPreStep();
-        HUDHandler::doPreStep(player.getPosition());
+        HUDHandler::doPreStep(PlayerHandler::GetPlayer().get()->GetPosition());
     }
 
     static void doPhysics() {
-        player.doPhysics();
-        ScoreItemHandler::doPhysics(&player);
+        if (shouldSwitchPhase)
+            actuallySwitchPhase();
+        ScoreItemHandler::doPhysics();
         PlayerBullets::getPlayerBullets()->doPhysics();
-        SpawnedEnemies::doPhysics(&player);
-        GlobalPools::doPhysics(&player);
-        GlobalVariables::getCurrentPhase()->doPhysics(&player);
+        SpawnedEnemies::doPhysics();
+
+        if (GlobalVariables::getCurrentPhase()->CanSpawnBullets())
+            GlobalPools::doPhysics();
+        GlobalVariables::getCurrentPhase()->doPhysics();
+        GlobalVariables::getCurrentPhase()->tickStep();
+        PlayerHandler::GetPlayer().get()->doPhysics();
     }
 };
 #endif //RAYLIB_STG_GAMEHANDLER_H

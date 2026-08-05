@@ -48,9 +48,10 @@ void SimpleBullet1::doPreStep() {
     SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET, .col = color});
 }
 
-bool SimpleBullet1::doPhysics(const std::array<Vector2, 2> playerPosAndMovement) {
-    Vector2 playerFinalPoint = playerPosAndMovement[0] + (playerPosAndMovement[1] - Vector2Scale(direction, speed));
-    if (CheckCollisionRoundBullet(position, radius, playerPosAndMovement[0], playerFinalPoint, grazeValue)) {
+bool SimpleBullet1::doPhysics() {
+    Vector2 playerPos = PlayerHandler::GetPlayer().get()->GetPosition();
+    Vector2 playerFinalPoint = PlayerHandler::GetPlayer().get()->GetFinalPos();
+    if (CheckCollisionRoundBullet(position, radius, playerPos, playerFinalPoint, grazeValue)) {
         DamageHandler::hitPlayer();
         return false;
     }

@@ -4,19 +4,18 @@
 
 #ifndef RAYLIB_STG_STEPTHINKER_H
 #define RAYLIB_STG_STEPTHINKER_H
-#include <memory>
 #include <vector>
-
-#include <GameObject.h>
 
 #include "raylib.h"
 
-class StepThinker : public GameObject{
+class Player;
+
+class StepThinker {
 public:
+    virtual ~StepThinker() = default;
     virtual void doPreStep();
-    virtual bool doPhysics(std::array<Vector2, 2> playerPosAndMovement);
     virtual bool doPhysics();
-    virtual Vector2 getPosition();
+    virtual Vector2 GetPosition();
 };
 
 

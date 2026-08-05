@@ -19,13 +19,17 @@ class PhaseHelper : public StepThinker {
         std::string phaseName = "Unnamed Phase"; //Phase name. For debug purposes?
         bool playerHit = false;
         int currentWaitSteps = 0; //Don't spawn bullets for a while after a hyper.
-        Vector2 defaultScrollVector; //Scrolling for the background and grounded enemies!
+        STATIC_SPRITES defaultBackgroundSprite = DEFAULT_BACKGROUND; //Used when starting from a specific stage.
+        Vector2 defaultBackgroundPosition{}; //Scrolling for the background and grounded enemies!
+        Vector2 defaultScrollVector{}; //Scrolling for the background and grounded enemies!
         u_int stepsElapsed = 0;
 
     public:
-        PhaseHelper(const Vector2 _defaultScrollVector)
+        PhaseHelper(const Vector2 _defaultBackgroundPosition = {}, const Vector2 _defaultScrollVector = {}, const STATIC_SPRITES _defaultBackgroundSprite = DEFAULT_BACKGROUND)
         {
+            defaultBackgroundPosition = _defaultBackgroundPosition;
             defaultScrollVector = _defaultScrollVector;
+            defaultBackgroundSprite = _defaultBackgroundSprite;
         }
 
         void doPreStep() override {
@@ -37,7 +41,7 @@ class PhaseHelper : public StepThinker {
             //SpriteHandler::QueueMyStaticSprite({background, Vector2Add(currentBackgroundPosition, Vector2(0, 0))});
         }
 
-        virtual bool doPhysics(Player* player) {
+        bool doPhysics() override {
             if (playerHit) {
                 clearBullets();
                 playerHit = false;
@@ -50,7 +54,12 @@ class PhaseHelper : public StepThinker {
                 return true;
             }
             return true;
-    };
+    }
+
+        [[nodiscard]] bool CanSpawnBullets() const
+        {
+            return (currentWaitSteps <= 0);
+        }
 
     void hitPlayer() {
         playerHit = true;
@@ -74,7 +83,6 @@ class PhaseHelper : public StepThinker {
 
     void cancelBullets() { //Clear bullets AND spawn score items.
         for (const auto& pooling_vector : *GlobalPools::GetPools()) {
-            std::cout << "Active position count: " << pooling_vector->getActivePositions().size() << std::endl;
             for (const auto& pos : pooling_vector->getActivePositions()) {
                 if (pos.x < -2 || pos.x > 122 || pos.y < -2 || pos.y > 182)
                     continue;
@@ -98,13 +106,30 @@ class PhaseHelper : public StepThinker {
 
     virtual void enemyKilled(u_int _id) = 0;
     virtual void enemyDespawned(u_int _id) = 0;
+    virtual void tickStep()
+    {
+        stepsElapsed++;
+    }
 
+    [[nodiscard]] STATIC_SPRITES getDefaultBackgroundSprite() const
+    {
+        return defaultBackgroundSprite;
+    }
+
+    [[nodiscard]] Vector2 getDefaultBackgroundPosition() const
+    {
+        return defaultBackgroundPosition;
+    }
+
+    [[nodiscard]] Vector2 getDefaultScrollVector() const
+    {
+        return defaultScrollVector;
+    }
 
 };
 
 struct PhaseRef //Used to list PhaseHelpers without loading them in their entirety.
 {
-    std::string name = "Unnamed Phase";
     PhaseHelper* (*initPhase)();
 };
 

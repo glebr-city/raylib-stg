@@ -26,12 +26,11 @@ protected:
     std::vector<Enemy1State> stateVector;
     u_int currentStateIndex = 0;
     float currentSpeed = 0;
-    bool shouldDespawn = false;
     u_int elapsedStepsInState;
 
-    virtual void handleShooting(Enemy1State currentState, std::array<Vector2, 2> playerPosAndMovement)
+    virtual void handleShooting(const Enemy1State currentState)
     {
-        const Vector2 playerFinalPos = Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]);
+        const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
         if (currentState.fireRate > 0 && elapsedSteps % currentState.fireRate == 0)
         {
             SoundHandler::PlaySound(THUMP_1);
@@ -43,7 +42,7 @@ protected:
     }
 
 public:
-    Enemy1(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const std::vector<Enemy1State>& _stateVector) {
+    Enemy1(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 100) : Enemy(_scoreValue) {
         elapsedSteps = -1;
         bulletPool = _bulletPool;
         position = {0, 0};
@@ -60,43 +59,44 @@ public:
             SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .yOffset = 1, .l = LAYER_ENEMY});
     }
 
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override
+    bool doPhysics() override
     {
         elapsedSteps++;
+        checkPlayerCollision();
         if (checkPlayerBulletCollision())
         {
             if (!takeDamage())
                 return false;
         }
-        if (shouldDespawn)
-            return false;
         const Enemy1State currentState = stateVector[currentStateIndex];
         if (++elapsedStepsInState == currentState.duration)
-            enterNewState(currentStateIndex + 1);
+            return enterNewState(currentStateIndex + 1);
         if (Vector2DistanceSqr(position, currentState.desiredPos) < (currentState.speed / 4) * (currentState.speed / 4))
         {
             currentSpeed = std::clamp(currentSpeed - currentState.speed / 60, 0.0f, currentState.speed);
             if (currentSpeed == 0.0f) //Done moving, now enter the new state!
-                enterNewState(currentStateIndex + 1);
+                return enterNewState(currentStateIndex + 1);
         }
         else if (currentSpeed < currentState.speed)
             currentSpeed = currentSpeed + currentState.speed / 60;
         position = Vector2MoveTowards(position, currentState.desiredPos, currentSpeed / 120);
         collider.x = position.x - collider.width / 2;
         collider.y = position.y - collider.height / 2;
-        handleShooting(currentState, playerPosAndMovement);
+        handleShooting(currentState);
         return true;
     }
 
-    void enterNewState(const u_int newStateIndex)
+    bool enterNewState(const u_int newStateIndex)
     {
+        if (stateVector[currentStateIndex].despawn)
+            return false;
         elapsedStepsInState = 0;
-        shouldDespawn = stateVector[currentStateIndex].despawn;
-        if (stateVector.size() > newStateIndex)
+        if (newStateIndex < stateVector.size())
             currentStateIndex = newStateIndex;
         else
             currentStateIndex = 0;
         currentSpeed = 0;
+        return true;
     }
 };
 #define RAYLIB_STG_ENEMY1_H

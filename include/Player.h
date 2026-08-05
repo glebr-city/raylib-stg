@@ -15,6 +15,7 @@ class Player : public StepThinker{
 private:
     void startHyper();
     void endHyper();
+    void setFinalPos();
 
 public:
     Player(Vector2 pos);
@@ -26,9 +27,10 @@ public:
     void doPhysics(Vector2 pos);
     bool doPhysics() override;
 
-    Vector2 getPosition() override;
-    Vector2 getMovement();
-    std::array<Vector2, 2> getPosAndMovement();
+    Vector2 GetPosition() override;
+    Vector2 GetMovement();
+    Vector2 GetFinalPos();
+    std::array<Vector2, 2> GetPosAndMovement();
     void getHit();
 };
 

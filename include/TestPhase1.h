@@ -16,7 +16,7 @@ class TestPhase1 : public PhaseHelper {
     std::shared_ptr<PoolingVector<SimpleBullet1>> darkPurplePool;
 public:
     TestPhase1();
-    bool doPhysics(Player *player) override;
+    bool doPhysics() override;
     void enemyDespawned(u_int _id) override {};
     void enemyKilled(u_int _id) override {};
 };

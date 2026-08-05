@@ -6,33 +6,34 @@
 #define RAYLIB_STG_GLOBALVARIABLES_H
 #include <cstdint>
 #include <memory>
-#include "PhaseHelper.h"
-#include <raylib.h>
 
-#include "SoundHandler.h"
-#include "SpriteHandlerEnums.h"
+//#include "PhaseHelper.h"
+
+class PhaseHelper;
+struct PhaseRef;
 inline int currentGrazeMetre = 0;
 inline const int gameWidth = 120;
 inline const int gameHeight = 180;
+inline const int bulletSealRadius = 22; //Grounded enemies may not fire from this distance to the player.
+inline const int bulletSealRadiusSQ = bulletSealRadius * bulletSealRadius; //Grounded enemies may not fire from this distance to the player.
 
 typedef enum {
     DIAGONAL_TANKS = 0,
-    TEST_PHASE_1,
+    PHASE_2,
 
     PHASE_COUNT
 } PHASES;
 
-class PhaseHelper;
 class GlobalVariables {
 protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
-    static const std::array<PhaseRef, 2> phases;
+    static const std::array<PhaseRef, PHASE_COUNT> phases;
 public:
 
     //static std::array<PhaseRef, 2> getPhaseList(){return {};};
 
-    static PhaseRef getPhase(const PHASES _index);
 
+    static PhaseRef getPhase(const PHASES _index);
 
     static std::uint32_t& currentStep();
 
@@ -49,7 +50,6 @@ public:
     static void setGrazeMetre(int i) {
         currentGrazeMetre = i;
     }
-
 
 
 };

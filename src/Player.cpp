@@ -31,6 +31,7 @@ static constexpr std::array<KeyboardKey, 3> focusKeys = {KEY_LEFT_SHIFT, KEY_RIG
 static constexpr std::array<KeyboardKey, 3> hyperKeys = {KEY_X, KEY_LEFT_CONTROL, KEY_PERIOD};
 static constexpr std::array<KeyboardKey, 2> fireKeys = {KEY_Z, KEY_SLASH};
 Vector2 position;
+Vector2 finalPos{}; //Calculated during preStep, applied during doPhysics.
 Vector2 inputVector {0, 0};
 Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 constexpr int fireCooldown = 30; //Frames to wait between player shots
@@ -51,17 +52,28 @@ Player::Player(const Vector2 pos) {
     reset(pos);
 }
 
-Vector2 Player::getPosition() {
+Vector2 Player::GetPosition() {
     return position;
 }
 
-Vector2 Player::getMovement() {
+Vector2 Player::GetMovement() {
     return Vector2Scale(inputVector, *currentSpeed);
 }
 
-std::array<Vector2, 2> Player::getPosAndMovement() {
-    return std::array<Vector2, 2>{ position, {}};
-    //return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
+Vector2 Player::GetFinalPos()
+{
+    return finalPos;
+}
+
+void Player::setFinalPos() //Called during preStep.
+{
+    finalPos = position;
+    finalPos += Vector2Normalize(inputVector) * *currentSpeed;
+    finalPos = Vector2Clamp(finalPos, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth),static_cast<float>(gameHeight)});
+}
+
+std::array<Vector2, 2> Player::GetPosAndMovement() { //Used by bullets to perform accurate collision tests.
+    return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
 }
 
 void Player::reset(const Vector2 pos) {
@@ -109,13 +121,18 @@ void Player::doPreStep() {
         currentSpeed = &speed;
     }
 
-    if (InputHandler::CheckInputsPressed(hyperKeys)) {
+    if (InputHandler::CheckInputsPressed(hyperKeys))
+    {
+        if (hyperOn)
+        {
+            endHyper();
+        }
+    }
+
+    if (InputHandler::CheckInputsDown(hyperKeys)) {
         if (!hyperOn) {
             if (currentGrazeMetre >= maxGrazeMetre)
                 startHyper();
-        }
-        else {
-            endHyper();
         }
     }
     if (InputHandler::CheckInputsDown(fireKeys)) {
@@ -149,7 +166,7 @@ void Player::doPreStep() {
     }
     if (hyperOn)
     {
-        ScoreHandler::setMultiplier(1 + std::min(9.0, (currentGrazeMetre) * 0.006));
+        ScoreHandler::setMultiplier(2 + std::min(8.0, (currentGrazeMetre) * 0.0055));
         float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
         const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
         const Color hyperGhostColour = {200, 200, 0, tempAlpha};
@@ -170,13 +187,14 @@ void Player::doPreStep() {
     hyperRingRect.x = std::min(6300.0f, hyperRingRect.x + 180);
     SpriteHandler::QueueMyAnimatedSprite({.i=PLAYER_HYPER_RING, .pos=Vector2 {position.x - 90, position.y - 90}, .l=LAYER_PLAYER, .col=currentHyperRingColour, .corner = true, .rect=hyperRingRect});
     SpriteHandler::QueueMyStaticSprite({.i = PLAYER_GRAZE_RADIUS, .pos = position, .l = LAYER_PLAYER});
-    float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
-    float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
+    const float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
+    const float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
     if (GlobalVariables::getGrazeMetre() < maxGrazeMetre)
         SpriteHandler::QueueMyStaticSprite({.i=PLAYER_GRAZE_FILLING, .pos=Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, .col=WHITE, .corner=true, .rect=Rectangle{tempX, 22 - tempHeight, 22, tempHeight}});
     else
         SpriteHandler::QueueMyAnimatedSprite({grazeRadiusFilledSprite, position});
     SpriteHandler::QueueMyAnimatedSprite({PLAYER,  position, static_cast<int>(-inputVector.x), LAYER_PLAYER,}); //Counting on digital movement only.
+    setFinalPos();
 }
 
 void Player::doPhysics(Vector2 pos) {
@@ -185,8 +203,7 @@ void Player::doPhysics(Vector2 pos) {
 }
 
 bool Player::doPhysics() {
-    position += Vector2Normalize(inputVector) * *currentSpeed;
-    position = Vector2Clamp(position, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth),static_cast<float>(gameHeight)});
+    position = finalPos;
     return true;
 }
 

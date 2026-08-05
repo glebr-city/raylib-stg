@@ -6,8 +6,6 @@
 #define RAYLIB_STG_GLOBALPOOLS_H
 #include <memory>
 #include <vector>
-
-#include "Player.h"
 #include "PoolingVector.h"
 
 
@@ -37,16 +35,20 @@ public:
         }
     }
 
-    static void doPhysics(Player* player)
+    static void doPhysics()
     {
-        const std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
         for (const auto& pool : *GlobalPools::GetPools()) {
-            pool->doPhysics(playerPosAndMovement);
+            pool->doPhysics();
         }
     }
     static void RemoveAt(const uint i)
     {
         pools.erase(pools.begin() + i);
+    }
+
+    static void Clear()
+    {
+        pools.clear();
     }
 };
 

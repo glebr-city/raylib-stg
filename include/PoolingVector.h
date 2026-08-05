@@ -18,7 +18,6 @@ public:
     virtual ~IPoolingVector() = default;
     virtual void doPreStep() = 0;
     virtual void doPhysics() = 0;
-    virtual void doPhysics(std::array<Vector2, 2> playerPosAndMovement) = 0;
     [[nodiscard]] virtual int getVectorSize() const = 0;
     virtual int getNumActive() = 0;
     virtual void setNumActive(std::size_t i) = 0;
@@ -63,7 +62,7 @@ class PoolingVector : public IPoolingVector{
         storage.begin() + num_active,
         std::back_inserter(activePositions),
         [](T& elem) { 
-            return elem.getPosition();
+            return elem.GetPosition();
         }
     );
         return activePositions;
@@ -75,19 +74,6 @@ class PoolingVector : public IPoolingVector{
 
     void doPreStep() final {
 				std::for_each(this->storage.begin(), this->storage.begin() + num_active, [](auto& elem){elem.doPreStep();});
-    }
-
-		void doPhysics(std::array<Vector2, 2> playerPosAndMovement) final {
-      auto i = 0UL;  
-			while(i < num_active && num_active > 0) {
-				if(storage.at(i).doPhysics(playerPosAndMovement)) {
-					i++;
-				} else {
-					num_active--;
-					std::swap(storage.at(i), storage.at(num_active));
-				    spawnIndex = num_active;
-				}
-			}
     }
 
 		void doPhysics() final {

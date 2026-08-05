@@ -5,6 +5,7 @@
 #ifndef RAYLIB_STG_SCOREITEMHANDLER_H
 #define RAYLIB_STG_SCOREITEMHANDLER_H
 #include "Player.h"
+#include "PlayerHandler.h"
 #include "PoolingVector.h"
 #include "ScoreItem.h"
 
@@ -22,9 +23,9 @@ private:
         scoreItemPool.doPreStep();
     }
 
-    static void doPhysics(Player* player) {
-        const std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
-        scoreItemPool.doPhysics(playerPosAndMovement);
+    static void doPhysics() {
+        const std::array<Vector2, 2> playerPosAndMovement = PlayerHandler::GetPlayer()->GetPosAndMovement();
+        scoreItemPool.doPhysics();
     }
     static void spawn(const Vector2 _position) {
         scoreItemPool.spawn().spawn(_position);

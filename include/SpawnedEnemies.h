@@ -19,11 +19,10 @@ public:
         }
     }
 
-    static void doPhysics(Player* player) {
-        const std::array<Vector2, 2> playerPosAndMovement = player->getPosAndMovement();
+    static void doPhysics() {
 
         for (int e = 0; e < spawnedEnemies->size();) {
-            if (spawnedEnemies->at(e)->doPhysics(playerPosAndMovement)) {
+            if (spawnedEnemies->at(e)->doPhysics()) {
                 e++;
                 continue;
             }

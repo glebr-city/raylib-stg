@@ -11,22 +11,30 @@
 struct EnemySpawnParametres
 {
     Vector2 pos = {};
-    u_int scoreValue = 50;
     u_int id = 0;
 };
 
 
 class Enemy : public Spawnable {
 private:
-    const u_int HIT_FLASH_DURATION = 120;
+    const u_int HIT_FLASH_DURATION = 90;
 protected:
     Vector2 position = {};
     static inline const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Rectangle collider = {}; //The Enemy's collider
-    u_int scoreValue = 50;
+    uint scoreValue = 100;
     u_int id = 0; //Special IDs for keeping track of specific enemies, used by PhaseHelpers.
     int currentFlashDuration = 0;
 public:
+    explicit Enemy(const uint _scoreValue = 100)
+    {
+        scoreValue = _scoreValue;
+    }
+    void checkPlayerCollision() const
+    {
+        if (CheckCollisionPointRec(PlayerHandler::GetPlayer().get()->GetFinalPos(), collider))
+            DamageHandler::hitPlayer();
+    }
     [[nodiscard]] bool checkPlayerBulletCollision() const {
         const int activePlayerBullets = PlayerBullets::getPlayerBullets()->getNumActive();
         if (activePlayerBullets <= 0) {
@@ -55,19 +63,21 @@ public:
             SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position});
     }
 
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
+    bool doPhysics() override {
+        checkPlayerCollision();
         return !checkPlayerBulletCollision();
     }
+
+
 
     void spawn(const EnemySpawnParametres _params) {
         position = _params.pos;
         collider.x = position.x;
         collider.y = position.y;
-        scoreValue = _params.scoreValue;
         id = _params.id;
     }
 
-    void spawn(Vector2 _position) override
+    void spawn(const Vector2 _position) override
     {
         spawn(EnemySpawnParametres{_position});
     }
