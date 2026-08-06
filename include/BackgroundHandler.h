@@ -33,9 +33,9 @@ public:
         currentBackgroundPosition = newBackgroundPosition;
     }
 
-    static Vector2 GetAbsolutePos(const Vector2 relativePos)
+    static Vector2 GetAbsolutePos(const Vector2 relativePos) //Origin here is the bottom left of the screen -- (0, 180)
     {
-        return Vector2Subtract(relativePos, currentBackgroundPosition);
+        return Vector2Subtract({relativePos.x, relativePos.y - 180}, currentBackgroundPosition);
     }
 
     static Vector2 GetRelativePos(const Vector2 absolutePos) //Origin here is the bottom left of the screen -- (0, 180)
