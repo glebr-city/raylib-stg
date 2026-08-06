@@ -35,6 +35,7 @@ void SpriteHandler::InitSprites() { //It would be nice to initialise these as co
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/spinningRodMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/spinningOvalMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/bigEnemy1SpriteSheet.png"), Rectangle {0,0,31,19}, 30}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/streetlightEnemySpriteSheet.png"), Rectangle {0,0,8,13}, 25}),
     };
     staticSprites = {
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/grazeRadius.png"), Vector2 {22, 22}}),

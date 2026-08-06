@@ -20,7 +20,7 @@ enum VALUESPRITE {
     LIGHT_LARGE = 40
 };
 
-inline const int scoreItemMultiplier = 20;
+inline const int scoreItemMultiplier = 50;
 
 class ScoreItem : public Spawnable {
 protected:

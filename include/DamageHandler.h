@@ -18,7 +18,7 @@ inline int hitsTaken = 0;
 class DamageHandler {
 private:
     static const int mercyInvincibilityDuration = 60;
-    static int stepHit;
+    static u_int32_t stepHit;
     public:
 
     static void hitPlayer() {
@@ -34,13 +34,11 @@ private:
         return hitsTaken;
     }
 
-    static void grazePlayer() {
-        ScoreHandler::addScore(5);
-        currentGrazeMetre = std::min(currentGrazeMetre + 20, maxGrazeMetre);
-    }
 
-    static void grazePlayer(const int i) {
-        ScoreHandler::addScore(std::floor(i / 4) * ScoreHandler::getMultiplier());
+    static void grazePlayer(int i) {
+        ScoreHandler::addScore(static_cast<u_int>(i * 0.25 * ScoreHandler::getMultiplier()));
+        if (PlayerHandler::GetPlayer()->GetHyperOn())
+            i = static_cast<int>(i * 0.5f);
         if (currentGrazeMetre >= maxGrazeMetre)
         {
             SoundHandler::PlayAnySound({PLAYER_GRAZE_1, PLAYER_GRAZE_2}, true, 0);

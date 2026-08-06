@@ -33,6 +33,16 @@ public:
         currentBackgroundPosition = newBackgroundPosition;
     }
 
+    static Vector2 GetAbsolutePos(const Vector2 relativePos)
+    {
+        return Vector2Subtract(relativePos, currentBackgroundPosition);
+    }
+
+    static Vector2 GetRelativePos(const Vector2 absolutePos) //Origin here is the bottom left of the screen -- (0, 180)
+    {
+        return Vector2Add({absolutePos.x, absolutePos.y + 180}, currentBackgroundPosition);
+    }
+
     static Vector2 GetScrollVector() //Get the (current) scroll vector; used by grounded enemies and the background.
     {
         return currentScrollVector;

@@ -13,7 +13,6 @@ add_executable(raylib_stg src/main.cpp
         include/SimpleBullet.h
         src/SpriteHandler.cpp
         include/SpriteHandler.h
-        src/SimpleBullet1.cpp
         include/SimpleBullet1.h
         src/SimpleBullet2.cpp
         include/SimpleBullet2.h
@@ -63,6 +62,8 @@ add_executable(raylib_stg src/main.cpp
         include/Phase2.h
         include/PlayerHandler.h
         src/PlayerHandler.cpp
+        include/StreetlightEnemy.h
+        include/SimpleBullet1Fast.h
 )
 
 target_sources(raylib_stg

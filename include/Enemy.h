@@ -22,11 +22,11 @@ protected:
     Vector2 position = {};
     static inline const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Rectangle collider = {}; //The Enemy's collider
-    uint scoreValue = 100;
+    uint scoreValue = 500;
     u_int id = 0; //Special IDs for keeping track of specific enemies, used by PhaseHelpers.
     int currentFlashDuration = 0;
 public:
-    explicit Enemy(const uint _scoreValue = 100)
+    explicit Enemy(const uint _scoreValue = 500)
     {
         scoreValue = _scoreValue;
     }

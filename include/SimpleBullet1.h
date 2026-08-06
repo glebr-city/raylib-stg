@@ -9,25 +9,47 @@
 
 
 class SimpleBullet1 : public SimpleBullet{
-    private:
+protected:
     static constexpr float radius = 3;
     static constexpr float speed = 1;
-    static constexpr int grazeValue = 20;
+    uint grazeValue = 20;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 direction{};
     Color color = WHITE;
 
 public:
     using StepThinker::doPhysics;
-    SimpleBullet1(const Vector2 pos, const Vector2 dir);
+    SimpleBullet1() = default;
 
-    SimpleBullet1();
-
-    SimpleBullet1(const Vector2 pos, const Vector2 dir, Color col);
-    void spawn(Vector2 pos, Vector2 dir);
-    void spawn(Vector2 pos, Vector2 dir, Color col);
-    void doPreStep() override;
-    bool doPhysics() override;
+    SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(pos)
+    {
+        position = pos;
+        direction = dir;
+        color = col;
+        grazeValue = _grazeValue;
+    }
+    void spawn(const Vector2 pos, const Vector2 dir, const Color col = GREEN)
+    {
+        position = pos;
+        direction = dir;
+        hasBeenGrazed = false;
+        color = col;
+    }
+    void doPreStep() override
+    {
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET, .col = color});
+    }
+    bool doPhysics() override
+    {
+        if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
+            DamageHandler::hitPlayer();
+            return false;
+        }
+        position = Vector2Add(position, direction * speed);
+        if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
+            return false;
+        return true;
+    }
 };
 
 

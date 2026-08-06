@@ -32,6 +32,8 @@ class PhaseHelper : public StepThinker {
             defaultBackgroundSprite = _defaultBackgroundSprite;
         }
 
+        virtual void InitPhase(){} //Called late into switching phases / restarting the game.
+
         void doPreStep() override {
             /*for (auto& pool : phasePools) {
                 pool->doPreStep();

@@ -33,27 +33,26 @@ public:
         GlobalPools::AddPools({diagonalTankBulletPool, enemy1BulletPool, bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool});
 
     }
-    bool doPhysics() override
+
+    void InitPhase() override
     {
-        std::cout<< "Phase doing thing!" << std::endl;
-        if (stepsElapsed == 0)
+        std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 20}, .speed = 100,}, {.desiredPos = {50, 20}, .speed = 100, .fireRate = 30}, {.desiredPos = {190, 20}, .speed = 100, .fireRate = 30, .despawn = true},};
+        std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
+        newEnemy->spawn({Vector2(125, -5), 1});
+        SpawnedEnemies::spawnEnemy(std::move(newEnemy));
+        for (int rowNumber = 0; rowNumber < 3; rowNumber++)
         {
-            std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 20}, .speed = 100,}, {.desiredPos = {50, 20}, .speed = 100, .fireRate = 30}, {.desiredPos = {190, 20}, .speed = 100, .fireRate = 30, .despawn = true},};
-            std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
-            newEnemy->spawn({Vector2(125, -5), 1});
-            SpawnedEnemies::spawnEnemy(std::move(newEnemy));
-            for (int rowNumber = 0; rowNumber < 3; rowNumber++)
+            for (int i = 0; i < 6; i++)
             {
-                for (int i = 0; i < 8; i++)
-                {
-                    std::unique_ptr<DiagonalTank> newTank = std::make_unique<DiagonalTank>(diagonalTankBulletPool, 360 + i * 8 + rowNumber * 24);
-                    newTank->spawn(EnemySpawnParametres { Vector2(i * 17 - 31, i * -17 + rowNumber * -21 + 17)});
-                    SpawnedEnemies::spawnEnemy(std::move(newTank));
-                }
+                std::unique_ptr<DiagonalTank> newTank = std::make_unique<DiagonalTank>(diagonalTankBulletPool, 400 + i * 10 + rowNumber * 24);
+                newTank->spawn(EnemySpawnParametres { Vector2(i * 17 - 31, i * -17 + rowNumber * -21 + 17)});
+                SpawnedEnemies::spawnEnemy(std::move(newTank));
             }
         }
-
-        else if (stepsElapsed == 500)
+    }
+    bool doPhysics() override
+    {
+        if (stepsElapsed == 500)
         {
             std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 40}, .speed = 100,}, {.desiredPos = {-10, 30}, .speed = 100, .fireRate = 30, .despawn = true},};
             std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
@@ -95,7 +94,7 @@ public:
         switch (_id)
         {
             case 1:
-            if (stepsElapsed < 240)
+            if (stepsElapsed < 300)
             {
                 std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 20}, .speed = 100,}, {.desiredPos = {50, 20}, .speed = 100, .fireRate = 30}, {.desiredPos = {190, 20}, .speed = 100, .fireRate = 30, .despawn = true},};
                 std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);

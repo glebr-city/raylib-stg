@@ -43,7 +43,7 @@ Rectangle hyperRingRect = {6300, 0, 180, 180};
 auto currentHyperRingColour = WHITE; //Using the same effect for Hyper and for taking damage.
 ANIMATED_SPRITES grazeRadiusFilledSprite = PLAYER_GRAZE_FILLED;
 ANIMATED_SPRITES hyperAuraSprite = PLAYER_HYPER_AURA;
-int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
+const int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
 bool hyperOn = false;
 
 Player::Player(const Vector2 pos) {
@@ -70,6 +70,11 @@ void Player::setFinalPos() //Called during preStep.
     finalPos = position;
     finalPos += Vector2Normalize(inputVector) * *currentSpeed;
     finalPos = Vector2Clamp(finalPos, Vector2{0,0}, Vector2{ static_cast<float>(gameWidth),static_cast<float>(gameHeight)});
+}
+
+bool Player::GetHyperOn()
+{
+    return hyperOn;
 }
 
 std::array<Vector2, 2> Player::GetPosAndMovement() { //Used by bullets to perform accurate collision tests.

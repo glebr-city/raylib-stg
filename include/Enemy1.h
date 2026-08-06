@@ -42,7 +42,7 @@ protected:
     }
 
 public:
-    Enemy1(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 100) : Enemy(_scoreValue) {
+    Enemy1(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 500) : Enemy(_scoreValue) {
         elapsedSteps = -1;
         bulletPool = _bulletPool;
         position = {0, 0};

@@ -104,7 +104,7 @@ private:
         Enemy::despawn();
     }
 public:
-    BigEnemy1(const std::shared_ptr<PoolingVector<SimpleBullet3>>& _bullet1Pool, const std::shared_ptr<PoolingVector<SimpleBullet1>>& _bullet2Pool,const std::vector<Enemy1State>& _stateVector) : Enemy1({}, _stateVector, 750)
+    BigEnemy1(const std::shared_ptr<PoolingVector<SimpleBullet3>>& _bullet1Pool, const std::shared_ptr<PoolingVector<SimpleBullet1>>& _bullet2Pool,const std::vector<Enemy1State>& _stateVector) : Enemy1({}, _stateVector, 3750)
     {
         scoreValue = SCORE_VALUE;
         elapsedSteps = -1;
@@ -119,10 +119,9 @@ public:
     void doPreStep() override
     {
         SpriteParametres spriteParams = {.i = sprite, .pos = position, .l = LAYER_ENEMY};
-        if (currentFlashDuration > 0)
+        if (currentFlashDuration-- > 0)
         {
             spriteParams.flashing = true;
-            currentFlashDuration--;
         }
         if (stateVector[currentStateIndex].fireRate > 0)
             spriteParams.yOffset = 1;

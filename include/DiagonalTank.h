@@ -17,7 +17,7 @@ class DiagonalTank : public Enemy
     bool isMoving = true;
     u_int stopAndFireDelay = 0; //How many steps to wait before stopping and firing
     public:
-    DiagonalTank(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const u_int _stopAndFireDelay = 0) {
+    DiagonalTank(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const u_int _stopAndFireDelay = 0) : Enemy(500) {
         elapsedSteps = -1;
         bulletPool = _bulletPool;
         position = {0, 0};
@@ -34,7 +34,6 @@ class DiagonalTank : public Enemy
     }
 
     bool doPhysics() override {
-        elapsedSteps++;
         position += BackgroundHandler::GetScrollVector();
         if (checkPlayerBulletCollision()) {
             takeDamage();
@@ -50,7 +49,7 @@ class DiagonalTank : public Enemy
         collider.x = position.x - collider.width / 2;
         collider.y = position.y - collider.height / 2;
         Vector2 playerFinalPos = PlayerHandler::GetPlayer()->GetFinalPos();
-        if (elapsedSteps == stopAndFireDelay) {
+        if (++elapsedSteps == stopAndFireDelay) {
             isMoving = false;
         } else if (elapsedSteps == stopAndFireDelay + 60 && Vector2DistanceSqr(position, playerFinalPos) > bulletSealRadiusSQ)
         {

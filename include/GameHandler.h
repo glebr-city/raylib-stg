@@ -27,14 +27,15 @@ private:
         GlobalPools::Clear();
         PlayerHandler::GetPlayer().get()->reset(Vector2 {60, 140});
         hitsTaken = 0;
+        SpawnedEnemies::clear();
+        GlobalVariables::setGrazeMetre(0);
+        ScoreItemHandler::clear();
+        ScoreHandler::resetScore();
         GlobalVariables::setCurrentPhase(desiredPhase);
         BackgroundHandler::SetBackgroundPosition(GlobalVariables::getCurrentPhase()->getDefaultBackgroundPosition());
         BackgroundHandler::SetBackgroundSprite(GlobalVariables::getCurrentPhase()->getDefaultBackgroundSprite());
         BackgroundHandler::SetScrollVector(GlobalVariables::getCurrentPhase()->getDefaultScrollVector());
-        GlobalVariables::setGrazeMetre(0);
-        SpawnedEnemies::clear();
-        ScoreItemHandler::clear();
-        ScoreHandler::resetScore();
+        GlobalVariables::getCurrentPhase()->InitPhase();
     }
     static void actuallySwitchPhase()
     {
@@ -46,6 +47,7 @@ private:
                 GlobalPools::RemoveAt(i);
         }
         GlobalVariables::setCurrentPhase(desiredPhase);
+        GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
     static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {

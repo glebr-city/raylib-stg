@@ -30,6 +30,7 @@ public:
     Vector2 GetPosition() override;
     Vector2 GetMovement();
     Vector2 GetFinalPos();
+    bool GetHyperOn();
     std::array<Vector2, 2> GetPosAndMovement();
     void getHit();
 };
