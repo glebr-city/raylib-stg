@@ -128,14 +128,14 @@ public:
         switch (_id)
         {
         case 15:
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {115, 15}, .speed = 30}, {.desiredPos = {-5, 15}, .speed = 120, .fireRate = 60, .despawn=true}};
                 std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
                 newEnemy->spawn({Vector2(125 + i * 20, 15 + i * 10)});
                 SpawnedEnemies::spawnEnemy(std::move(newEnemy));
             }
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 1; i++)
             {
                 std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {5, 15}, .speed = 30}, {.desiredPos = {125, 15}, .speed = 120, .fireRate = 60, .despawn=true}};
                 std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);

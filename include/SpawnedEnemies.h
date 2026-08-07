@@ -10,38 +10,38 @@
 #include "Enemy.h"
 #include "Player.h"
 class SpawnedEnemies {
-    static std::unique_ptr<std::vector<std::unique_ptr<Enemy>>> spawnedEnemies;
+    static std::vector<std::shared_ptr<Enemy>> spawnedEnemies;
 public:
 
     static void doPreStep() {
-        for (auto& e: *spawnedEnemies) {
+        for (const auto& e: spawnedEnemies) {
             e->doPreStep();
         }
     }
 
     static void doPhysics() {
 
-        for (int e = 0; e < spawnedEnemies->size();) {
-            if (spawnedEnemies->at(e)->doPhysics()) {
+        for (int e = 0; e < spawnedEnemies.size();) {
+            if (spawnedEnemies.at(e)->doPhysics()) {
                 e++;
                 continue;
             }
-            spawnedEnemies->at(e)->despawn();
-            const u_int id = spawnedEnemies->at(e)->GetID();
-            spawnedEnemies->erase(spawnedEnemies->begin() + e);
+            spawnedEnemies.at(e)->despawn();
+            const u_int id = spawnedEnemies.at(e)->GetID();
+            spawnedEnemies.erase(spawnedEnemies.begin() + e);
             GlobalVariables::getCurrentPhase()->enemyDespawned(id);
         }
     }
-    static void spawnEnemy(std::unique_ptr<Enemy> _enemy) { //Add an enemy to the vector.
-        spawnedEnemies->emplace_back(std::move(_enemy));
+    static void spawnEnemy(std::shared_ptr<Enemy> _enemy) { //Add an enemy to the vector.
+        spawnedEnemies.emplace_back(std::move(_enemy));
     }
 
-    static std::vector<std::unique_ptr<Enemy>> *getSpawnedEnemies() {
-        return spawnedEnemies.get();
+    static std::vector<std::shared_ptr<Enemy>>* getSpawnedEnemies() {
+        return &spawnedEnemies;
     }
 
     static void clear() {
-        spawnedEnemies->clear();
+        spawnedEnemies.clear();
     }
 
 };

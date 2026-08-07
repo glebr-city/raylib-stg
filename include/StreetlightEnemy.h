@@ -69,7 +69,7 @@ public:
                     aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
                     bulletPool->spawn().spawn(firingPosition, aimingDirection);
                     aimingDirection = Vector2Rotate(aimingDirection, 0.25 * PI);
-                } else if (GlobalVariables::getCurrentPhase()->getStepsElapsed() % 80 == 40)
+                } else if (GlobalVariables::getCurrentPhase()->getStepsElapsed() % 80 == 30)
                 {
                     SoundHandler::PlaySound(BANG_2);
                     bulletPool->spawn().spawn(position, aimingDirection, color2);

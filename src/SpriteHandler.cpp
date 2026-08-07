@@ -139,3 +139,24 @@ void SpriteHandler::QueueText(TextParametres opts)
 {
     textLayer.emplace_back(opts);
 }
+
+void SpriteHandler::DrawMyStaticSprite(const SpriteParametres& opts) //Draw a sprite NOW -- used by the HUD.
+{
+    const int staticSpriteIndex = opts.i;
+    const int yOffset = opts.yOffset;
+    const Vector2 pos = opts.pos;
+    const Color col = opts.col;
+    Vector2 spriteSize = staticSprites[staticSpriteIndex]->spriteSize;
+    Rectangle spriteRect;
+    if (opts.rect.width == 0) //Hacky and with poor performance...
+    {
+        spriteRect = Rectangle{0, 0, spriteSize.x, spriteSize.y};
+        spriteRect.y += yOffset * spriteRect.height;
+    }
+    else
+        spriteRect = opts.rect;
+    if (opts.corner)
+        DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x, pos.y + yOffset * spriteSize.y}, col);
+    else
+        DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x - (spriteSize.x / 2), pos.y - (spriteSize.y / 2) + yOffset * spriteSize.y}, col);
+}

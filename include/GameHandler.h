@@ -31,6 +31,7 @@ private:
         GlobalVariables::setGrazeMetre(0);
         ScoreItemHandler::clear();
         ScoreHandler::resetScore();
+        HUDHandler::endBoss();
         GlobalVariables::setCurrentPhase(desiredPhase);
         BackgroundHandler::SetBackgroundPosition(GlobalVariables::getCurrentPhase()->getDefaultBackgroundPosition());
         BackgroundHandler::SetBackgroundSprite(GlobalVariables::getCurrentPhase()->getDefaultBackgroundSprite());
@@ -40,6 +41,7 @@ private:
     static void actuallySwitchPhase()
     {
         shouldSwitchPhase = false;
+        HUDHandler::RemoveBossTimer();
         const std::vector<std::shared_ptr<IPoolingVector>>* pools = GlobalPools::GetPools();
         for (uint i = 0; i < pools->size(); i++)
         {
@@ -50,7 +52,7 @@ private:
         GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {
+    static void RestartGame(const PHASES _desiredPhase = PHASE_2) {
         desiredPhase = _desiredPhase;
         shouldRestartGame = true;
     }
@@ -71,7 +73,11 @@ public:
         SpawnedEnemies::doPreStep();
         GlobalPools::doPreStep();
         GlobalVariables::getCurrentPhase()->doPreStep();
-        HUDHandler::doPreStep(PlayerHandler::GetPlayer().get()->GetPosition());
+    }
+
+    static void HandleHUD() //Hacky for this to be here, but it's fine.
+    {
+        HUDHandler::HandleHud(PlayerHandler::GetPlayer().get()->GetPosition()); //Hacky for this to be here, but it's fine.
     }
 
     static void doPhysics() {
@@ -80,7 +86,6 @@ public:
         ScoreItemHandler::doPhysics();
         PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics();
-
         if (GlobalVariables::getCurrentPhase()->CanSpawnBullets())
             GlobalPools::doPhysics();
         GlobalVariables::getCurrentPhase()->doPhysics();

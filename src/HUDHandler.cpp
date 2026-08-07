@@ -1,15 +1,20 @@
-#include "HUDHandler.h"
+#include "../include/HUDHandler.h"
 
-#include "LifeHandler.h"
-#include "SpriteHandler.h"
+#include "../include/LifeHandler.h"
+#include "../include/SpriteHandler.h"
 //
 // Created by g on 15/02/2026.
 //
 int HUDHandler::yOffset = -1;
 const Color HUDHandler::scoreColour = {255, 255, 255, 130};
 const Color HUDHandler::multiplierColour = {255, 255, 0, 130};
+bool HUDHandler::enableBossHealthBar = false;
+int HUDHandler::bossHealth = 6000;
+int HUDHandler::bossMaxHealth = 6000;
+int* HUDHandler::bossTimer = nullptr;
+int HUDHandler::currentBossTimer = 0;
 
-void HUDHandler::doPreStep(Vector2 playerPos)  {
+/*void HUDHandler::doPreStep(Vector2 playerPos)  {
     if (playerPos.y > 14)
         yOffset = -1;
     else
@@ -25,4 +30,4 @@ void HUDHandler::doPreStep(Vector2 playerPos)  {
         tempStr.insert(tempStr.length() - 2, ".");
         SpriteHandler::QueueText({tempStr, Vector2{0, static_cast<float>(yOffset + 7)}, 0, multiplierColour});
     }
-}
+}*/

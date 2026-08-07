@@ -25,6 +25,7 @@ private:
     static void AdvanceAnimation();
     static void DrawSprites();
     static void InitSprites();
+    static void DrawMyStaticSprite(const SpriteParametres& opts);
 };
 
 

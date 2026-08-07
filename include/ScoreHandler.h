@@ -4,7 +4,6 @@
 
 #ifndef RAYLIB_STG_SCOREHANDLER_H
 #define RAYLIB_STG_SCOREHANDLER_H
-#include <cmath>
 #include <string>
 
 #include "raylib.h"

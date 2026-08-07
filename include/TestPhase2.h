@@ -31,7 +31,7 @@ public:
         }
 
         if (stepsElapsed % 120 == 0) {
-            SpawnedEnemies::spawnEnemy(std::make_unique<OrbEnemy1>(orbBulletPool.get()));
+            SpawnedEnemies::spawnEnemy(std::make_shared<OrbEnemy1>(orbBulletPool.get()));
         }
         stepsElapsed++;
         return PhaseHelper::doPhysics(_player);

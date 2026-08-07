@@ -87,6 +87,7 @@ int main() {
         BeginMode2D(camera);
         GameHandler::doPreStep();
         SpriteHandler::DrawSprites();
+        GameHandler::HandleHUD();
         EndMode2D();
         EndScissorMode();
         std::string tempStr = GlobalVariables::getCurrentPhase()->getPhaseName();
@@ -95,7 +96,7 @@ int main() {
         tempStr.append(std::string(" \nSteps Elapsed: "));
         tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getStepsElapsed()));
         tempStr.append(" \nStage Coordinates: ");
-        tempStr.append("(" + std::to_string(BackgroundHandler::GetBackgroundPosition().x) + ", " + std::to_string(BackgroundHandler::GetBackgroundPosition().y) + ")");
+        tempStr.append("(" + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().x * 100) / 100) +"." + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().x * 100) % 100) + ", " + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) / 100) +"." + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) % 100) + ")");
         tempStr.append("\nCurrent Graze: ");
         tempStr.append(std::to_string(GlobalVariables::getGrazeMetre()));
         DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);

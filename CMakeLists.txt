@@ -39,7 +39,7 @@ add_executable(raylib_stg src/main.cpp
         include/ScoreHandler.h
         src/ScoreHandler.cpp
         include/HUDHandler.h
-        include/HUDHandler.cpp
+        src/HUDHandler.cpp
         include/LifeHandler.h
         src/LifeHandler.cpp
         src/DamageHandler.cpp
@@ -56,7 +56,7 @@ add_executable(raylib_stg src/main.cpp
         include/SoundHandler.h
         src/SoundHandler.cpp
         include/GlobalPools.h
-        include/GlobalPools.cpp
+        src/GlobalPools.cpp
         include/BackgroundHandler.h
         src/BackgroundHandler.cpp
         include/Phase2.h
@@ -64,6 +64,7 @@ add_executable(raylib_stg src/main.cpp
         src/PlayerHandler.cpp
         include/StreetlightEnemy.h
         include/SimpleBullet1Fast.h
+        include/Boss.h
 )
 
 target_sources(raylib_stg
