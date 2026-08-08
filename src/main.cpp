@@ -76,21 +76,37 @@ int main() {
         }
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();
-        GlobalVariables::currentStep()++;
-        SpriteHandler::AdvanceAnimation();
+        if (IsKeyPressed(KEY_TAB))
+            GlobalVariables::TogglePaused();
+        const bool gamePaused = GlobalVariables::GetPaused();
+        InputHandler::UpdateInputVector();
 #if !DEBUG_BUILD
-        GameHandler::doPreStep();
-        GameHandler::doPhysics();
+        if (!gamePaused)
+        {
+            GameHandler::doPreStep();
+            GameHandler::doPhysics();
+            GlobalVariables::currentStep()++;
+            SpriteHandler::AdvanceAnimation();
+        }
+#endif
+#if DEBUG_BUILD
+        if (!gamePaused)
+        {
+            GlobalVariables::currentStep()++;
+            SpriteHandler::AdvanceAnimation();
+        }
 #endif
         BeginDrawing();
-
-
         ClearBackground(BLACK);
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
         BeginMode2D(camera);
 #if DEBUG_BUILD
-        GameHandler::doPreStep();
+        if (!gamePaused)
+        {
+            SpriteHandler::ClearQueues();
+            GameHandler::doPreStep();
+        }
 #endif
         SpriteHandler::DrawSprites();
         GameHandler::HandleHUD();
@@ -112,7 +128,8 @@ int main() {
 #endif
         EndDrawing();
 #if DEBUG_BUILD
-        GameHandler::doPhysics();
+        if (!gamePaused)
+            GameHandler::doPhysics();
 #endif
     }
 }

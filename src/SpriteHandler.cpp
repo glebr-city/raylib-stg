@@ -36,14 +36,19 @@ void SpriteHandler::InitSprites() { //It would be nice to initialise these as co
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/spinningOvalMonochromeSpriteSheet.png"), Rectangle {0,0,6,6}, 8}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/bigEnemy1SpriteSheet.png"), Rectangle {0,0,31,19}, 30}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/streetlightEnemySpriteSheet.png"), Rectangle {0,0,8,13}, 25}),
-       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/boss1SpriteSheet.png"), Rectangle {0,0,92,57}, 8}),
     };
     staticSprites = {
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/grazeRadius.png"), Vector2 {22, 22}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/grazeRadiusFilling.png"), Vector2 {22, 22}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/lifeIcon.png"), Vector2{5, 6}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/defaultBackground.png"), Vector2{0, 0}}),
-        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/diagonalTankBackground.png"), Vector2{0, 0}})
+        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/diagonalTankBackground.png"), Vector2{0, 0}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Base.png"), {92,57}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part1.png"), {92,57}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part2.png"), {92,57}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part3.png"), {92,57}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part4.png"), {92,57}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1SmallPartsSpriteSheet.png"), {92,57}}),
     };
 }
 
@@ -83,7 +88,8 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
             else
                 DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x - (spriteSize.x / 2), pos.y - (spriteSize.y / 2) + yOffset * spriteSize.y}, col);
         }
-        staticLayers[i].clear();
+        //Line removed to facilitate neat pausing.
+        //staticLayers[i].clear();
         for (const SpriteParametres& opts : animatedLayers[i]) //Now, draw every animated sprite on the same layer.
         {
             const int animatedSpriteIndex = opts.i;
@@ -106,13 +112,26 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
                 DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {pos.x - (spriteRect.width / 2), pos.y - (spriteRect.height / 2)}, col);
 
         }
-        animatedLayers[i].clear();
+            //Line removed to facilitate neat pausing.
+            //animatedLayers[i].clear();
     }
 
     //Now, draw the text.
     for (TextParametres& opts : textLayer)
     {
         DrawText(opts.text.c_str(), opts.pos.x, opts.pos.y, opts.fontSize, opts.col);
+    }
+    //Line removed to facilitate neat pausing.
+    //textLayer.clear();
+
+}
+
+void SpriteHandler::ClearQueues() //Not performant, but I'd like to have a neat pause screen...
+{
+    for (int i = 0; i < LAYER_COUNT; i++)
+    {
+        animatedLayers[i].clear();
+        staticLayers[i].clear();
     }
     textLayer.clear();
 

@@ -13,10 +13,10 @@ class Boss1 : public Boss
 
     void doPreStep() override
     {
-        SpriteParametres opts = {.i=BOSS_1, .pos=position, .l = LAYER_GROUNDED};
+        SpriteParametres opts = {.i=BOSS_1_BASE, .pos=position, .l = LAYER_GROUNDED};
         if (--currentFlashDuration > 0 && GlobalVariables::currentStep() % 61 > 30)
             opts.col = RED;
-            SpriteHandler::QueueMyAnimatedSprite(opts);
+            SpriteHandler::QueueMyStaticSprite(opts);
     }
 };
 #endif //RAYLIB_STG_BOSS1_H

@@ -26,6 +26,7 @@ private:
     static void DrawSprites();
     static void InitSprites();
     static void DrawMyStaticSprite(const SpriteParametres& opts);
+    static void ClearQueues();
 };
 
 

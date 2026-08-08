@@ -29,6 +29,7 @@ class GlobalVariables {
 protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
     static const std::array<PhaseRef, PHASE_COUNT> phases;
+    static bool isPaused;
 public:
 
     //static std::array<PhaseRef, 2> getPhaseList(){return {};};
@@ -50,6 +51,21 @@ public:
 
     static void setGrazeMetre(int i) {
         currentGrazeMetre = i;
+    }
+
+    static bool GetPaused()
+    {
+        return isPaused;
+    }
+
+    static void SetPaused(const bool b)
+    {
+        isPaused = b;
+    }
+
+    static void TogglePaused()
+    {
+        isPaused = !isPaused;
     }
 
 

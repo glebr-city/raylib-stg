@@ -70,7 +70,7 @@ public:
         //SpriteHandler::QueueMyStaticSprite({.i = LIFE_ICON, .pos = Vector2 {105, static_cast<float>(yOffset + 5)}, .l=LAYER_HUD, .col = scoreColour});
         SpriteHandler::DrawMyStaticSprite({.i = LIFE_ICON, .pos = Vector2 {105, static_cast<float>(yOffset + 5)}, .col = scoreColour});
         const std::string lifeStr = "x" + std::to_string(LifeHandler::getCurrentLives());
-        SpriteHandler::QueueText({lifeStr, Vector2{109, static_cast<float>(yOffset)}, 0, scoreColour});
+        DrawText(lifeStr.c_str(), 109, yOffset, 0, scoreColour);
         if (currentMultiplier > 1) {
             std::string tempStr = "x" + std::to_string(static_cast<int>(std::round(currentMultiplier * 100)));
             tempStr.insert(tempStr.length() - 2, ".");

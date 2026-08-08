@@ -6,6 +6,8 @@
 
 #include <algorithm>
 
+Vector2 InputHandler::inputVector {};
+
 bool InputHandler::CheckInputsPressed(const std::array<KeyboardKey, 3> &keyArray) {
     if (std::any_of(keyArray.begin(), keyArray.end(), [](KeyboardKey key) {return IsKeyPressed(key);}))
         return true;
