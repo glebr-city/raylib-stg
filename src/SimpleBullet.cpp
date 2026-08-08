@@ -7,7 +7,7 @@
 #include <iostream>
 #include <ostream>
 
-#include "raymath.h"
+#include "../include/raylib/raymath.h"
 
 SimpleBullet::SimpleBullet() {
     position = Vector2();

@@ -11,7 +11,7 @@
 #include <iterator>
 #include <cstddef>
 
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 class IPoolingVector {
 public:

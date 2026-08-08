@@ -6,7 +6,7 @@
 #define RAYLIB_STG_ORBENEMY1_H
 
 #include "Enemy.h"
-#include "raymath.h"
+#include "raylib/raymath.h"
 #include "SimpleBullet2.h"
 
 class OrbEnemy1 : public Enemy {

@@ -65,6 +65,8 @@ add_executable(raylib_stg src/main.cpp
         include/StreetlightEnemy.h
         include/SimpleBullet1Fast.h
         include/Boss.h
+        include/Boss1Phase1.h
+        include/Boss1.h
 )
 
 target_sources(raylib_stg
@@ -87,6 +89,7 @@ set_target_properties(raylib PROPERTIES
 )
 
 target_include_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/include/raylib)
 target_link_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/lib)
 
 target_link_libraries(raylib_stg PRIVATE libraylib.a)
@@ -103,3 +106,5 @@ target_compile_options(raylib_stg PUBLIC
 target_link_options(raylib_stg PUBLIC
         -Wl,--gc-sections
 )
+
+target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=true)

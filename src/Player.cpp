@@ -12,7 +12,7 @@
 #include "LifeHandler.h"
 #include "PhaseHelper.h"
 #include "PlayerBullets.h"
-#include "raylib.h"
+#include "../include/raylib/raylib.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
 

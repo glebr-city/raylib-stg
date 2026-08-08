@@ -4,7 +4,7 @@
 
 #ifndef RAYLIB_STG_BACKGROUNDHANDLER_H
 #define RAYLIB_STG_BACKGROUNDHANDLER_H
-#include "raylib.h"
+#include "raylib/raylib.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
 #include "SpriteHandlerEnums.h"

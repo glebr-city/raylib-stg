@@ -92,6 +92,11 @@ public:
             newStreetlightEnemy2->spawn( {BackgroundHandler::GetRelativePos({90, -765})});
             SpawnedEnemies::spawnEnemy(std::move(newStreetlightEnemy2));
         }
+        else if (BackgroundHandler::GetBackgroundPosition().y >= 770)
+        {
+            GameHandler::NextPhase();
+            return false;
+        }
         return PhaseHelper::doPhysics();
     }
 

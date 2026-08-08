@@ -1,7 +1,7 @@
 #include <array>
 #include <iostream>
 #include <memory>
-#include <raylib.h>
+#include <../include/raylib/raylib.h>
 
 #include "BackgroundHandler.h"
 #include "GameHandler.h"
@@ -78,6 +78,10 @@ int main() {
             CloseWindow();
         GlobalVariables::currentStep()++;
         SpriteHandler::AdvanceAnimation();
+#if !DEBUG_BUILD
+        GameHandler::doPreStep();
+        GameHandler::doPhysics();
+#endif
         BeginDrawing();
 
 
@@ -85,11 +89,14 @@ int main() {
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
         BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
         BeginMode2D(camera);
+#if DEBUG_BUILD
         GameHandler::doPreStep();
+#endif
         SpriteHandler::DrawSprites();
         GameHandler::HandleHUD();
         EndMode2D();
         EndScissorMode();
+#if DEBUG_BUILD
         std::string tempStr = GlobalVariables::getCurrentPhase()->getPhaseName();
         tempStr.append("\nBullet Count: ");
         tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
@@ -102,7 +109,10 @@ int main() {
         DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);
         /*DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);*/
         DrawFPS(100, 195);
+#endif
         EndDrawing();
+#if DEBUG_BUILD
         GameHandler::doPhysics();
+#endif
     }
 }

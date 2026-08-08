@@ -4,7 +4,7 @@
 
 #ifndef RAYLIB_STG_SPRITEHANDLERENUMS_H
 #define RAYLIB_STG_SPRITEHANDLERENUMS_H
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 typedef enum {
     PLAYER = 0,
@@ -22,6 +22,7 @@ typedef enum {
     SPINNING_OVAL_MONOCHROME,
     BIG_ENEMY_1,
     STREETLIGHT_ENEMY,
+    BOSS_1,
 
     ANIMATED_SPRITE_COUNT,
 } ANIMATED_SPRITES;

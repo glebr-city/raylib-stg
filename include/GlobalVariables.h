@@ -20,6 +20,7 @@ inline const int bulletSealRadiusSQ = bulletSealRadius * bulletSealRadius; //Gro
 typedef enum {
     DIAGONAL_TANKS = 0,
     PHASE_2,
+    BOSS_1_PHASE_1,
 
     PHASE_COUNT
 } PHASES;

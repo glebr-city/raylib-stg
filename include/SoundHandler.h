@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <vector>
 
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 typedef enum
 {

@@ -6,7 +6,7 @@
 #define RAYLIB_STG_PLAYER_H
 #include <StepThinker.h>
 
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 
 class PlayerBullet;

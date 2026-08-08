@@ -6,7 +6,7 @@
 #define RAYLIB_STG_SCOREITEM_H
 #include <cmath>
 
-#include "raymath.h"
+#include "raylib/raymath.h"
 #include "ScoreHandler.h"
 #include "Spawnable.h"
 #include "SpriteHandler.h"

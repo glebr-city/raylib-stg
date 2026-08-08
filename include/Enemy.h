@@ -19,6 +19,7 @@ class Enemy : public Spawnable {
 private:
     const u_int HIT_FLASH_DURATION = 90;
 protected:
+    int health = 1;
     Vector2 position = {};
     static inline const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Rectangle collider = {}; //The Enemy's collider
@@ -26,9 +27,11 @@ protected:
     u_int id = 0; //Special IDs for keeping track of specific enemies, used by PhaseHelpers.
     int currentFlashDuration = 0;
 public:
-    explicit Enemy(const uint _scoreValue = 500)
+    explicit Enemy(const uint _scoreValue = 500, const Rectangle _collider = {}, const int _health = 1)
     {
         scoreValue = _scoreValue;
+        collider = _collider;
+        health = _health;
     }
     void checkPlayerCollision() const
     {
@@ -65,15 +68,17 @@ public:
 
     bool doPhysics() override {
         checkPlayerCollision();
-        return !checkPlayerBulletCollision();
+        if (checkPlayerBulletCollision())
+            return takeDamage();
+        return true;
     }
 
 
 
     void spawn(const EnemySpawnParametres _params) {
         position = _params.pos;
-        collider.x = position.x;
-        collider.y = position.y;
+        collider.x += position.x - collider.width / 2;
+        collider.y += position.y - collider.height / 2;
         id = _params.id;
     }
 
@@ -91,8 +96,12 @@ public:
     virtual bool takeDamage() // Return false to kill the enemy.
     {
         startDamageAnimation();
-        die();
-        return false;
+        if (--health <= 0)
+        {
+            die();
+            return false;
+        }
+        return true;
     }
 
     virtual void startDamageAnimation()

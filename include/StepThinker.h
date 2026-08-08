@@ -6,7 +6,7 @@
 #define RAYLIB_STG_STEPTHINKER_H
 #include <vector>
 
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 class Player;
 

@@ -6,7 +6,7 @@
 #define RAYLIB_STG_INPUTHANDLER_H
 #include <array>
 
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 
 class InputHandler {

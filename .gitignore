@@ -1,2 +1,4 @@
 $GIT_DIR/lib/
 \$GIT_DIR/lib/libraries.txt
+$GIT_DIR/include/raylib
+\$GIT_DIR/include/raylib/readme.txt

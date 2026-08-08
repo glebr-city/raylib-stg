@@ -4,6 +4,7 @@
 
 #include "GlobalVariables.h"
 
+#include "Boss1Phase1.h"
 #include "DiagonalTankPhase1.h"
 #include "Phase2.h"
 #include "PhaseHelper.h"
@@ -13,6 +14,7 @@ std::unique_ptr<PhaseHelper> GlobalVariables::currentPhase = nullptr;
 const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new DiagonalTankPhase1(); }},
     {[]() -> PhaseHelper* { return new Phase2(); }},
+    {[]() -> PhaseHelper* { return new Boss1Phase1(); }},
     }};
 
 PhaseRef GlobalVariables::getPhase(const PHASES _index)

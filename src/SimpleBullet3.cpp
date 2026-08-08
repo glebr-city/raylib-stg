@@ -14,7 +14,7 @@
 
 #include "DamageHandler.h"
 #include "GlobalVariables.h"
-#include "raymath.h"
+#include "../include/raylib/raymath.h"
 #include "SpriteHandler.h"
 
 void SimpleBullet3::spawn(Vector2 pos, Vector2 dir, Color col) {

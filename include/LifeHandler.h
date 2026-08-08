@@ -8,7 +8,7 @@
 
 #include "DamageHandler.h"
 #include "GlobalVariables.h"
-#include "raylib.h"
+#include "raylib/raylib.h"
 
 class LifeHandler {
 private:

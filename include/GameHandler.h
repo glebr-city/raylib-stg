@@ -42,6 +42,7 @@ private:
     {
         shouldSwitchPhase = false;
         HUDHandler::RemoveBossTimer();
+        HUDHandler::RemoveBossHealth();
         const std::vector<std::shared_ptr<IPoolingVector>>* pools = GlobalPools::GetPools();
         for (uint i = 0; i < pools->size(); i++)
         {
@@ -52,7 +53,7 @@ private:
         GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = PHASE_2) {
+    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_1) {
         desiredPhase = _desiredPhase;
         shouldRestartGame = true;
     }
@@ -91,6 +92,11 @@ public:
         GlobalVariables::getCurrentPhase()->doPhysics();
         GlobalVariables::getCurrentPhase()->tickStep();
         PlayerHandler::GetPlayer().get()->doPhysics();
+    }
+
+    static void NextPhase()
+    {
+        SwitchPhase(static_cast<PHASES>(static_cast<int>(desiredPhase) + 1));
     }
 };
 #endif //RAYLIB_STG_GAMEHANDLER_H

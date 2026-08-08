@@ -6,7 +6,7 @@
 #define RAYLIB_STG_SCOREHANDLER_H
 #include <string>
 
-#include "raylib.h"
+#include "raylib/raylib.h"
 class ScoreHandler {
   private:
   static std::string scoreStr;

@@ -7,7 +7,7 @@
 
 #include "DamageHandler.h"
 #include "GlobalVariables.h"
-#include "raymath.h"
+#include "../include/raylib/raymath.h"
 
 void SimpleBullet2::spawn(const Vector2 pos, const Vector2 dir, const Color col) {
     position = pos;

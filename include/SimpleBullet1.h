@@ -4,7 +4,7 @@
 
 #ifndef RAYLIB_STG_SIMPLEBULLET1_H
 #define RAYLIB_STG_SIMPLEBULLET1_H
-#include "raylib.h"
+#include "raylib/raylib.h"
 #include "SimpleBullet.h"
 
 
