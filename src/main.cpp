@@ -2,6 +2,10 @@
 #include <iostream>
 #include <memory>
 #include <../include/raylib/raylib.h>
+#if DEBUG_BUILD
+#include <sstream>
+#include <iomanip>
+#endif
 
 #include "BackgroundHandler.h"
 #include "GameHandler.h"
@@ -113,20 +117,38 @@ int main() {
         EndMode2D();
         EndScissorMode();
 #if DEBUG_BUILD
-        std::string tempStr = GlobalVariables::getCurrentPhase()->getPhaseName();
-        tempStr.append("\nBullet Count: ");
-        tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
-        tempStr.append(std::string(" \nSteps Elapsed: "));
-        tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getStepsElapsed()));
-        tempStr.append(" \nStage Coordinates: ");
-        tempStr.append("(" + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().x * 100) / 100) +"." + std::to_string(static_cast<int>(abs(BackgroundHandler::GetBackgroundPosition().x * 100)) % 100) + ", " + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) / 100) +"." + std::to_string(abs(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) % 100)) + ")");
-        tempStr.append("\nCurrent Graze: ");
-        tempStr.append(std::to_string(GlobalVariables::getGrazeMetre()));
-        tempStr.append("\nPlayer Pos:\n");
-        tempStr.append("(" + std::to_string(static_cast<int>(PlayerHandler::GetPlayer()->GetFinalPos().x * 100) / 100) +"." + std::to_string(static_cast<int>(abs(PlayerHandler::GetPlayer()->GetFinalPos().x * 100)) % 100) + ", " + std::to_string(static_cast<int>(PlayerHandler::GetPlayer()->GetFinalPos().y * 100) / 100) +"." + std::to_string(static_cast<int>(abs(PlayerHandler::GetPlayer()->GetFinalPos().y * 100)) % 100) + ")");
-        tempStr.append("\n(" + std::to_string(static_cast<int>(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).x * 100) / 100) +"." + std::to_string(static_cast<int>(abs(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).x * 100)) % 100) + ", " + std::to_string(static_cast<int>(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).y * 100) / 100) +"." + std::to_string(abs(static_cast<int>(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).y * 100) % 100)) + ")");
-        DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);
-        DrawFPS(100, 195);
+        //std::string tempStr = GlobalVariables::getCurrentPhase()->getPhaseName();
+        //tempStr.append("\nBullet Count: ");
+        //tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getNumActive()));
+        //tempStr.append(std::string(" \nSteps Elapsed: "));
+        //tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getStepsElapsed()));
+        //tempStr.append(" \nStage Coordinates: ");
+        //tempStr.append("(" + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().x * 100) / 100) +"." + std::to_string(static_cast<int>(abs(BackgroundHandler::GetBackgroundPosition().x * 100)) % 100) + ", " + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) / 100) +"." + std::to_string(abs(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) % 100)) + ")");
+        //tempStr.append("\nCurrent Graze: ");
+        //tempStr.append(std::to_string(GlobalVariables::getGrazeMetre()));
+        //tempStr.append("\nPlayer Pos:\n");
+        const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
+        const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
+        const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
+
+        std::stringstream ss;
+
+        ss << GlobalVariables::getCurrentPhase()->getPhaseName()
+        << "\nFPS: " << GetFPS()
+        << "\nBullet Count: " << GlobalVariables::getCurrentPhase()->getNumActive()
+        << " \nSteps Elapsed: " << GlobalVariables::getCurrentPhase()->getStepsElapsed()
+        << "\nCurrent Graze: \n"
+        << GlobalVariables::getGrazeMetre()
+        << " \nStage Coordinates: (" <<
+            std::fixed << std::setprecision(2)
+        << "(" << backgroundPos.x << "," << backgroundPos.y << ")"
+            <<"\nPlayer Pos:\n"
+           << "(" << playerPos.x << ", " << playerPos.y << ")"
+           << "\n("
+           << absolutePos.x << ", " << absolutePos.y
+           << ")";
+        DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
+        //DrawFPS(100, 195);
 #endif
         EndDrawing();
 #if DEBUG_BUILD
