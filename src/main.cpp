@@ -119,11 +119,13 @@ int main() {
         tempStr.append(std::string(" \nSteps Elapsed: "));
         tempStr.append(std::to_string(GlobalVariables::getCurrentPhase()->getStepsElapsed()));
         tempStr.append(" \nStage Coordinates: ");
-        tempStr.append("(" + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().x * 100) / 100) +"." + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().x * 100) % 100) + ", " + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) / 100) +"." + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) % 100) + ")");
+        tempStr.append("(" + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().x * 100) / 100) +"." + std::to_string(static_cast<int>(abs(BackgroundHandler::GetBackgroundPosition().x * 100)) % 100) + ", " + std::to_string(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) / 100) +"." + std::to_string(abs(static_cast<int>(BackgroundHandler::GetBackgroundPosition().y * 100) % 100)) + ")");
         tempStr.append("\nCurrent Graze: ");
         tempStr.append(std::to_string(GlobalVariables::getGrazeMetre()));
+        tempStr.append("\nPlayer Pos:\n");
+        tempStr.append("(" + std::to_string(static_cast<int>(PlayerHandler::GetPlayer()->GetFinalPos().x * 100) / 100) +"." + std::to_string(static_cast<int>(abs(PlayerHandler::GetPlayer()->GetFinalPos().x * 100)) % 100) + ", " + std::to_string(static_cast<int>(PlayerHandler::GetPlayer()->GetFinalPos().y * 100) / 100) +"." + std::to_string(static_cast<int>(abs(PlayerHandler::GetPlayer()->GetFinalPos().y * 100)) % 100) + ")");
+        tempStr.append("\n(" + std::to_string(static_cast<int>(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).x * 100) / 100) +"." + std::to_string(static_cast<int>(abs(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).x * 100)) % 100) + ", " + std::to_string(static_cast<int>(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).y * 100) / 100) +"." + std::to_string(abs(static_cast<int>(BackgroundHandler::GetAbsolutePos(PlayerHandler::GetPlayer()->GetFinalPos()).y * 100) % 100)) + ")");
         DrawText(tempStr.c_str(), 0, 100, 30, RAYWHITE);
-        /*DrawText(std::to_string(zoomFactor).c_str(), 100, 100, 50, RAYWHITE);*/
         DrawFPS(100, 195);
 #endif
         EndDrawing();
