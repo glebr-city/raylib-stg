@@ -4,14 +4,18 @@
 
 #ifndef RAYLIB_STG_BOSS1PHASE3_H
 #define RAYLIB_STG_BOSS1PHASE3_H
+#include "BackgroundHandler.h"
+#include "Boss1.h"
+#include "GameHandler.h"
 #include "PhaseHelper.h"
+#include "SpawnedEnemies.h"
 
 class Boss1Phase3 : public PhaseHelper
 {
     std::shared_ptr<Boss1> boss1 = nullptr;
     int* bossHealth = nullptr;
-    int maxHealth = 140;
-    int maxTimer = 7200;
+    int maxHealth = 200;
+    int maxTimer = 3000;
     int bossTimer = maxTimer;
 private:
     void attemptFindingBoss1()
@@ -26,9 +30,10 @@ private:
             }
         }
         auto _pool1 = std::make_shared<PoolingVector<Boss1SmallBullet>>(100);
-        auto _pool2 = std::make_shared<PoolingVector<SimpleBullet1>>(100);
-        GlobalPools::AddPools({_pool1, _pool2});
-        boss1 = std::make_shared<Boss1>(_pool1, _pool2);
+        auto _pool2 = std::make_shared<PoolingVector<SimpleBullet1Slow>>(100);
+        auto _pool3 = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(100);
+        GlobalPools::AddPools({_pool1, _pool2, _pool3});
+        boss1 = std::make_shared<Boss1>(_pool1, _pool2, _pool3);
         boss1->spawn({.pos=BackgroundHandler::GetRelativePos(Vector2(60, -921.5)), .id = 201});
         SpawnedEnemies::spawnEnemy(boss1);
     }
@@ -44,9 +49,9 @@ public:
 
     bool doPhysics() override
     {
-        if (stepsElapsed < 120)
+        if (stepsElapsed < 180)
             return true;
-        if (stepsElapsed == 120)
+        if (stepsElapsed == 180)
         {
             boss1->SetHealth(maxHealth);
             boss1->SetPhase(Boss1::PHASE_3);
@@ -54,13 +59,15 @@ public:
         }
         if (--bossTimer == 0)
         {
-            GameHandler::SwitchPhase(BOSS_1_PHASE_3);
+            cancelBullets();
+            GameHandler::SwitchPhase(BOSS_1_PHASE_4);
             return false;
         }
         if (*bossHealth <= 0)
         {
+            cancelBullets();
             ScoreHandler::addScore(1000);
-            GameHandler::SwitchPhase(BOSS_1_PHASE_3);
+            GameHandler::SwitchPhase(BOSS_1_PHASE_4);
             return false;
         }
         return PhaseHelper::doPhysics();

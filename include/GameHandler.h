@@ -54,7 +54,7 @@ private:
         GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_2) {
+    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_4) {
         desiredPhase = _desiredPhase;
         shouldRestartGame = true;
     }

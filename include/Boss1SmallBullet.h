@@ -8,7 +8,8 @@
 
 class Boss1SmallBullet : public SimpleBullet2
 {
-    static constexpr float speed = 1.8f;
+    static constexpr float speed = 1.5f;
+    static constexpr int grazeValue = 45;
 public:
     bool doPhysics() override
     {

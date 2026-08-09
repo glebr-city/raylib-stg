@@ -78,10 +78,11 @@ public:
         }
         if (BackgroundHandler::GetBackgroundPosition().y < -550 && !bigEnemySpawned)
         {
-            auto boss1SmallBulletPool = std::make_shared<PoolingVector<Boss1SmallBullet>>(100);
-            auto simpleBullet1Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100);
-            const auto boss1 = std::make_shared<Boss1>(boss1SmallBulletPool, simpleBullet1Pool);
-            GlobalPools::AddPools({boss1SmallBulletPool, simpleBullet1Pool});
+            auto _pool1 = std::make_shared<PoolingVector<Boss1SmallBullet>>(100);
+            auto _pool2 = std::make_shared<PoolingVector<SimpleBullet1Slow>>(100);
+            auto _pool3 = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(100);
+            GlobalPools::AddPools({_pool1, _pool2, _pool3});
+            auto boss1 = std::make_shared<Boss1>(_pool1, _pool2, _pool3);
             boss1->spawn({.pos=BackgroundHandler::GetRelativePos(Vector2(60, -921.5)), .id = 201});
             SpawnedEnemies::spawnEnemy(boss1);
 
