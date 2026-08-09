@@ -14,7 +14,6 @@
 
 
 
-
 class Bullet  : public Spawnable {
 protected:
  int scoreValue = 0;

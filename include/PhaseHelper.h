@@ -14,6 +14,7 @@
 
 
 
+
 class PhaseHelper : public StepThinker {
     protected:
         std::string phaseName = "Unnamed Phase"; //Phase name. For debug purposes?

@@ -20,7 +20,7 @@ private:
     std::shared_ptr<PoolingVector<SimpleBullet1>> bigEnemy1Bullet2Pool;
     bool switchEarly = false;
 public:
-    DiagonalTankPhase1() : PhaseHelper({}, {0, 0.2f}, DIAGONAL_TANK_BACKGROUND)
+    DiagonalTankPhase1() : PhaseHelper({}, {0, -0.2f}, DIAGONAL_TANK_BACKGROUND)
     {
         phaseName = "Diagonal Tanks";
         diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(55, 30);

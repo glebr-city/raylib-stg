@@ -10,13 +10,27 @@
 
 class SimpleBullet2 : public SimpleBullet {
 public:
-    SimpleBullet2();
+    SimpleBullet2()
+    {
+        position = {};
+        direction = {};
+    }
 
     SimpleBullet2(Vector2 pos, Vector2 dir);
 
     SimpleBullet2(Vector2 pos, Vector2 dir, Color col);
 
-    bool doPhysics() override;
+    bool doPhysics() override
+    {
+        if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {
+            DamageHandler::hitPlayer();
+            return false;
+        }
+        position = Vector2Add(position, direction * speed);
+        if (position.x < -2 || position.x > 122 || position.y < -100 || position.y > 182)
+            return false;
+        return true;
+    }
     void spawn(Vector2 pos, Vector2 dir);
 
     void spawn(Vector2 pos, Vector2 dir, Color col);
@@ -24,14 +38,12 @@ public:
     void doPreStep() override;
 
 
-
-private:
+protected:
     static constexpr float radius = 1.15f;
-    static constexpr float speed = 2;
     static constexpr ANIMATED_SPRITES sprite = BULLET_SMALL_MONOCHROME;
     Vector2 direction{};
     Color color = WHITE;
-protected:
+    static constexpr float speed = 2;
     static constexpr int grazeValue = 30;
 
 };

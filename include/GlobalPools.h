@@ -8,7 +8,6 @@
 #include <vector>
 #include "PoolingVector.h"
 
-
 class IPoolingVector;
 
 class GlobalPools
@@ -26,6 +25,11 @@ public:
         pools.insert(pools.end(),
             std::make_move_iterator(_phasePools.begin()),
             std::make_move_iterator(_phasePools.end()));
+    }
+
+    static void AddPool(const std::shared_ptr<IPoolingVector>& _newPool)
+    {
+        pools.emplace_back(_newPool);
     }
 
     static void doPreStep()

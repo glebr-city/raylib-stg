@@ -7,6 +7,8 @@
 #include <cstdint>
 #include <memory>
 
+#include "PhaseHelper.h"
+
 //#include "PhaseHelper.h"
 
 class PhaseHelper;
@@ -21,6 +23,8 @@ typedef enum {
     DIAGONAL_TANKS = 0,
     PHASE_2,
     BOSS_1_PHASE_1,
+    BOSS_1_PHASE_2,
+    BOSS_1_PHASE_3,
 
     PHASE_COUNT
 } PHASES;
@@ -43,6 +47,12 @@ public:
 
     static PhaseHelper *getCurrentPhase() {
         return currentPhase.get();
+    }
+
+    static void DestroyCurrentPhase()
+    {
+        delete currentPhase.get();
+        currentPhase.release();
     }
 
     static int getGrazeMetre() {

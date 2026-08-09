@@ -34,7 +34,7 @@ class DiagonalTank : public Enemy
     }
 
     bool doPhysics() override {
-        position += BackgroundHandler::GetScrollVector();
+        position -= BackgroundHandler::GetScrollVector();
         if (checkPlayerBulletCollision()) {
             takeDamage();
             return false;

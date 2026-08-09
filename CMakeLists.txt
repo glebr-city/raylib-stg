@@ -67,6 +67,9 @@ add_executable(raylib_stg src/main.cpp
         include/Boss.h
         include/Boss1Phase1.h
         include/Boss1.h
+        include/Boss1SmallBullet.h
+        include/Boss1Phase2.h
+        include/Boss1Phase3.h
 )
 
 target_sources(raylib_stg

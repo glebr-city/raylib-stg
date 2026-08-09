@@ -48,7 +48,7 @@ public:
 
     bool doPhysics() override
     {
-        position += BackgroundHandler::GetScrollVector();
+        position -= BackgroundHandler::GetScrollVector();
         collider.x = position.x - collider.width / 2;
         collider.y = position.y - collider.height / 2;
         Vector2 firingPosition = {position.x, position.y + firingPositionOffset};

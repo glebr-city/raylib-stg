@@ -65,7 +65,7 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
     //First, we draw the background.
     const MyStaticSprite* backgroundSprite = getStaticSprite(BackgroundHandler::GetBackgroundSprite());
     const Vector2 currentBackgroundPosition = BackgroundHandler::GetBackgroundPosition();
-    DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition.x, backgroundSprite->spriteSize.y - 180 - currentBackgroundPosition.y, 120, 180}, Vector2(0, 0), WHITE);
+    DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition.x, backgroundSprite->spriteSize.y - 180 + currentBackgroundPosition.y, 120, 180}, Vector2(0, 0), WHITE);
     for (int i = 0; i < LAYER_COUNT; i++)
     {
         for (const SpriteParametres& opts : staticLayers[i]) //Draw every static sprite on the given layer.

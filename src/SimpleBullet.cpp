@@ -9,11 +9,6 @@
 
 #include "../include/raylib/raymath.h"
 
-SimpleBullet::SimpleBullet() {
-    position = Vector2();
-}
-
-SimpleBullet::SimpleBullet(const Vector2 pos) : Bullet(pos){}
 
 void SimpleBullet::doPreStep() {
     SpriteHandler::QueueMyAnimatedSprite({sprite, position});

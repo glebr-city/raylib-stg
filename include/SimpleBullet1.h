@@ -4,6 +4,7 @@
 
 #ifndef RAYLIB_STG_SIMPLEBULLET1_H
 #define RAYLIB_STG_SIMPLEBULLET1_H
+#include "SimpleBullet.h"
 #include "raylib/raylib.h"
 #include "SimpleBullet.h"
 
@@ -19,7 +20,7 @@ protected:
 
 public:
     using StepThinker::doPhysics;
-    SimpleBullet1() = default;
+    SimpleBullet1(const Vector2 _pos = {}) : SimpleBullet(_pos) {};
 
     SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(pos)
     {
@@ -37,7 +38,7 @@ public:
     }
     void doPreStep() override
     {
-        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET, .col = color});
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
     }
     bool doPhysics() override
     {

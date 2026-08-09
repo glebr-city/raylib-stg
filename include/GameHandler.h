@@ -44,16 +44,17 @@ private:
         HUDHandler::RemoveBossTimer();
         HUDHandler::RemoveBossHealth();
         const std::vector<std::shared_ptr<IPoolingVector>>* pools = GlobalPools::GetPools();
+        GlobalVariables::DestroyCurrentPhase();
         for (uint i = 0; i < pools->size(); i++)
         {
-            if (pools->at(i).use_count() <= 2 && pools->at(i)->getNumActive() == 0)
+            if (pools->at(i).use_count() <= 1 && pools->at(i)->getNumActive() == 0)
                 GlobalPools::RemoveAt(i);
         }
         GlobalVariables::setCurrentPhase(desiredPhase);
         GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_1) {
+    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_2) {
         desiredPhase = _desiredPhase;
         shouldRestartGame = true;
     }

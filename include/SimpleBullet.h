@@ -10,8 +10,7 @@
 
 class SimpleBullet : public Bullet {
 public:
-    SimpleBullet();
-    SimpleBullet(Vector2 pos);
+    explicit SimpleBullet(const Vector2 pos = {}) : Bullet(pos) {};
 
     void doPreStep() override;
 

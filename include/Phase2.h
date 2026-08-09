@@ -20,7 +20,7 @@ private:
     bool bigEnemySpawned = false;
     bool extraBigEnemyAlive = false;
 public:
-    Phase2() : PhaseHelper({0, 240}, {0, 0.2f}, DIAGONAL_TANK_BACKGROUND)
+    Phase2() : PhaseHelper({0, -240}, {0, -0.2f}, DIAGONAL_TANK_BACKGROUND)
     {
         phaseName = "Phase2";
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30, 30);
@@ -29,7 +29,7 @@ public:
         bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100, 30);
         GlobalPools::AddPools({enemy1BulletPool, streetlightBulletPool, bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool});
         BackgroundHandler::SetBackgroundSprite(DIAGONAL_TANK_BACKGROUND);
-        BackgroundHandler::SetScrollVector({0, 0.2f});
+        BackgroundHandler::SetScrollVector(defaultScrollVector);
 
     }
 
@@ -68,7 +68,7 @@ public:
                 }
             }
         }
-        if (BackgroundHandler::GetBackgroundPosition().y > 470 && BackgroundHandler::GetBackgroundPosition().y < 500 && !extraBigEnemyAlive && SpawnedEnemies::getSpawnedEnemies()->empty())
+        if (BackgroundHandler::GetBackgroundPosition().y < -470 && BackgroundHandler::GetBackgroundPosition().y > -500 && !extraBigEnemyAlive && SpawnedEnemies::getSpawnedEnemies()->empty())
         {
             extraBigEnemyAlive = true;
             std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {60, 20}, .speed = 60,}, {.desiredPos = {50, 20}, .speed = 0, .duration = 200, .fireRate = 8, .despawn = false}, {.desiredPos = {60, -15}, .speed = 60, .fireRate = 8, .despawn = true},};
@@ -76,8 +76,15 @@ public:
             newEnemy->spawn({Vector2(60, -15), 16});
             SpawnedEnemies::spawnEnemy(std::move(newEnemy));
         }
-        if (BackgroundHandler::GetBackgroundPosition().y > 550 && !bigEnemySpawned)
+        if (BackgroundHandler::GetBackgroundPosition().y < -550 && !bigEnemySpawned)
         {
+            auto boss1SmallBulletPool = std::make_shared<PoolingVector<Boss1SmallBullet>>(100);
+            auto simpleBullet1Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100);
+            const auto boss1 = std::make_shared<Boss1>(boss1SmallBulletPool, simpleBullet1Pool);
+            GlobalPools::AddPools({boss1SmallBulletPool, simpleBullet1Pool});
+            boss1->spawn({.pos=BackgroundHandler::GetRelativePos(Vector2(60, -921.5)), .id = 201});
+            SpawnedEnemies::spawnEnemy(boss1);
+
             bigEnemySpawned = true;
             std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {60, 20}, .speed = 30,}, {.desiredPos = {50, 20}, .speed = 0, .duration = 600, .fireRate = 8, .despawn = false}, {.desiredPos = {60, -15}, .speed = 30, .fireRate = 8, .despawn = true},};
             std::unique_ptr<BigEnemy1> newEnemy = std::make_unique<BigEnemy1>(bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool, enemy1StateVector);
@@ -92,7 +99,7 @@ public:
             newStreetlightEnemy2->spawn( {BackgroundHandler::GetRelativePos({90, -765})});
             SpawnedEnemies::spawnEnemy(std::move(newStreetlightEnemy2));
         }
-        else if (BackgroundHandler::GetBackgroundPosition().y >= 770)
+        else if (BackgroundHandler::GetBackgroundPosition().y <= -770)
         {
             GameHandler::NextPhase();
             return false;
@@ -122,35 +129,29 @@ public:
                 SpawnedEnemies::spawnEnemy(std::move(newEnemy));
             }
             break;
+        case 15:
+            {
+                for (int i = 0; i < 1; i++)
+                {
+                    std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {115, 15}, .speed = 30}, {.desiredPos = {-5, 15}, .speed = 120, .fireRate = 60, .despawn=true}};
+                    std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
+                    newEnemy->spawn({Vector2(125 + i * 20, 15 + i * 10)});
+                    SpawnedEnemies::spawnEnemy(std::move(newEnemy));
+                }
+                for (int i = 0; i < 1; i++)
+                {
+                    std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {5, 15}, .speed = 30}, {.desiredPos = {125, 15}, .speed = 120, .fireRate = 60, .despawn=true}};
+                    std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
+                    newEnemy->spawn({Vector2(-5 - i * 20, 15 + i * 10)});
+                    SpawnedEnemies::spawnEnemy(std::move(newEnemy));
+                }
+            }
         case 16:
             extraBigEnemyAlive = false;
         default:
             break;
         }
     };
-    void enemyDespawned(u_int _id) override
-    {
-        switch (_id)
-        {
-        case 15:
-            for (int i = 0; i < 1; i++)
-            {
-                std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {115, 15}, .speed = 30}, {.desiredPos = {-5, 15}, .speed = 120, .fireRate = 60, .despawn=true}};
-                std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
-                newEnemy->spawn({Vector2(125 + i * 20, 15 + i * 10)});
-                SpawnedEnemies::spawnEnemy(std::move(newEnemy));
-            }
-            for (int i = 0; i < 1; i++)
-            {
-                std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {5, 15}, .speed = 30}, {.desiredPos = {125, 15}, .speed = 120, .fireRate = 60, .despawn=true}};
-                std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
-                newEnemy->spawn({Vector2(-5 - i * 20, 15 + i * 10)});
-                SpawnedEnemies::spawnEnemy(std::move(newEnemy));
-            }
-            break;
-        default:
-            break;
-        }
-    };
+    void enemyDespawned(const u_int _id) override {};
 };
 #endif //RAYLIB_STG_PHASE2_H
