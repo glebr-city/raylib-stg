@@ -24,12 +24,11 @@ public:
 
     SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(pos)
     {
-        position = pos;
         direction = dir;
         color = col;
         grazeValue = _grazeValue;
     }
-    void spawn(const Vector2 pos, const Vector2 dir, const Color col = GREEN)
+    virtual void spawn(const Vector2 pos, const Vector2 dir, const Color col = GREEN)
     {
         position = pos;
         direction = dir;

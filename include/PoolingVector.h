@@ -5,7 +5,6 @@
 #ifndef RAYLIB_STG_POOLINGVECTOR_H
 #define RAYLIB_STG_POOLINGVECTOR_H
 #include <iostream>
-#include <array>
 #include <vector>
 #include <algorithm>
 #include <iterator>
@@ -61,7 +60,7 @@ class PoolingVector : public IPoolingVector{
         storage.begin(), 
         storage.begin() + num_active,
         std::back_inserter(activePositions),
-        [](T& elem) { 
+        [](T& elem) {
             return elem.GetPosition();
         }
     );

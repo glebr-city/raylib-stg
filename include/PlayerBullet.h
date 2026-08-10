@@ -42,7 +42,7 @@ public:
     }
 
     void doPreStep() override {
-        SpriteHandler::QueueMyAnimatedSprite({.i = currentSprite, .pos = position, .l = LAYER_PLAYER});
+        SpriteHandler::QueueMyAnimatedSprite({.i = currentSprite, .pos = position, .l = LAYER_PLAYER, .col = {255, 255, 255, 150}});
     }
 
     bool doPhysics() override {

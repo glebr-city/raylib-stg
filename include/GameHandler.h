@@ -54,7 +54,7 @@ private:
         GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {
+    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_1) {
         desiredPhase = _desiredPhase;
         shouldRestartGame = true;
     }
@@ -63,6 +63,11 @@ public:
     {
         shouldSwitchPhase = true;
         desiredPhase = _desiredPhase;
+    }
+
+    static void SwitchPhase(const uint_fast8_t _desiredPhase = 0)
+    {
+        SwitchPhase(static_cast<PHASES>(_desiredPhase));
     }
 
     static void doPreStep() {
@@ -99,7 +104,13 @@ public:
 
     static void NextPhase()
     {
-        SwitchPhase(static_cast<PHASES>(static_cast<int>(desiredPhase) + 1));
+        const int nextPhaseIndex = static_cast<PHASES>(static_cast<int>(desiredPhase) + 1);
+        if (nextPhaseIndex >= PHASE_COUNT)
+        {
+            SwitchPhase(0);
+            return;
+        }
+        SwitchPhase(nextPhaseIndex);
     }
 };
 #endif //RAYLIB_STG_GAMEHANDLER_H

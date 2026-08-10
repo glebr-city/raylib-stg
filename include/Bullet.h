@@ -54,14 +54,12 @@ protected:
 public:
  bool doPhysics() override = 0;
  Bullet() {
-  position = Vector2();
  }
- Bullet(const Vector2 pos) {
-  position = pos;
+ Bullet(const Vector2 _pos) : Spawnable(_pos) {
  }
 
  void spawn(const Vector2 _position) override {
-  position = _position;
+  Spawnable::position = _position;
   hasBeenGrazed = false;
  }
 
@@ -75,7 +73,6 @@ public:
 protected:
  bool hasBeenGrazed = false;
  static const float radius;
- Vector2 position{};
 };
 
 

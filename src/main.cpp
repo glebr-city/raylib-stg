@@ -82,6 +82,8 @@ int main() {
             CloseWindow();
         if (IsKeyPressed(KEY_TAB))
             GlobalVariables::TogglePaused();
+        if (IsKeyPressed(KEY_PAGE_DOWN))
+            GameHandler::NextPhase();
         const bool gamePaused = GlobalVariables::GetPaused();
         InputHandler::UpdateInputVector();
         if (!gamePaused)

@@ -12,7 +12,6 @@
 
 class Boss1Phase1 : public PhaseHelper
 {
-    std::shared_ptr<Boss1> boss1 = nullptr;
     int* bossHealth = nullptr;
     static constexpr int PHASE_1_HEALTH = 140;
     static constexpr int PHASE_1_TIME = 3000;
@@ -21,6 +20,8 @@ class Boss1Phase1 : public PhaseHelper
     int maxHealth = 140;
     int maxTimer = 3000;
     int bossTimer = maxTimer;
+protected:
+    std::shared_ptr<Boss1> boss1 = nullptr;
 private:
     void attemptFindingBoss1()
     {
@@ -33,9 +34,9 @@ private:
                 return;
             }
         }
-        auto _pool1 = std::make_shared<PoolingVector<Boss1SmallBullet>>(100);
-        auto _pool2 = std::make_shared<PoolingVector<SimpleBullet1Slow>>(100);
-        auto _pool3 = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(100);
+        auto _pool1 = std::make_shared<PoolingVector<Boss1SmallBullet>>(128);
+        auto _pool2 = std::make_shared<PoolingVector<SimpleBullet1Slow>>(128);
+        auto _pool3 = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(128);
         GlobalPools::AddPools({_pool1, _pool2, _pool3});
         boss1 = std::make_shared<Boss1>(_pool1, _pool2, _pool3);
         boss1->spawn({.pos=BackgroundHandler::GetRelativePos(Vector2(60, -921.5)), .id = 201});
@@ -57,6 +58,7 @@ public:
         attemptFindingBoss1();
         bossHealth = boss1->GetHealth();
         boss1->SetPhase(Boss1::PRE_FIGHT);
+        boss1->SetSpriteDamage(static_cast<uint_fast8_t>(bossPhase) - 1);
     }
 
     bool doPhysics() override

@@ -75,6 +75,7 @@ add_executable(raylib_stg src/main.cpp
         include/EphemeraHandler.h
         include/Ephemera.h
         src/EphemeraHandler.cpp
+        include/Boss1Phase5.h
 )
 
 target_sources(raylib_stg

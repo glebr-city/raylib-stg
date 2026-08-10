@@ -42,7 +42,7 @@ void SpriteHandler::InitSprites() { //It would be nice to initialise these as co
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/lifeIcon.png"), Vector2{5, 6}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/defaultBackground.png"), Vector2{0, 0}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/diagonalTankBackground.png"), Vector2{0, 0}}),
-       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Base.png"), {92,57}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1BaseSpriteSheet.png"), {92,57}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part1.png"), {92,57}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part2.png"), {92,57}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part3.png"), {92,57}}),
@@ -84,9 +84,9 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
             else
                 spriteRect = opts.rect;
             if (opts.corner)
-                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x, pos.y + yOffset * spriteSize.y}, col);
+                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x, pos.y}, col);
             else
-                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x - (spriteSize.x / 2), pos.y - (spriteSize.y / 2) + yOffset * spriteSize.y}, col);
+                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x - (spriteSize.x / 2), pos.y - (spriteSize.y / 2)}, col);
         }
         //Line removed to facilitate neat pausing.
         //staticLayers[i].clear();

@@ -8,6 +8,7 @@
 #include "Boss1Phase2.h"
 #include "Boss1Phase3.h"
 #include "Boss1Phase4.h"
+#include "Boss1Phase5.h"
 #include "DiagonalTankPhase1.h"
 #include "Phase2.h"
 #include "PhaseHelper.h"
@@ -21,6 +22,7 @@ const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new Boss1Phase2(); }},
     {[]() -> PhaseHelper* { return new Boss1Phase3(); }},
     {[]() -> PhaseHelper* { return new Boss1Phase4(); }},
+    {[]() -> PhaseHelper* { return new Boss1Phase5(); }},
     }};
 
 PhaseRef GlobalVariables::getPhase(const PHASES _index)

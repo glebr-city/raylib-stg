@@ -21,5 +21,10 @@ public:
             return false;
         return true;
     }
+
+    Vector2 GetPosition() override
+    {
+        return SimpleBullet1::GetPosition();
+    }
 };
 #endif //RAYLIB_STG_SIMPLEBULLET1SLOW_H

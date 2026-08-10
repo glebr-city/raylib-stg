@@ -18,7 +18,6 @@ public:
 
     void spawn(Vector2 _position) override;
 
-
     Vector2 GetPosition() override;
 
 
