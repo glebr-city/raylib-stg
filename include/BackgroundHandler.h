@@ -7,7 +7,6 @@
 #include "raylib/raylib.h"
 #include "raymath.h"
 #include "SpriteHandler.h"
-#include "SpriteHandlerEnums.h"
 
 class BackgroundHandler
 {

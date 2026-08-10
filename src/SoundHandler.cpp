@@ -28,6 +28,9 @@ void SoundHandler::InitSounds()
         LoadSound("resources/sounds/playerHyper3.mp3"),
         LoadSound("resources/sounds/playerGraze1.mp3"),
         LoadSound("resources/sounds/playerGraze2.mp3"),
+        LoadSound("resources/sounds/explosion1.mp3"),
+        LoadSound("resources/sounds/explosion1Short.mp3"),
+        LoadSound("resources/sounds/explosion2.mp3"),
     };
     currentSounds = {};
     for (int j = 0; j < sounds.size(); j++)

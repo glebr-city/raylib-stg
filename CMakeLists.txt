@@ -47,7 +47,6 @@ add_executable(raylib_stg src/main.cpp
         src/GameHandler.cpp
         include/DiagonalTankPhase1.h
         include/DiagonalTank.h
-        include/SpriteHandlerEnums.h
         include/Enemy1.h
         include/RNGHandler.h
         include/BigEnemy1.h
@@ -73,6 +72,9 @@ add_executable(raylib_stg src/main.cpp
         include/Boss1Phase4.h
         include/Boss1FastBurstBullet.h
         include/SimpleBullet1Slow.h
+        include/EphemeraHandler.h
+        include/Ephemera.h
+        src/EphemeraHandler.cpp
 )
 
 target_sources(raylib_stg

@@ -6,6 +6,7 @@
 #define RAYLIB_STG_DIAGONALTANK_H
 #include "BackgroundHandler.h"
 #include "Enemy.h"
+#include "Enemy.h"
 #include "SimpleBullet2.h"
 
 class DiagonalTank : public Enemy
@@ -17,11 +18,10 @@ class DiagonalTank : public Enemy
     bool isMoving = true;
     u_int stopAndFireDelay = 0; //How many steps to wait before stopping and firing
     public:
-    DiagonalTank(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const u_int _stopAndFireDelay = 0) : Enemy(500) {
+    DiagonalTank(const std::shared_ptr<PoolingVector<SimpleBullet2>>& _bulletPool, const u_int _stopAndFireDelay = 0) : Enemy(500, {0, 0, 13, 13}, 1, {EphemeraHandler::EXPLOSION_SMALL, LAYER_GROUNDED}) {
         elapsedSteps = -1;
         bulletPool = _bulletPool;
         position = {0, 0};
-        collider = {0, 0, 13, 13};
         stopAndFireDelay = _stopAndFireDelay;
     }
 

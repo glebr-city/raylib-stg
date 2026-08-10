@@ -54,7 +54,7 @@ private:
         GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_4) {
+    static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {
         desiredPhase = _desiredPhase;
         shouldRestartGame = true;
     }
@@ -70,6 +70,7 @@ public:
             actuallyRestartGame();
         BackgroundHandler::ScrollBackground();
         ScoreItemHandler::doPreStep();
+        EphemeraHandler::doPreStep();
         PlayerBullets::getPlayerBullets()->doPreStep();
        PlayerHandler::GetPlayer().get()->doPreStep();
         SpawnedEnemies::doPreStep();
@@ -88,6 +89,7 @@ public:
         ScoreItemHandler::doPhysics();
         PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics();
+        EphemeraHandler::doPhysics();
         if (GlobalVariables::getCurrentPhase()->CanSpawnBullets())
             GlobalPools::doPhysics();
         GlobalVariables::getCurrentPhase()->doPhysics();

@@ -4,11 +4,10 @@
 
 #ifndef RAYLIB_STG_SPAWNEDENEMIES_H
 #define RAYLIB_STG_SPAWNEDENEMIES_H
-#include <array>
 #include <memory>
 
 #include "Enemy.h"
-#include "Player.h"
+//#include "EphemeraHandler.h"
 class SpawnedEnemies {
     static std::vector<std::shared_ptr<Enemy>> spawnedEnemies;
 public:
@@ -22,14 +21,17 @@ public:
     static void doPhysics() {
 
         for (int e = 0; e < spawnedEnemies.size();) {
-            if (spawnedEnemies.at(e)->doPhysics()) {
+            const auto _enemy = spawnedEnemies.at(e);
+            if (_enemy->doPhysics()) {
                 e++;
                 continue;
             }
-            spawnedEnemies.at(e)->despawn();
-            const u_int id = spawnedEnemies.at(e)->GetID();
+            _enemy->despawn();
+            const Enemy::EnemyDeathInfo* _enemyDeathInfo = _enemy->GetDeathInfo();
+            const Vector2 _pos = _enemy->GetPosition();
+            EphemeraHandler::Spawn(_pos, _enemyDeathInfo->t, _enemyDeathInfo->l);
             spawnedEnemies.erase(spawnedEnemies.begin() + e);
-            GlobalVariables::getCurrentPhase()->enemyDespawned(id);
+            GlobalVariables::getCurrentPhase()->enemyDespawned(_enemy->GetID());
         }
     }
     static void spawnEnemy(std::shared_ptr<Enemy> _enemy) { //Add an enemy to the vector.

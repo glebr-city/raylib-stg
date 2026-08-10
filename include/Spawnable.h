@@ -12,9 +12,14 @@ protected:
     public:
     virtual void spawn(Vector2 _position) = 0;
     virtual void spawn(Vector2 _position, u_int _scoreValue) = 0;
-    //virtual void despawn() = 0;
+    virtual void despawn() {};
     Vector2 GetPosition() override {
         return position;
+    }
+public:
+    Spawnable(const Vector2 _pos = {})
+    {
+        position = _pos;
     }
 };
 

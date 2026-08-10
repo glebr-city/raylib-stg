@@ -18,11 +18,9 @@ private:
     static constexpr Color color2 = {150, 150, 50, 255};
     uint health = maxHealth;
 public:
-    StreetlightEnemy(const std::shared_ptr<PoolingVector<SimpleBullet1Fast>>& _bulletPool) : Enemy(1000)
+    StreetlightEnemy(const std::shared_ptr<PoolingVector<SimpleBullet1Fast>>& _bulletPool) : Enemy(1000, Rectangle {0, 0, 8, 10}, maxHealth, {EphemeraHandler::EXPLOSION_SMALL, LAYER_GROUNDED})
     {
         position = {};
-        health = maxHealth;
-        collider = Rectangle {0, 0, 8, 10};
         aimingDirection = {0, 1};
         bulletPool = _bulletPool;
     }

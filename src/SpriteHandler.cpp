@@ -8,7 +8,6 @@
 #include <vector>
 
 #include "BackgroundHandler.h"
-#include "SpriteHandlerEnums.h"
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
 
@@ -49,6 +48,7 @@ void SpriteHandler::InitSprites() { //It would be nice to initialise these as co
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part3.png"), {92,57}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1Part4.png"), {92,57}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss1SmallPartsSpriteSheet.png"), {92,57}}),
+        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/explosionSmallSpriteSheet.png"), {10,10}}),
     };
 }
 

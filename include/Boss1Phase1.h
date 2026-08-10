@@ -9,12 +9,15 @@
 #include "Boss1.h"
 #include "GameHandler.h"
 #include "PhaseHelper.h"
-#include "SpawnedEnemies.h"
 
 class Boss1Phase1 : public PhaseHelper
 {
     std::shared_ptr<Boss1> boss1 = nullptr;
     int* bossHealth = nullptr;
+    static constexpr int PHASE_1_HEALTH = 140;
+    static constexpr int PHASE_1_TIME = 3000;
+    static constexpr Boss1::BOSS_1_PHASES PHASE_1_BOSS_PHASE = Boss1::PHASE_1;
+    Boss1::BOSS_1_PHASES bossPhase = Boss1::PHASE_1;
     int maxHealth = 140;
     int maxTimer = 3000;
     int bossTimer = maxTimer;
@@ -38,13 +41,22 @@ private:
         boss1->spawn({.pos=BackgroundHandler::GetRelativePos(Vector2(60, -921.5)), .id = 201});
         SpawnedEnemies::spawnEnemy(boss1);
     }
-    public:
+public:
+    explicit Boss1Phase1(const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss1::BOSS_1_PHASES _bossPhase = PHASE_1_BOSS_PHASE)
+    {
+        maxHealth = _maxHealth;
+        maxTimer = _maxTimer;
+        bossPhase = _bossPhase;
+        bossTimer = maxTimer;
+    }
+
     void InitPhase() override
     {
         BackgroundHandler::SetScrollVector({0, 0});
         BackgroundHandler::SetBackgroundPosition({0, -770});
         attemptFindingBoss1();
         bossHealth = boss1->GetHealth();
+        boss1->SetPhase(Boss1::PRE_FIGHT);
     }
 
     bool doPhysics() override
@@ -54,20 +66,22 @@ private:
         if (stepsElapsed == 180)
         {
             boss1->SetHealth(maxHealth);
-            boss1->SetPhase(Boss1::PHASE_1);
+            boss1->SetPhase(bossPhase);
             HUDHandler::startBoss(maxHealth, maxTimer, &bossTimer,  bossHealth);
         }
         if (--bossTimer == 0)
         {
+            SoundHandler::PlaySound(EXPLOSION_1);
             cancelBullets();
-            GameHandler::SwitchPhase(BOSS_1_PHASE_2);
+            GameHandler::NextPhase();
             return false;
         }
         if (*bossHealth <= 0)
         {
+            SoundHandler::PlaySound(EXPLOSION_1);
             cancelBullets();
-            ScoreHandler::addScore(1000);
-            GameHandler::SwitchPhase(BOSS_1_PHASE_2);
+            ScoreHandler::addScore(10000, false);
+            GameHandler::NextPhase();
             return false;
         }
         return PhaseHelper::doPhysics();
@@ -76,4 +90,7 @@ private:
     void enemyKilled(u_int _id) override{};
     void enemyDespawned(u_int _id) override{};
 };
+
+#include "SpawnedEnemies.h"
+
 #endif //RAYLIB_STG_BOSS1PHASE1_H
