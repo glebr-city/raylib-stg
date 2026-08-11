@@ -129,7 +129,7 @@ private:
                 part3GlowSteps = 0;
                 part4GlowSteps = 0;
                 SoundHandler::StopSound(HUM_1);
-                const int halfOfShotNum = 15;
+                constexpr int halfOfShotNum = 15;
                 const Vector2 spawnPos = {position.x, position.y + 15};
                 for (int i = -halfOfShotNum; i <= halfOfShotNum; i++)
                 {

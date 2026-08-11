@@ -70,7 +70,7 @@ int main() {
             camera.offset = {letterboxSize.x, letterboxSize.y};
             camera.zoom = zoomFactor;
         }
-        if (InputHandler::CheckInputsPressed(restartKeys)) {
+        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
         if (IsKeyPressed(KEY_ENTER))
@@ -85,9 +85,9 @@ int main() {
         if (IsKeyPressed(KEY_PAGE_DOWN))
             GameHandler::NextPhase();
         const bool gamePaused = GlobalVariables::GetPaused();
-        InputHandler::UpdateInputVector();
         if (!gamePaused)
         {
+            InputHandler::UpdateInputs();
             SpriteHandler::ClearQueues();
             GameHandler::doPreStep();
             GameHandler::doPhysics();

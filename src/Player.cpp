@@ -85,13 +85,13 @@ void Player::doPreStep() {
     inputVector = InputHandler::GetInputVector();
 
 
-    if (InputHandler::CheckInputsPressed(focusKeys))
+    if (InputHandler::CheckInputsPressed(INPUT_FOCUS))
         currentSpeed = &focusSpeed;
-    else if (InputHandler::CheckInputsReleased(focusKeys)) {
+    else if (InputHandler::CheckInputsReleased(INPUT_FOCUS)) {
         currentSpeed = &speed;
     }
 
-    if (InputHandler::CheckInputsPressed(hyperKeys))
+    if (InputHandler::CheckInputsPressed(INPUT_HYPER))
     {
         if (hyperOn)
         {
@@ -99,13 +99,13 @@ void Player::doPreStep() {
         }
     }
 
-    if (InputHandler::CheckInputsDown(hyperKeys)) {
+    if (InputHandler::CheckInputsDown(INPUT_HYPER)) {
         if (!hyperOn) {
             if (currentGrazeMetre >= maxGrazeMetre)
                 startHyper();
         }
     }
-    if (InputHandler::CheckInputsDown(fireKeys)) {
+    if (InputHandler::CheckInputsDown(INPUT_FIRE)) {
         wishToShoot = true;
     }
 
