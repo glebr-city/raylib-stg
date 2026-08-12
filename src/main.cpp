@@ -12,6 +12,8 @@
 #include "GlobalVariables.h"
 #include "HUDHandler.h"
 #include "InputHandler.h"
+#include "MenuHandler.h"
+#include "PauseHandler.h"
 #include "PhaseHelper.h"
 #include "SpriteHandler.h"
 #include "SoundHandler.h"
@@ -54,7 +56,6 @@ int main() {
     zoomFactor = resizeValues[0];
     letterboxSize.x = static_cast<float>(resizeValues[1]);
     letterboxSize.y = static_cast<float>(resizeValues[2]);
-    static constexpr std::array<KeyboardKey, 3> restartKeys = {KEY_R, KEY_ESCAPE, KEY_BACKSPACE};
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
     GameHandler::RestartGame();
@@ -80,27 +81,27 @@ int main() {
         }
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();
-        if (IsKeyPressed(KEY_TAB))
-            GlobalVariables::TogglePaused();
         if (IsKeyPressed(KEY_PAGE_DOWN))
             GameHandler::NextPhase();
-        const bool gamePaused = GlobalVariables::GetPaused();
-        if (!gamePaused)
+        const bool gamePaused = PauseHandler::GetPaused();
+        if (gamePaused)
         {
-            InputHandler::UpdateInputs();
-            SpriteHandler::ClearQueues();
-            GameHandler::doPreStep();
-            GameHandler::doPhysics();
-            GlobalVariables::currentStep()++;
-            SpriteHandler::AdvanceAnimation();
-        }
-#if DEBUG_BUILD
-        if (!gamePaused)
+            MenuHandler::HandleMenus();
+        } else
         {
-            GlobalVariables::currentStep()++;
-            SpriteHandler::AdvanceAnimation();
+            if (IsKeyPressed(KEY_TAB))
+            {
+                PauseHandler::SetPause(true);
+            } else
+            {
+                InputHandler::UpdateInputs();
+                SpriteHandler::ClearQueues();
+                GameHandler::doPreStep();
+                GameHandler::doPhysics();
+                GlobalVariables::currentStep()++;
+                SpriteHandler::AdvanceAnimation();
+            }
         }
-#endif
         BeginDrawing();
         ClearBackground(BLACK);
         DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
@@ -114,9 +115,7 @@ int main() {
         const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
         const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
         const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
-
         std::stringstream ss;
-
         ss << GlobalVariables::getCurrentPhase()->getPhaseName()
         << "\nFPS: " << GetFPS()
         << "\nBullet Count: " << GlobalVariables::getCurrentPhase()->getNumActive()
@@ -132,7 +131,6 @@ int main() {
            << absolutePos.x << ", " << absolutePos.y
            << ")";
         DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
-        //DrawFPS(100, 195);
 #endif
         EndDrawing();
     }

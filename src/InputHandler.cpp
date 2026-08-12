@@ -10,24 +10,24 @@ Vector2 InputHandler::inputVector {};
 
 
 
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::leftInputs = {std::make_shared<MyKey>(KEY_LEFT), std::make_shared<MyKey>(KEY_P), std::make_shared<MyKey>(KEY_A)};
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::rightInputs = {std::make_shared<MyKey>(KEY_RIGHT), std::make_shared<MyKey>(KEY_RIGHT_BRACKET), std::make_shared<MyKey>(KEY_D)};
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::upInputs = {std::make_shared<MyKey>(KEY_UP), std::make_shared<MyKey>(KEY_RIGHT_ALT), std::make_shared<MyKey>(KEY_W)};
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::downInputs = {std::make_shared<MyKey>(KEY_DOWN), std::make_shared<MyKey>(KEY_LEFT_BRACKET), std::make_shared<MyKey>(KEY_S)};
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::focusInputs = {std::make_shared<MyKey>(KEY_LEFT_SHIFT), std::make_shared<MyKey>(KEY_RIGHT_SHIFT), std::make_shared<MyKey>(KEY_SPACE)};
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::hyperInputs = {std::make_shared<MyKey>(KEY_X), std::make_shared<MyKey>(KEY_LEFT_CONTROL), std::make_shared<MyKey>(KEY_PERIOD)};
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::fireInputs = {std::make_shared<MyKey>(KEY_Z), std::make_shared<MyKey>(KEY_SLASH), std::make_shared<MyKey>(KEY_Z)};
-const std::array<std::shared_ptr<MyKey>, 3> InputHandler::restartInputs = {std::make_shared<MyKey>(KEY_R), std::make_shared<MyKey>(KEY_R), std::make_shared<MyKey>(KEY_R)};
+const std::vector<MyKey> InputHandler::leftInputs = {MyKey(KEY_LEFT), MyKey(KEY_P), MyKey(KEY_A)};
+const std::vector<MyKey> InputHandler::rightInputs = {MyKey(KEY_RIGHT), MyKey(KEY_RIGHT_BRACKET), MyKey(KEY_D)};
+const std::vector<MyKey> InputHandler::upInputs = {MyKey(KEY_UP), MyKey(KEY_RIGHT_ALT), MyKey(KEY_W)};
+const std::vector<MyKey> InputHandler::downInputs = {MyKey(KEY_DOWN), MyKey(KEY_LEFT_BRACKET), MyKey(KEY_S)};
+const std::vector<MyKey> InputHandler::focusInputs = {MyKey(KEY_LEFT_SHIFT), MyKey(KEY_RIGHT_SHIFT), MyKey(KEY_SPACE)};
+const std::vector<MyKey> InputHandler::hyperInputs = {MyKey(KEY_X), MyKey(KEY_LEFT_CONTROL), MyKey(KEY_PERIOD)};
+const std::vector<MyKey> InputHandler::fireInputs = {MyKey(KEY_Z), MyKey(KEY_SLASH)};
+const std::vector<MyKey> InputHandler::restartInputs = {MyKey(KEY_R)};
 
-const std::array<std::shared_ptr<std::array<std::shared_ptr<MyKey>, 3>>, INPUT_COUNT> InputHandler::gameInputs =  {
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(leftInputs),
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(rightInputs),
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(upInputs),
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(downInputs),
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(focusInputs),
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(hyperInputs),
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(fireInputs),
-    std::make_shared<std::array<std::shared_ptr<MyKey>, 3>>(restartInputs),
+const std::array<std::shared_ptr<std::vector<MyKey>>, INPUT_COUNT> InputHandler::gameInputs =  {
+    std::make_shared<std::vector<MyKey>>(leftInputs),
+    std::make_shared<std::vector<MyKey>>(rightInputs),
+    std::make_shared<std::vector<MyKey>>(upInputs),
+    std::make_shared<std::vector<MyKey>>(downInputs),
+    std::make_shared<std::vector<MyKey>>(focusInputs),
+    std::make_shared<std::vector<MyKey>>(hyperInputs),
+    std::make_shared<std::vector<MyKey>>(fireInputs),
+    std::make_shared<std::vector<MyKey>>(restartInputs),
 };
 
 

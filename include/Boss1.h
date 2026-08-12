@@ -84,15 +84,15 @@ private:
         }
     }
 
-    void fireSmallPartShot(uint8_t _currentSmallPart = 12, const float _maxRotation = 0.75f)
-        {
+    void fireSmallPartShot(uint8_t _currentSmallPart = 12, const float _maxRotation = 0.75f, const float _extraRotation = 0) const
+    {
         if (_currentSmallPart == 12)
             _currentSmallPart = currentSmallPart;
-        Vector2 playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
+        const Vector2 playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
         const Vector2 _startingDirection = Vector2Normalize(smallPartOffsets[_currentSmallPart]);
         const Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[_currentSmallPart]);
         const Vector2 _vectorToPlayer = Vector2Subtract(playerPos, _currentBulletSpawnPos);
-        const float _rotation = std::clamp(Vector2Angle(_startingDirection, _vectorToPlayer), -_maxRotation, _maxRotation);
+        const float _rotation = std::clamp(Vector2Angle(_startingDirection, _vectorToPlayer) + _extraRotation, -_maxRotation, _maxRotation);
         boss1SmallBullets->spawn().spawn(_currentBulletSpawnPos, Vector2Rotate(_startingDirection, _rotation), PARTS_COLOUR);
     }
 
@@ -226,7 +226,8 @@ public:
                 {
                     if (++currentSmallPart >= 11)
                         currentSmallPart = 0;
-                    fireSmallPartShot(currentSmallPart);
+                    std::cout << stepsElapsed << ", and: " << static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) <<std::endl;
+                    fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 1000, static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 5000);
                 }
                 break;
             }

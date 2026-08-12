@@ -76,6 +76,9 @@ add_executable(raylib_stg src/main.cpp
         include/Ephemera.h
         src/EphemeraHandler.cpp
         include/Boss1Phase5.h
+        include/MenuHandler.h
+        include/PauseHandler.h
+        src/PauseHandler.cpp
 )
 
 target_sources(raylib_stg

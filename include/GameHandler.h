@@ -22,6 +22,7 @@ private:
         PlayerHandler::SetPlayer(std::make_shared<Player>(Vector2{60, 140}));
         PlayerBullets::clearPlayerBullets();
         LifeHandler::resetLives();
+        DamageHandler::Reset();
         SoundHandler::StopAllSounds();
         GlobalVariables::currentStep() = 0;
         GlobalPools::Clear();

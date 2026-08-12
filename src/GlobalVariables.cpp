@@ -14,7 +14,6 @@
 #include "PhaseHelper.h"
 
 std::unique_ptr<PhaseHelper> GlobalVariables::currentPhase = nullptr;
-bool GlobalVariables::isPaused = false;
 const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new DiagonalTankPhase1(); }},
     {[]() -> PhaseHelper* { return new Phase2(); }},
@@ -30,8 +29,8 @@ PhaseRef GlobalVariables::getPhase(const PHASES _index)
     return phases[_index];
 }
 
-uint32_t& GlobalVariables::currentStep() {
-    static uint32_t currentStep = 0;
+uint_fast32_t& GlobalVariables::currentStep() {
+    static uint_fast32_t currentStep = 0;
     return currentStep;
 }
 

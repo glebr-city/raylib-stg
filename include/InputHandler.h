@@ -9,6 +9,7 @@
 #include <iostream>
 #include <memory>
 #include <ostream>
+#include <vector>
 
 #include "raylib/raylib.h"
 
@@ -35,16 +36,16 @@ typedef enum
 class InputHandler {
 
 public:
-    static const std::array<std::shared_ptr<MyKey>, 3> leftInputs;
-    static const std::array<std::shared_ptr<MyKey>, 3> rightInputs;
-    static const std::array<std::shared_ptr<MyKey>, 3> upInputs;
-    static const std::array<std::shared_ptr<MyKey>, 3> downInputs;
-    static const std::array<std::shared_ptr<MyKey>, 3> focusInputs;
-    static const std::array<std::shared_ptr<MyKey>, 3> hyperInputs;
-    static const std::array<std::shared_ptr<MyKey>, 3> fireInputs;
-    static const std::array<std::shared_ptr<MyKey>, 3> restartInputs;
+    static const std::vector<MyKey> leftInputs;
+    static const std::vector<MyKey> rightInputs;
+    static const std::vector<MyKey> upInputs;
+    static const std::vector<MyKey> downInputs;
+    static const std::vector<MyKey> focusInputs;
+    static const std::vector<MyKey> hyperInputs;
+    static const std::vector<MyKey> fireInputs;
+    static const std::vector<MyKey> restartInputs;
 private:
-    static const std::array<std::shared_ptr<std::array<std::shared_ptr<MyKey>, 3>>, INPUT_COUNT> gameInputs;
+    static const std::array<std::shared_ptr<std::vector<MyKey>>, INPUT_COUNT> gameInputs;
 
     static Vector2 inputVector;
     static auto getGameInput(const INPUTS _i)
@@ -92,7 +93,7 @@ private:
     static bool CheckInputsPressed(const INPUTS i) {
         for (const auto& j : *getGameInput(i))
         {
-            if (j->d && !j->l)
+            if (j.d && !j.l)
                 return true;
         }
         return false;
@@ -101,7 +102,7 @@ private:
     static bool CheckInputsDown(const INPUTS i) {
         for (const auto& j : *getGameInput(i))
         {
-            if (j->d)
+            if (j.d)
                 return true;
         }
         return false;
@@ -109,7 +110,7 @@ private:
     static bool CheckInputsDown(int i) {
         for (const auto& j : *getGameInput(static_cast<INPUTS>(i)))
         {
-            if (j->d)
+            if (j.d)
                 return true;
         }
         return false;
@@ -118,7 +119,7 @@ private:
     static bool CheckInputsReleased(const INPUTS i) {
         for (const auto& j : *getGameInput(i))
         {
-            if (!j->d && j->l)
+            if (!j.d && j.l)
                 return true;
         }
         return false;
@@ -132,10 +133,11 @@ private:
     {
         for (int j = 0; j < INPUT_COUNT; j++)
         {
-            for (auto& i : *gameInputs.at(j))
+            for (auto& [k, d, l] : *gameInputs.at(j))
             {
-                i->l = i->d;
-                i->d = IsKeyDown(i->k);
+                l = d;
+                d = IsKeyDown(k);
+                std::cout << d << std::endl;
             }
         }
         UpdateInputVector();

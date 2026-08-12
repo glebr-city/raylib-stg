@@ -17,8 +17,8 @@
 inline int hitsTaken = 0;
 class DamageHandler {
 private:
-    static const int mercyInvincibilityDuration = 60;
-    static u_int32_t stepHit;
+    static constexpr int mercyInvincibilityDuration = 60;
+    static uint_fast32_t stepHit;
     public:
 
     static void hitPlayer() {
@@ -52,6 +52,11 @@ private:
         }
         currentGrazeMetre = maxGrazeMetre;
         SoundHandler::PlaySound(PLAYER_HYPER_3, false, 0);
+    }
+
+    static void Reset()
+    {
+        stepHit = UINT_FAST32_MAX;
     }
 };
 #endif //RAYLIB_STG_DAMAGEHANDLER_H
