@@ -36,7 +36,7 @@ public:
         return true;
     }
 
-    void doPreStep() override
+    void doPostStep() override
     {
         SpriteParametres opts = {.i=STREETLIGHT_ENEMY, .pos=position, .l=LAYER_GROUNDED};
         if (currentFlashDuration-- > 0 && GlobalVariables::getCurrentPhase()->getStepsElapsed() % 60 <= 30)

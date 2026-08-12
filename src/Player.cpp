@@ -155,15 +155,6 @@ void Player::doPreStep() {
             endHyper();
     }
     hyperRingRect.x = std::min(6300.0f, hyperRingRect.x + 180);
-    SpriteHandler::QueueMyAnimatedSprite({.i=PLAYER_HYPER_RING, .pos=Vector2 {position.x - 90, position.y - 90}, .l=LAYER_PLAYER, .col=currentHyperRingColour, .corner = true, .rect=hyperRingRect});
-    SpriteHandler::QueueMyStaticSprite({.i = PLAYER_GRAZE_RADIUS, .pos = position, .l = LAYER_PLAYER});
-    const float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
-    const float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
-    if (GlobalVariables::getGrazeMetre() < maxGrazeMetre)
-        SpriteHandler::QueueMyStaticSprite({.i=PLAYER_GRAZE_FILLING, .pos=Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, .col=WHITE, .corner=true, .rect=Rectangle{tempX, 22 - tempHeight, 22, tempHeight}});
-    else
-        SpriteHandler::QueueMyAnimatedSprite({grazeRadiusFilledSprite, position});
-    SpriteHandler::QueueMyAnimatedSprite({PLAYER,  position, static_cast<int>(-inputVector.x), LAYER_PLAYER,}); //Counting on digital movement only.
     setFinalPos();
 }
 
@@ -175,6 +166,19 @@ void Player::doPhysics(Vector2 pos) {
 bool Player::doPhysics() {
     position = finalPos;
     return true;
+}
+
+void Player::doPostStep()
+{
+    SpriteHandler::QueueMyAnimatedSprite({.i=PLAYER_HYPER_RING, .pos=Vector2 {position.x - 90, position.y - 90}, .l=LAYER_PLAYER, .col=currentHyperRingColour, .corner = true, .rect=hyperRingRect});
+    SpriteHandler::QueueMyStaticSprite({.i = PLAYER_GRAZE_RADIUS, .pos = position, .l = LAYER_PLAYER});
+    const float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
+    const float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
+    if (GlobalVariables::getGrazeMetre() < maxGrazeMetre)
+        SpriteHandler::QueueMyStaticSprite({.i=PLAYER_GRAZE_FILLING, .pos=Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, .col=WHITE, .corner=true, .rect=Rectangle{tempX, 22 - tempHeight, 22, tempHeight}});
+    else
+        SpriteHandler::QueueMyAnimatedSprite({grazeRadiusFilledSprite, position});
+    SpriteHandler::QueueMyAnimatedSprite({PLAYER,  position, static_cast<int>(-inputVector.x), LAYER_PLAYER,}); //Counting on digital movement only.
 }
 
 void Player::startHyper() {

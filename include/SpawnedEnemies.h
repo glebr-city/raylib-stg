@@ -46,6 +46,12 @@ public:
         spawnedEnemies.clear();
     }
 
+    static void doPostStep() {
+        for (const auto& e: spawnedEnemies) {
+            e->doPostStep();
+        }
+    }
+
 };
 
 #endif //RAYLIB_STG_SPAWNEDENEMIES_H

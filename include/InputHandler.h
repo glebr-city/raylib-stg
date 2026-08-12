@@ -137,7 +137,6 @@ private:
             {
                 l = d;
                 d = IsKeyDown(k);
-                std::cout << d << std::endl;
             }
         }
         UpdateInputVector();

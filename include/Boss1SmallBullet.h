@@ -23,5 +23,6 @@ public:
         return true;
     }
 
+
 };
 #endif //RAYLIB_STG_BOSS1SMALLBULLETS_H

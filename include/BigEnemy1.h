@@ -29,7 +29,7 @@ private:
         return true;
     }
 
-    void handleShooting(Enemy1State currentState) override
+    void handleShooting(const Enemy1State currentState) override
     {
         if (currentState.fireRate == 0)
             return;
@@ -116,7 +116,7 @@ public:
         enterNewState(0);
     }
 
-    void doPreStep() override
+    void doPostStep() override
     {
         SpriteParametres spriteParams = {.i = sprite, .pos = position, .l = LAYER_ENEMY};
         if (currentFlashDuration-- > 0)

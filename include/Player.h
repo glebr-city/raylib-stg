@@ -26,6 +26,7 @@ public:
 
     void doPhysics(Vector2 pos);
     bool doPhysics() override;
+    void doPostStep() override;
 
     Vector2 GetPosition() override;
     Vector2 GetMovement();

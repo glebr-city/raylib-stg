@@ -10,15 +10,34 @@
 
 class SimpleBullet : public Bullet {
 public:
-    explicit SimpleBullet(const Vector2 pos = {}) : Bullet(pos) {};
+    explicit SimpleBullet(const Vector2 pos = {}, const ANIMATED_SPRITES _sprite = BULLET_1_MONOCHROME, const Color _col = WHITE) : Bullet(pos)
+    {
+        sprite = _sprite;
+        color = _col;
+    };
 
-    void doPreStep() override;
 
-    bool doPhysics() override;
+    bool doPhysics() override
+    {
+        const std::array<Vector2, 2> playerPosAndMovement = PlayerHandler::GetPlayer().get()->GetPosAndMovement();
+        return !CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]));
+    }
 
-    void spawn(Vector2 _position) override;
+    void doPostStep() override
+    {
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos= position, .col = color});
+    }
 
-    Vector2 GetPosition() override;
+    void spawn(const Vector2 _position) override
+    {
+        position = _position;
+        hasBeenGrazed = false;
+    }
+
+    Vector2 GetPosition() override
+    {
+        return position;
+    }
 
 
 
@@ -26,6 +45,7 @@ public:
 protected:
     static constexpr float radius = 0.5f;
     ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
+    Color color = GREEN;
 
 };
 

@@ -18,14 +18,28 @@ private:
 
 public:
     using StepThinker::doPhysics;
-    SimpleBullet3(const Vector2 pos, const Vector2 dir);
 
-    SimpleBullet3();
-
-    SimpleBullet3(const Vector2 pos, const Vector2 dir, Color col);
-    void spawn(Vector2 pos, Vector2 dir);
-    void spawn(Vector2 pos, Vector2 dir, Color col);
-    void doPreStep() override;
-    bool doPhysics() override;
+    SimpleBullet3(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = RED) : SimpleBullet(pos, sprite, col)
+    {
+        direction = dir;
+    }
+    void spawn(const Vector2 _pos, const Vector2 _dir, const Color _col = RED)
+    {
+        direction = _dir;
+        color = _col;
+        SimpleBullet::spawn(_pos);
+    };
+    bool doPhysics() override
+    {
+        if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
+            DamageHandler::hitPlayer();
+            return false;
+        }
+        position = Vector2Add(position, direction * speed);
+        if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
+            return false;
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET, .col = color});
+        return true;
+    }
 };
 #endif //RAYLIB_STG_SIMPLEBULLET3_H

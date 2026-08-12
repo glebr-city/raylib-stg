@@ -51,7 +51,7 @@ public:
         enterNewState(0);
     }
 
-    void doPreStep() override
+    void doPostStep() override
     {
         if (stateVector[currentStateIndex].fireRate == 0)
             SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_ENEMY});

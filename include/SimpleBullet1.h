@@ -16,7 +16,6 @@ protected:
     uint grazeValue = 20;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 direction{};
-    Color color = WHITE;
 
 public:
     using StepThinker::doPhysics;
@@ -36,9 +35,7 @@ public:
         color = col;
     }
     void doPreStep() override
-    {
-        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
-    }
+    {}
     bool doPhysics() override
     {
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
@@ -48,6 +45,7 @@ public:
         position = Vector2Add(position, direction * speed);
         if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
             return false;
+        //SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
         return true;
     }
 };

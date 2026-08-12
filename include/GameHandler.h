@@ -103,6 +103,13 @@ public:
         PlayerHandler::GetPlayer().get()->doPhysics();
     }
 
+    static void doPostStep()
+    {
+        GlobalPools::DoPostStep();
+        PlayerHandler::GetPlayer().get()->doPostStep();
+        SpawnedEnemies::doPostStep();
+    }
+
     static void NextPhase()
     {
         const int nextPhaseIndex = static_cast<PHASES>(static_cast<int>(desiredPhase) + 1);

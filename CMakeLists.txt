@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 project(raylib_stg)
 add_executable(raylib_stg src/main.cpp
-        src/StepThinker.cpp
         include/StepThinker.h
         src/Player.cpp
         include/Player.h
@@ -9,12 +8,10 @@ add_executable(raylib_stg src/main.cpp
         src/InputHandler.cpp
         include/InputHandler.h
         include/Bullet.h
-        src/SimpleBullet.cpp
         include/SimpleBullet.h
         src/SpriteHandler.cpp
         include/SpriteHandler.h
         include/SimpleBullet1.h
-        src/SimpleBullet2.cpp
         include/SimpleBullet2.h
         include/SimpleBullet2.h
         include/PoolingVector.h
@@ -51,7 +48,6 @@ add_executable(raylib_stg src/main.cpp
         include/RNGHandler.h
         include/BigEnemy1.h
         include/SimpleBullet3.h
-        src/SimpleBullet3.cpp
         include/SoundHandler.h
         src/SoundHandler.cpp
         include/GlobalPools.h

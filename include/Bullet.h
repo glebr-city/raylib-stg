@@ -53,8 +53,7 @@ protected:
  }
 public:
  bool doPhysics() override = 0;
- Bullet() {
- }
+ Bullet() = default;
  Bullet(const Vector2 _pos) : Spawnable(_pos) {
  }
 

@@ -10,15 +10,15 @@
 
 class SimpleBullet2 : public SimpleBullet {
 public:
-    SimpleBullet2()
+
+    void doPreStep() override{};
+
+    SimpleBullet2(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = YELLOW) : SimpleBullet(pos, sprite)
     {
-        position = {};
-        direction = {};
+        position = pos;
+        direction = dir;
+        color = col;
     }
-
-    SimpleBullet2(Vector2 pos, Vector2 dir);
-
-    SimpleBullet2(Vector2 pos, Vector2 dir, Color col);
 
     bool doPhysics() override
     {
@@ -29,20 +29,23 @@ public:
         position = Vector2Add(position, direction * speed);
         if (position.x < -2 || position.x > 122 || position.y < -100 || position.y > 182)
             return false;
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
         return true;
     }
-    void spawn(Vector2 pos, Vector2 dir);
 
-    void spawn(Vector2 pos, Vector2 dir, Color col);
+    void spawn(const Vector2 pos, const Vector2 dir, const Color col)
+    {
+        direction = dir;
+        color = col;
+        SimpleBullet::spawn(pos);
+    }
 
-    void doPreStep() override;
 
 
 protected:
     static constexpr float radius = 1.15f;
     static constexpr ANIMATED_SPRITES sprite = BULLET_SMALL_MONOCHROME;
     Vector2 direction{};
-    Color color = WHITE;
     static constexpr float speed = 2;
     static constexpr int grazeValue = 30;
 

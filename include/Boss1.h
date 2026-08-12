@@ -158,42 +158,6 @@ public:
     void doPreStep() override
     {
         stepsElapsed++;
-        drawnColour = WHITE;
-        if (--currentFlashDuration > 0 && GlobalVariables::currentStep() % 61 > 45)
-            drawnColour = RED;
-        const SpriteParametres opts = {.i=BOSS_1_BASE, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour};
-        SpriteHandler::QueueMyStaticSprite(opts);
-        if (part1GlowSteps-- > 0)
-            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_1, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
-        if (part2GlowSteps-- > 0)
-            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_2, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
-        if (part3GlowSteps-- > 0)
-            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_3, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
-        if (part4GlowSteps-- > 0)
-            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_4, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
-        if (smallPartsGlowSteps-- > 0)
-            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_SMALL_PARTS, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 57, 92, 57}});
-        switch (bossPhase)
-        {
-        case PRE_FIGHT:
-            break;
-        case PHASE_1:
-                {
-                const auto xOffset = static_cast<float>(stepsElapsed / PHASE_1_FIRE_RATE % 11 * 92);
-                    const SpriteParametres smallPartsOpts = {.i=BOSS_1_SMALL_PARTS, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={xOffset, 0, 92, 57}};
-                    SpriteHandler::QueueMyStaticSprite(smallPartsOpts);
-                    break;
-                }
-        case PHASE_2:
-            {
-                const auto xOffset = static_cast<float>(1012 - stepsElapsed / PHASE_2_FIRE_RATE % 11 * 92);
-                const SpriteParametres smallPartsOpts = {.i=BOSS_1_SMALL_PARTS, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={xOffset, 0, 92, 57}};
-                SpriteHandler::QueueMyStaticSprite(smallPartsOpts);
-                break;
-            }
-        case PHASE_3:
-            break;
-        }
     }
 
     bool doPhysics() override
@@ -226,7 +190,6 @@ public:
                 {
                     if (++currentSmallPart >= 11)
                         currentSmallPart = 0;
-                    std::cout << stepsElapsed << ", and: " << static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) <<std::endl;
                     fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 1000, static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 5000);
                 }
                 break;
@@ -325,6 +288,46 @@ public:
         if (checkPlayerBulletCollision())
             takeDamage();
         return true;
+    }
+
+    void doPostStep()
+    {
+        drawnColour = WHITE;
+        if (--currentFlashDuration > 0 && GlobalVariables::currentStep() % 61 > 45)
+            drawnColour = RED;
+        const SpriteParametres opts = {.i=BOSS_1_BASE, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour};
+        SpriteHandler::QueueMyStaticSprite(opts);
+        if (part1GlowSteps-- > 0)
+            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_1, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
+        if (part2GlowSteps-- > 0)
+            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_2, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
+        if (part3GlowSteps-- > 0)
+            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_3, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
+        if (part4GlowSteps-- > 0)
+            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_PART_4, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 0, 92, 57}});
+        if (smallPartsGlowSteps-- > 0)
+            SpriteHandler::QueueMyStaticSprite({.i=BOSS_1_SMALL_PARTS, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={0, 57, 92, 57}});
+        switch (bossPhase)
+        {
+        case PRE_FIGHT:
+            break;
+        case PHASE_1:
+                {
+                const auto xOffset = static_cast<float>(stepsElapsed / PHASE_1_FIRE_RATE % 11 * 92);
+                    const SpriteParametres smallPartsOpts = {.i=BOSS_1_SMALL_PARTS, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={xOffset, 0, 92, 57}};
+                    SpriteHandler::QueueMyStaticSprite(smallPartsOpts);
+                    break;
+                }
+        case PHASE_2:
+            {
+                const auto xOffset = static_cast<float>(1012 - stepsElapsed / PHASE_2_FIRE_RATE % 11 * 92);
+                const SpriteParametres smallPartsOpts = {.i=BOSS_1_SMALL_PARTS, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour, .rect={xOffset, 0, 92, 57}};
+                SpriteHandler::QueueMyStaticSprite(smallPartsOpts);
+                break;
+            }
+        case PHASE_3:
+            break;
+        }
     }
 
 

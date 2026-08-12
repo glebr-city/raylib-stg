@@ -54,6 +54,13 @@ public:
     {
         pools.clear();
     }
+
+    static void DoPostStep()
+    {
+        for (const auto& pool : pools) {
+            pool->doPostStep();
+        }
+    }
 };
 
 #endif //RAYLIB_STG_GLOBALPOOLS_H

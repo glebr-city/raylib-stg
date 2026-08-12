@@ -25,7 +25,7 @@ class DiagonalTank : public Enemy
         stopAndFireDelay = _stopAndFireDelay;
     }
 
-    void doPreStep() override
+    void doPostStep() override
     {
         if (isMoving)
             SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_GROUNDED});

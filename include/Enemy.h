@@ -68,8 +68,7 @@ public:
         }
         return false;
     }
-
-    void doPreStep() override {
+    void doPostStep() override {
         if (currentFlashDuration > 0)
         {
             currentFlashDuration--;

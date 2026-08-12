@@ -18,6 +18,10 @@
 #include "SpriteHandler.h"
 #include "SoundHandler.h"
 
+int zoomFactor = 2;
+Vector2 letterboxSize = {0, 0};
+Camera2D camera = { 0 };
+
 std::array<int, 3> AdjustLetterbox() {
     int zoomFactor = 1;
     Vector2 letterboxSize = {0, 0};
@@ -36,7 +40,51 @@ std::array<int, 3> AdjustLetterbox() {
     return {zoomFactor, x, y};
 }
 
+void doStep()
+{
+    InputHandler::UpdateInputs();
+    SpriteHandler::ClearQueues();
+    GameHandler::doPreStep();
+    GameHandler::doPhysics();
+    GameHandler::doPostStep();
+    GlobalVariables::currentStep()++;
+    SpriteHandler::AdvanceAnimation();
+}
 
+void doDrawing()
+{
+    BeginDrawing();
+    ClearBackground(BLACK);
+    DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
+    BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
+    BeginMode2D(camera);
+    SpriteHandler::DrawSprites();
+    GameHandler::HandleHUD();
+    EndMode2D();
+    EndScissorMode();
+#if DEBUG_BUILD
+    const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
+    const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
+    const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
+    std::stringstream ss;
+    ss << GlobalVariables::getCurrentPhase()->getPhaseName()
+    << "\nFPS: " << GetFPS()
+    << "\nBullet Count: " << GlobalVariables::getCurrentPhase()->getNumActive()
+    << " \nSteps Elapsed: " << GlobalVariables::getCurrentPhase()->getStepsElapsed()
+    << "\nCurrent Graze: \n"
+    << GlobalVariables::getGrazeMetre()
+    << " \nStage Coordinates: (" <<
+        std::fixed << std::setprecision(2)
+    << backgroundPos.x << "," << backgroundPos.y << ")"
+        <<"\nPlayer Pos:\n"
+       << "(" << playerPos.x << ", " << playerPos.y << ")"
+       << "\n("
+       << absolutePos.x << ", " << absolutePos.y
+       << ")";
+    DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
+#endif
+    EndDrawing();
+}
 
 int main() {
     ChangeDirectory(GetApplicationDirectory());
@@ -46,9 +94,6 @@ int main() {
     InitAudioDevice();
     SpriteHandler::InitSprites(); //Need to initialise this after the window.
     SoundHandler::InitSounds();
-    int zoomFactor = 2;
-    Vector2 letterboxSize = {0, 0};
-    Camera2D camera = { 0 };
     camera.zoom = zoomFactor; // NOLINT(*-narrowing-conversions)
     camera.offset = {letterboxSize.x, letterboxSize.y};
     SetTargetFPS(120);
@@ -59,6 +104,7 @@ int main() {
     camera.offset = {letterboxSize.x, letterboxSize.y};
     camera.zoom = zoomFactor;
     GameHandler::RestartGame();
+    doStep();
     bool DEBUG_highFramerate = false;
 
 
@@ -71,6 +117,8 @@ int main() {
             camera.offset = {letterboxSize.x, letterboxSize.y};
             camera.zoom = zoomFactor;
         }
+        std::cout << InputHandler::GetInputVector().x << std::endl;
+        doDrawing();
         if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
@@ -94,44 +142,9 @@ int main() {
                 PauseHandler::SetPause(true);
             } else
             {
-                InputHandler::UpdateInputs();
-                SpriteHandler::ClearQueues();
-                GameHandler::doPreStep();
-                GameHandler::doPhysics();
-                GlobalVariables::currentStep()++;
-                SpriteHandler::AdvanceAnimation();
+                doStep();
             }
         }
-        BeginDrawing();
-        ClearBackground(BLACK);
-        DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
-        BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
-        BeginMode2D(camera);
-        SpriteHandler::DrawSprites();
-        GameHandler::HandleHUD();
-        EndMode2D();
-        EndScissorMode();
-#if DEBUG_BUILD
-        const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
-        const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-        const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
-        std::stringstream ss;
-        ss << GlobalVariables::getCurrentPhase()->getPhaseName()
-        << "\nFPS: " << GetFPS()
-        << "\nBullet Count: " << GlobalVariables::getCurrentPhase()->getNumActive()
-        << " \nSteps Elapsed: " << GlobalVariables::getCurrentPhase()->getStepsElapsed()
-        << "\nCurrent Graze: \n"
-        << GlobalVariables::getGrazeMetre()
-        << " \nStage Coordinates: (" <<
-            std::fixed << std::setprecision(2)
-        << backgroundPos.x << "," << backgroundPos.y << ")"
-            <<"\nPlayer Pos:\n"
-           << "(" << playerPos.x << ", " << playerPos.y << ")"
-           << "\n("
-           << absolutePos.x << ", " << absolutePos.y
-           << ")";
-        DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
-#endif
-        EndDrawing();
     }
 }
+
