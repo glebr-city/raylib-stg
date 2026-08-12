@@ -19,7 +19,7 @@ private:
 public:
     using StepThinker::doPhysics;
 
-    SimpleBullet3(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = RED) : SimpleBullet(pos, sprite, col)
+    SimpleBullet3(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = RED) : SimpleBullet(pos, sprite, LAYER_BULLET, col)
     {
         direction = dir;
     }

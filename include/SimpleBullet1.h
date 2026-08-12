@@ -13,13 +13,13 @@ class SimpleBullet1 : public SimpleBullet{
 protected:
     static constexpr float radius = 3;
     static constexpr float speed = 1;
-    uint grazeValue = 20;
+    uint grazeValue = 30;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 direction{};
 
 public:
     using StepThinker::doPhysics;
-    SimpleBullet1(const Vector2 _pos = {}) : SimpleBullet(_pos) {};
+    SimpleBullet1(const Vector2 _pos = {}) : SimpleBullet(_pos, sprite, LAYER_BULLET_LOW) {};
 
     SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(pos)
     {

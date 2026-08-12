@@ -4,11 +4,7 @@
 
 #ifndef RAYLIB_STG_BOSS1PHASE3_H
 #define RAYLIB_STG_BOSS1PHASE3_H
-#include "BackgroundHandler.h"
 #include "Boss1.h"
-#include "GameHandler.h"
-#include "PhaseHelper.h"
-#include "SpawnedEnemies.h"
 
 class Boss1Phase3 : public Boss1Phase1
 {

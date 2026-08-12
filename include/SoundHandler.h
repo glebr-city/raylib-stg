@@ -10,6 +10,8 @@
 
 #include "raylib/raylib.h"
 
+class SoundData;
+
 typedef enum
 {
     THUMP_1 = 0,
@@ -33,17 +35,24 @@ typedef enum
     SOUND_COUNT
 } SOUNDS;
 
+constexpr size_t SOUND_MAX_OVERLAP = 2; //How many instances of the same sound can play at a time?
 class SoundHandler
 {
 private:
+    static float soundVolume;
+    static std::vector<SoundData> sounds;
     public:
     static void InitSounds(); //Run at the start of the game
-    static void SetAllSoundVolume(float v);
-    static uint8_t PlaySound(SOUNDS i, bool loop = false, uint8_t index = 255);
+    static void SetAllSoundVolume(float v); //It doesn't seem to work?
+    static void SetAllSoundPause(bool p);
+    static size_t PlaySound(SOUNDS i, bool loop = false);
+    static size_t PlaySound(size_t index, SOUNDS i, bool loop = false);
     static SOUNDS PlayAnySound(const std::vector<SOUNDS>& i, bool loop = false, uint8_t index = 255);
-    static void StopSound(SOUNDS i, uint8_t index = 255);
+    static void StopSound(SOUNDS i);
+    static void StopSound(SOUNDS i, size_t index);
     static void StopAllSounds();
-    static bool IsSoundPlaying(SOUNDS i, uint8_t index = 255);
+    static bool IsSoundPlaying(SOUNDS i, size_t index);
+    static bool IsSoundPlaying(SOUNDS i);
 
 };
 #endif //RAYLIB_STG_SOUNDHANDLER_H

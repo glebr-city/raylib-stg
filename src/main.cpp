@@ -60,6 +60,10 @@ void doDrawing()
     BeginMode2D(camera);
     SpriteHandler::DrawSprites();
     GameHandler::HandleHUD();
+    if (PauseHandler::GetPaused())
+    {
+        MenuHandler::HandleMenus();
+    }
     EndMode2D();
     EndScissorMode();
 #if DEBUG_BUILD
@@ -117,8 +121,6 @@ int main() {
             camera.offset = {letterboxSize.x, letterboxSize.y};
             camera.zoom = zoomFactor;
         }
-        std::cout << InputHandler::GetInputVector().x << std::endl;
-        doDrawing();
         if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
@@ -130,12 +132,10 @@ int main() {
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();
         if (IsKeyPressed(KEY_PAGE_DOWN))
-            GameHandler::NextPhase();
+            GameHandler::NextPhase(true);
         const bool gamePaused = PauseHandler::GetPaused();
-        if (gamePaused)
-        {
-            MenuHandler::HandleMenus();
-        } else
+        doDrawing();
+        if (!gamePaused)
         {
             if (IsKeyPressed(KEY_TAB))
             {

@@ -10,9 +10,10 @@
 
 class SimpleBullet : public Bullet {
 public:
-    explicit SimpleBullet(const Vector2 pos = {}, const ANIMATED_SPRITES _sprite = BULLET_1_MONOCHROME, const Color _col = WHITE) : Bullet(pos)
+    explicit SimpleBullet(const Vector2 pos = {}, const ANIMATED_SPRITES _sprite = BULLET_1_MONOCHROME, const LAYERS _layer = LAYER_BULLET, const Color _col = WHITE) : Bullet(pos)
     {
         sprite = _sprite;
+        layer = _layer;
         color = _col;
     };
 
@@ -25,7 +26,7 @@ public:
 
     void doPostStep() override
     {
-        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos= position, .col = color});
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos= position, .l = layer, .col = color});
     }
 
     void spawn(const Vector2 _position) override
@@ -46,6 +47,7 @@ protected:
     static constexpr float radius = 0.5f;
     ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Color color = GREEN;
+    LAYERS layer = LAYER_BULLET;
 
 };
 

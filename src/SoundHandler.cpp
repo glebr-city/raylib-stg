@@ -7,62 +7,74 @@
 #include <vector>
 
 #include "GlobalVariables.h"
-const uint8_t MAX_OVERLAP = 2; //How many instances of the same sound can play at a time?
-std::array<Sound, SOUND_COUNT> sounds;
-std::vector<std::array<Sound, MAX_OVERLAP>> currentSounds;
+#include "SoundData.h"
+float SoundHandler::soundVolume = 1;
 
+std::vector<SoundData> SoundHandler::sounds = {};
 void SoundHandler::InitSounds()
 {
-    sounds = {
-        LoadSound("resources/sounds/thump1.mp3"),
-        LoadSound("resources/sounds/hum1.mp3"),
-        LoadSound("resources/sounds/slide1.mp3"),
-        LoadSound("resources/sounds/slide2.mp3"),
-        LoadSound("resources/sounds/slide3.mp3"),
-        LoadSound("resources/sounds/slide4.mp3"),
-        LoadSound("resources/sounds/bang1.mp3"),
-        LoadSound("resources/sounds/bang2.mp3"),
-        LoadSound("resources/sounds/playerHit.mp3"),
-        LoadSound("resources/sounds/playerHyper.mp3"),
-        LoadSound("resources/sounds/playerHyper2.mp3"),
-        LoadSound("resources/sounds/playerHyper3.mp3"),
-        LoadSound("resources/sounds/playerGraze1.mp3"),
-        LoadSound("resources/sounds/playerGraze2.mp3"),
-        LoadSound("resources/sounds/explosion1.mp3"),
-        LoadSound("resources/sounds/explosion1Short.mp3"),
-        LoadSound("resources/sounds/explosion2.mp3"),
-    };
-    currentSounds = {};
-    for (int j = 0; j < sounds.size(); j++)
-    {
-        std::array<Sound, MAX_OVERLAP> newArray{};
-        currentSounds.emplace_back(newArray);
-        for (int k = 0; k < MAX_OVERLAP; k++)
-        {
-            currentSounds[j][k] = LoadSoundAlias(sounds[j]);
-        }
-    }
-
-};
+    sounds.reserve(SOUND_COUNT);
+    sounds.emplace_back("resources/sounds/thump1.mp3");
+    sounds.emplace_back("resources/sounds/hum1.mp3");
+    sounds.emplace_back("resources/sounds/slide1.mp3");
+    sounds.emplace_back("resources/sounds/slide2.mp3");
+    sounds.emplace_back("resources/sounds/slide3.mp3");
+    sounds.emplace_back("resources/sounds/slide4.mp3");
+    sounds.emplace_back("resources/sounds/bang1.mp3");
+    sounds.emplace_back("resources/sounds/bang2.mp3");
+    sounds.emplace_back("resources/sounds/playerHit.mp3");
+    sounds.emplace_back("resources/sounds/playerHyper.mp3");
+    sounds.emplace_back("resources/sounds/playerHyper2.mp3");
+    sounds.emplace_back("resources/sounds/playerHyper3.mp3");
+    sounds.emplace_back("resources/sounds/playerGraze1.mp3");
+    sounds.emplace_back("resources/sounds/playerGraze2.mp3");
+    sounds.emplace_back("resources/sounds/explosion1.mp3");
+    sounds.emplace_back("resources/sounds/explosion1Short.mp3");
+    sounds.emplace_back("resources/sounds/explosion2.mp3");
+}
 
 void SoundHandler::SetAllSoundVolume(const float v)
 {
+    return;/*
+    soundVolume = v;
     for (uint8_t j = 0; j < MAX_OVERLAP; j++)
     {
         for (const Sound sound : currentSounds[j])
             ::SetSoundVolume(sound, v);
+    }*/
+}
+
+void SoundHandler::SetAllSoundPause(const bool p)
+{
+    if (p)
+    {
+        for (const SoundData& sound : sounds)
+            {
+                sound.Pause();
+            }
+    } else
+    {
+            for (const SoundData& sound : sounds)
+            {
+                sound.Resume();
+            }
     }
+}
+size_t SoundHandler::PlaySound(const SOUNDS i, const bool loop)
+{
+    return sounds.at(static_cast<size_t>(i)).Play(loop);
 }
 
 
-
-uint8_t SoundHandler::PlaySound(const SOUNDS i, bool loop, const uint8_t index)
+size_t SoundHandler::PlaySound(const size_t index, const SOUNDS i, const bool loop)
 {
+    return sounds.at(static_cast<size_t>(i)).Play(index, loop);
+    /*
     if (index < MAX_OVERLAP)
     {
         if (loop && ::IsSoundPlaying(currentSounds[i][index]))
             return index;
-        ::PlaySound(currentSounds[i][index]);
+        (currentSounds[i][index].);
         return index;
     }
     std::array<uint, MAX_OVERLAP> frameCounts{};
@@ -87,21 +99,22 @@ uint8_t SoundHandler::PlaySound(const SOUNDS i, bool loop, const uint8_t index)
     }
     ::PlaySound(currentSounds[i][largestIndex]);
     return 0;
+    */
 }
 
 SOUNDS SoundHandler::PlayAnySound(const std::vector<SOUNDS>& i, bool loop, uint8_t index)
 {
-    if (index < MAX_OVERLAP)
+    if (index < SOUND_MAX_OVERLAP)
     {
         for (const SOUNDS _sound : i)
         {
             if (!IsSoundPlaying(_sound, index))
             {
-                PlaySound(_sound, loop, index);
+                PlaySound(index, _sound, loop);
                 return _sound;
             }
         }
-        PlaySound(i[0], loop, index);
+        PlaySound(index, i[0], loop);
         return i[0];
     }
     for (const SOUNDS _sound : i)
@@ -117,29 +130,37 @@ SOUNDS SoundHandler::PlayAnySound(const std::vector<SOUNDS>& i, bool loop, uint8
 
 }
 
-void SoundHandler::StopSound(const SOUNDS i, const uint8_t index)
+
+void SoundHandler::StopSound(const SOUNDS i)
 {
-    if (index < MAX_OVERLAP)
+    sounds.at(static_cast<size_t>(i)).StopAllSounds();
+}
+
+void SoundHandler::StopSound(const SOUNDS i, const size_t index)
+{
+    sounds.at(static_cast<size_t>(i)).Stop(index);
+    /*if (index < MAX_OVERLAP)
     {
         ::StopSound(currentSounds[i][index]);
         return;
     }
     for (const Sound j : currentSounds[i])
-        ::StopSound(j);
+        ::StopSound(j);*/
 }
 
 
 void SoundHandler::StopAllSounds()
 {
-    for (const std::array<Sound, MAX_OVERLAP> sound : currentSounds) //Should this be using the SOUNDS enum, somehow?
+    for (const auto& sd : sounds) //Should this be using the SOUNDS enum, somehow?
     {
-        for (const Sound j : sound)
-            ::StopSound(j);
+        sd.StopAllSounds();
     }
 }
 
-bool SoundHandler::IsSoundPlaying(SOUNDS i, const uint8_t index)
+bool SoundHandler::IsSoundPlaying(const SOUNDS i)
 {
+    return sounds.at(static_cast<size_t>(i)).IsPlaying();
+    /*
     if (index < MAX_OVERLAP)
         return ::IsSoundPlaying(currentSounds[i][index]);
 
@@ -149,5 +170,22 @@ bool SoundHandler::IsSoundPlaying(SOUNDS i, const uint8_t index)
             return true;
     }
     return false;
+    */
+}
+
+bool SoundHandler::IsSoundPlaying(const SOUNDS i, const size_t index)
+{
+    return sounds.at(static_cast<size_t>(i)).IsPlaying(index);
+    /*
+    if (index < MAX_OVERLAP)
+        return ::IsSoundPlaying(currentSounds[i][index]);
+
+    for (const Sound j : currentSounds[i])
+    {
+        if (::IsSoundPlaying(j))
+            return true;
+    }
+    return false;
+    */
 }
 

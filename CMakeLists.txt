@@ -75,6 +75,10 @@ add_executable(raylib_stg src/main.cpp
         include/MenuHandler.h
         include/PauseHandler.h
         src/PauseHandler.cpp
+        include/MenuOptions.h
+        src/MenuHandler.cpp
+        include/SoundData.h
+        src/RNGHandler.cpp
 )
 
 target_sources(raylib_stg
@@ -115,4 +119,4 @@ target_link_options(raylib_stg PUBLIC
         -Wl,--gc-sections
 )
 
-target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=true)
+target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=false)

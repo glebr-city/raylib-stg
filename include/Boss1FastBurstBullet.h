@@ -12,7 +12,7 @@ class Boss1FastBurstBullet : public SimpleBullet1
 public:
     Boss1FastBurstBullet()
     {
-        grazeValue = 60;
+        grazeValue = 70;
     }
 
     bool doPhysics() override

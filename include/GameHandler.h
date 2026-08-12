@@ -7,7 +7,9 @@
 #include "BackgroundHandler.h"
 #include "HUDHandler.h"
 #include "LifeHandler.h"
+#include "PauseHandler.h"
 #include "PlayerHandler.h"
+#include "RNGHandler.h"
 #include "SoundHandler.h"
 #include "SpawnedEnemies.h"
 
@@ -55,8 +57,14 @@ private:
         GlobalVariables::getCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = BOSS_1_PHASE_1) {
+    static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {
         desiredPhase = _desiredPhase;
+        PauseHandler::SetPause(false);
+        shouldRestartGame = true;
+    }
+    static void RestartGame(const uint_fast8_t _desiredPhase) {
+        desiredPhase = static_cast<PHASES>(_desiredPhase);
+        PauseHandler::SetPause(false);
         shouldRestartGame = true;
     }
 
@@ -66,7 +74,7 @@ public:
         desiredPhase = _desiredPhase;
     }
 
-    static void SwitchPhase(const uint_fast8_t _desiredPhase = 0)
+    static void SwitchPhase(const uint_fast8_t _desiredPhase)
     {
         SwitchPhase(static_cast<PHASES>(_desiredPhase));
     }
@@ -75,6 +83,7 @@ public:
         if (shouldRestartGame)
             actuallyRestartGame();
         BackgroundHandler::ScrollBackground();
+        RNGHandler::StepSeed();
         ScoreItemHandler::doPreStep();
         EphemeraHandler::doPreStep();
         PlayerBullets::getPlayerBullets()->doPreStep();
@@ -110,15 +119,21 @@ public:
         SpawnedEnemies::doPostStep();
     }
 
-    static void NextPhase()
+    static void NextPhase(const bool _restart = false)
     {
         const int nextPhaseIndex = static_cast<PHASES>(static_cast<int>(desiredPhase) + 1);
         if (nextPhaseIndex >= PHASE_COUNT)
         {
-            SwitchPhase(0);
+            if (_restart)
+                RestartGame(0);
+            else
+                SwitchPhase(nextPhaseIndex);
             return;
         }
-        SwitchPhase(nextPhaseIndex);
+        if (_restart)
+            RestartGame(nextPhaseIndex);
+        else
+            SwitchPhase(nextPhaseIndex);
     }
 };
 #endif //RAYLIB_STG_GAMEHANDLER_H

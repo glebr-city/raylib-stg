@@ -4,13 +4,7 @@
 
 #ifndef RAYLIB_STG_BOSS1PHASE4_H
 #define RAYLIB_STG_BOSS1PHASE4_H
-#include "BackgroundHandler.h"
 #include "Boss1.h"
-#include "GameHandler.h"
-#include "PhaseHelper.h"
-#include "SimpleBullet1Fast.h"
-#include "SpawnedEnemies.h"
-
 class Boss1Phase4  : public Boss1Phase1
 {
     static constexpr int PHASE_4_HEALTH = 300;

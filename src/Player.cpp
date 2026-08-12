@@ -186,7 +186,7 @@ void Player::startHyper() {
     hyperRingRect.x = 0;
     GlobalVariables::getCurrentPhase()->cancelBullets();
     SoundHandler::StopSound(PLAYER_HYPER_3, 0);
-    SoundHandler::PlaySound(PLAYER_HYPER_1, false, 0);
+    SoundHandler::PlaySound(0, PLAYER_HYPER_1, false);
     hyperOn = true;
 }
 
@@ -195,7 +195,7 @@ void Player::endHyper() {
     GlobalVariables::getCurrentPhase()->cancelBullets();
     hyperOn = false;
     SoundHandler::StopSound(PLAYER_HYPER_1, 0);
-    SoundHandler::PlaySound(PLAYER_HYPER_2, false, 0);
+    SoundHandler::PlaySound(0, PLAYER_HYPER_2, false);
     GlobalVariables::setGrazeMetre(0);
     ScoreHandler::setMultiplier(1);
 }

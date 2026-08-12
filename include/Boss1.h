@@ -61,7 +61,7 @@ private:
 
     void fireSpread(const Vector2 _pos, const Vector2 _dir)
     {
-        SoundHandler::PlaySound(SLIDE_3, false, 0);
+        SoundHandler::PlaySound(0, SLIDE_3, false);
         for (int i = -5; i < 5; i++)
         {
             const Vector2 translatedPos = Vector2Add(_pos, {-_dir.y * i * 3, _dir.x * i * 3});

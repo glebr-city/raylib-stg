@@ -4,6 +4,7 @@
 
 #ifndef RAYLIB_STG_PAUSEHANDLER_H
 #define RAYLIB_STG_PAUSEHANDLER_H
+#include "SoundHandler.h"
 
 class PauseHandler
 {
@@ -14,11 +15,12 @@ private:
     static void SetPause(const bool _p)
     {
         isPaused = _p;
+        SoundHandler::SetAllSoundPause(_p);
     }
 
     static void TogglePause()
     {
-        isPaused = !isPaused;
+        SetPause(!isPaused);
     }
 
     static bool GetPaused()

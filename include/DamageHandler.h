@@ -51,7 +51,7 @@ private:
             return;
         }
         currentGrazeMetre = maxGrazeMetre;
-        SoundHandler::PlaySound(PLAYER_HYPER_3, false, 0);
+        SoundHandler::PlaySound(0, PLAYER_HYPER_3, false);
     }
 
     static void Reset()
