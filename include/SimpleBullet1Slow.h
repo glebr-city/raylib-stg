@@ -19,8 +19,13 @@ public:
         position = Vector2Add(position, direction * speed);
         if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
             return false;
-        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
         return true;
+    }
+
+    void doPostStep() override
+    {
+
+        SpriteHandler::QueueMyAnimatedSprite({.i = SPEAR_1, .pos = position, .l = LAYER_BULLET_LOW, .col = WHITE});
     }
 };
 #endif //RAYLIB_STG_SIMPLEBULLET1SLOW_H

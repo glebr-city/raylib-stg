@@ -21,23 +21,25 @@
 int zoomFactor = 2;
 Vector2 letterboxSize = {0, 0};
 Camera2D camera = { 0 };
+RenderTexture2D target = {};
 
 std::array<int, 3> AdjustLetterbox() {
-    int zoomFactor = 1;
+    uint zoomFactor = 1;
     Vector2 letterboxSize = {0, 0};
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
     float aspectRatio = static_cast<float>(screenHeight) / static_cast<float>(screenWidth);
     if (aspectRatio < 1.5f) {
-        zoomFactor = std::fmaxf(2.0f, floor(screenHeight / gameHeight / 2) * 2);
+        zoomFactor = screenHeight / gameHeight;//std::fmaxf(2.0f, floor(screenHeight / gameHeight / 2) * 2);
     } else {
-        zoomFactor = std::fmaxf(2.0f, floor(screenWidth / gameWidth / 2) * 2);
+        zoomFactor = screenWidth / gameHeight;//std::fmaxf(2.0f, floor(screenWidth / gameWidth / 2) * 2);
     }
+    zoomFactor = std::max(static_cast<uint> (1), std::bit_floor(zoomFactor));
     letterboxSize.x = ((screenWidth) - (gameWidth * zoomFactor)) / 2;
     letterboxSize.y = ((screenHeight) - (gameHeight * zoomFactor)) / 2;
     const int x = floor(letterboxSize.x);
     const int y = floor(letterboxSize.y);
-    return {zoomFactor, x, y};
+    return {static_cast<int>(zoomFactor), x, y};
 }
 
 void doStep()
@@ -53,12 +55,8 @@ void doStep()
 
 void doDrawing()
 {
-    BeginDrawing();
+    BeginTextureMode(target);
     ClearBackground(BLACK);
-    DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
-    BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
-    camera.zoom = zoomFactor;
-    BeginMode2D(camera);
     SpriteHandler::DrawSprites();
     GameHandler::HandleHUD();
     if (PauseHandler::GetPaused())
@@ -66,7 +64,19 @@ void doDrawing()
         MenuHandler::HandleMenus();
     }
     EndMode2D();
-    EndScissorMode();
+    EndTextureMode();
+    BeginDrawing();
+    ClearBackground(BLACK);
+    //BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
+    //BeginMode2D(camera);
+    DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
+    DrawTexturePro(target.texture,
+        {0, 0, static_cast<float>(target.texture.width), static_cast<float>(-target.texture.height)},
+        {target.texture.width + letterboxSize.x, target.texture.height + letterboxSize.y, static_cast<float>(target.texture.width * zoomFactor), static_cast<float>(target.texture.height * zoomFactor)},
+        {static_cast<float>(target.texture.width), static_cast<float>(target.texture.height)},
+        0, WHITE);
+    //EndScissorMode();
+    //EndMode2D();
 
 #if DEBUG_BUILD
     const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
@@ -100,8 +110,9 @@ int main() {
     InitAudioDevice();
     SpriteHandler::InitSprites(); //Need to initialise this after the window.
     SoundHandler::InitSounds();
-    camera.zoom = zoomFactor; // NOLINT(*-narrowing-conversions)
     camera.offset = {letterboxSize.x, letterboxSize.y};
+    target = LoadRenderTexture(gameWidth, gameHeight);
+    SetTextureFilter(target.texture, TEXTURE_FILTER_POINT);
     SetTargetFPS(120);
     std::array<int, 3> resizeValues = AdjustLetterbox();
     zoomFactor = resizeValues[0];
