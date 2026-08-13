@@ -13,7 +13,7 @@ class SimpleBullet1 : public SimpleBullet{
 protected:
     static constexpr float radius = 3;
     static constexpr float speed = 1;
-    uint grazeValue = 30;
+    uint grazeValue = 20;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 direction{};
 

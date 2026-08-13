@@ -57,6 +57,17 @@ public:
     }
 };
 
+class QuitOption : public MenuOption
+{
+public:
+    QuitOption() : MenuOption("quit"){};
+    bool PressOK() override
+    {
+        CloseWindow();
+        return false;
+    }
+};
+
 class SoundVolumeOption : public MenuOption
 {
 private:

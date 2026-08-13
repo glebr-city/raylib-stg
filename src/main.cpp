@@ -57,6 +57,7 @@ void doDrawing()
     ClearBackground(BLACK);
     DrawRectangleLines(letterboxSize.x - 1, letterboxSize.y - 1, gameWidth * zoomFactor + 2, gameHeight * zoomFactor + 2, DARKGRAY);
     BeginScissorMode(letterboxSize.x, letterboxSize.y, gameWidth * zoomFactor, gameHeight * zoomFactor);
+    camera.zoom = zoomFactor;
     BeginMode2D(camera);
     SpriteHandler::DrawSprites();
     GameHandler::HandleHUD();
@@ -66,6 +67,7 @@ void doDrawing()
     }
     EndMode2D();
     EndScissorMode();
+
 #if DEBUG_BUILD
     const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
     const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
@@ -127,7 +129,7 @@ int main() {
         if (IsKeyPressed(KEY_ENTER))
         {
             DEBUG_highFramerate = !DEBUG_highFramerate;
-            DEBUG_highFramerate ? SetTargetFPS(360) : SetTargetFPS(120);
+            DEBUG_highFramerate ? SetTargetFPS(10) : SetTargetFPS(120);
         }
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();

@@ -65,7 +65,7 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
     //First, we draw the background.
     const MyStaticSprite* backgroundSprite = getStaticSprite(BackgroundHandler::GetBackgroundSprite());
     const Vector2 currentBackgroundPosition = BackgroundHandler::GetBackgroundPosition();
-    DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{currentBackgroundPosition.x, backgroundSprite->spriteSize.y - 180 + currentBackgroundPosition.y, 120, 180}, Vector2(0, 0), WHITE);
+    DrawTextureRec(backgroundSprite->spriteTexture, Rectangle{floor(currentBackgroundPosition.x), floor(backgroundSprite->spriteSize.y - 180 + currentBackgroundPosition.y), 120, 180}, Vector2(0, 0), WHITE);
     for (int i = 0; i < LAYER_COUNT; i++)
     {
         for (const SpriteParametres& opts : staticLayers[i]) //Draw every static sprite on the given layer.
@@ -84,9 +84,9 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
             else
                 spriteRect = opts.rect;
             if (opts.corner)
-                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x, pos.y}, col);
+                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {round(pos.x), round(pos.y)}, col);
             else
-                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x - (spriteSize.x / 2), pos.y - (spriteSize.y / 2)}, col);
+                DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {round(pos.x - (spriteSize.x / 2)), round(pos.y - (spriteSize.y / 2))}, col);
         }
         //Line removed to facilitate neat pausing.
         //staticLayers[i].clear();
@@ -107,9 +107,9 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
             else
                 spriteRect = opts.rect;
             if (opts.corner)
-                DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {pos.x, pos.y}, col);
+                DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {round(pos.x), round(pos.y)}, col);
             else
-                DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {pos.x - (spriteRect.width / 2), pos.y - (spriteRect.height / 2)}, col);
+                DrawTextureRec(animatedSprites[animatedSpriteIndex]->spriteSheet, spriteRect, Vector2 {round(pos.x - (spriteRect.width / 2)), round(pos.y - (spriteRect.height / 2))}, col);
 
         }
             //Line removed to facilitate neat pausing.
@@ -176,7 +176,7 @@ void SpriteHandler::DrawMyStaticSprite(const SpriteParametres& opts) //Draw a sp
     else
         spriteRect = opts.rect;
     if (opts.corner)
-        DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x, pos.y + yOffset * spriteSize.y}, col);
+        DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {round(pos.x), round(pos.y + yOffset * spriteSize.y)}, col);
     else
-        DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {pos.x - (spriteSize.x / 2), pos.y - (spriteSize.y / 2) + yOffset * spriteSize.y}, col);
+        DrawTextureRec(staticSprites[staticSpriteIndex]->spriteTexture, spriteRect, Vector2 {round(pos.x - (spriteSize.x / 2)), round(pos.y - (spriteSize.y / 2) + yOffset * spriteSize.y)}, col);
 }

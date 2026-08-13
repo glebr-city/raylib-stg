@@ -33,7 +33,7 @@ private:
       seed += 7001;
     if (InputHandler::CheckInputsDown(INPUT_FIRE))
       seed += 8513;
-    seed++;
+    seed += seed % 9463;
   }
   static uint_fast16_t GetSeed() // Returns the current RNG seed (0 to 65535).
   {

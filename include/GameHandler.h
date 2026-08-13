@@ -21,6 +21,7 @@ class GameHandler {
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
+        RNGHandler::InitSeed();
         PlayerHandler::SetPlayer(std::make_shared<Player>(Vector2{60, 140}));
         PlayerBullets::clearPlayerBullets();
         LifeHandler::resetLives();

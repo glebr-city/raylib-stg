@@ -39,32 +39,32 @@ private:
         float elapsedStepsOffsetThing = std::min(static_cast<float>(elapsedSteps % 60) / 60, 1.0f);
         if (elapsedSteps % 120 < 60)
             elapsedStepsOffsetThing = 1 - elapsedStepsOffsetThing;
-        if (elapsedSteps % 8 == 0)
+        if (elapsedSteps % 10 == 0)
         {
             bullet2Pool->spawn().spawn(bulletSpawnPos, {0, -1}, RED);
             bulletSpawnPos = {position.x - 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({-1, 1 + -elapsedStepsOffsetThing}), RED);
-        } else if (elapsedSteps % 8 == 1)
+        } else if (elapsedSteps % 10 == 1)
         {
             bulletSpawnPos = {position.x + 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({1, 1 + -elapsedStepsOffsetThing}), RED);
             bulletSpawnPos = {position.x - 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({-1, -0.5f + elapsedStepsOffsetThing}), RED);
-        } else if (elapsedSteps % 8 == 2)
+        } else if (elapsedSteps % 10 == 2)
         {
             bulletSpawnPos = {position.x - 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({-1, -elapsedStepsOffsetThing}), RED);
             bulletSpawnPos = {position.x + 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({1, -0.5f + elapsedStepsOffsetThing}), RED);
-        } else if (elapsedSteps % 8 == 3)
+        } else if (elapsedSteps % 10 == 5)
         {
             bulletSpawnPos = {position.x + 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({1, -elapsedStepsOffsetThing}), RED);
-        } else if (elapsedSteps % 8 == 4)
+        } else if (elapsedSteps % 10 == 6)
         {
             bulletSpawnPos = {position.x - 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({-1, -1 + -elapsedStepsOffsetThing}), RED);
-        } else if (elapsedSteps % 8 == 5)
+        } else if (elapsedSteps % 10 == 7)
         {
             bulletSpawnPos = {position.x + 7, position.y - 5};
             bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({1, -1 + -elapsedStepsOffsetThing}), RED);

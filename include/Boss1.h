@@ -7,6 +7,7 @@
 #include "Boss.h"
 #include "Boss1SmallBullet.h"
 #include "Boss1FastBurstBullet.h"
+#include "RNGHandler.h"
 #include "SimpleBullet1Slow.h"
 #include "SimpleBullet2.h"
 
@@ -190,7 +191,8 @@ public:
                 {
                     if (++currentSmallPart >= 11)
                         currentSmallPart = 0;
-                    fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 1000, static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 5000);
+                    fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 240 - 120) / 1000), static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 240 - 120) / 5000));
+                    //fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 1000, static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 5000);
                 }
                 break;
             }
