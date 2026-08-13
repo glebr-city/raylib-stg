@@ -15,7 +15,7 @@
 class MenuHandler
 {
 private:
-    static constexpr uint8_t OPTION_COUNT = 4;
+    static constexpr uint8_t OPTION_COUNT = 5;
     static std::array<std::unique_ptr<MenuOption>, OPTION_COUNT> menuOptions;
     static size_t selectedOption;
 public:

@@ -100,4 +100,60 @@ public:
         return false;
     }
 };
+
+class ScreenFilterOption : public MenuOption
+{
+private:
+    RenderTexture2D* renderTexture;
+    TextureFilter* textureFilter;
+public:
+    ScreenFilterOption() : MenuOption("screen filter: ")
+    {
+        renderTexture = GlobalVariables::GetRenderTexture();
+        textureFilter = GlobalVariables::GetTextureFilter();
+        switch (*textureFilter)
+        {
+            case TEXTURE_FILTER_POINT:
+            text = text.append("point");
+            break;
+            case TEXTURE_FILTER_BILINEAR:
+            text = text.append("bilinear");
+            break;
+        default:
+            text = text.append("???");
+        }
+    };
+    bool PressRight() override
+    {
+        text = "screen filter: ";
+        switch (*textureFilter)
+        {
+        case TEXTURE_FILTER_POINT:
+            {
+                GlobalVariables::SetRenderTextureFilter(TEXTURE_FILTER_BILINEAR);
+                text = text.append("bilinear");
+            }
+            break;
+        case TEXTURE_FILTER_BILINEAR:
+            {
+                GlobalVariables::SetRenderTextureFilter(TEXTURE_FILTER_POINT);
+                text = text.append("point");
+            }
+            break;
+        default:
+            {
+                GlobalVariables::SetRenderTextureFilter(TEXTURE_FILTER_POINT);
+                text = text.append("point");
+                break;
+            }
+        }
+        //SoundHandler::SetAllSoundVolume(static_cast<float>(soundVolume) / 100);
+        return false;
+    }
+
+    bool PressLeft() override
+    {
+        return PressRight();
+    }
+};
 #endif //RAYLIB_STG_MENUOPTIONS_H

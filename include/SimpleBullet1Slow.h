@@ -25,7 +25,7 @@ public:
     void doPostStep() override
     {
 
-        SpriteHandler::QueueMyAnimatedSprite({.i = SPEAR_1, .pos = position, .l = LAYER_BULLET_LOW, .col = WHITE});
+        SpriteHandler::QueueMyAnimatedSprite({.i = BULLET_1_MONOCHROME, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
     }
 };
 #endif //RAYLIB_STG_SIMPLEBULLET1SLOW_H

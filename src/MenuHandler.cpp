@@ -11,6 +11,7 @@ std::array<std::unique_ptr<MenuOption>, MenuHandler::OPTION_COUNT> MenuHandler::
     std::make_unique<ResumeOption>(),
     std::make_unique<RestartOption>(),
     std::make_unique<SoundVolumeOption>(),
+    std::make_unique<ScreenFilterOption>(),
     std::make_unique<QuitOption>(),
 };
 size_t MenuHandler::selectedOption = 0;

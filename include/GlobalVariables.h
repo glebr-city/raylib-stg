@@ -35,6 +35,8 @@ class GlobalVariables {
 protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
     static const std::array<PhaseRef, PHASE_COUNT> phases;
+    static RenderTexture2D renderTexture;
+    static TextureFilter renderTextureFilter;
 public:
 
     //static std::array<PhaseRef, 2> getPhaseList(){return {};};
@@ -64,7 +66,26 @@ public:
         currentGrazeMetre = i;
     }
 
+    static RenderTexture2D* GetRenderTexture()
+    {
+        return &renderTexture;
+    }
 
+    static TextureFilter* GetTextureFilter()
+    {
+        return &renderTextureFilter;
+    }
+
+    static void SetRenderTextureFilter(const TextureFilter _filter)
+    {
+        renderTextureFilter = _filter;
+        SetTextureFilter(renderTexture.texture, renderTextureFilter);
+    }
+
+    static void InitRenderTexture(const int _width, const int _height)
+    {
+        renderTexture = LoadRenderTexture(_width, _height);
+    }
 };
 
 #endif //RAYLIB_STG_GLOBALVARIABLES_H
