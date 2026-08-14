@@ -139,4 +139,36 @@ public:
         return PressRight();
     }
 };
+
+class ScreenRotationOption : public MenuOption
+{
+private:
+    int screenRotation;
+public:
+    ScreenRotationOption () : MenuOption("screen rotation: ")
+    {
+        screenRotation = GlobalVariables::GetScreenRotation();
+        text = text.append(std::to_string(screenRotation * 90));
+    };
+    bool PressRight() override
+    {
+        text = "screen rotation: ";
+        GlobalVariables::SetScreenRotation(++screenRotation);
+        screenRotation = GlobalVariables::GetScreenRotation();
+        text = text.append(std::to_string(screenRotation * 90));
+        SoundHandler::PlaySound(0, EXPLOSION_2, false);
+        return false;
+    }
+
+    bool PressLeft() override
+    {
+        screenRotation--;
+        text = "screen rotation: ";
+        GlobalVariables::SetScreenRotation(screenRotation);
+        screenRotation = GlobalVariables::GetScreenRotation();
+        text = text.append(std::to_string(screenRotation * 90));
+        SoundHandler::PlaySound(0, EXPLOSION_2, false);
+        return false;
+    }
+};
 #endif //RAYLIB_STG_MENUOPTIONS_H

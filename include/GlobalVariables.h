@@ -38,6 +38,8 @@ protected:
     static RenderTexture2D renderTexture;
     static int renderTextureFilter;
     static int effectVolume;
+    static int screenRotation;
+    static int zoomFactor;
 public:
 
     //static std::array<PhaseRef, 2> getPhaseList(){return {};};
@@ -106,6 +108,56 @@ public:
     static int GetEffectVolume()
     {
         return effectVolume;
+    }
+
+    static int GetScreenRotation()
+    {
+        return screenRotation;
+    }
+
+    static void SetScreenRotation(const int _screenRotation)
+    {
+        if (_screenRotation < 0)
+            screenRotation = 3;
+        else if (_screenRotation > 3)
+            screenRotation = 0;
+        else
+        screenRotation = _screenRotation;
+        AdjustLetterbox();
+    }
+
+    static std::array<int, 3> AdjustLetterbox() {
+        zoomFactor = 1;
+        Vector2 letterboxSize = {0, 0};
+        int screenWidth = GetScreenWidth();
+        int screenHeight = GetScreenHeight();
+        float aspectRatio = static_cast<float>(screenHeight) / static_cast<float>(screenWidth);
+        int screenRotation = GetScreenRotation();
+        if (screenRotation == 1 || screenRotation == 3)
+            aspectRatio = 1.0f / aspectRatio;
+        if (aspectRatio < 1.5f) {
+            if (screenRotation == 0 || screenRotation == 2)
+                zoomFactor = std::fmaxf(2.0f, floor(screenHeight / gameHeight / 2) * 2);
+            else
+                zoomFactor = std::fmaxf(2.0f, floor(screenWidth / gameHeight / 2) * 2);
+        } else {
+            if (screenRotation == 0 || screenRotation == 2)
+                zoomFactor = std::fmaxf(2.0f, floor(screenWidth / gameWidth / 2) * 2);
+            else
+                zoomFactor = std::fmaxf(2.0f, floor(screenHeight / gameWidth / 2) * 2);
+        }
+        //ppzoomFactor = std::max(static_cast<uint> (1), std::bit_floor(zoomFactor));
+        //zoomFactor = even
+        letterboxSize.x = ((screenWidth) - (gameWidth * zoomFactor)) / 2;
+        letterboxSize.y = ((screenHeight) - (gameHeight * zoomFactor)) / 2;
+        const int x = round(letterboxSize.x);
+        const int y = round(letterboxSize.y);
+        return {static_cast<int>(zoomFactor), x, y};
+    }
+
+    static int* GetZoomFactor()
+    {
+        return &zoomFactor;
     }
 };
 

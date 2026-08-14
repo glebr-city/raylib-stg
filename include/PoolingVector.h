@@ -31,21 +31,19 @@ class PoolingVector : public IPoolingVector{
     std::size_t spawnIndex = 0UL; //The index of the next object to spawn -- allows for looping through the vector.
     std::vector<T> storage;
     public:
-		// Main Constructor
-		PoolingVector(T _template, std::size_t size, const int _scoreValue) {
-        scoreItemValue = _scoreValue;
-        for (int i = 0; i < size; i++) {
-            storage.emplace_back(_template);
-        }
-    }
+        explicit PoolingVector(T _template, const std::size_t size, const int _scoreItemValue)
+		{
+		    if (_scoreItemValue < 0)
+		        scoreItemValue = _template.GetScoreValue();
+		    else
+				scoreItemValue = _scoreItemValue;
+		    for (int i = 0; i < size; i++) {
+		        storage.emplace_back(_template);
+		    }
+		}
+        PoolingVector() : PoolingVector({}, 0, -1) {}
+        explicit PoolingVector(const std::size_t size, const int _scoreValue = -1) : PoolingVector({}, size, _scoreValue) {}
 
-		// Default constructor
-        PoolingVector() : PoolingVector({}, 0, 0) {}
-		PoolingVector(std::size_t size) : PoolingVector({}, size, 0) {}
-
-    PoolingVector(T _template, int size): PoolingVector(_template, size, 0) {}
-
-    PoolingVector(std::size_t size, const int _scoreValue) : PoolingVector({}, size, _scoreValue) {}
 
     std::vector<T>& getVector() {
         return storage;

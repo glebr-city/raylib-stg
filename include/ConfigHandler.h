@@ -21,9 +21,9 @@ public:
         std::filesystem::create_directory(ss.str());
         ChangeDirectory(ss.str().c_str());
         rini_data config = rini_load("config.ini");
-        //rini_set_value(&config, "screen_filter", 1, "");
         GlobalVariables::SetRenderTextureFilter(rini_get_value(config, "screen_filter"));
         GlobalVariables::SetEffectVolume(rini_get_value(config, "effect_volume"));
+        GlobalVariables::SetScreenRotation(rini_get_value(config, "screenRotation"));
         rini_save(config, "config.ini");
         rini_unload(&config);
         ChangeDirectory(GetApplicationDirectory());
@@ -37,6 +37,7 @@ public:
         rini_data config = rini_load("config.ini");
         rini_set_value(&config, "screen_filter", GlobalVariables::GetTextureFilter(), "");
         rini_set_value(&config, "effect_volume", GlobalVariables::GetEffectVolume(), "");
+        rini_set_value(&config, "screenRotation", GlobalVariables::GetScreenRotation(), "");
         rini_save(config, "config.ini");
         rini_unload(&config);
         ChangeDirectory(GetApplicationDirectory());

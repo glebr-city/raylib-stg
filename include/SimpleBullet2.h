@@ -13,7 +13,7 @@ public:
 
     void doPreStep() override{};
 
-    SimpleBullet2(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = YELLOW) : SimpleBullet(pos, sprite)
+    SimpleBullet2(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = YELLOW) : SimpleBullet(grazeValue, pos, sprite)
     {
         position = pos;
         direction = dir;

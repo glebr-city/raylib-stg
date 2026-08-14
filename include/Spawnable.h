@@ -21,6 +21,10 @@ public:
     {
         position = _pos;
     }
+    virtual int GetScoreValue()
+    {
+        return 10;
+    }
 };
 
 #endif //RAYLIB_STG_SPAWNABLE_H

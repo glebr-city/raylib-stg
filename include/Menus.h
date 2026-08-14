@@ -26,6 +26,7 @@ public:
         menuOptions.emplace_back(std::make_unique<RestartOption>());
         menuOptions.emplace_back(std::make_unique<SoundVolumeOption>());
         menuOptions.emplace_back(std::make_unique<ScreenFilterOption>());
+        menuOptions.emplace_back(std::make_unique<ScreenRotationOption>());
         menuOptions.emplace_back(std::make_unique<QuitOption>());
     }
 

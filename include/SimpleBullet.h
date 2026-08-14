@@ -10,7 +10,7 @@
 
 class SimpleBullet : public Bullet {
 public:
-    explicit SimpleBullet(const Vector2 pos = {}, const ANIMATED_SPRITES _sprite = BULLET_1_MONOCHROME, const LAYERS _layer = LAYER_BULLET, const Color _col = WHITE) : Bullet(pos)
+    explicit SimpleBullet(const int _scoreValue, const Vector2 pos = {}, const ANIMATED_SPRITES _sprite = BULLET_1_MONOCHROME, const LAYERS _layer = LAYER_BULLET, const Color _col = WHITE) : Bullet(_scoreValue, pos)
     {
         sprite = _sprite;
         layer = _layer;

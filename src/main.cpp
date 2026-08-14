@@ -20,28 +20,10 @@
 #include "SpriteHandler.h"
 #include "SoundHandler.h"
 
-int zoomFactor = 2;
+int* zoomFactor = nullptr;
 RenderTexture2D* target = GlobalVariables::GetRenderTexture();
 
-std::array<int, 3> AdjustLetterbox() {
-    uint zoomFactor = 1;
-    Vector2 letterboxSize = {0, 0};
-    int screenWidth = GetScreenWidth();
-    int screenHeight = GetScreenHeight();
-    float aspectRatio = static_cast<float>(screenHeight) / static_cast<float>(screenWidth);
-    if (aspectRatio < 1.5f) {
-        zoomFactor = std::fmaxf(2.0f, floor(screenHeight / gameHeight / 2) * 2);
-    } else {
-        zoomFactor = std::fmaxf(2.0f, floor(screenWidth / gameWidth / 2) * 2);
-    }
-    //ppzoomFactor = std::max(static_cast<uint> (1), std::bit_floor(zoomFactor));
-    //zoomFactor = even
-    letterboxSize.x = ((screenWidth) - (gameWidth * zoomFactor)) / 2;
-    letterboxSize.y = ((screenHeight) - (gameHeight * zoomFactor)) / 2;
-    const int x = floor(letterboxSize.x);
-    const int y = floor(letterboxSize.y);
-    return {static_cast<int>(zoomFactor), x, y};
-}
+
 
 void doStep()
 {
@@ -69,14 +51,18 @@ void doDrawing()
     EndTextureMode();
     BeginDrawing();
     ClearBackground(BLACK);
-    Vector2 realScreenSize = {static_cast<float>(gameWidth * zoomFactor), static_cast<float>(gameHeight * zoomFactor)};
+    Vector2 realScreenSize = {static_cast<float>(gameWidth * *zoomFactor), static_cast<float>(gameHeight * *zoomFactor)};
     Vector2 realScreenCentre = {static_cast<float>(GetScreenWidth() / 2), static_cast<float>(GetScreenHeight() / 2)};
-    DrawRectangleLines(realScreenCentre.x-realScreenSize.x / 2 - 1, realScreenCentre.y-realScreenSize.y / 2 - 1, realScreenSize.x + 2, realScreenSize.y + 2, DARKGRAY);
+    const int screenRotation = GlobalVariables::GetScreenRotation();
+    if (screenRotation == 0 || screenRotation == 2)
+        DrawRectangleLines(realScreenCentre.x-realScreenSize.x / 2 - 1, realScreenCentre.y-realScreenSize.y / 2 - 1, realScreenSize.x + 2, realScreenSize.y + 2, DARKGRAY);
+    else
+        DrawRectangleLines(realScreenCentre.x-realScreenSize.y / 2 - 1, realScreenCentre.y-realScreenSize.x / 2 - 1, realScreenSize.y + 2, realScreenSize.x + 2, DARKGRAY);
     DrawTexturePro(target->texture,
         {0, 0, static_cast<float>(target->texture.width), static_cast<float>(-target->texture.height)},
         {static_cast<float>(GetScreenWidth() / 2), static_cast<float>(GetScreenHeight() / 2), realScreenSize.x, realScreenSize.y},
-        {static_cast<float>(target->texture.width * zoomFactor / 2), static_cast<float>(target->texture.height * zoomFactor / 2)},
-        0, WHITE);
+        {static_cast<float>(target->texture.width * *zoomFactor / 2), static_cast<float>(target->texture.height * *zoomFactor / 2)},
+        screenRotation * 90, WHITE);
 
 #if DEBUG_BUILD
     const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
@@ -112,8 +98,8 @@ int main() {
     SoundHandler::InitSounds();
     GlobalVariables::InitRenderTexture(gameWidth, gameHeight);
     SetTargetFPS(120);
-    std::array<int, 3> resizeValues = AdjustLetterbox();
-    zoomFactor = resizeValues[0];
+    std::array<int, 3> resizeValues = GlobalVariables::AdjustLetterbox();
+    zoomFactor = GlobalVariables::GetZoomFactor();
     ConfigHandler::ReadFile();
     MenuHandler::InitMenus();
     //letterboxSize.x = static_cast<float>(resizeValues[1]);
@@ -125,8 +111,7 @@ int main() {
 
     while (!WindowShouldClose()) {
         if (IsWindowResized()) {
-            resizeValues = AdjustLetterbox();
-            zoomFactor = resizeValues[0];
+            resizeValues = GlobalVariables::AdjustLetterbox();
             //letterboxSize.x = static_cast<float>(resizeValues[1]);
             //letterboxSize.y = static_cast<float>(resizeValues[2]);
         }

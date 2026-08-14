@@ -17,6 +17,8 @@ std::unique_ptr<PhaseHelper> GlobalVariables::currentPhase = nullptr;
 RenderTexture2D GlobalVariables::renderTexture = {};
 int GlobalVariables::renderTextureFilter = 0;
 int GlobalVariables::effectVolume = 100;
+int GlobalVariables::screenRotation = 0;
+int GlobalVariables::zoomFactor = 1;
 const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new DiagonalTankPhase1(); }},
     {[]() -> PhaseHelper* { return new Phase2(); }},

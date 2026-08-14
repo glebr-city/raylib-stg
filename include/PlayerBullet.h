@@ -22,7 +22,7 @@ private:
     Rectangle collider{-1000, -1000, 0, 0};
 public:
     PlayerBullet() : PlayerBullet(false) {};
-    PlayerBullet(bool isHyper) {
+    PlayerBullet(bool isHyper) : SimpleBullet (0){
         position = Vector2 {-1000, -1000};
         if (isHyper) {
             currentSprite = hyperSprite;
@@ -31,7 +31,7 @@ public:
             collider = Rectangle {colliderOffsetX, colliderOffsetY, 7, 10};
         }
     }
-    PlayerBullet(bool isHyper, Vector2 pos) {
+    PlayerBullet(bool isHyper, Vector2 pos) : SimpleBullet (0) {
         position = pos;
         if (isHyper) {
             currentSprite = hyperSprite;

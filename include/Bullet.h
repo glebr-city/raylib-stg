@@ -16,7 +16,7 @@
 
 class Bullet  : public Spawnable {
 protected:
- int scoreValue = 0;
+ int scoreValue = 10;
  static constexpr int grazeValue = 40;
  bool CheckCollisionRoundBullet(const Vector2 _center, const float _radius, const Vector2 p1, const Vector2 p2, const int _grazeValue)
  {
@@ -54,7 +54,8 @@ protected:
 public:
  bool doPhysics() override = 0;
  Bullet() = default;
- Bullet(const Vector2 _pos) : Spawnable(_pos) {
+ Bullet(const int _scoreValue, const Vector2 _pos) : Spawnable(_pos) {
+  scoreValue = _scoreValue;
  }
 
  void spawn(const Vector2 _position) override {
@@ -62,10 +63,15 @@ public:
   hasBeenGrazed = false;
  }
 
- void spawn(const Vector2 _position, u_int _scoreValue) override {
+ void spawn(const Vector2 _position, const u_int _scoreValue) override {
   position = _position;
   hasBeenGrazed = false;
   scoreValue = _scoreValue;
+ }
+
+ int GetScoreValue() override
+ {
+  return scoreValue;
  }
 
 

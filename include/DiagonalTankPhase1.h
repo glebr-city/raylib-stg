@@ -23,10 +23,10 @@ public:
     DiagonalTankPhase1() : PhaseHelper({}, {0, -0.2f}, DIAGONAL_TANK_BACKGROUND)
     {
         phaseName = "Diagonal Tanks";
-        diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(55, 30);
-        enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30, 30);
-        bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(100, 30);
-        bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100, 30);
+        diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(55);
+        enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30);
+        bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(100);
+        bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100);
         BackgroundHandler::SetBackgroundSprite(DIAGONAL_TANK_BACKGROUND);
         BackgroundHandler::SetBackgroundPosition({0, 0});
         BackgroundHandler::SetScrollVector(defaultScrollVector);

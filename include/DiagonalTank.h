@@ -6,7 +6,6 @@
 #define RAYLIB_STG_DIAGONALTANK_H
 #include "BackgroundHandler.h"
 #include "Enemy.h"
-#include "Enemy.h"
 #include "SimpleBullet2.h"
 
 class DiagonalTank : public Enemy
