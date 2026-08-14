@@ -71,31 +71,31 @@ public:
 class SoundVolumeOption : public MenuOption
 {
 private:
-    uint_fast8_t soundVolume = 100;
+    uint_fast8_t effectVolume = 100;
 public:
-    SoundVolumeOption() : MenuOption("sound volume: ")
+    SoundVolumeOption() : MenuOption("effect volume: ")
     {
-        soundVolume = 100;
-        text = text.append(std::to_string(soundVolume));
+        effectVolume = GlobalVariables::GetEffectVolume();
+        text = text.append(std::to_string(effectVolume));
     };
     bool PressRight() override
     {
-        soundVolume = std::min(soundVolume + 10, 100);
-        text = "sound volume: ";
-        text = text.append(std::to_string(soundVolume));
+        effectVolume = std::min(effectVolume + 10, 100);
+        text = "effect volume: ";
+        text = text.append(std::to_string(effectVolume));
         //SoundHandler::SetAllSoundVolume(static_cast<float>(soundVolume) / 100);
-        SetMasterVolume(static_cast<float>(soundVolume) / 100);
+        GlobalVariables::SetEffectVolume(effectVolume);
         SoundHandler::PlaySound(0, EXPLOSION_2, false);
         return false;
     }
 
     bool PressLeft() override
     {
-        soundVolume = std::max(soundVolume - 10, 0);
-        text = "sound volume: ";
-        text = text.append(std::to_string(soundVolume));
+        effectVolume = std::max(effectVolume - 10, 0);
+        text = "effect volume: ";
+        text = text.append(std::to_string(effectVolume));
         //SoundHandler::SetAllSoundVolume(static_cast<float>(soundVolume) / 100);
-        SetMasterVolume(static_cast<float>(soundVolume) / 100);
+        GlobalVariables::SetEffectVolume(effectVolume);
         SoundHandler::PlaySound(0, EXPLOSION_2, false);
         return false;
     }
@@ -105,49 +105,32 @@ class ScreenFilterOption : public MenuOption
 {
 private:
     RenderTexture2D* renderTexture;
-    TextureFilter* textureFilter;
+    int textureFilter;
 public:
     ScreenFilterOption() : MenuOption("screen filter: ")
     {
         renderTexture = GlobalVariables::GetRenderTexture();
         textureFilter = GlobalVariables::GetTextureFilter();
-        switch (*textureFilter)
-        {
-            case TEXTURE_FILTER_POINT:
-            text = text.append("point");
-            break;
-            case TEXTURE_FILTER_BILINEAR:
+        if (textureFilter == 1)
             text = text.append("bilinear");
-            break;
-        default:
-            text = text.append("???");
-        }
-    };
+        else
+            text = text.append("point");
+    }
     bool PressRight() override
     {
         text = "screen filter: ";
-        switch (*textureFilter)
+        if (textureFilter == 0)
         {
-        case TEXTURE_FILTER_POINT:
-            {
-                GlobalVariables::SetRenderTextureFilter(TEXTURE_FILTER_BILINEAR);
-                text = text.append("bilinear");
-            }
-            break;
-        case TEXTURE_FILTER_BILINEAR:
-            {
-                GlobalVariables::SetRenderTextureFilter(TEXTURE_FILTER_POINT);
-                text = text.append("point");
-            }
-            break;
-        default:
-            {
-                GlobalVariables::SetRenderTextureFilter(TEXTURE_FILTER_POINT);
-                text = text.append("point");
-                break;
-            }
+            textureFilter = 1;
+            text = text.append("bilinear");
         }
-        //SoundHandler::SetAllSoundVolume(static_cast<float>(soundVolume) / 100);
+        else
+        {
+            textureFilter = 0;
+            text = text.append("point");
+        }
+        GlobalVariables::SetRenderTextureFilter(textureFilter);
+        SoundHandler::PlaySound(EXPLOSION_2);
         return false;
     }
 

@@ -7,11 +7,5 @@
 #include <array>
 
 #include "MenuOptions.h"
-std::array<std::unique_ptr<MenuOption>, MenuHandler::OPTION_COUNT> MenuHandler::menuOptions = {
-    std::make_unique<ResumeOption>(),
-    std::make_unique<RestartOption>(),
-    std::make_unique<SoundVolumeOption>(),
-    std::make_unique<ScreenFilterOption>(),
-    std::make_unique<QuitOption>(),
-};
-size_t MenuHandler::selectedOption = 0;
+std::array<std::unique_ptr<Menu>, MENU_COUNT> MenuHandler::menus = {};
+size_t MenuHandler::selectedMenu = 0;

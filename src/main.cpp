@@ -2,6 +2,8 @@
 #include <iostream>
 #include <memory>
 #include <../include/raylib/raylib.h>
+
+#include "ConfigHandler.h"
 #if DEBUG_BUILD
 #include <sstream>
 #include <iomanip>
@@ -112,6 +114,8 @@ int main() {
     SetTargetFPS(120);
     std::array<int, 3> resizeValues = AdjustLetterbox();
     zoomFactor = resizeValues[0];
+    ConfigHandler::ReadFile();
+    MenuHandler::InitMenus();
     //letterboxSize.x = static_cast<float>(resizeValues[1]);
     //letterboxSize.y = static_cast<float>(resizeValues[2]);
     GameHandler::RestartGame();

@@ -36,7 +36,8 @@ protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
     static const std::array<PhaseRef, PHASE_COUNT> phases;
     static RenderTexture2D renderTexture;
-    static TextureFilter renderTextureFilter;
+    static int renderTextureFilter;
+    static int effectVolume;
 public:
 
     //static std::array<PhaseRef, 2> getPhaseList(){return {};};
@@ -71,20 +72,40 @@ public:
         return &renderTexture;
     }
 
-    static TextureFilter* GetTextureFilter()
+    static int GetTextureFilter()
     {
-        return &renderTextureFilter;
+        return renderTextureFilter;
     }
 
-    static void SetRenderTextureFilter(const TextureFilter _filter)
+    static void SetRenderTextureFilter(const int _filter)
     {
-        renderTextureFilter = _filter;
-        SetTextureFilter(renderTexture.texture, renderTextureFilter);
+        if (_filter == 1)
+        {
+            renderTextureFilter = 1;
+            SetTextureFilter(renderTexture.texture, TEXTURE_FILTER_BILINEAR);
+        }
+        else
+        {
+            renderTextureFilter = 0;
+            SetTextureFilter(renderTexture.texture, TEXTURE_FILTER_POINT);
+        }
     }
 
     static void InitRenderTexture(const int _width, const int _height)
     {
+        SetTextureWrap(renderTexture.texture, TEXTURE_WRAP_MIRROR_CLAMP);
         renderTexture = LoadRenderTexture(_width, _height);
+    }
+
+    static void SetEffectVolume(const int _volume)
+    {
+        effectVolume = _volume;
+        SetMasterVolume(std::clamp(static_cast<float>(effectVolume) / 100, 0.0f, 1.0f));
+    }
+
+    static int GetEffectVolume()
+    {
+        return effectVolume;
     }
 };
 

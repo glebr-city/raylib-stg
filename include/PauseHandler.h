@@ -4,16 +4,22 @@
 
 #ifndef RAYLIB_STG_PAUSEHANDLER_H
 #define RAYLIB_STG_PAUSEHANDLER_H
+#include "ConfigHandler.h"
 #include "SoundHandler.h"
 
 class PauseHandler
 {
 private:
     static bool isPaused;
+    static bool buttonReleased;
     public:
 
     static void SetPause(const bool _p)
     {
+        if (!isPaused && _p)
+            buttonReleased = false;
+        else
+            ConfigHandler::WriteFile();
         isPaused = _p;
         SoundHandler::SetAllSoundPause(_p);
     }
@@ -26,6 +32,15 @@ private:
     static bool GetPaused()
     {
         return isPaused;
+    }
+
+    static bool GetReleased()
+    {
+        return buttonReleased;
+    }
+    static void ReleaseButton()
+    {
+        buttonReleased = true;
     }
 };
 

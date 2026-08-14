@@ -4,3 +4,5 @@
 
 #include "PauseHandler.h"
 bool PauseHandler::isPaused = false;
+
+bool PauseHandler::buttonReleased = false;

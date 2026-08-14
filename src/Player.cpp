@@ -31,7 +31,6 @@ Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 constexpr int fireCooldown = 30; //Frames to wait between player shots
 int currentFireCooldown = 0; //Frames remaining until the player may shoot again
 bool wishToShoot = false; //Rudimentary buffer!
-Texture2D hyperRingSprite;
 Texture2D* grazeRadiusFillingSprite;
 Rectangle hyperRingRect = {6300, 0, 180, 180};
 auto currentHyperRingColour = WHITE; //Using the same effect for Hyper and for taking damage.
@@ -42,7 +41,6 @@ bool hyperOn = false;
 
 Player::Player(const Vector2 pos) {
     hyperRingRect.x = 6300;
-    hyperRingSprite = LoadTexture("resources/growingRingSpriteSheet.png");
     reset(pos);
 }
 

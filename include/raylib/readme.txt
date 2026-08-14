@@ -3,3 +3,4 @@ Files that belong in this directory:
 - raymath.h
 - rcamera.h
 - rlgl.h
+- rini.h

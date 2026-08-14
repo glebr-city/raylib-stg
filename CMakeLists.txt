@@ -79,6 +79,8 @@ add_executable(raylib_stg src/main.cpp
         src/MenuHandler.cpp
         include/SoundData.h
         src/RNGHandler.cpp
+        include/ConfigHandler.h
+        include/Menus.h
 )
 
 target_sources(raylib_stg
