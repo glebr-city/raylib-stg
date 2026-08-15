@@ -5,6 +5,7 @@
 #ifndef RAYLIB_STG_PAUSEHANDLER_H
 #define RAYLIB_STG_PAUSEHANDLER_H
 #include "ConfigHandler.h"
+#include "InputHandler.h"
 #include "SoundHandler.h"
 
 class PauseHandler
@@ -16,10 +17,15 @@ private:
 
     static void SetPause(const bool _p)
     {
+        InputHandler::ClearInputsMenu();
         if (!isPaused && _p)
+        {
             buttonReleased = false;
+        }
         else
+        {
             ConfigHandler::WriteFile();
+        }
         isPaused = _p;
         SoundHandler::SetAllSoundPause(_p);
     }

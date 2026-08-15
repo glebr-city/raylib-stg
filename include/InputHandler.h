@@ -18,6 +18,8 @@ struct MyKey
     KeyboardKey k = KEY_SPACE; //Keys (as on a keyboard).
     bool d = false; //Down?
     bool l = false; //Last frame, down?
+    bool md = false; //Menu, down?
+    bool ml = false; //Menu, last frame, down?
 };
 
 typedef enum
@@ -29,12 +31,17 @@ typedef enum
     INPUT_FOCUS,
     INPUT_HYPER,
     INPUT_FIRE,
+    INPUT_MENU,
     INPUT_RESTART,
 
     INPUT_COUNT
 } INPUTS;
+struct GameInput
+{
+    std::string name;
+    std::vector<MyKey> keys;
+};
 class InputHandler {
-
 public:
     static const std::vector<MyKey> leftInputs;
     static const std::vector<MyKey> rightInputs;
@@ -43,14 +50,15 @@ public:
     static const std::vector<MyKey> focusInputs;
     static const std::vector<MyKey> hyperInputs;
     static const std::vector<MyKey> fireInputs;
+    static const std::vector<MyKey> menuInputs;
     static const std::vector<MyKey> restartInputs;
 private:
-    static const std::array<std::shared_ptr<std::vector<MyKey>>, INPUT_COUNT> gameInputs;
-
+    static const std::array<std::shared_ptr<GameInput>, INPUT_COUNT> gameInputs;
     static Vector2 inputVector;
+
     static auto getGameInput(const INPUTS _i)
     {
-        return gameInputs.at(static_cast<int>(_i));
+        return gameInputs.at(_i);
     }
 
     static void UpdateInputVector()
@@ -89,9 +97,32 @@ private:
     }
     public:
 
+    static auto GetGameInputList() {
+        return &gameInputs;
+    }
+
+    static std::vector<KeyboardKey> GetGameInputKeys (const INPUTS _i)
+    {
+        std::vector<KeyboardKey> keys;
+        for (const auto& j : getGameInput(_i)->keys)
+        {
+            keys.emplace_back(j.k);
+        }
+        return keys;
+    }
+
+    static bool CheckInputsPressedMenu(const INPUTS i)
+    {
+        for (const auto& j : getGameInput(i)->keys)
+        {
+            if (j.md && !j.ml)
+                return true;
+        }
+        return false;
+    }
 
     static bool CheckInputsPressed(const INPUTS i) {
-        for (const auto& j : *getGameInput(i))
+        for (const auto& j : getGameInput(i)->keys)
         {
             if (j.d && !j.l)
                 return true;
@@ -100,7 +131,7 @@ private:
     }
 
     static bool CheckInputsDown(const INPUTS i) {
-        for (const auto& j : *getGameInput(i))
+        for (const auto& j : getGameInput(i)->keys)
         {
             if (j.d)
                 return true;
@@ -108,7 +139,7 @@ private:
         return false;
     }
     static bool CheckInputsDown(int i) {
-        for (const auto& j : *getGameInput(static_cast<INPUTS>(i)))
+        for (const auto& j : getGameInput(static_cast<INPUTS>(i))->keys)
         {
             if (j.d)
                 return true;
@@ -117,7 +148,7 @@ private:
     }
 
     static bool CheckInputsReleased(const INPUTS i) {
-        for (const auto& j : *getGameInput(i))
+        for (const auto& j : getGameInput(i)->keys)
         {
             if (!j.d && j.l)
                 return true;
@@ -129,14 +160,38 @@ private:
         //return (getGameInput(i)->l && !getGameInput(i)->d);
     }
 
+    static void UpdateInputsMenu()
+    {
+        for (int j = 0; j < INPUT_COUNT; j++)
+        {
+            for (auto& k: gameInputs.at(j)->keys)
+            {
+                k.ml = k.md;
+                k.md = IsKeyDown(k.k);
+            }
+        }
+    }
+
+    static void ClearInputsMenu()
+    {
+        for (int j = 0; j < INPUT_COUNT; j++)
+        {
+            for (auto& k: gameInputs.at(j)->keys)
+            {
+                k.md = true;
+                k.ml = true;
+            }
+        }
+    }
+
     static void UpdateInputs()
     {
         for (int j = 0; j < INPUT_COUNT; j++)
         {
-            for (auto& [k, d, l] : *gameInputs.at(j))
+            for (auto& k: gameInputs.at(j)->keys)
             {
-                l = d;
-                d = IsKeyDown(k);
+                k.l = k.d;
+                k.d = IsKeyDown(k.k);
             }
         }
         UpdateInputVector();
@@ -145,6 +200,16 @@ private:
     static Vector2 GetInputVector()
     {
         return inputVector;
+    }
+
+    static void SetKeyBind(const INPUTS i, const size_t index, const KeyboardKey _newBind)
+    {
+        gameInputs.at(i)->keys.at(index).k = _newBind;
+    }
+
+    static void SetKeyBind(const std::shared_ptr<GameInput>& i, const size_t index, const KeyboardKey _newBind)
+    {
+        i->keys.at(index).k = _newBind;
     }
 };
 

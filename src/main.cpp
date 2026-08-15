@@ -43,6 +43,7 @@ void doDrawing()
     ClearBackground(BLACK);
     SpriteHandler::DrawSprites();
     GameHandler::HandleHUD();
+    InputHandler::UpdateInputsMenu();
     if (PauseHandler::GetPaused())
     {
         MenuHandler::HandleMenus();
@@ -98,7 +99,6 @@ int main() {
     SoundHandler::InitSounds();
     GlobalVariables::InitRenderTexture(gameWidth, gameHeight);
     SetTargetFPS(120);
-    std::array<int, 3> resizeValues = GlobalVariables::AdjustLetterbox();
     zoomFactor = GlobalVariables::GetZoomFactor();
     ConfigHandler::ReadFile();
     MenuHandler::InitMenus();
@@ -110,11 +110,8 @@ int main() {
 
 
     while (!WindowShouldClose()) {
-        if (IsWindowResized()) {
-            resizeValues = GlobalVariables::AdjustLetterbox();
-            //letterboxSize.x = static_cast<float>(resizeValues[1]);
-            //letterboxSize.y = static_cast<float>(resizeValues[2]);
-        }
+        if (IsWindowResized())
+            GlobalVariables::AdjustLetterbox();
         if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
@@ -127,13 +124,13 @@ int main() {
             CloseWindow();
         if (IsKeyPressed(KEY_PAGE_DOWN))
             GameHandler::NextPhase(true);
-        const bool gamePaused = PauseHandler::GetPaused();
         doDrawing();
-        if (!gamePaused)
+        if (!PauseHandler::GetPaused())
         {
-            if (IsKeyPressed(KEY_TAB))
+            if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))
             {
                 PauseHandler::SetPause(true);
+                MenuHandler::OpenMenu();
             } else
             {
                 doStep();
@@ -141,4 +138,3 @@ int main() {
         }
     }
 }
-

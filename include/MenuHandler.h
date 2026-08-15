@@ -8,16 +8,11 @@
 #include <cstdint>
 #include <memory>
 
-#include "GlobalVariables.h"
+#include "MenuList.h"
 #include "MenuOptions.h"
 #include "Menus.h"
-#include "raylib.h"
 
-typedef enum
-{
-    MENU_MAIN = 0,
-    MENU_COUNT
-}MENUS;
+
 
 class MenuHandler
 {
@@ -31,6 +26,7 @@ public:
     {
         menus = {
             std::make_unique<MainMenu>(),
+            std::make_unique<ControlMenu>(),
         };
 
         for (const auto &i : menus)
@@ -41,7 +37,22 @@ public:
 
     static void HandleMenus()
     {
-        menus.at(selectedMenu)->HandleMenu();
+        if (!menus.at(selectedMenu)->HandleMenu())
+            SwitchMenu(menus.at(selectedMenu)->GetDesiredMenu());
+    }
+
+    static void OpenMenu()
+    {
+        menus.at(selectedMenu)->OpenMenu();
+    }
+
+    static void SwitchMenu(const MENUS _menu)
+    {
+        if (_menu == selectedMenu)
+            return;
+        selectedMenu = _menu;
+        OpenMenu();
+        return;
     }
 };
 #endif //RAYLIB_STG_MENUHANDLER_H

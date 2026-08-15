@@ -16,18 +16,20 @@ const std::vector<MyKey> InputHandler::upInputs = {MyKey(KEY_UP), MyKey(KEY_RIGH
 const std::vector<MyKey> InputHandler::downInputs = {MyKey(KEY_DOWN), MyKey(KEY_LEFT_BRACKET), MyKey(KEY_S)};
 const std::vector<MyKey> InputHandler::focusInputs = {MyKey(KEY_LEFT_SHIFT), MyKey(KEY_RIGHT_SHIFT), MyKey(KEY_SPACE)};
 const std::vector<MyKey> InputHandler::hyperInputs = {MyKey(KEY_X), MyKey(KEY_LEFT_CONTROL), MyKey(KEY_PERIOD)};
-const std::vector<MyKey> InputHandler::fireInputs = {MyKey(KEY_Z), MyKey(KEY_SLASH)};
-const std::vector<MyKey> InputHandler::restartInputs = {MyKey(KEY_R)};
+const std::vector<MyKey> InputHandler::fireInputs = {MyKey(KEY_Z), MyKey(KEY_SLASH), MyKey(KEY_NULL)};
+const std::vector<MyKey> InputHandler::menuInputs = {MyKey(KEY_TAB), MyKey(KEY_NULL), MyKey(KEY_NULL)};
+const std::vector<MyKey> InputHandler::restartInputs = {MyKey(KEY_R), MyKey(KEY_NULL), MyKey(KEY_NULL)};
 
-const std::array<std::shared_ptr<std::vector<MyKey>>, INPUT_COUNT> InputHandler::gameInputs =  {
-    std::make_shared<std::vector<MyKey>>(leftInputs),
-    std::make_shared<std::vector<MyKey>>(rightInputs),
-    std::make_shared<std::vector<MyKey>>(upInputs),
-    std::make_shared<std::vector<MyKey>>(downInputs),
-    std::make_shared<std::vector<MyKey>>(focusInputs),
-    std::make_shared<std::vector<MyKey>>(hyperInputs),
-    std::make_shared<std::vector<MyKey>>(fireInputs),
-    std::make_shared<std::vector<MyKey>>(restartInputs),
+const std::array<std::shared_ptr<GameInput>, INPUT_COUNT> InputHandler::gameInputs =  {
+    std::make_shared<GameInput>("left" , leftInputs),
+    std::make_shared<GameInput>("right", rightInputs),
+    std::make_shared<GameInput>("up", upInputs),
+    std::make_shared<GameInput>("down", downInputs),
+    std::make_shared<GameInput>("focus", focusInputs),
+    std::make_shared<GameInput>("hyper", hyperInputs),
+    std::make_shared<GameInput>("fire", fireInputs),
+    std::make_shared<GameInput>("menu", menuInputs),
+    std::make_shared<GameInput>("restart", restartInputs),
 };
 
 

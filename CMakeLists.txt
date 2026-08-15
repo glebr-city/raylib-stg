@@ -81,6 +81,8 @@ add_executable(raylib_stg src/main.cpp
         src/RNGHandler.cpp
         include/ConfigHandler.h
         include/Menus.h
+        include/KeyNameDictionary.h
+        include/MenuList.h
 )
 
 target_sources(raylib_stg
