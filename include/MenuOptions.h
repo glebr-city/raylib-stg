@@ -186,17 +186,28 @@ class ControlRebindOption : public MenuOption
 private:
     size_t selectedBind = 0;
     std::shared_ptr<GameInput> gameInput = nullptr;
+    bool isGamepad = false;
+    bool waitingForGamepadRelease = false;
 public:
-    ControlRebindOption(const std::shared_ptr<GameInput>& input) : MenuOption(input->name)
+    ControlRebindOption(const std::shared_ptr<GameInput>& input, bool _isGamepad = false) : MenuOption(input->name)
     {
         gameInput = input;
         text = text.append(":");
+        isGamepad = _isGamepad;
     };
 
     std::vector<std::string_view> GetBinds()
     {
         std::vector<std::string_view> binds = {};
         text = gameInput->name;
+        if (isGamepad)
+        {
+            for (const auto k : gameInput->buttons)
+            {
+                binds.emplace_back(GetMyButtonName(k.b));
+            }
+            return binds;
+        }
         for (const auto k : gameInput->keys)
         {
             binds.emplace_back(GetMyKeyName(k.k));
@@ -237,14 +248,57 @@ public:
 
    bool HandleRebinding() //return true to finish rebinding
     {
+        if (isGamepad)
+            return HandleRebindingGamepad();
         if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))
         {
-            InputHandler::SetKeyBind(gameInput, selectedBind, static_cast<KeyboardKey>(0));
+            for (int j = 0; j < gameInput->keys.size(); j++)
+            {
+                if (j != selectedBind && gameInput->keys.at(j).k != 0)
+                {
+                    InputHandler::SetKeyBind(gameInput, selectedBind, static_cast<KeyboardKey>(0));
+                    return true;
+                }
+            }
             return true;
         }
         if (const int keyPressed = GetKeyPressed(); keyPressed != 0)
         {
             InputHandler::SetKeyBind(gameInput, selectedBind, static_cast<KeyboardKey>(keyPressed));
+            return true;
+        }
+        return false;
+    }
+
+    void WaitForGamepadRelease() //Hacky way to avoid the fire key immediately being read as a new button bind; the keyboard equivalent has a built-in queue that fixes this.
+    {
+        waitingForGamepadRelease = true;
+    }
+
+private:
+    bool HandleRebindingGamepad() //return true to finish rebinding
+    {
+        if (waitingForGamepadRelease)
+        {
+            if (GetGamepadButtonPressed() == 0)
+                waitingForGamepadRelease = false;
+            return false;
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))
+        {
+            for (int j = 0; j < gameInput->buttons.size(); j++)
+            {
+                if (j != selectedBind && gameInput->buttons.at(j).b != 0)
+                {
+                    InputHandler::SetButtonBind(gameInput, selectedBind, static_cast<GamepadButton>(0));
+                    return true;
+                }
+            }
+            return true;
+        }
+        if (const int buttonPressed = GetGamepadButtonPressed(); buttonPressed != 0)
+        {
+            InputHandler::SetButtonBind(gameInput, selectedBind, static_cast<GamepadButton>(buttonPressed));
             return true;
         }
         return false;
@@ -261,7 +315,38 @@ public:
     };
     MENUS GetDesiredMenu() override
     {
+        return MENU_CONTROL_DEVICE_SELECTION;
+    }
+};
+
+class ControlDeviceSelectionMenuOptionKeyboard : public MenuOption
+{
+public:
+    ControlDeviceSelectionMenuOptionKeyboard() : MenuOption("keyboard") {}
+    MENUS GetDesiredMenu() override
+    {
         return MENU_CONTROLS;
     }
+
+    bool PressOK() override
+    {
+        return true;
+    }
+};
+
+class ControlDeviceSelectionMenuOptionGamepad : public MenuOption
+{
+public:
+    ControlDeviceSelectionMenuOptionGamepad() : MenuOption("gamepad") {}
+    MENUS GetDesiredMenu() override
+    {
+        return MENU_CONTROLS_GAMEPAD;
+    }
+
+    bool PressOK() override
+    {
+        return true;
+    }
+
 };
 #endif //RAYLIB_STG_MENUOPTIONS_H

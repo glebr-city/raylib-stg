@@ -5,6 +5,7 @@
 #ifndef RAYLIB_STG_INPUTHANDLER_H
 #define RAYLIB_STG_INPUTHANDLER_H
 #include <array>
+#include <iostream>
 #include <memory>
 #include <vector>
 
@@ -135,11 +136,21 @@ private:
             if (j.md && !j.ml)
                 return true;
         }
+        for (const auto& j : getGameInput(i)->buttons)
+        {
+            if (j.md && !j.ml)
+                return true;
+        }
         return false;
     }
 
     static bool CheckInputsPressed(const INPUTS i) {
         for (const auto& j : getGameInput(i)->keys)
+        {
+            if (j.d && !j.l)
+                return true;
+        }
+        for (const auto& j : getGameInput(i)->buttons)
         {
             if (j.d && !j.l)
                 return true;
@@ -153,10 +164,20 @@ private:
             if (j.d)
                 return true;
         }
+        for (const auto& j : getGameInput(i)->buttons)
+        {
+            if (j.d)
+                return true;
+        }
         return false;
     }
     static bool CheckInputsDown(int i) {
         for (const auto& j : getGameInput(static_cast<INPUTS>(i))->keys)
+        {
+            if (j.d)
+                return true;
+        }
+        for (const auto& j : getGameInput(static_cast<INPUTS>(i))->buttons)
         {
             if (j.d)
                 return true;
@@ -170,11 +191,12 @@ private:
             if (!j.d && j.l)
                 return true;
         }
+        for (const auto& j : getGameInput(i)->buttons)
+        {
+            if (!j.d && j.l)
+                return true;
+        }
         return false;
-        /*if (std::ranges::any_of(getGameInput(static_cast<INPUTS>(i))->k, [](const KeyboardKey key) {return IsKeyReleased(key);}))
-            return true;
-        return false;*/
-        //return (getGameInput(i)->l && !getGameInput(i)->d);
     }
 
     static void UpdateInputsMenu()
@@ -186,6 +208,21 @@ private:
                 k.ml = k.md;
                 k.md = IsKeyDown(k.k);
             }
+
+            for (auto& k: gameInputs.at(j)->buttons)
+            {
+                k.ml = k.md;
+                k.md = false;
+                int i = -1;
+                while (IsGamepadAvailable(++i))
+                {
+                    if (IsGamepadButtonDown(i, k.b))
+                    {
+                        k.md = true;
+                        break;
+                    }
+                }
+            }
         }
     }
 
@@ -194,6 +231,11 @@ private:
         for (int j = 0; j < INPUT_COUNT; j++)
         {
             for (auto& k: gameInputs.at(j)->keys)
+            {
+                k.md = true;
+                k.ml = true;
+            }
+            for (auto& k: gameInputs.at(j)->buttons)
             {
                 k.md = true;
                 k.ml = true;
@@ -210,6 +252,21 @@ private:
                 k.l = k.d;
                 k.d = IsKeyDown(k.k);
             }
+
+            for (auto& k: gameInputs.at(j)->buttons)
+            {
+                k.l = k.d;
+                k.d = false;
+                int i = -1;
+                while (IsGamepadAvailable(++i))
+                {
+                    if (IsGamepadButtonDown(i, k.b))
+                    {
+                        k.d = true;
+                        break;
+                    }
+                }
+            }
         }
         UpdateInputVector();
     }
@@ -219,14 +276,15 @@ private:
         return inputVector;
     }
 
-    static void SetKeyBind(const INPUTS i, const size_t index, const KeyboardKey _newBind)
-    {
-        gameInputs.at(i)->keys.at(index).k = _newBind;
-    }
 
     static void SetKeyBind(const std::shared_ptr<GameInput>& i, const size_t index, const KeyboardKey _newBind)
     {
         i->keys.at(index).k = _newBind;
+    }
+
+    static void SetButtonBind(const std::shared_ptr<GameInput>& i, const size_t index, GamepadButton _newBind)
+    {
+        i->buttons.at(index).b = _newBind;
     }
 };
 

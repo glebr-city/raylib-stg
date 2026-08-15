@@ -92,9 +92,54 @@ public:
     }
 };
 
+class ControlDeviceSelectionMenu : public Menu
+{
+    void InitMenu() override
+    {
+        menuOptions.emplace_back(std::make_unique<ControlDeviceSelectionMenuOptionKeyboard>());
+        menuOptions.emplace_back(std::make_unique<ControlDeviceSelectionMenuOptionGamepad>());
+    };
+    bool HandleMenu() override
+    {
+        DrawRectangle(0, 0, gameWidth, gameHeight, {30, 30, 30, 100});
+        for (int i = 0; i < menuOptions.size(); i++)
+        {
+            if (i == selectedOption)
+                DrawText(menuOptions.at(i)->GetText().c_str(), 0, 10 + i*10, 10, WHITE);
+            else
+                DrawText(menuOptions.at(i)->GetText().c_str(), 0, 10 + i*10, 10, {255, 255, 255, 100});
+        }
+
+        if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))
+            return false;
+        if (InputHandler::CheckInputsPressedMenu(INPUT_FIRE))
+        {
+            if (menuOptions.at(selectedOption)->PressOK())
+            {
+                desiredMenu = menuOptions.at(selectedOption)->GetDesiredMenu();
+                return false;
+            }
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_DOWN))
+        {
+            SoundHandler::PlaySound(THUMP_1);
+            if (selectedOption++ >= menuOptions.size() - 1)
+                selectedOption = 0;
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_UP))
+        {
+            SoundHandler::PlaySound(THUMP_1);
+            if (selectedOption-- == 0)
+                selectedOption = menuOptions.size() - 1;
+        }
+        return true;
+    }
+};
+
+
 class ControlMenu : public Menu
 {
-private:
+protected:
     std::vector<std::unique_ptr<ControlRebindOption>> menuOptions;
     bool isFocused = false;
     bool isRebinding = false;
@@ -119,7 +164,6 @@ public:
             int xOffset = 0;
             auto binds  = menuOptions.at(real_i)->GetBinds();
             Color colour = {255, 255, 255, 100};
-            Color bindColour = {255, 255, 255, 100};
             if (real_i == selectedOption)
             {
                 colour = WHITE;
@@ -196,6 +240,7 @@ public:
                 menuOptions.at(selectedOption)->PressOK();
             } else
             {
+                menuOptions.at(selectedOption)->WaitForGamepadRelease();
                 isRebinding = true;
             }
         }
@@ -220,6 +265,19 @@ public:
             menuOptions.at(selectedOption)->PressRight();
         }
         return true;
+    }
+};
+
+class ControlMenuGamepad : public ControlMenu
+{
+    void InitMenu() override
+    {
+        int yPos = 0;
+        for (auto& i : *InputHandler::GetGameInputList())
+        {
+            menuOptions.emplace_back(std::make_unique<ControlRebindOption>(i, true));
+            yPos += 10;
+        }
     }
 };
 #endif //RAYLIB_STG_MENUS_H

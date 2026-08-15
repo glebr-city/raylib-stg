@@ -12,17 +12,12 @@ class PauseHandler
 {
 private:
     static bool isPaused;
-    static bool buttonReleased;
     public:
 
     static void SetPause(const bool _p)
     {
         InputHandler::ClearInputsMenu();
-        if (!isPaused && _p)
-        {
-            buttonReleased = false;
-        }
-        else
+        if (isPaused && _p)
         {
             ConfigHandler::WriteFile();
         }
@@ -40,14 +35,8 @@ private:
         return isPaused;
     }
 
-    static bool GetReleased()
-    {
-        return buttonReleased;
-    }
-    static void ReleaseButton()
-    {
-        buttonReleased = true;
-    }
+
+
 };
 
 #endif //RAYLIB_STG_PAUSEHANDLER_H

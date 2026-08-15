@@ -7,9 +7,9 @@
 #include <array>
 #include <map>
 #include <string>
+#include <raylib.h>
 
 
-// Evaluates at compile-time if given a constant, but usable at runtime too!
 constexpr std::string_view GetMyKeyName(const KeyboardKey k) {
     switch (k)
     {
@@ -126,6 +126,32 @@ constexpr std::string_view GetMyKeyName(const KeyboardKey k) {
     default: return "???";
     }   
 }
+
+constexpr std::string_view GetMyButtonName(const GamepadButton b) {
+    switch (b)
+    {
+    case GAMEPAD_BUTTON_UNKNOWN: return "none";
+    case GAMEPAD_BUTTON_LEFT_FACE_UP: return "up";
+    case GAMEPAD_BUTTON_LEFT_FACE_RIGHT: return "right";
+    case GAMEPAD_BUTTON_LEFT_FACE_DOWN: return "down";
+    case GAMEPAD_BUTTON_LEFT_FACE_LEFT: return "left";
+    case GAMEPAD_BUTTON_RIGHT_FACE_UP: return "y";
+    case GAMEPAD_BUTTON_RIGHT_FACE_RIGHT: return "b";
+    case GAMEPAD_BUTTON_RIGHT_FACE_DOWN: return "a";
+    case GAMEPAD_BUTTON_RIGHT_FACE_LEFT: return "x";
+    case GAMEPAD_BUTTON_LEFT_TRIGGER_1: return "lb";
+    case GAMEPAD_BUTTON_LEFT_TRIGGER_2: return "lt";
+    case GAMEPAD_BUTTON_RIGHT_TRIGGER_1: return "rb";
+    case GAMEPAD_BUTTON_RIGHT_TRIGGER_2: return "rt";
+    case GAMEPAD_BUTTON_MIDDLE_LEFT: return "select";
+    case GAMEPAD_BUTTON_MIDDLE: return "steam";
+    case GAMEPAD_BUTTON_MIDDLE_RIGHT: return "start";
+    case GAMEPAD_BUTTON_LEFT_THUMB: return "ls";
+    case GAMEPAD_BUTTON_RIGHT_THUMB: return "rs";
+    }
+    return "none";
+}
+
 /*
     inline constexpr auto MY_KEY_NAMES = std::map<size_t, std::string>{
     {0,"NULL"},

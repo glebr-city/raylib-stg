@@ -27,6 +27,8 @@ public:
         menus = {
             std::make_unique<MainMenu>(),
             std::make_unique<ControlMenu>(),
+            std::make_unique<ControlMenuGamepad>(),
+            std::make_unique<ControlDeviceSelectionMenu>(),
         };
 
         for (const auto &i : menus)

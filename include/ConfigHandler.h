@@ -61,6 +61,14 @@ public:
                 if (const int bind = rini_get_value(config, keyName.str().c_str()); bind > 0)
                     InputHandler::SetKeyBind(i, j, static_cast<KeyboardKey>(bind));
             }
+            for (size_t j = 0; j < i->buttons.size(); j++)
+            {
+                std::stringstream keyName;
+                keyName << "keybind_gamepad_" << i->name << "_" << j;
+                rini_set_value(&config, keyName.str().c_str(), i->buttons[j].b, "");
+                if (const int bind = rini_get_value(config, keyName.str().c_str()); bind > 0)
+                    InputHandler::SetButtonBind(i, j, static_cast<GamepadButton>(bind));
+            }
         }
         rini_save(config, "config.ini");
         rini_unload(&config);
