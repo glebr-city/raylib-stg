@@ -4,11 +4,8 @@
 
 #ifndef RAYLIB_STG_INPUTHANDLER_H
 #define RAYLIB_STG_INPUTHANDLER_H
-#include <algorithm>
 #include <array>
-#include <iostream>
 #include <memory>
-#include <ostream>
 #include <vector>
 
 #include "raylib/raylib.h"
@@ -16,6 +13,15 @@
 struct MyKey
 {
     KeyboardKey k = KEY_SPACE; //Keys (as on a keyboard).
+    bool d = false; //Down?
+    bool l = false; //Last frame, down?
+    bool md = false; //Menu, down?
+    bool ml = false; //Menu, last frame, down?
+};
+
+struct MyButton
+{
+    GamepadButton b = GAMEPAD_BUTTON_RIGHT_FACE_DOWN; //Buttons (as on a gamepad controller).
     bool d = false; //Down?
     bool l = false; //Last frame, down?
     bool md = false; //Menu, down?
@@ -40,6 +46,7 @@ struct GameInput
 {
     std::string name;
     std::vector<MyKey> keys;
+    std::vector<MyButton> buttons;
 };
 class InputHandler {
 public:
@@ -52,6 +59,16 @@ public:
     static const std::vector<MyKey> fireInputs;
     static const std::vector<MyKey> menuInputs;
     static const std::vector<MyKey> restartInputs;
+
+    static const std::vector<MyButton> leftInputsGamepad;
+    static const std::vector<MyButton> rightInputsGamepad;
+    static const std::vector<MyButton> upInputsGamepad;
+    static const std::vector<MyButton> downInputsGamepad;
+    static const std::vector<MyButton> focusInputsGamepad;
+    static const std::vector<MyButton> hyperInputsGamepad;
+    static const std::vector<MyButton> fireInputsGamepad;
+    static const std::vector<MyButton> menuInputsGamepad;
+    static const std::vector<MyButton> restartInputsGamepad;
 private:
     static const std::array<std::shared_ptr<GameInput>, INPUT_COUNT> gameInputs;
     static Vector2 inputVector;

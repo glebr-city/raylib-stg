@@ -113,7 +113,7 @@ public:
     {
         DrawRectangle(0, 0, gameWidth, gameHeight, {30, 30, 30, 100});
         int yCount = 0;
-        for (size_t i = selectedOption; i < menuOptions.size() * 2; i++)
+        for (size_t i = selectedOption; i < menuOptions.size(); i++)
         {
             const size_t real_i = i % menuOptions.size(); //To draw an infinite menu~
             int xOffset = 0;
@@ -166,6 +166,7 @@ public:
                 isRebinding = false;
                 return true;
             }
+            ConfigHandler::WriteFile();
             return false;
         }
 
@@ -204,7 +205,10 @@ public:
             if (isFocused)
                 isFocused = false;
             else
+            {
+                ConfigHandler::WriteFile();
                 return false;
+            }
         }
 
         if (InputHandler::CheckInputsPressedMenu(INPUT_LEFT) && isFocused)
