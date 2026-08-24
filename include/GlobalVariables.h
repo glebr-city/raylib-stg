@@ -8,8 +8,7 @@
 #include <memory>
 
 #include "PhaseHelper.h"
-
-//#include "PhaseHelper.h"
+#include "Stage.h"
 
 class PhaseHelper;
 struct PhaseRef;
@@ -19,22 +18,16 @@ inline const int gameHeight = 180;
 inline const int bulletSealRadius = 22; //Grounded enemies may not fire from this distance to the player.
 inline const int bulletSealRadiusSQ = bulletSealRadius * bulletSealRadius; //Grounded enemies may not fire from this distance to the player.
 
-typedef enum {
-    DIAGONAL_TANKS = 0,
-    PHASE_2,
-    BOSS_1_PHASE_1,
-    BOSS_1_PHASE_2,
-    BOSS_1_PHASE_3,
-    BOSS_1_PHASE_4,
-    BOSS_1_PHASE_5,
 
-    PHASE_COUNT
-} PHASES;
+
+
+
 
 class GlobalVariables {
 protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
     static const std::array<PhaseRef, PHASE_COUNT> phases;
+    static const std::array<Stage, 2> stages;
     static RenderTexture2D renderTexture;
     static int renderTextureFilter;
     static int effectVolume;

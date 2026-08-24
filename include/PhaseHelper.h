@@ -13,7 +13,17 @@
 #include "StepThinker.h"
 
 
+typedef enum {
+    DIAGONAL_TANKS = 0,
+    PHASE_2,
+    BOSS_1_PHASE_1,
+    BOSS_1_PHASE_2,
+    BOSS_1_PHASE_3,
+    BOSS_1_PHASE_4,
+    BOSS_1_PHASE_5,
 
+    PHASE_COUNT
+} PHASES;
 
 class PhaseHelper : public StepThinker {
     protected:

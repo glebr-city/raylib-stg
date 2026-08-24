@@ -29,6 +29,11 @@ const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new Boss1Phase5(); }},
     }};
 
+const std::array<Stage, 2> GlobalVariables::stages = {{
+    {"stage 1", {DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5, }},
+        {"stage 2", {DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5, }}
+    }};
+
 PhaseRef GlobalVariables::getPhase(const PHASES _index)
 {
     return phases[_index];

@@ -19,7 +19,10 @@ protected:
 
 public:
     using StepThinker::doPhysics;
-    SimpleBullet1(const Vector2 _pos = {}) : SimpleBullet(grazeValue, _pos, sprite, LAYER_BULLET_LOW) {};
+    SimpleBullet1(const Vector2 _pos = {}, const uint _grazeValue = 20) : SimpleBullet(_grazeValue, _pos, sprite, LAYER_BULLET_LOW), grazeValue(20)
+    {
+        grazeValue = _grazeValue;
+    };
 
     SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(grazeValue, pos)
     {

@@ -22,6 +22,14 @@ public:
         std::filesystem::create_directory(ss.str());
         ChangeDirectory(ss.str().c_str());
         rini_data config = rini_load("config.ini");
+        if (rini_get_value(config, "read_before") == 0)
+        {
+            rini_set_value(&config, "read_before", 1, "");
+            rini_save(config, "config.ini");
+            rini_unload(&config);
+            WriteFile();
+            return;
+        }
         GlobalVariables::SetRenderTextureFilter(rini_get_value(config, "screen_filter"));
         GlobalVariables::SetEffectVolume(rini_get_value(config, "effect_volume"));
         GlobalVariables::SetScreenRotation(rini_get_value(config, "screenRotation"));
@@ -32,8 +40,7 @@ public:
             {
                 std::stringstream keyName;
                 keyName << "keybind_" << i->name << "_" << j;
-                if (const int bind = rini_get_value(config, keyName.str().c_str()); bind > 0)
-                    InputHandler::SetKeyBind(i, j, static_cast<KeyboardKey>(bind));
+                InputHandler::SetKeyBind(i, j, static_cast<KeyboardKey>(rini_get_value(config, keyName.str().c_str())));
             }
         }
         rini_save(config, "config.ini");

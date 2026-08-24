@@ -118,7 +118,7 @@ int main() {
         if (IsKeyPressed(KEY_ENTER))
         {
             DEBUG_highFramerate = !DEBUG_highFramerate;
-            DEBUG_highFramerate ? SetTargetFPS(10) : SetTargetFPS(120);
+            DEBUG_highFramerate ? SetTargetFPS(360) : SetTargetFPS(120);
         }
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();

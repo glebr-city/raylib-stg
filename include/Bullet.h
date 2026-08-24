@@ -17,7 +17,7 @@
 class Bullet  : public Spawnable {
 protected:
  int scoreValue = 10;
- static constexpr int grazeValue = 40;
+ static constexpr uint grazeValue = 40;
  bool CheckCollisionRoundBullet(const Vector2 _center, const float _radius, const Vector2 p1, const Vector2 p2, const int _grazeValue)
  {
   const float dx = p1.x - p2.x;

@@ -134,6 +134,8 @@ void Player::doPreStep() {
     }
     if (hyperOn)
     {
+
+        //Draw the hyper effect
         ScoreHandler::setMultiplier(2 + std::min(8.0, (currentGrazeMetre) * 0.0055));
         float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
         const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
