@@ -39,7 +39,7 @@ public:
     void doPostStep() override
     {
         SpriteParametres opts = {.i=STREETLIGHT_ENEMY, .pos=position, .l=LAYER_GROUNDED};
-        if (currentFlashDuration-- > 0 && GlobalVariables::getCurrentPhase()->getStepsElapsed() % 60 <= 30)
+        if (currentFlashDuration-- > 0 && GlobalVariables::GetCurrentPhase()->getStepsElapsed() % 60 <= 30)
             opts.col = RED;
         SpriteHandler::QueueMyAnimatedSprite(opts);
     }
@@ -56,7 +56,7 @@ public:
                 return false;
             if (position.y <= 140)
             {
-                if (GlobalVariables::getCurrentPhase()->getStepsElapsed() % 80 == 0)
+                if (GlobalVariables::GetCurrentPhase()->getStepsElapsed() % 80 == 0)
                 {
                     SoundHandler::PlaySound(BANG_1);
                     bulletPool->spawn().spawn(firingPosition, aimingDirection);
@@ -67,7 +67,7 @@ public:
                     aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
                     bulletPool->spawn().spawn(firingPosition, aimingDirection);
                     aimingDirection = Vector2Rotate(aimingDirection, 0.25 * PI);
-                } else if (GlobalVariables::getCurrentPhase()->getStepsElapsed() % 80 == 30)
+                } else if (GlobalVariables::GetCurrentPhase()->getStepsElapsed() % 80 == 30)
                 {
                     SoundHandler::PlaySound(BANG_2);
                     bulletPool->spawn().spawn(position, aimingDirection, color2);

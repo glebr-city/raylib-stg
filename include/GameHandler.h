@@ -18,6 +18,7 @@ class GameHandler {
     static bool shouldRestartGame;
     static bool shouldSwitchPhase;
     static PHASES desiredPhase;
+    static uint_fast8_t desiredStage;
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
@@ -32,15 +33,15 @@ private:
         PlayerHandler::GetPlayer().get()->reset(Vector2 {60, 140});
         hitsTaken = 0;
         SpawnedEnemies::clear();
-        GlobalVariables::setGrazeMetre(0);
+        GlobalVariables::SetGrazeMetre(0);
         ScoreItemHandler::clear();
         ScoreHandler::resetScore();
         HUDHandler::endBoss();
-        GlobalVariables::setCurrentPhase(desiredPhase);
-        BackgroundHandler::SetBackgroundPosition(GlobalVariables::getCurrentPhase()->getDefaultBackgroundPosition());
-        BackgroundHandler::SetBackgroundSprite(GlobalVariables::getCurrentPhase()->getDefaultBackgroundSprite());
-        BackgroundHandler::SetScrollVector(GlobalVariables::getCurrentPhase()->getDefaultScrollVector());
-        GlobalVariables::getCurrentPhase()->InitPhase();
+        GlobalVariables::SetCurrentPhase(desiredPhase);
+        BackgroundHandler::SetBackgroundPosition(GlobalVariables::GetCurrentPhase()->getDefaultBackgroundPosition());
+        BackgroundHandler::SetBackgroundSprite(GlobalVariables::GetCurrentPhase()->getDefaultBackgroundSprite());
+        BackgroundHandler::SetScrollVector(GlobalVariables::GetCurrentPhase()->getDefaultScrollVector());
+        GlobalVariables::GetCurrentPhase()->InitPhase();
     }
     static void actuallySwitchPhase()
     {
@@ -54,30 +55,24 @@ private:
             if (pools->at(i).use_count() <= 1 && pools->at(i)->getNumActive() == 0)
                 GlobalPools::RemoveAt(i);
         }
-        GlobalVariables::setCurrentPhase(desiredPhase);
-        GlobalVariables::getCurrentPhase()->InitPhase();
+        GlobalVariables::SetCurrentPhase(desiredPhase);
+        GlobalVariables::GetCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const PHASES _desiredPhase = DIAGONAL_TANKS) {
-        desiredPhase = _desiredPhase;
-        PauseHandler::SetPause(false);
-        shouldRestartGame = true;
-    }
-    static void RestartGame(const uint_fast8_t _desiredPhase) {
-        desiredPhase = static_cast<PHASES>(_desiredPhase);
+    static void RestartGame(const uint_fast8_t _desiredStage = 0, const uint_fast8_t _desiredPhaseIndex = 0) {
+        desiredStage = _desiredStage;
+        GlobalVariables::SetCurrentStage(_desiredStage);
+        desiredPhase = GlobalVariables::GetCurrentStage()->GetPhase(_desiredPhaseIndex);
         PauseHandler::SetPause(false);
         shouldRestartGame = true;
     }
 
-    static void SwitchPhase(const PHASES _desiredPhase = DIAGONAL_TANKS)
+    static void SwitchPhase(const uint_fast8_t _desiredStage, const uint_fast8_t _desiredPhaseIndex)
     {
         shouldSwitchPhase = true;
-        desiredPhase = _desiredPhase;
-    }
-
-    static void SwitchPhase(const uint_fast8_t _desiredPhase)
-    {
-        SwitchPhase(static_cast<PHASES>(_desiredPhase));
+        GlobalVariables::SetCurrentStage(_desiredStage);
+        desiredPhase = GlobalVariables::GetCurrentStage()->GetPhase(_desiredPhaseIndex);
+        desiredStage = _desiredStage;
     }
 
     static void doPreStep() {
@@ -91,7 +86,7 @@ public:
        PlayerHandler::GetPlayer().get()->doPreStep();
         SpawnedEnemies::doPreStep();
         GlobalPools::doPreStep();
-        GlobalVariables::getCurrentPhase()->doPreStep();
+        GlobalVariables::GetCurrentPhase()->doPreStep();
     }
 
     static void HandleHUD() //Hacky for this to be here, but it's fine.
@@ -106,10 +101,10 @@ public:
         PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics();
         EphemeraHandler::doPhysics();
-        if (GlobalVariables::getCurrentPhase()->CanSpawnBullets())
+        if (GlobalVariables::GetCurrentPhase()->CanSpawnBullets())
             GlobalPools::doPhysics();
-        GlobalVariables::getCurrentPhase()->doPhysics();
-        GlobalVariables::getCurrentPhase()->tickStep();
+        GlobalVariables::GetCurrentPhase()->doPhysics();
+        GlobalVariables::GetCurrentPhase()->tickStep();
         PlayerHandler::GetPlayer().get()->doPhysics();
     }
 
@@ -122,19 +117,22 @@ public:
 
     static void NextPhase(const bool _restart = false)
     {
-        const int nextPhaseIndex = static_cast<PHASES>(static_cast<int>(desiredPhase) + 1);
-        if (nextPhaseIndex >= PHASE_COUNT)
+        int nextPhaseIndex = GlobalVariables::GetCurrentPhaseIndex() + 1;
+        auto currentStage = GlobalVariables::GetCurrentStage();
+        if (nextPhaseIndex >= currentStage->GetPhaseCount())
         {
+            GlobalVariables::NextStage();
+            nextPhaseIndex = 0;
             if (_restart)
-                RestartGame(0);
+                RestartGame(0, 0);
             else
-                SwitchPhase(nextPhaseIndex);
+                SwitchPhase(GlobalVariables::GetCurrentStageIndex(), nextPhaseIndex);
             return;
         }
         if (_restart)
-            RestartGame(nextPhaseIndex);
+            RestartGame(GlobalVariables::GetCurrentStageIndex(), nextPhaseIndex);
         else
-            SwitchPhase(nextPhaseIndex);
+            SwitchPhase(GlobalVariables::GetCurrentStageIndex(), nextPhaseIndex);
     }
 };
 #endif //RAYLIB_STG_GAMEHANDLER_H

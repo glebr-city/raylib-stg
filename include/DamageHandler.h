@@ -27,7 +27,7 @@ private:
         stepHit = GlobalVariables::currentStep();
         hitsTaken++;
         PlayerHandler::GetPlayer()->getHit();
-        GlobalVariables::getCurrentPhase()->hitPlayer();
+        GlobalVariables::GetCurrentPhase()->hitPlayer();
     }
 
     static int getHitsTaken() {

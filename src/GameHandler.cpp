@@ -8,3 +8,4 @@
 bool GameHandler::shouldRestartGame = false;
 bool GameHandler::shouldSwitchPhase = false;
 PHASES GameHandler::desiredPhase = DIAGONAL_TANKS;
+uint_fast8_t GameHandler::desiredStage = 0;

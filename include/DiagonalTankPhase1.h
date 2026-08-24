@@ -81,11 +81,11 @@ public:
 
         else if (stepsElapsed >= 1200 && switchEarly)
         {
-            GameHandler::SwitchPhase(PHASE_2);
+            GameHandler::NextPhase();
         }
 
         else if (stepsElapsed == 1460)
-            GameHandler::SwitchPhase(PHASE_2);
+            GameHandler::NextPhase();
         return PhaseHelper::doPhysics();
     };
 
@@ -148,7 +148,7 @@ public:
         case 5:
             if (stepsElapsed >= 1200)
             {
-                GameHandler::SwitchPhase(PHASE_2);
+                GameHandler::NextPhase();
             }
             break;
         case 6:

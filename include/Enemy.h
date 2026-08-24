@@ -124,12 +124,12 @@ public:
     void die()
     {
         ScoreHandler::addScore(scoreValue);
-        GlobalVariables::getCurrentPhase()->enemyKilled(id);
+        GlobalVariables::GetCurrentPhase()->enemyKilled(id);
     }
 
     virtual void despawn()
     {
-        //GlobalVariables::getCurrentPhase()->enemyDespawned(id);
+        //GlobalVariables::GetCurrentPhase()->enemyDespawned(id);
     }
 
      [[nodiscard]] u_int GetID() const

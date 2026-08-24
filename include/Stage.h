@@ -25,6 +25,11 @@ public:
                 return phaseList;
         }
 
+        [[nodiscard]] PHASES GetPhase(const int _index) const
+        {
+                return phaseList[_index];
+        }
+
         [[nodiscard]] size_t GetPhaseCount() const
         {
                 return phaseCount;

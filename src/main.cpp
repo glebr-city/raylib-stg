@@ -70,12 +70,12 @@ void doDrawing()
     const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
     const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
     std::stringstream ss;
-    ss << GlobalVariables::getCurrentPhase()->getPhaseName()
+    ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
     << "\nFPS: " << GetFPS()
-    << "\nBullet Count: " << GlobalVariables::getCurrentPhase()->getNumActive()
-    << " \nSteps Elapsed: " << GlobalVariables::getCurrentPhase()->getStepsElapsed()
+    << "\nBullet Count: " << GlobalVariables::GetCurrentPhase()->getNumActive()
+    << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
     << "\nCurrent Graze: \n"
-    << GlobalVariables::getGrazeMetre()
+    << GlobalVariables::GetGrazeMetre()
     << " \nStage Coordinates: (" <<
         std::fixed << std::setprecision(2)
     << backgroundPos.x << "," << backgroundPos.y << ")"

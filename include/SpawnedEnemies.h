@@ -31,7 +31,7 @@ public:
             const Vector2 _pos = _enemy->GetPosition();
             EphemeraHandler::Spawn(_pos, _enemyDeathInfo->t, _enemyDeathInfo->l);
             spawnedEnemies.erase(spawnedEnemies.begin() + e);
-            GlobalVariables::getCurrentPhase()->enemyDespawned(_enemy->GetID());
+            GlobalVariables::GetCurrentPhase()->enemyDespawned(_enemy->GetID());
         }
     }
     static void spawnEnemy(std::shared_ptr<Enemy> _enemy) { //Add an enemy to the vector.

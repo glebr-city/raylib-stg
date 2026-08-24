@@ -27,25 +27,49 @@ class GlobalVariables {
 protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
     static const std::array<PhaseRef, PHASE_COUNT> phases;
-    static const std::array<Stage, 2> stages;
+    static const std::array<std::shared_ptr<Stage>, 2> stages;
+    static int currentStageIndex;
+    static int currentPhaseIndex; //Within the current stage!
     static RenderTexture2D renderTexture;
     static int renderTextureFilter;
     static int effectVolume;
     static int screenRotation;
     static int zoomFactor;
+
+    static void setCurrentPhase(const PHASES _desiredPhase)
+    {
+        PhaseHelper* newPhase = GetPhase(_desiredPhase).initPhase();
+        currentPhase = std::unique_ptr<PhaseHelper>(newPhase);
+    }
 public:
 
     //static std::array<PhaseRef, 2> getPhaseList(){return {};};
 
 
-    static PhaseRef getPhase(const PHASES _index);
+    static PhaseRef GetPhase(const PHASES _index);
+
+
+    static void SetCurrentPhase(const uint8_t _desiredPhaseIndex)
+    {
+        currentPhaseIndex = _desiredPhaseIndex;
+        setCurrentPhase(stages.at(currentStageIndex)->GetPhase(_desiredPhaseIndex));
+    }
 
     static std::uint_fast32_t& currentStep();
 
-    static void setCurrentPhase(const PHASES _desiredPhase);
+    static void NextPhase()
+    {
+        currentPhaseIndex++;
+        setCurrentPhase(stages.at(currentStageIndex)->GetPhase(currentPhaseIndex));
+    }
 
-    static PhaseHelper *getCurrentPhase() {
+    static PhaseHelper *GetCurrentPhase() {
         return currentPhase.get();
+    }
+
+    static int GetCurrentPhaseIndex()
+    {
+        return currentPhaseIndex;
     }
 
     static void DestroyCurrentPhase()
@@ -54,11 +78,33 @@ public:
         currentPhase.release();
     }
 
-    static int getGrazeMetre() {
+    static void SetCurrentStage(const int _desiredStageIndex)
+    {
+        currentStageIndex = _desiredStageIndex;
+    }
+
+    static void NextStage() //Increments current stage and switches to its first phase.
+    {
+        currentStageIndex++;
+        currentPhaseIndex = 0;
+        DestroyCurrentPhase();
+        setCurrentPhase(stages.at(currentStageIndex)->GetPhase(0));
+    }
+
+    static int GetCurrentStageIndex()
+    {
+        return currentStageIndex;
+    }
+
+    static std::shared_ptr<Stage> GetCurrentStage() {
+        return stages.at(currentStageIndex);
+    }
+
+    static int GetGrazeMetre() {
         return currentGrazeMetre;
     }
 
-    static void setGrazeMetre(int i) {
+    static void SetGrazeMetre(int i) {
         currentGrazeMetre = i;
     }
 

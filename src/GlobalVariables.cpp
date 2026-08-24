@@ -19,6 +19,8 @@ int GlobalVariables::renderTextureFilter = 0;
 int GlobalVariables::effectVolume = 100;
 int GlobalVariables::screenRotation = 0;
 int GlobalVariables::zoomFactor = 1;
+int GlobalVariables::currentStageIndex = 0;
+int GlobalVariables::currentPhaseIndex = 0;
 const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new DiagonalTankPhase1(); }},
     {[]() -> PhaseHelper* { return new Phase2(); }},
@@ -29,26 +31,24 @@ const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new Boss1Phase5(); }},
     }};
 
-const std::array<Stage, 2> GlobalVariables::stages = {{
-    {"stage 1", {DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5, }},
-        {"stage 2", {DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5, }}
+const std::array<std::shared_ptr<Stage>, 2> GlobalVariables::stages = {{
+    std::make_shared<Stage>("stage 1", std::vector{DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5}),
+    std::make_shared<Stage>("stage 2", std::vector{DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5})
     }};
 
-PhaseRef GlobalVariables::getPhase(const PHASES _index)
+PhaseRef GlobalVariables::GetPhase(const PHASES _index)
 {
     return phases[_index];
 }
+
+
 
 uint_fast32_t& GlobalVariables::currentStep() {
     static uint_fast32_t currentStep = 0;
     return currentStep;
 }
 
-void GlobalVariables::setCurrentPhase(const PHASES _desiredPhase)
-{
-    PhaseHelper* newPhase = getPhase(_desiredPhase).initPhase();
-    currentPhase = std::unique_ptr<PhaseHelper>(newPhase);
-}
+
 
  /*void GlobalVariables::setCurrentPhase(std::unique_ptr<PhaseHelper> newPhase) {
     currentPhase = std::move(newPhase);

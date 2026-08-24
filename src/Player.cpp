@@ -150,8 +150,8 @@ void Player::doPreStep() {
         SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, 1}), .yOffset = static_cast<int>(-inputVector.x), .l =LAYER_PLAYER, .col = hyperGhostColour});
         SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x), .l =LAYER_PLAYER, .col = hyperGhostColour});
         SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x), .l =LAYER_PLAYER, .col = hyperGhostColour});
-        GlobalVariables::setGrazeMetre(std::max(0, GlobalVariables::getGrazeMetre() - hyperCostRate));
-        if (GlobalVariables::getGrazeMetre() <= 0)
+        GlobalVariables::SetGrazeMetre(std::max(0, GlobalVariables::GetGrazeMetre() - hyperCostRate));
+        if (GlobalVariables::GetGrazeMetre() <= 0)
             endHyper();
     }
     hyperRingRect.x = std::min(6300.0f, hyperRingRect.x + 180);
@@ -174,7 +174,7 @@ void Player::doPostStep()
     SpriteHandler::QueueMyStaticSprite({.i = PLAYER_GRAZE_RADIUS, .pos = position, .l = LAYER_PLAYER});
     const float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * 22);
     const float tempX = currentGrazeMetre >= maxGrazeMetre ? 22 : 0;
-    if (GlobalVariables::getGrazeMetre() < maxGrazeMetre)
+    if (GlobalVariables::GetGrazeMetre() < maxGrazeMetre)
         SpriteHandler::QueueMyStaticSprite({.i=PLAYER_GRAZE_FILLING, .pos=Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, .col=WHITE, .corner=true, .rect=Rectangle{tempX, 22 - tempHeight, 22, tempHeight}});
     else
         SpriteHandler::QueueMyAnimatedSprite({grazeRadiusFilledSprite, position});
@@ -184,7 +184,7 @@ void Player::doPostStep()
 void Player::startHyper() {
     currentHyperRingColour = WHITE;
     hyperRingRect.x = 0;
-    GlobalVariables::getCurrentPhase()->cancelBullets();
+    GlobalVariables::GetCurrentPhase()->cancelBullets();
     SoundHandler::StopSound(PLAYER_HYPER_3, 0);
     SoundHandler::PlaySound(0, PLAYER_HYPER_1, false);
     hyperOn = true;
@@ -192,11 +192,11 @@ void Player::startHyper() {
 
 void Player::endHyper() {
     hyperRingRect.x = 0;
-    GlobalVariables::getCurrentPhase()->cancelBullets();
+    GlobalVariables::GetCurrentPhase()->cancelBullets();
     hyperOn = false;
     SoundHandler::StopSound(PLAYER_HYPER_1, 0);
     SoundHandler::PlaySound(0, PLAYER_HYPER_2, false);
-    GlobalVariables::setGrazeMetre(0);
+    GlobalVariables::SetGrazeMetre(0);
     ScoreHandler::setMultiplier(1);
 }
 
@@ -208,7 +208,7 @@ void Player::getHit() {
     }
     SoundHandler::PlaySound(PLAYER_HIT);
     hyperOn = false;
-    GlobalVariables::setGrazeMetre(0);
+    GlobalVariables::SetGrazeMetre(0);
     ScoreHandler::setMultiplier(1);
     currentHyperRingColour = RED;
     hyperRingRect.x = 0;
