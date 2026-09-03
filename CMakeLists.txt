@@ -84,6 +84,8 @@ add_executable(raylib_stg src/main.cpp
         include/KeyNameDictionary.h
         include/MenuList.h
         include/Stage.h
+        include/MainLoopHandler.h
+        src/MainLoopHandler.cpp
 )
 
 target_sources(raylib_stg
