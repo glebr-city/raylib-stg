@@ -35,6 +35,7 @@ protected:
     static int effectVolume;
     static int screenRotation;
     static int zoomFactor;
+    static int titleCardStepsRemaining;
 
     static void setCurrentPhase(const PHASES _desiredPhase)
     {
@@ -197,6 +198,21 @@ public:
     static int* GetZoomFactor()
     {
         return &zoomFactor;
+    }
+
+    static int GetTitleCardStepsRemaining()
+    {
+        return titleCardStepsRemaining;
+    }
+
+    static void DecrementTitleCardStepsRemaining()
+    {
+        titleCardStepsRemaining--;
+    }
+
+    static void SetTitleCardStepsRemaining(const int _stepsRemaining)
+    {
+        titleCardStepsRemaining = _stepsRemaining;
     }
 };
 

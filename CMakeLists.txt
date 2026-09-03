@@ -86,6 +86,9 @@ add_executable(raylib_stg src/main.cpp
         include/Stage.h
         include/MainLoopHandler.h
         src/MainLoopHandler.cpp
+        include/MainLoop.h
+        include/CurrentMainLoopHolder.h
+        include/OtherMainLoops.h
 )
 
 target_sources(raylib_stg

@@ -119,14 +119,19 @@ public:
     {
         int nextPhaseIndex = GlobalVariables::GetCurrentPhaseIndex() + 1;
         auto currentStage = GlobalVariables::GetCurrentStage();
-        if (nextPhaseIndex >= currentStage->GetPhaseCount())
+        if (nextPhaseIndex >= currentStage->GetPhaseCount()) //Time to switch to the next stage!
         {
             GlobalVariables::NextStage();
             nextPhaseIndex = 0;
             if (_restart)
                 RestartGame(0, 0);
             else
+            {
+                GlobalVariables::SetTitleCardStepsRemaining(180);
+                SoundHandler::SetAllSoundPause(true);
+                CurrentMainLoopHolder::SetMainLoop(TITLE_CARD_MAIN_LOOP);
                 SwitchPhase(GlobalVariables::GetCurrentStageIndex(), nextPhaseIndex);
+            }
             return;
         }
         if (_restart)

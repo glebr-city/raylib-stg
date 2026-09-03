@@ -5,8 +5,10 @@
 #ifndef RAYLIB_STG_PAUSEHANDLER_H
 #define RAYLIB_STG_PAUSEHANDLER_H
 #include "ConfigHandler.h"
+#include "CurrentMainLoopHolder.h"
 #include "InputHandler.h"
 #include "SoundHandler.h"
+
 
 class PauseHandler
 {
@@ -23,6 +25,7 @@ private:
         }
         isPaused = _p;
         SoundHandler::SetAllSoundPause(_p);
+        CurrentMainLoopHolder::SetMainLoop(_p);
     }
 
     static void TogglePause()

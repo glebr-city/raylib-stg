@@ -9,7 +9,7 @@
 class Boss1Phase5 : public Boss1Phase1
 {
     static constexpr int PHASE_5_HEALTH = -1;
-    static constexpr int PHASE_5_TIME = 4500;
+    static constexpr int PHASE_5_TIME = 180;
     static constexpr Boss1::BOSS_1_PHASES PHASE_5_BOSS_PHASE = Boss1::PHASE_DEFEAT;
 public:
     Boss1Phase5() : Boss1Phase1(PHASE_5_HEALTH, PHASE_5_TIME, PHASE_5_BOSS_PHASE){};
@@ -24,6 +24,8 @@ public:
 
     bool doPhysics() override
     {
+        if (stepsElapsed++ >= PHASE_5_TIME)
+            GameHandler::NextPhase();
         return true;
     };
 };

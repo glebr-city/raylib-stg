@@ -21,6 +21,7 @@ int GlobalVariables::screenRotation = 0;
 int GlobalVariables::zoomFactor = 1;
 int GlobalVariables::currentStageIndex = 0;
 int GlobalVariables::currentPhaseIndex = 0;
+int GlobalVariables::titleCardStepsRemaining = 0;
 const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new DiagonalTankPhase1(); }},
     {[]() -> PhaseHelper* { return new Phase2(); }},
