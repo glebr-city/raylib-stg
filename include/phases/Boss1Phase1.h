@@ -5,10 +5,12 @@
 #ifndef RAYLIB_STG_BOSS1PHASE1_H
 #define RAYLIB_STG_BOSS1PHASE1_H
 
-#include "BackgroundHandler.h"
-#include "Boss1.h"
-#include "GameHandler.h"
-#include "PhaseHelper.h"
+#include <utility>
+
+#include "../BackgroundHandler.h"
+#include "../Boss1.h"
+#include "../GameHandler.h"
+#include "../PhaseHelper.h"
 
 class Boss1Phase1 : public PhaseHelper
 {
@@ -43,7 +45,7 @@ private:
         SpawnedEnemies::spawnEnemy(boss1);
     }
 public:
-    explicit Boss1Phase1(const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss1::BOSS_1_PHASES _bossPhase = PHASE_1_BOSS_PHASE)
+    explicit Boss1Phase1(std::string _phaseName = "Boss1Phase1", const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss1::BOSS_1_PHASES _bossPhase = PHASE_1_BOSS_PHASE) : PhaseHelper(std::move(_phaseName))
     {
         maxHealth = _maxHealth;
         maxTimer = _maxTimer;
@@ -93,6 +95,6 @@ public:
     void enemyDespawned(u_int _id) override{};
 };
 
-#include "SpawnedEnemies.h"
+#include "../SpawnedEnemies.h"
 
 #endif //RAYLIB_STG_BOSS1PHASE1_H

@@ -29,6 +29,7 @@ typedef enum {
     BIG_ENEMY_1,
     STREETLIGHT_ENEMY,
     SPEAR_1,
+    ENEMY_1_2,
 
     ANIMATED_SPRITE_COUNT,
 } ANIMATED_SPRITES;

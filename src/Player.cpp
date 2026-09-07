@@ -36,7 +36,7 @@ Rectangle hyperRingRect = {6300, 0, 180, 180};
 auto currentHyperRingColour = WHITE; //Using the same effect for Hyper and for taking damage.
 ANIMATED_SPRITES grazeRadiusFilledSprite = PLAYER_GRAZE_FILLED;
 ANIMATED_SPRITES hyperAuraSprite = PLAYER_HYPER_AURA;
-const int hyperCostRate = 3; //How much graze metre to lose on every step in Hyper Mode.
+constexpr int hyperCostRate = 7; //How much graze metre to lose on every SECOND step in Hyper Mode.
 bool hyperOn = false;
 
 Player::Player(const Vector2 pos) {
@@ -136,7 +136,7 @@ void Player::doPreStep() {
     {
 
         //Draw the hyper effect
-        ScoreHandler::setMultiplier(2 + std::min(8.0, (currentGrazeMetre) * 0.0055));
+        ScoreHandler::setMultiplier(1 + std::min(9.0, (currentGrazeMetre) * 0.0055));
         float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
         const unsigned char tempAlpha = static_cast<char>(std::max(static_cast<float>(0), 255 - static_cast<float>(GlobalVariables::currentStep() % 31) * 8));
         const Color hyperGhostColour = {200, 200, 0, tempAlpha};
@@ -150,7 +150,8 @@ void Player::doPreStep() {
         SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, 1}), .yOffset = static_cast<int>(-inputVector.x), .l =LAYER_PLAYER, .col = hyperGhostColour});
         SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x), .l =LAYER_PLAYER, .col = hyperGhostColour});
         SpriteHandler::QueueMyAnimatedSprite({.i = PLAYER, .pos = Vector2Add(position, {-xOffset, xOffset}), .yOffset = static_cast<int>(-inputVector.x), .l =LAYER_PLAYER, .col = hyperGhostColour});
-        GlobalVariables::SetGrazeMetre(std::max(0, GlobalVariables::GetGrazeMetre() - hyperCostRate));
+        if (GlobalVariables::currentStep() % 2 == 0)
+            GlobalVariables::SetGrazeMetre(std::max(0, GlobalVariables::GetGrazeMetre() - hyperCostRate));
         if (GlobalVariables::GetGrazeMetre() <= 0)
             endHyper();
     }

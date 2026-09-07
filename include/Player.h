@@ -20,7 +20,7 @@ private:
 public:
     Player(Vector2 pos);
 
-    void reset(Vector2 pos);
+    void reset(const Vector2 pos = {60, 140});
 
     void doPreStep() override;
 

@@ -4,11 +4,11 @@
 
 #ifndef RAYLIB_STG_PHASE2_H
 #define RAYLIB_STG_PHASE2_H
-#include "Enemy1.h"
-#include "PhaseHelper.h"
-#include "SimpleBullet2.h"
-#include "SpawnedEnemies.h"
-#include "StreetlightEnemy.h"
+#include "../Enemy1.h"
+#include "../PhaseHelper.h"
+#include "../SimpleBullet2.h"
+#include "../SpawnedEnemies.h"
+#include "../StreetlightEnemy.h"
 
 class Phase2 : public PhaseHelper
 {
@@ -20,9 +20,8 @@ private:
     bool bigEnemySpawned = false;
     bool extraBigEnemyAlive = false;
 public:
-    Phase2() : PhaseHelper({0, -240}, {0, -0.2f}, DIAGONAL_TANK_BACKGROUND)
+    Phase2() : PhaseHelper("Phase2", {0, -240}, {0, -0.2f}, DIAGONAL_TANK_BACKGROUND)
     {
-        phaseName = "Phase2";
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30);
         streetlightBulletPool = std::make_shared<PoolingVector<SimpleBullet1Fast>>(60);
         bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(100);

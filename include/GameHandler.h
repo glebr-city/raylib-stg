@@ -32,9 +32,10 @@ private:
         GlobalPools::Clear();
         PlayerHandler::GetPlayer().get()->reset(Vector2 {60, 140});
         hitsTaken = 0;
-        SpawnedEnemies::clear();
+        SpawnedEnemies::Clear();
         GlobalVariables::SetGrazeMetre(0);
         ScoreItemHandler::clear();
+        EphemeraHandler::Clear();
         ScoreHandler::resetScore();
         HUDHandler::endBoss();
         GlobalVariables::SetCurrentPhase(desiredPhase);
@@ -59,7 +60,7 @@ private:
         GlobalVariables::GetCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const uint_fast8_t _desiredStage = 0, const uint_fast8_t _desiredPhaseIndex = 0) {
+    static void RestartGame(const uint_fast8_t _desiredStage = 1, const uint_fast8_t _desiredPhaseIndex = 0) {
         desiredStage = _desiredStage;
         GlobalVariables::SetCurrentStage(_desiredStage);
         desiredPhase = GlobalVariables::GetCurrentStage()->GetPhase(_desiredPhaseIndex);
@@ -83,7 +84,7 @@ public:
         ScoreItemHandler::doPreStep();
         EphemeraHandler::doPreStep();
         PlayerBullets::getPlayerBullets()->doPreStep();
-       PlayerHandler::GetPlayer().get()->doPreStep();
+        PlayerHandler::GetPlayer().get()->doPreStep();
         SpawnedEnemies::doPreStep();
         GlobalPools::doPreStep();
         GlobalVariables::GetCurrentPhase()->doPreStep();
@@ -123,8 +124,9 @@ public:
         {
             GlobalVariables::NextStage();
             nextPhaseIndex = 0;
+            desiredPhase = GlobalVariables::GetCurrentStage()->GetPhase(nextPhaseIndex);
             if (_restart)
-                RestartGame(0, 0);
+                RestartGame(GlobalVariables::GetCurrentStageIndex(), nextPhaseIndex);
             else
             {
                 GlobalVariables::SetTitleCardStepsRemaining(180);

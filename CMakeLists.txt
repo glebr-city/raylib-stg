@@ -17,7 +17,7 @@ add_executable(raylib_stg src/main.cpp
         include/PoolingVector.h
         include/PhaseHelper.h
         src/TestPhase1.cpp
-        include/TestPhase1.h
+        include/phases/TestPhase1.h
         include/DamageHandler.h
         src/GlobalVariables.cpp
         include/PlayerBullet.h
@@ -27,7 +27,7 @@ add_executable(raylib_stg src/main.cpp
         include/Enemy.h
         include/SpawnedEnemies.h
         src/SpawnedEnemies.cpp
-        include/TestPhase2.h
+        include/phases/TestPhase2.h
         include/OrbEnemy1.h
         include/ScoreItem.h
         include/Spawnable.h
@@ -42,7 +42,7 @@ add_executable(raylib_stg src/main.cpp
         src/DamageHandler.cpp
         include/GameHandler.h
         src/GameHandler.cpp
-        include/DiagonalTankPhase1.h
+        include/phases/DiagonalTankPhase1.h
         include/DiagonalTank.h
         include/Enemy1.h
         include/RNGHandler.h
@@ -54,24 +54,24 @@ add_executable(raylib_stg src/main.cpp
         src/GlobalPools.cpp
         include/BackgroundHandler.h
         src/BackgroundHandler.cpp
-        include/Phase2.h
+        include/phases/Phase2.h
         include/PlayerHandler.h
         src/PlayerHandler.cpp
         include/StreetlightEnemy.h
         include/SimpleBullet1Fast.h
         include/Boss.h
-        include/Boss1Phase1.h
+        include/phases/Boss1Phase1.h
         include/Boss1.h
         include/Boss1SmallBullet.h
-        include/Boss1Phase2.h
-        include/Boss1Phase3.h
-        include/Boss1Phase4.h
+        include/phases/Boss1Phase2.h
+        include/phases/Boss1Phase3.h
+        include/phases/Boss1Phase4.h
         include/Boss1FastBurstBullet.h
         include/SimpleBullet1Slow.h
         include/EphemeraHandler.h
         include/Ephemera.h
         src/EphemeraHandler.cpp
-        include/Boss1Phase5.h
+        include/phases/Boss1Phase5.h
         include/MenuHandler.h
         include/PauseHandler.h
         src/PauseHandler.cpp
@@ -89,6 +89,10 @@ add_executable(raylib_stg src/main.cpp
         include/MainLoop.h
         include/CurrentMainLoopHolder.h
         include/OtherMainLoops.h
+        include/phases/Stage2Phase1.h
+        include/Enemy1_2.h
+        include/Enemy1_2Bullet1.h
+        include/Enemy1_2Bullet2.h
 )
 
 target_sources(raylib_stg

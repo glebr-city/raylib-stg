@@ -4,9 +4,9 @@
 
 #ifndef RAYLIB_STG_TESTPHASE2_H
 #define RAYLIB_STG_TESTPHASE2_H
-#include "OrbEnemy1.h"
-#include "PhaseHelper.h"
-#include "SpawnedEnemies.h"
+#include "../OrbEnemy1.h"
+#include "../PhaseHelper.h"
+#include "../SpawnedEnemies.h"
 
 class TestPhase2 : public PhaseHelper {
 private:

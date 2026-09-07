@@ -54,5 +54,10 @@ public:
         }
         spawnedEphemerae.emplace_back(std::move(e));
     };
+
+    static void Clear()
+    {
+        spawnedEphemerae.clear();
+    }
 };
 #endif //RAYLIB_STG_EPHEMERAHANDLER_H

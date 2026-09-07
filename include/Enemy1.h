@@ -3,6 +3,7 @@
 //
 
 #ifndef RAYLIB_STG_ENEMY1_H
+#define RAYLIB_STG_ENEMY1_H
 #include "Enemy.h"
 #include "SimpleBullet2.h"
 #include "SoundHandler.h"
@@ -14,13 +15,14 @@ struct Enemy1State //Enemy1 can only do a few things, and all of them can be spe
     u_int duration = 0; // State will end after this many ticks if > 0 .
     u_int fireRate = 0; // No. of ticks between shots; 0 to not shoot.
     bool despawn = false; // Despawn after completing this state?
+    bool slowAtDesiredPos = true; //Should the enemy slow down between states?
 };
 
 class Enemy1 : public Enemy
 {
 private:
-    std::shared_ptr<PoolingVector<SimpleBullet2>> bulletPool;
 protected:
+    std::shared_ptr<PoolingVector<SimpleBullet2>> bulletPool;
     static inline const ANIMATED_SPRITES sprite = ENEMY_1;
     u_int elapsedSteps;
     std::vector<Enemy1State> stateVector;
@@ -71,14 +73,28 @@ public:
         const Enemy1State currentState = stateVector[currentStateIndex];
         if (++elapsedStepsInState == currentState.duration)
             return enterNewState(currentStateIndex + 1);
-        if (Vector2DistanceSqr(position, currentState.desiredPos) < (currentState.speed / 4) * (currentState.speed / 4))
+        if (currentState.slowAtDesiredPos)
         {
-            currentSpeed = std::clamp(currentSpeed - currentState.speed / 60, 0.0f, currentState.speed);
-            if (currentSpeed == 0.0f) //Done moving, now enter the new state!
+            if (Vector2DistanceSqr(position, currentState.desiredPos) < (currentState.speed / 4) * (currentState.speed / 4))
+            {
+                currentSpeed = std::clamp(currentSpeed - currentState.speed / 60, 0.0f, currentState.speed);
+                if (currentSpeed == 0.0f) //Done moving, now enter the new state!
+                    return enterNewState(currentStateIndex + 1);
+            }
+            else if (currentSpeed < currentState.speed)
+                currentSpeed = currentSpeed + currentState.speed / 60;
+        } else
+        {
+            if (currentSpeed < currentState.speed)
+                currentSpeed = std::clamp(currentSpeed + currentState.speed / 60, 0.0f, currentState.speed);
+            else if (currentSpeed > currentState.speed)
+                currentSpeed = std::clamp(currentSpeed - currentState.speed / 60, 0.0f, currentState.speed);
+            if (Vector2DistanceSqr(position, currentState.desiredPos) <= (currentState.speed / 120) * (currentState.speed / 120))
+            {
+                position = currentState.desiredPos;
                 return enterNewState(currentStateIndex + 1);
+            }
         }
-        else if (currentSpeed < currentState.speed)
-            currentSpeed = currentSpeed + currentState.speed / 60;
         position = Vector2MoveTowards(position, currentState.desiredPos, currentSpeed / 120);
         collider.x = position.x - collider.width / 2;
         collider.y = position.y - collider.height / 2;
@@ -90,15 +106,16 @@ public:
     {
         if (stateVector[currentStateIndex].despawn)
             return false;
+        if (stateVector[currentStateIndex].slowAtDesiredPos)
+            currentSpeed = 0;
         elapsedStepsInState = 0;
         if (newStateIndex < stateVector.size())
             currentStateIndex = newStateIndex;
         else
             currentStateIndex = 0;
-        currentSpeed = 0;
         return true;
     }
 };
-#define RAYLIB_STG_ENEMY1_H
+
 
 #endif //RAYLIB_STG_ENEMY1_H

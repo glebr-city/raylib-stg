@@ -2,14 +2,13 @@
 // Created by g on 08/02/2026.
 //
 
-#include "../include/TestPhase1.h"
+#include "../include/phases/TestPhase1.h"
 
 
 #include "BackgroundHandler.h"
 #include "GlobalVariables.h"
 
-TestPhase1::TestPhase1() : PhaseHelper({0, 0.2f}) {
-    phaseName = "TestPhase1";
+TestPhase1::TestPhase1() : PhaseHelper("TestPhase1", {0, 0.2f}) {
     movingDarkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
     darkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
     GlobalPools::AddPools({movingDarkPurplePool, darkPurplePool});

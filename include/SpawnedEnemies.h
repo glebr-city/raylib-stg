@@ -42,7 +42,7 @@ public:
         return &spawnedEnemies;
     }
 
-    static void clear() {
+    static void Clear() {
         spawnedEnemies.clear();
     }
 

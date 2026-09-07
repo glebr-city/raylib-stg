@@ -52,8 +52,15 @@ public:
 
     static void SetCurrentPhase(const uint8_t _desiredPhaseIndex)
     {
-        currentPhaseIndex = _desiredPhaseIndex;
-        setCurrentPhase(stages.at(currentStageIndex)->GetPhase(_desiredPhaseIndex));
+        size_t i = _desiredPhaseIndex;
+        int j = 0;
+        while (i >= stages.at(j)->GetPhaseCount())
+        {
+            i -= stages.at(j)->GetPhaseCount();
+            j++;
+        }
+        currentPhaseIndex = static_cast<int>(i);
+        setCurrentPhase(stages.at(currentStageIndex)->GetPhase(static_cast<int>(i)));
     }
 
     static std::uint_fast32_t& currentStep();

@@ -40,7 +40,7 @@ protected:
         position = _position;
     }
     void doPreStep() override {
-        SpriteHandler::QueueMyAnimatedSprite({SCORE_ITEM, position, valueSprite});
+        SpriteHandler::QueueMyAnimatedSprite({SCORE_ITEM, position, valueSprite, LAYER_ENEMY});
     }
 
     bool doPhysics() override {

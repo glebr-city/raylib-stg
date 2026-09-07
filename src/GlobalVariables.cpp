@@ -4,14 +4,15 @@
 
 #include "GlobalVariables.h"
 
-#include "Boss1Phase1.h"
-#include "Boss1Phase2.h"
-#include "Boss1Phase3.h"
-#include "Boss1Phase4.h"
-#include "Boss1Phase5.h"
-#include "DiagonalTankPhase1.h"
-#include "Phase2.h"
+#include "../include/phases/Boss1Phase1.h"
+#include "phases/Boss1Phase2.h"
+#include "phases/Boss1Phase3.h"
+#include "phases/Boss1Phase4.h"
+#include "phases/Boss1Phase5.h"
+#include "phases/DiagonalTankPhase1.h"
+#include "../include/phases/Phase2.h"
 #include "PhaseHelper.h"
+#include "phases/Stage2Phase1.h"
 
 std::unique_ptr<PhaseHelper> GlobalVariables::currentPhase = nullptr;
 RenderTexture2D GlobalVariables::renderTexture = {};
@@ -30,11 +31,12 @@ const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new Boss1Phase3(); }},
     {[]() -> PhaseHelper* { return new Boss1Phase4(); }},
     {[]() -> PhaseHelper* { return new Boss1Phase5(); }},
+{[]() -> PhaseHelper* { return new Stage2Phase1(); }},
     }};
 
 const std::array<std::shared_ptr<Stage>, 2> GlobalVariables::stages = {{
     std::make_shared<Stage>("stage 1", std::vector{DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5}),
-    std::make_shared<Stage>("stage 2", std::vector{DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4, BOSS_1_PHASE_5})
+    std::make_shared<Stage>("stage 2", std::vector{STAGE_2_PHASE_1})
     }};
 
 PhaseRef GlobalVariables::GetPhase(const PHASES _index)

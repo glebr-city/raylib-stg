@@ -4,10 +4,10 @@
 
 #ifndef RAYLIB_STG_TESTPHASE1_H
 #define RAYLIB_STG_TESTPHASE1_H
-#include "PhaseHelper.h"
-#include "PoolingVector.h"
-#include "SimpleBullet1.h"
-#include "SimpleBullet2.h"
+#include "../PhaseHelper.h"
+#include "../PoolingVector.h"
+#include "../SimpleBullet1.h"
+#include "../SimpleBullet2.h"
 
 
 class TestPhase1 : public PhaseHelper {

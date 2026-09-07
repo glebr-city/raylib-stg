@@ -5,6 +5,7 @@
 #ifndef RAYLIB_STG_PHASEHELPER_H
 #define RAYLIB_STG_PHASEHELPER_H
 #include <array>
+#include <utility>
 
 #include "GlobalPools.h"
 #include "Player.h"
@@ -21,13 +22,14 @@ typedef enum {
     BOSS_1_PHASE_3,
     BOSS_1_PHASE_4,
     BOSS_1_PHASE_5,
+    STAGE_2_PHASE_1,
 
     PHASE_COUNT
 } PHASES;
 
 class PhaseHelper : public StepThinker {
     protected:
-        std::string phaseName = "Unnamed Phase"; //Phase name. For debug purposes?
+        const std::string phaseName; //Phase name. For debug purposes?
         bool playerHit = false;
         int currentWaitSteps = 0; //Don't spawn bullets for a while after a hyper.
         STATIC_SPRITES defaultBackgroundSprite = DEFAULT_BACKGROUND; //Used when starting from a specific stage.
@@ -36,7 +38,7 @@ class PhaseHelper : public StepThinker {
         u_int stepsElapsed = 0;
 
     public:
-        PhaseHelper(const Vector2 _defaultBackgroundPosition = {}, const Vector2 _defaultScrollVector = {}, const STATIC_SPRITES _defaultBackgroundSprite = DEFAULT_BACKGROUND)
+        PhaseHelper(std::string _phaseName = "Unnamed Phase", const Vector2 _defaultBackgroundPosition = {}, const Vector2 _defaultScrollVector = {}, const STATIC_SPRITES _defaultBackgroundSprite = DEFAULT_BACKGROUND) : phaseName(std::move(_phaseName))
         {
             defaultBackgroundPosition = _defaultBackgroundPosition;
             defaultScrollVector = _defaultScrollVector;
