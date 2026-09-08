@@ -7,16 +7,16 @@
 //
 // Created by n on 07/09/2026.
 //
-
-#ifndef RAYLIB_STG_ENEMY1_2BULLET1_H
-#define RAYLIB_STG_ENEMY1_2BULLET1_H
 #include "SimpleBullet2.h"
 
 class Enemy1_2Bullet2 : public SimpleBullet2
 {
 protected:
-    static constexpr float speed = 1;
+    static constexpr float speed = 1.5f;
 public:
+    Enemy1_2Bullet2() : SimpleBullet2({}, {}, PINK)
+    {
+    }
     bool doPhysics() override
     {
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {
@@ -30,5 +30,4 @@ public:
         return true;
     }
 };
-#endif //RAYLIB_STG_ENEMY1_2BULLET1_H
 #endif //RAYLIB_STG_ENEMY1_2BULLET2_H

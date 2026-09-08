@@ -93,7 +93,7 @@ public:
 
     static void NextStage() //Increments current stage and switches to its first phase.
     {
-        currentStageIndex++;
+        currentStageIndex = (currentStageIndex + 1) % stages.size();
         currentPhaseIndex = 0;
         DestroyCurrentPhase();
         setCurrentPhase(stages.at(currentStageIndex)->GetPhase(0));

@@ -13,7 +13,7 @@ public:
 
     void doPreStep() override{};
 
-    SimpleBullet2(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = YELLOW) : SimpleBullet(grazeValue, pos, sprite)
+    SimpleBullet2(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = YELLOW) : SimpleBullet(grazeValue, pos, sprite, LAYER_BULLET_LOW, col)
     {
         position = pos;
         direction = dir;
@@ -38,6 +38,10 @@ public:
         direction = dir;
         color = col;
         SimpleBullet::spawn(pos);
+    }
+
+    void doPostStep() override
+    {
     }
 
 

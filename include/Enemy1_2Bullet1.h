@@ -9,8 +9,11 @@
 class Enemy1_2Bullet1 : public SimpleBullet2
 {
     protected:
-    static constexpr float speed = 3;
+    static constexpr float speed = 2.5f;
 public:
+    Enemy1_2Bullet1() : SimpleBullet2({}, {}, RED)
+    {
+    }
     bool doPhysics() override
     {
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {

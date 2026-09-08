@@ -29,7 +29,6 @@ public:
             _enemy->despawn();
             const Enemy::EnemyDeathInfo* _enemyDeathInfo = _enemy->GetDeathInfo();
             const Vector2 _pos = _enemy->GetPosition();
-            EphemeraHandler::Spawn(_pos, _enemyDeathInfo->t, _enemyDeathInfo->l);
             spawnedEnemies.erase(spawnedEnemies.begin() + e);
             GlobalVariables::GetCurrentPhase()->enemyDespawned(_enemy->GetID());
         }

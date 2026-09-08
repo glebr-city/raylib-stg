@@ -44,7 +44,7 @@ add_executable(raylib_stg src/main.cpp
         src/GameHandler.cpp
         include/phases/DiagonalTankPhase1.h
         include/DiagonalTank.h
-        include/Enemy1.h
+        include/Enemy1Base.h
         include/RNGHandler.h
         include/BigEnemy1.h
         include/SimpleBullet3.h
@@ -93,6 +93,7 @@ add_executable(raylib_stg src/main.cpp
         include/Enemy1_2.h
         include/Enemy1_2Bullet1.h
         include/Enemy1_2Bullet2.h
+        include/Enemy1.h
 )
 
 target_sources(raylib_stg
@@ -133,4 +134,4 @@ target_link_options(raylib_stg PUBLIC
         -Wl,--gc-sections
 )
 
-target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=false)
+target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=true)

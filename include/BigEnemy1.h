@@ -4,10 +4,10 @@
 
 #ifndef RAYLIB_STG_BIGENEMY1_H
 #define RAYLIB_STG_BIGENEMY1_H
-#include "Enemy1.h"
+#include "Enemy1Base.h"
 #include "SimpleBullet3.h"
 
-class BigEnemy1 : public Enemy1
+class BigEnemy1 : public Enemy1Base
 {
 private:
     static inline const int SCORE_VALUE = 700;
@@ -104,7 +104,7 @@ private:
         Enemy::despawn();
     }
 public:
-    BigEnemy1(const std::shared_ptr<PoolingVector<SimpleBullet3>>& _bullet1Pool, const std::shared_ptr<PoolingVector<SimpleBullet1>>& _bullet2Pool,const std::vector<Enemy1State>& _stateVector) : Enemy1({}, _stateVector, 3750)
+    BigEnemy1(const std::shared_ptr<PoolingVector<SimpleBullet3>>& _bullet1Pool, const std::shared_ptr<PoolingVector<SimpleBullet1>>& _bullet2Pool,const std::vector<Enemy1State>& _stateVector) : Enemy1Base(_stateVector, 3750)
     {
         scoreValue = SCORE_VALUE;
         elapsedSteps = -1;

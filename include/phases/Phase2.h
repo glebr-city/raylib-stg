@@ -60,7 +60,7 @@ public:
             {
                 for (int i = -1; i <= 1; i += 2)
                 {
-                    std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {static_cast<float>(60 + 10 * i), 15}, .speed = 30}, {.desiredPos = {60 + static_cast<float>(65 * i), 15}, .speed = 120, .fireRate = 45, .despawn=true}};
+                    std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {static_cast<float>(60 + 10 * i), 15}, .speed = 30}, {.desiredPos = {60 + static_cast<float>(70 * i), 15}, .speed = 120, .fireRate = 45, .despawn=true}};
                     std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
                     newEnemy->spawn({Vector2(60 + 5 * i, -6 - 30 * j)});
                     SpawnedEnemies::spawnEnemy(std::move(newEnemy));

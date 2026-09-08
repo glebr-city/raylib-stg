@@ -125,6 +125,7 @@ public:
     {
         ScoreHandler::addScore(scoreValue);
         GlobalVariables::GetCurrentPhase()->enemyKilled(id);
+        EphemeraHandler::Spawn(position, deathInfo.t, deathInfo.l);
     }
 
     virtual void despawn()

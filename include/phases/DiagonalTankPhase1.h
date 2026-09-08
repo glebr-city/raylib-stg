@@ -4,6 +4,7 @@
 
 #ifndef RAYLIB_STG_DIAGONALTANKPHASE1_H
 #define RAYLIB_STG_DIAGONALTANKPHASE1_H
+#include "Enemy1.h"
 #include "../BigEnemy1.h"
 #include "../DiagonalTank.h"
 #include "../Enemy1.h"
