@@ -5,6 +5,7 @@
 #ifndef RAYLIB_STG_STAGE2PHASE1_H
 #define RAYLIB_STG_STAGE2PHASE1_H
 #include "BackgroundHandler.h"
+#include "BigEnemy2.h"
 #include "Enemy1_2.h"
 #include "PhaseHelper.h"
 #include "SpawnedEnemies.h"
@@ -19,15 +20,16 @@ class Stage2Phase1 : public PhaseHelper
      std::shared_ptr<PoolingVector<Enemy1_2Bullet1>> enemy1_2BulletPool;
      std::shared_ptr<PoolingVector<Enemy1_2Bullet2>> enemy1_2BulletPool2;
     std::shared_ptr<PoolingVector<SimpleBullet2>> enemy1BulletPool;
+    std::shared_ptr<PoolingVector<AcceleratingBullet1>> bigEnemy2Bullet2Pool;
 private:
     void spawnEnemy1_2Wave1()
     {
         std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 20}, .speed = 100, .slowAtDesiredPos = false}, {.desiredPos = {50, 20}, .speed = 100, .fireRate = 15}, {.desiredPos = {190, 20}, .speed = 100, .fireRate = 15, .despawn = true},};
-        std::unique_ptr<Enemy1_2> newEnemy = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector);
+        auto newEnemy = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector);
         newEnemy->spawn({Vector2(128, -5)});
         SpawnedEnemies::spawnEnemy(std::move(newEnemy));
         std::vector<Enemy1State> enemy1StateVector_2 = {{.desiredPos = {20, 55}, .speed = 100, .slowAtDesiredPos = false}, {.desiredPos = {130, 50}, .speed = 100, .fireRate = 15, .despawn = true},};
-        std::unique_ptr<Enemy1_2> newEnemy2 = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector_2);
+        auto newEnemy2 = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector_2);
         newEnemy2->spawn({Vector2(-30, 10)});
         SpawnedEnemies::spawnEnemy(std::move(newEnemy2));
     }
@@ -35,12 +37,12 @@ private:
     void spawnEnemy1_2Wave2()
     {
         std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 10}, .speed = 100, .slowAtDesiredPos = false},{.desiredPos = {-10, 20}, .speed = 100, .fireRate = 15, .despawn = true},};
-        std::unique_ptr<Enemy1_2> newEnemy = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector);
+        auto newEnemy = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector);
         newEnemy->spawn({Vector2(130, 90)});
         SpawnedEnemies::spawnEnemy(std::move(newEnemy));
 
         std::vector<Enemy1State> enemy1StateVector_2 = {{.desiredPos = {20, 66}, .speed = 100, .slowAtDesiredPos = false}, {.desiredPos = {130, 50}, .speed = 100, .fireRate = 15, .despawn = true},};
-        std::unique_ptr<Enemy1_2> newEnemy2 = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector_2);
+        auto newEnemy2 = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1StateVector_2);
         newEnemy2->spawn({Vector2(-40, 90)});
         SpawnedEnemies::spawnEnemy(std::move(newEnemy2));
     }
@@ -52,7 +54,9 @@ public:
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(90);
         BackgroundHandler::SetBackgroundPosition({0, 0});
         BackgroundHandler::SetScrollVector(defaultScrollVector);
-        GlobalPools::AddPools({enemy1_2BulletPool, enemy1_2BulletPool2, enemy1BulletPool});
+
+        bigEnemy2Bullet2Pool = std::make_shared<PoolingVector<AcceleratingBullet1>>(300);
+        GlobalPools::AddPools({enemy1_2BulletPool, enemy1_2BulletPool2, enemy1BulletPool, bigEnemy2Bullet2Pool});
 
     }
     void InitPhase() override
@@ -86,11 +90,26 @@ public:
         } else if (stepsElapsed == 480)
         {
             spawnEnemy1_2Wave2();
+        } else if (stepsElapsed == 660)
+        {
+            std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {60, 20}, .speed = 90,}, {.desiredPos = {60, -15}, .speed = 5, .duration = 600, .fireRate = 2, .despawn = false}, {.desiredPos = {60, -15}, .speed = 90, .fireRate = 2, .despawn = true},};
+            auto bigEnemy2 = std::make_unique<BigEnemy2>(bigEnemy2Bullet2Pool, enemy1StateVector);
+            bigEnemy2->spawn({Vector2(60, -10), 10});
+            SpawnedEnemies::spawnEnemy(std::move(bigEnemy2));
+        } else if (stepsElapsed == 760)
+        {
+            spawnEnemy1_2Wave1();
+        } else if (stepsElapsed == 960)
+        {
+            spawnEnemy1_2Wave2();
         }
         PhaseHelper::doPreStep();
     }
 
     void enemyKilled(u_int _id) override {};
-    void enemyDespawned(u_int _id) override {};
+    void enemyDespawned(u_int _id) override
+    {
+
+    };
 };
 #endif //RAYLIB_STG_STAGE2PHASE1_H

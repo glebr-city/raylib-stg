@@ -12,7 +12,8 @@
 class Enemy1_2Bullet2 : public SimpleBullet2
 {
 protected:
-    static constexpr float speed = 1.5f;
+    static constexpr float speed = 1;
+    static constexpr int grazeValue = 30;
 public:
     Enemy1_2Bullet2() : SimpleBullet2({}, {}, PINK)
     {

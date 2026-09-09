@@ -6,7 +6,6 @@
 #define RAYLIB_STG_ENEMY1BASE_H
 #include "Enemy.h"
 #include "SimpleBullet2.h"
-#include "SoundHandler.h"
 
 struct Enemy1State //Enemy1 can only do a few things, and all of them can be specified here; pass a Vector of Enemy1States when spawning.
 {
@@ -22,13 +21,12 @@ class Enemy1Base : public Enemy
 {
 private:
 protected:
-    std::shared_ptr<PoolingVector<SimpleBullet2>> bulletPool;
-    static inline const ANIMATED_SPRITES sprite = ENEMY_1;
+    static constexpr ANIMATED_SPRITES sprite = ENEMY_1;
     u_int elapsedSteps;
     std::vector<Enemy1State> stateVector;
     u_int currentStateIndex = 0;
     float currentSpeed = 0;
-    u_int elapsedStepsInState;
+    u_int elapsedStepsInState = 0;
 
     virtual void handleShooting(const Enemy1State currentState)
     {
@@ -70,7 +68,10 @@ public:
             {
                 currentSpeed = std::clamp(currentSpeed - currentState.speed / 60, 0.0f, currentState.speed);
                 if (currentSpeed == 0.0f) //Done moving, now enter the new state!
+                {
+                    position = currentState.desiredPos;
                     return enterNewState(currentStateIndex + 1);
+                }
             }
             else if (currentSpeed < currentState.speed)
                 currentSpeed = currentSpeed + currentState.speed / 60;
@@ -93,7 +94,7 @@ public:
         return true;
     }
 
-    bool enterNewState(const u_int newStateIndex)
+    virtual bool enterNewState(const u_int newStateIndex)
     {
         if (stateVector[currentStateIndex].despawn)
             return false;

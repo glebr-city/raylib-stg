@@ -57,6 +57,16 @@ protected:
         const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
         const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
         const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            if (GetFPS() > 122)
+            {
+                SetTargetFPS(120);
+            } else
+            {
+                SetTargetFPS(360);
+            }
+        }
         std::stringstream ss;
         ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
         << "\nFPS: " << GetFPS()
@@ -64,6 +74,7 @@ protected:
         << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
         << "\nCurrent Graze: \n"
         << GlobalVariables::GetGrazeMetre()
+        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
         << " \nStage Coordinates: (" <<
             std::fixed << std::setprecision(2)
         << backgroundPos.x << "," << backgroundPos.y << ")"
@@ -95,7 +106,6 @@ public:
         //letterboxSize.y = static_cast<float>(resizeValues[2]);
         GameHandler::RestartGame();
         doStep();
-        bool DEBUG_highFramerate = false;
     }
 };
 
@@ -139,6 +149,7 @@ protected:
         << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
         << "\nCurrent Graze: \n"
         << GlobalVariables::GetGrazeMetre()
+        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
         << " \nStage Coordinates: (" <<
             std::fixed << std::setprecision(2)
         << backgroundPos.x << "," << backgroundPos.y << ")"
@@ -161,8 +172,13 @@ protected:
         }
         if (IsKeyPressed(KEY_ENTER))
         {
-            ///DEBUG_highFramerate = !DEBUG_highFramerate;
-            //DEBUG_highFramerate ? SetTargetFPS(360) : SetTargetFPS(120);
+            if (GetFPS() > 122)
+            {
+                SetTargetFPS(120);
+            } else
+            {
+                SetTargetFPS(360);
+            }
         }
         if (IsKeyPressed(KEY_ESCAPE))
             CloseWindow();
@@ -220,6 +236,7 @@ protected:
         << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
         << "\nCurrent Graze: \n"
         << GlobalVariables::GetGrazeMetre()
+        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
         << " \nStage Coordinates: (" <<
             std::fixed << std::setprecision(2)
         << backgroundPos.x << "," << backgroundPos.y << ")"
@@ -290,6 +307,7 @@ protected:
         << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
         << "\nCurrent Graze: \n"
         << GlobalVariables::GetGrazeMetre()
+        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
         << " \nStage Coordinates: (" <<
             std::fixed << std::setprecision(2)
         << backgroundPos.x << "," << backgroundPos.y << ")"

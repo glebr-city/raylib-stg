@@ -9,6 +9,7 @@
 class Enemy1 : public Enemy1Base
 {
 private:
+    std::shared_ptr<PoolingVector<SimpleBullet2>> bulletPool;
     void handleShooting(const Enemy1State currentState) override
     {
         const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();

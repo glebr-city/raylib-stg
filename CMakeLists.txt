@@ -94,6 +94,8 @@ add_executable(raylib_stg src/main.cpp
         include/Enemy1_2Bullet1.h
         include/Enemy1_2Bullet2.h
         include/Enemy1.h
+        include/BigEnemy2.h
+        include/AcceleratingBullet1.h
 )
 
 target_sources(raylib_stg

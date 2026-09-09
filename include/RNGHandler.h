@@ -23,6 +23,7 @@ private:
   }
   static void StepSeed() //Increments the seed in pseudo-random fashion; call this as often as possible.
   {
+    seed += 1223;
     if (InputHandler::CheckInputsDown(INPUT_LEFT))
       seed += 2447;
     if (InputHandler::CheckInputsDown(INPUT_RIGHT))
@@ -35,7 +36,7 @@ private:
       seed += 8513;
     seed += seed % 9463;
   }
-  static uint_fast16_t GetSeed() // Returns the current RNG seed (0 to 65535).
+  static uint16_t GetSeed() // Returns the current RNG seed (0 to 65535).
   {
     return seed;
   }

@@ -1,38 +1,38 @@
 //
-// Created by g on 05/02/2026.
+// Created by n on 09/09/2026.
 //
 
-#ifndef RAYLIB_STG_SIMPLEBULLET1_H
-#define RAYLIB_STG_SIMPLEBULLET1_H
+#ifndef RAYLIB_STG_ACCELERATINGBULLET1_H
+#define RAYLIB_STG_ACCELERATINGBULLET1_H
+#include "raylib.h"
 #include "SimpleBullet.h"
-#include "raylib/raylib.h"
 
-
-class SimpleBullet1 : public SimpleBullet{
+class AcceleratingBullet1 : public SimpleBullet{
 protected:
     static constexpr float radius = 3;
-    static constexpr float speed = 1;
-    uint grazeValue = 20;
+    float speed = 1;
+    int grazeValue = 40;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 direction{};
 
 public:
     using StepThinker::doPhysics;
-    SimpleBullet1(const Vector2 _pos = {}, const uint _grazeValue = 20) : SimpleBullet(_grazeValue, _pos, sprite, LAYER_BULLET_LOW), grazeValue(20)
+    AcceleratingBullet1(const Vector2 _pos = {}, const uint _grazeValue = 40) : SimpleBullet(_grazeValue, _pos, sprite, LAYER_BULLET_LOW), grazeValue(20)
     {
         grazeValue = _grazeValue;
     };
 
-    SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(grazeValue, pos)
+    AcceleratingBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 40) : SimpleBullet(grazeValue, pos)
     {
         direction = dir;
         color = col;
         grazeValue = _grazeValue;
     }
-    void spawn(const Vector2 pos, const Vector2 dir, const Color col = GREEN)
+    void spawn(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const float _speed = 1)
     {
         position = pos;
         direction = dir;
+        speed = _speed;
         hasBeenGrazed = false;
         color = col;
     }
@@ -44,12 +44,11 @@ public:
             DamageHandler::hitPlayer();
             return false;
         }
+        speed += 0.0125f;
         position = Vector2Add(position, direction * speed);
         if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
             return false;
         return true;
     }
 };
-
-
-#endif //RAYLIB_STG_SIMPLEBULLET1_H
+#endif //RAYLIB_STG_ACCELERATINGBULLET1_H
