@@ -27,6 +27,7 @@ protected:
     u_int currentStateIndex = 0;
     float currentSpeed = 0;
     u_int elapsedStepsInState = 0;
+    bool hasStartedSlowing = false;
 
     virtual void handleShooting(const Enemy1State currentState)
     {
@@ -66,6 +67,11 @@ public:
         {
             if (Vector2DistanceSqr(position, currentState.desiredPos) < (currentState.speed / 4) * (currentState.speed / 4))
             {
+                if (!hasStartedSlowing)
+                {
+                    hasStartedSlowing = true;
+                    currentSpeed = currentState.speed;
+                }
                 currentSpeed = std::clamp(currentSpeed - currentState.speed / 60, 0.0f, currentState.speed);
                 if (currentSpeed == 0.0f) //Done moving, now enter the new state!
                 {
@@ -96,6 +102,7 @@ public:
 
     virtual bool enterNewState(const u_int newStateIndex)
     {
+        hasStartedSlowing = false;
         if (stateVector[currentStateIndex].despawn)
             return false;
         if (stateVector[currentStateIndex].slowAtDesiredPos)

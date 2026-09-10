@@ -10,7 +10,7 @@
 class BigEnemy2 : public Enemy1Base
 {
 private:
-    static inline const int SCORE_VALUE = 700;
+    static inline const int SCORE_VALUE = 2000;
     static inline const ANIMATED_SPRITES sprite = BIG_ENEMY_2;
     static constexpr uint8_t maxHealth = 13;
     static constexpr uint_fast8_t maxShots = 20;
@@ -60,7 +60,6 @@ private:
             const float fireRateFraction = static_cast<float>(elapsedStepsInState) / static_cast<float>(currentState.fireRate);
             //bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), randomRotation), YELLOW, 1 + fireRateFraction);
         }
-        std::cout << static_cast<int>(elapsedStepsInState) << std::endl;
         if (elapsedStepsInState % currentState.fireRate == 0)
         {
             float fireRateFraction = static_cast<float>(shotsFired) / static_cast<float>(maxShots);
@@ -68,13 +67,6 @@ private:
             bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
             bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * -PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
             fireRateFraction = static_cast<float>(shotsFired - 2) / static_cast<float>(maxShots);
-            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
-            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * -PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
-
-        }
-        if (shotsFired > maxShots && false)
-        {
-            const float fireRateFraction = static_cast<float>(shotsFired - (maxShots / 4)) / static_cast<float>(maxShots);
             bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
             bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * -PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
 

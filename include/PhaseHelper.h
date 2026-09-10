@@ -23,6 +23,10 @@ typedef enum {
     BOSS_1_PHASE_4,
     BOSS_1_PHASE_5,
     STAGE_2_PHASE_1,
+    STAGE_2_PHASE_2,
+    STAGE_2_PHASE_3,
+    STAGE_2_PHASE_4,
+    STAGE_2_PHASE_5,
 
     PHASE_COUNT
 } PHASES;

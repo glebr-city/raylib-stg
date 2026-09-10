@@ -10,7 +10,7 @@
 class BigEnemy1 : public Enemy1Base
 {
 private:
-    static inline const int SCORE_VALUE = 700;
+    static inline const int SCORE_VALUE = 2000;
     static inline const ANIMATED_SPRITES sprite = BIG_ENEMY_1;
     uint8_t humIndex = 254;
     std::shared_ptr<PoolingVector<SimpleBullet3>> bullet1Pool;

@@ -35,6 +35,8 @@ public:
 
     void InitPhase() override
     {
+        BackgroundHandler::SetBackgroundSprite(DIAGONAL_TANK_BACKGROUND);
+        clearBullets();
         std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 20}, .speed = 100,}, {.desiredPos = {50, 20}, .speed = 100, .fireRate = 30}, {.desiredPos = {190, 20}, .speed = 100, .fireRate = 30, .despawn = true},};
         std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
         newEnemy->spawn({Vector2(125, -5), 1});

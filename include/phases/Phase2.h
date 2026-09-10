@@ -27,18 +27,18 @@ public:
         bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(100);
         bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100);
         GlobalPools::AddPools({enemy1BulletPool, streetlightBulletPool, bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool});
-        BackgroundHandler::SetBackgroundSprite(DIAGONAL_TANK_BACKGROUND);
+        BackgroundHandler::SetBackgroundSprite(defaultBackgroundSprite);
         BackgroundHandler::SetScrollVector(defaultScrollVector);
 
     }
 
     void InitPhase() override
     {
-        std::unique_ptr<StreetlightEnemy> newStreetlightEnemy = std::make_unique<StreetlightEnemy>(streetlightBulletPool);
+        auto newStreetlightEnemy = std::make_unique<StreetlightEnemy>(streetlightBulletPool);
         newStreetlightEnemy->spawn( {BackgroundHandler::GetRelativePos({10, -500}), 11});
         SpawnedEnemies::spawnEnemy(std::move(newStreetlightEnemy));
 
-        std::unique_ptr<StreetlightEnemy> newStreetlightEnemy2 = std::make_unique<StreetlightEnemy>(streetlightBulletPool);
+        auto newStreetlightEnemy2 = std::make_unique<StreetlightEnemy>(streetlightBulletPool);
         newStreetlightEnemy2->spawn( {BackgroundHandler::GetRelativePos({110, -510}), 10});
         SpawnedEnemies::spawnEnemy(std::move(newStreetlightEnemy2));
     }
@@ -71,7 +71,7 @@ public:
         {
             extraBigEnemyAlive = true;
             std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {60, 20}, .speed = 60,}, {.desiredPos = {50, 20}, .speed = 0, .duration = 200, .fireRate = 8, .despawn = false}, {.desiredPos = {60, -15}, .speed = 60, .fireRate = 8, .despawn = true},};
-            std::unique_ptr<BigEnemy1> newEnemy = std::make_unique<BigEnemy1>(bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool, enemy1StateVector);
+            auto newEnemy = std::make_unique<BigEnemy1>(bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool, enemy1StateVector);
             newEnemy->spawn({Vector2(60, -15), 16});
             SpawnedEnemies::spawnEnemy(std::move(newEnemy));
         }
@@ -87,7 +87,7 @@ public:
 
             bigEnemySpawned = true;
             std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {60, 20}, .speed = 30,}, {.desiredPos = {50, 20}, .speed = 0, .duration = 600, .fireRate = 8, .despawn = false}, {.desiredPos = {60, -15}, .speed = 30, .fireRate = 8, .despawn = true},};
-            std::unique_ptr<BigEnemy1> newEnemy = std::make_unique<BigEnemy1>(bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool, enemy1StateVector);
+            auto newEnemy = std::make_unique<BigEnemy1>(bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool, enemy1StateVector);
             newEnemy->spawn({Vector2(60, -15), 15});
             SpawnedEnemies::spawnEnemy(std::move(newEnemy));
 

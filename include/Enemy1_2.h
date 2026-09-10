@@ -42,7 +42,7 @@ protected:
         }
     }
     public:
-    Enemy1_2(const std::shared_ptr<PoolingVector<Enemy1_2Bullet1>>& _bulletPool1, const std::shared_ptr<PoolingVector<Enemy1_2Bullet2>>& _bulletPool2, const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 500) : Enemy1Base(_stateVector, _scoreValue)
+    Enemy1_2(const std::shared_ptr<PoolingVector<Enemy1_2Bullet1>>& _bulletPool1, const std::shared_ptr<PoolingVector<Enemy1_2Bullet2>>& _bulletPool2, const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 800) : Enemy1Base(_stateVector, _scoreValue)
     {
         collider = {0, 0, 14, 12};
         bulletPool1 = _bulletPool1;

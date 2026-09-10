@@ -23,6 +23,11 @@ public:
         return true;
     }
 
+    void doPostStep() override
+    {
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
+    }
+
 
 };
 #endif //RAYLIB_STG_BOSS1SMALLBULLETS_H
