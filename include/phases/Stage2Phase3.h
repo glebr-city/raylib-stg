@@ -14,7 +14,7 @@ private:
     std::shared_ptr<PoolingVector<Enemy1_2Bullet1>> enemy1_2BulletPool;
     std::shared_ptr<PoolingVector<Enemy1_2Bullet2>> enemy1_2BulletPool2;
 public:
-    Stage2Phase3() : PhaseHelper("Stage2Phase3", {0, -650}, {0, -0.2f}, DEFAULT_BACKGROUND)
+    Stage2Phase3() : PhaseHelper("Stage2Phase3", {0, -650}, {0, -0.2f}, STAGE_2_BACKGROUND)
     {
         BackgroundHandler::SetBackgroundSprite(defaultBackgroundSprite);
         BackgroundHandler::SetScrollVector(defaultScrollVector);

@@ -33,7 +33,7 @@ public:
     Vector2 GetFinalPos();
     bool GetHyperOn();
     std::array<Vector2, 2> GetPosAndMovement();
-    void getHit();
+    static void getHit();
 };
 
 

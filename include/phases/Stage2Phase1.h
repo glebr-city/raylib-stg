@@ -48,7 +48,7 @@ private:
         SpawnedEnemies::spawnEnemy(std::move(newEnemy2));
     }
 public:
-    Stage2Phase1() : PhaseHelper("Stage2Phase1", {}, {0, -0.2f}, DEFAULT_BACKGROUND)
+    Stage2Phase1() : PhaseHelper("Stage2Phase1", {}, {0, -0.2f}, STAGE_2_BACKGROUND)
     {
         enemy1_2BulletPool = std::make_shared<PoolingVector<Enemy1_2Bullet1>>(90);
         enemy1_2BulletPool2 = std::make_shared<PoolingVector<Enemy1_2Bullet2>>(90);

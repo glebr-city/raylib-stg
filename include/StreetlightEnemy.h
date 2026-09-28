@@ -17,6 +17,8 @@ private:
     static constexpr uint maxHealth = 11;
     static constexpr Color color2 = {150, 150, 50, 255};
     uint health = maxHealth;
+    bool hasFired = false; //Start tracking fire cooldowns after the first shot -- ensure synchronisation!!!
+    size_t stepsElapsed = 0;
 public:
     StreetlightEnemy(const std::shared_ptr<PoolingVector<SimpleBullet1Fast>>& _bulletPool) : Enemy(1000, Rectangle {0, 0, 8, 10}, maxHealth, {EphemeraHandler::EXPLOSION_SMALL, LAYER_GROUNDED})
     {
@@ -39,9 +41,45 @@ public:
     void doPostStep() override
     {
         SpriteParametres opts = {.i=STREETLIGHT_ENEMY, .pos=position, .l=LAYER_GROUNDED};
-        if (currentFlashDuration-- > 0 && GlobalVariables::GetCurrentPhase()->getStepsElapsed() % 60 <= 30)
+        if (currentFlashDuration-- > 0 && stepsElapsed % 60 <= 30)
             opts.col = RED;
         SpriteHandler::QueueMyAnimatedSprite(opts);
+    }
+
+    void handleFiring()
+    {
+
+        const Vector2 firingPosition = {position.x, position.y + firingPositionOffset};
+        if (!hasFired)
+        {
+            if (GlobalVariables::GetCurrentPhase()->getStepsElapsed() % 80 != 0)
+                return;
+            hasFired = true;
+            stepsElapsed = 0;
+        }
+        if (stepsElapsed % 80 == 0)
+        {
+            SoundHandler::PlaySound(BANG_1);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.25 * PI);
+        } else if (stepsElapsed % 80 == 30)
+        {
+            SoundHandler::PlaySound(BANG_2);
+            bulletPool->spawn().spawn(position, aimingDirection, color2);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
+            bulletPool->spawn().spawn(position, aimingDirection, color2);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
+            bulletPool->spawn().spawn(position, aimingDirection, color2);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
+            bulletPool->spawn().spawn(position, aimingDirection, color2);
+            aimingDirection = Vector2Rotate(aimingDirection, 0.3 * PI);
+        }
     }
 
     bool doPhysics() override
@@ -49,37 +87,15 @@ public:
         position -= BackgroundHandler::GetScrollVector();
         collider.x = position.x - collider.width / 2;
         collider.y = position.y - collider.height / 2;
-        Vector2 firingPosition = {position.x, position.y + firingPositionOffset};
         if (position.y > 10)
         {
             if (position.y > 185)
                 return false;
             if (position.y <= 140)
             {
-                if (GlobalVariables::GetCurrentPhase()->getStepsElapsed() % 80 == 0)
-                {
-                    SoundHandler::PlaySound(BANG_1);
-                    bulletPool->spawn().spawn(firingPosition, aimingDirection);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-                    bulletPool->spawn().spawn(firingPosition, aimingDirection);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-                    bulletPool->spawn().spawn(firingPosition, aimingDirection);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-                    bulletPool->spawn().spawn(firingPosition, aimingDirection);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.25 * PI);
-                } else if (GlobalVariables::GetCurrentPhase()->getStepsElapsed() % 80 == 30)
-                {
-                    SoundHandler::PlaySound(BANG_2);
-                    bulletPool->spawn().spawn(position, aimingDirection, color2);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-                    bulletPool->spawn().spawn(position, aimingDirection, color2);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-                    bulletPool->spawn().spawn(position, aimingDirection, color2);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-                    bulletPool->spawn().spawn(position, aimingDirection, color2);
-                    aimingDirection = Vector2Rotate(aimingDirection, 0.3 * PI);
-                }
+                handleFiring();
             }
+            stepsElapsed++;
         }
         if (checkPlayerBulletCollision()) {
             return takeDamage();

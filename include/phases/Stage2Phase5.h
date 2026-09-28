@@ -12,6 +12,7 @@
 #include "AcceleratingBullet1.h"
 #include "BackgroundHandler.h"
 #include "BigEnemy2.h"
+#include "Boss2.h"
 #include "Enemy1.h"
 #include "Enemy1Base.h"
 #include "Enemy1_2.h"
@@ -62,7 +63,7 @@ private:
         SpawnedEnemies::spawnEnemy(std::move(newEnemy2));
     }
 public:
-    Stage2Phase5() : PhaseHelper("Stage2Phase5", {0, -1290}, {0, -0.2f}, DEFAULT_BACKGROUND)
+    Stage2Phase5() : PhaseHelper("Stage2Phase5", {0, -1290}, {0, -0.3f}, STAGE_2_BACKGROUND)
     {
         enemy1_2BulletPool = std::make_shared<PoolingVector<Enemy1_2Bullet1>>(120);
         enemy1_2BulletPool2 = std::make_shared<PoolingVector<Enemy1_2Bullet2>>(120);
@@ -86,11 +87,15 @@ public:
         newBigEnemy2Mirrored->spawn( {Vector2{115, 250}, 1});
         SpawnedEnemies::spawnEnemy(std::move(newBigEnemy2Mirrored));
 
+        auto boss2 = std::make_unique<Boss2>(std::shared_ptr<PoolingVector<Boss1SmallBullet>>{}, std::shared_ptr<PoolingVector<SimpleBullet1Slow>>{}, std::shared_ptr<PoolingVector<Boss1FastBurstBullet>> {}, 100);
+        boss2->spawn({BackgroundHandler::GetRelativePos(Vector2{60, -1925}), 1000});
+        SpawnedEnemies::spawnEnemy(std::move(boss2));
+
         for (int row = 0; row < 4; row++)
         {
             for (int i = -1; i <= 1; i += 2)
             {
-                auto newEnemy1_2StateVector1 = std::vector{Enemy1State{.speed = 0, .duration = static_cast<uint>(800 + row * 100)}, {.desiredPos = {static_cast<float>(60 + (i * 50)), 190}, .speed = 70, .fireRate = static_cast<uint>(25 + row * 10), .despawn = true, .slowAtDesiredPos = false},};
+                auto newEnemy1_2StateVector1 = std::vector{Enemy1State{.speed = 0, .duration = static_cast<uint>(800 + row * 100)}, {.desiredPos = {static_cast<float>(60 + (i * 50)), 150}, .speed = 70, .fireRate = static_cast<uint>(25 + row * 10), .despawn = false, .slowAtDesiredPos = false}, {.desiredPos = {static_cast<float>(60 + (i * 50)), 190}, .speed = 70, .despawn = true, .slowAtDesiredPos = false},};
                 auto newEnemy1_2 = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, newEnemy1_2StateVector1);
                 newEnemy1_2->spawn(Vector2(60 + i * 50, -20));
                 SpawnedEnemies::spawnEnemy(std::move(newEnemy1_2));
@@ -107,6 +112,9 @@ public:
             auto bigEnemy2 = std::make_unique<BigEnemy2>(bigEnemy2Bullet2Pool, enemy1StateVector);
             bigEnemy2->spawn({Vector2(60, -10)});
             SpawnedEnemies::spawnEnemy(std::move(bigEnemy2));
+        } else if (BackgroundHandler::GetBackgroundPosition().y <= -1800)
+        {
+            BackgroundHandler::SetScrollVector(Vector2{0,0});
         }
         PhaseHelper::doPreStep();
     }

@@ -15,7 +15,7 @@ private:
     std::shared_ptr<PoolingVector<AcceleratingBullet1>> bigEnemy2Bullet2Pool;
     std::shared_ptr<PoolingVector<SimpleBullet2>> enemy1BulletPool;
     public:
-    Stage2Phase2() : PhaseHelper("Stage2Phase2", {0, -280}, {0, -0.2f}, DEFAULT_BACKGROUND)
+    Stage2Phase2() : PhaseHelper("Stage2Phase2", {0, -280}, {0, -0.2f}, STAGE_2_BACKGROUND)
     {
         streetlightBulletPool = std::make_shared<PoolingVector<SimpleBullet1Fast>>(60);
         enemy1_2BulletPool = std::make_shared<PoolingVector<Enemy1_2Bullet1>>(90);
