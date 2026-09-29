@@ -58,7 +58,10 @@ public:
         if (checkPlayerBulletCollision())
         {
             if (!takeDamage())
+            {
+                die();
                 return false;
+            }
         }
         const Enemy1State currentState = stateVector[currentStateIndex];
         if (++elapsedStepsInState == currentState.duration)

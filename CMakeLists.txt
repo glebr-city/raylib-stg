@@ -101,6 +101,10 @@ add_executable(raylib_stg src/main.cpp
         include/phases/Stage2Phase4.h
         include/phases/Stage2Phase5.h
         include/Boss2.h
+        include/phases/Boss2Phase1.h
+        include/Boss2Automaton.h
+        include/Boss2AutomatonPinkBullet.h
+        include/Boss2SmallBullet.h
 )
 
 target_sources(raylib_stg

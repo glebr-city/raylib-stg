@@ -87,8 +87,8 @@ public:
         newBigEnemy2Mirrored->spawn( {Vector2{115, 250}, 1});
         SpawnedEnemies::spawnEnemy(std::move(newBigEnemy2Mirrored));
 
-        auto boss2 = std::make_unique<Boss2>(std::shared_ptr<PoolingVector<Boss1SmallBullet>>{}, std::shared_ptr<PoolingVector<SimpleBullet1Slow>>{}, std::shared_ptr<PoolingVector<Boss1FastBurstBullet>> {}, 100);
-        boss2->spawn({BackgroundHandler::GetRelativePos(Vector2{60, -1925}), 1000});
+        auto boss2 = std::make_unique<Boss2>(100);
+        boss2->spawn({BackgroundHandler::GetRelativePos(Vector2{60, -1900}), 301});
         SpawnedEnemies::spawnEnemy(std::move(boss2));
 
         for (int row = 0; row < 4; row++)
@@ -114,7 +114,7 @@ public:
             SpawnedEnemies::spawnEnemy(std::move(bigEnemy2));
         } else if (BackgroundHandler::GetBackgroundPosition().y <= -1800)
         {
-            BackgroundHandler::SetScrollVector(Vector2{0,0});
+            GameHandler::NextPhase();
         }
         PhaseHelper::doPreStep();
     }

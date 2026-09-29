@@ -36,6 +36,7 @@ class DiagonalTank : public Enemy
         position -= BackgroundHandler::GetScrollVector();
         if (checkPlayerBulletCollision()) {
             takeDamage();
+            die();
             return false;
         }
         if (isMoving)

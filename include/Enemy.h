@@ -46,12 +46,18 @@ public:
         health = _health;
         deathInfo = _deathInfo;
     }
-    void checkPlayerCollision() const
+    static void checkPlayerCollision(const Rectangle _collider)
     {
-        if (CheckCollisionPointRec(PlayerHandler::GetPlayer().get()->GetFinalPos(), collider))
+        if (CheckCollisionPointRec(PlayerHandler::GetPlayer().get()->GetFinalPos(), _collider))
             DamageHandler::hitPlayer();
     }
-    [[nodiscard]] bool checkPlayerBulletCollision() const {
+
+    void checkPlayerCollision() const
+    {
+        checkPlayerCollision(collider);
+    }
+
+    [[nodiscard]] static bool checkPlayerBulletCollision(const Rectangle _collider) {
         const int activePlayerBullets = PlayerBullets::getPlayerBullets()->getNumActive();
         if (activePlayerBullets <= 0) {
             return false;
@@ -60,7 +66,7 @@ public:
 
         for (int i = 0; i < activePlayerBullets;) {
             const Rectangle *bulletCollider = playerBulletsVector.at(i).getCollider();
-            if (CheckCollisionRecs(collider, *bulletCollider)) {
+            if (CheckCollisionRecs(_collider, *bulletCollider)) {
                 PlayerBullets::destroyPlayerBullet(i);
                 return true;
             }
@@ -68,6 +74,11 @@ public:
         }
         return false;
     }
+    [[nodiscard]] bool checkPlayerBulletCollision() const
+    {
+        return checkPlayerBulletCollision(collider);
+    }
+
     void doPostStep() override {
         if (currentFlashDuration > 0)
         {
@@ -110,7 +121,6 @@ public:
         startDamageAnimation();
         if (--health <= 0)
         {
-            die();
             return false;
         }
         return true;

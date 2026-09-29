@@ -98,7 +98,11 @@ public:
             stepsElapsed++;
         }
         if (checkPlayerBulletCollision()) {
-            return takeDamage();
+            if (!takeDamage())
+            {
+                die();
+                return false;
+            }
         }
         return true;
     }

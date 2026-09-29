@@ -5,7 +5,10 @@
 #ifndef RAYLIB_STG_BOSS2_H
 #define RAYLIB_STG_BOSS2_H
 #include "Boss.h"
+#include "Boss2Automaton.h"
+#include "Boss2SmallBullet.h"
 
+class Boss2AutomatonPinkBullet;
 class Boss1FastBurstBullet;
 class SimpleBullet1Slow;
 class Boss1SmallBullet;
@@ -13,11 +16,12 @@ class Boss1SmallBullet;
 class  Boss2 : public Boss
 {
 public:
-    constexpr static int COLLIDER_Y_OFFSET = -14;
-    constexpr static int maxMovement = 15; //How far, in one direction on the X-axis, may the boss move?
-    constexpr static Color PARTS_COLOUR = {223, 113, 38, 255};
+    constexpr static int COLLIDER_Y_OFFSET = -20;
+    constexpr static int COLLIDER_2_Y_OFFSET = 17;
+    constexpr static int maxMovement = 45; //How far, in one direction on the X-axis, may the boss move?
+    constexpr static Color PARTS_COLOUR = {183, 0, 0, 255};
     constexpr static Color SPREAD_COLOUR = {250, 150, 60, 255};
-    constexpr static uint8_t PHASE_1_FIRE_RATE = 4;
+    constexpr static uint8_t PHASE_1_FIRE_RATE = 3;
     constexpr static uint8_t PHASE_2_FIRE_RATE = 8;
     constexpr static uint8_t PHASE_3_FIRE_RATE = 76;
     constexpr static uint8_t PHASE_4_FIRE_RATE = 24;
@@ -29,32 +33,30 @@ public:
         PHASE_3,
         PHASE_4,
         PHASE_DEFEAT
-    }BOSS_1_PHASES;
+    }BOSS_2_PHASES;
 private:
-    std::shared_ptr<PoolingVector<Boss1SmallBullet>> boss1SmallBullets;
+    Rectangle collider2; //Due to the boss' shape, a second collider is required!
+    std::shared_ptr<PoolingVector<Boss2SmallBullet>> boss2SmallBullets;
     std::shared_ptr<PoolingVector<SimpleBullet1Slow>> simpleBullet1SlowPool;
     std::shared_ptr<PoolingVector<Boss1FastBurstBullet>> simpleBullet1FastPool;
-    BOSS_1_PHASES bossPhase = PRE_FIGHT;
+    std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>> automatonPinkBulletPool;
+    BOSS_2_PHASES bossPhase = PRE_FIGHT;
     static constexpr std::array<Vector2, 11> smallPartOffsets = {
-        Vector2(-38.0784, 7.98439),
-        Vector2(-34.6784, 13.0844),
-        Vector2(-30.4284, 18.1844),
-        Vector2(-20.2284, 21.5844),
-        Vector2(-11.7284, 20.7344),
-        Vector2(0, 20.7344),
-        Vector2(11.7284, 20.7344),
-        Vector2(20.2284, 21.5844),
-        Vector2(30.4284, 18.1844),
-        Vector2(34.6784, 13.0844),
-        Vector2(38.0784, 7.98439),
+        Vector2(-8.5, 7),
+        Vector2(-2.5, 7),
+        Vector2(2.5, 7),
+        Vector2(8.5, 7),
+        Vector2(-5.5, 10),
+        Vector2(5.5, 10),
+        Vector2(-8.5, 13),
+        Vector2(-2.5, 13),
+        Vector2(2.5, 13),
+        Vector2(8.5, 13),
     };
+    std::array<int, 11> currentSmallPartsGlowSteps{};
     uint stepsElapsed = 0;
     uint8_t currentSmallPart = 0;
-    int part1GlowSteps = 0;
-    int part2GlowSteps = 0;
-    int part3GlowSteps = 0;
-    int part4GlowSteps = 0;
-    int smallPartsGlowSteps = 0;
+    int smallPartsGlowSteps = 15; //Glow for this many steps after firing
     int baseSpriteYOffset = 0;
     Color drawnColour = WHITE;
     Vector2 movementVector = {};
@@ -84,25 +86,32 @@ private:
         }
     }
 
-    void fireSmallPartShot(uint8_t _currentSmallPart = 12, const float _maxRotation = 0.75f, const float _extraRotation = 0) const
+    void fireSmallPartShot(uint8_t _currentSmallPart = 11, const float _maxRotation = 0.75f, const float _extraRotation = 0)
     {
-        if (_currentSmallPart == 12)
+        if (_currentSmallPart == 11)
             _currentSmallPart = currentSmallPart;
         const Vector2 playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-        const Vector2 _startingDirection = Vector2Normalize(smallPartOffsets[_currentSmallPart]);
+        const Vector2 _startingDirection = Vector2Normalize(Vector2{smallPartOffsets[_currentSmallPart].x / 50, 1});
         const Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[_currentSmallPart]);
         const Vector2 _vectorToPlayer = Vector2Subtract(playerPos, _currentBulletSpawnPos);
         const float _rotation = std::clamp(Vector2Angle(_startingDirection, _vectorToPlayer) + _extraRotation, -_maxRotation, _maxRotation);
-        boss1SmallBullets->spawn().spawn(_currentBulletSpawnPos, Vector2Rotate(_startingDirection, _rotation), PARTS_COLOUR);
+        currentSmallPartsGlowSteps[_currentSmallPart] = smallPartsGlowSteps;
+        boss2SmallBullets->spawn().spawn(_currentBulletSpawnPos, Vector2Rotate(_startingDirection, _rotation), PARTS_COLOUR);
     }
 
-    void initPhase(const BOSS_1_PHASES _newPhase)
+    void initPhase(const BOSS_2_PHASES _newPhase)
     {
         switch (_newPhase)
         {
         case PHASE_1:
             {
-                //movementVector.x = -0.2f;
+                movementVector.x = -0.4f;
+                auto _automaton1 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool);
+                _automaton1->SetPhase(Boss2Automaton::PHASE_1_AUTOMATON_1);
+                auto _automaton2 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool);
+                _automaton2->SetPhase(Boss2Automaton::PHASE_1_AUTOMATON_2);
+                SpawnedEnemies::spawnEnemy(std::move(_automaton1));
+                SpawnedEnemies::spawnEnemy(std::move(_automaton2));
             }
             break;
         case PRE_FIGHT:
@@ -123,11 +132,6 @@ private:
         case PHASE_DEFEAT:
             {
                 currentSmallPart = 0;
-                smallPartsGlowSteps = 0;
-                part1GlowSteps = 0;
-                part2GlowSteps = 0;
-                part3GlowSteps = 0;
-                part4GlowSteps = 0;
                 SoundHandler::StopSound(HUM_1);
                 constexpr int halfOfShotNum = 15;
                 const Vector2 spawnPos = {position.x, position.y + 15};
@@ -147,12 +151,19 @@ private:
     }
 
 public:
-    explicit Boss2(std::shared_ptr<PoolingVector<Boss1SmallBullet>> _boss1SmallBulletPool, std::shared_ptr<PoolingVector<SimpleBullet1Slow>> _simpleBullet1SlowPool, std::shared_ptr<PoolingVector<Boss1FastBurstBullet>> _simpleBullet1FastPool, const int _health = 1)
-    : Boss(500, {0, COLLIDER_Y_OFFSET, 80, 45}, _health)
+    explicit Boss2(const int _health = 1)
+    : Boss(500, {0, COLLIDER_Y_OFFSET, 58, 50}, _health)
     {
-        boss1SmallBullets = _boss1SmallBulletPool;
+        std::shared_ptr<PoolingVector<Boss2SmallBullet>> _boss2SmallBulletPool = std::make_shared<PoolingVector<Boss2SmallBullet>>(100);
+        std::shared_ptr<PoolingVector<SimpleBullet1Slow>> _simpleBullet1SlowPool = std::make_shared<PoolingVector<SimpleBullet1Slow>>(100);
+        std::shared_ptr<PoolingVector<Boss1FastBurstBullet>> _simpleBullet1FastPool = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(150);
+        std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>> _boss2AutomatonPinkBulletPool = std::make_shared<PoolingVector<Boss2AutomatonPinkBullet>>(300);
+        automatonPinkBulletPool = _boss2AutomatonPinkBulletPool;
+        boss2SmallBullets = _boss2SmallBulletPool;
         simpleBullet1SlowPool = _simpleBullet1SlowPool;
         simpleBullet1FastPool = _simpleBullet1FastPool;
+        GlobalPools::AddPools({_boss2SmallBulletPool, _simpleBullet1SlowPool, _simpleBullet1FastPool, _boss2AutomatonPinkBulletPool});
+        collider2 = {0, COLLIDER_2_Y_OFFSET, 30, 24};
     }
 
     void doPreStep() override
@@ -169,6 +180,8 @@ public:
         position += movementVector;
         collider.x = position.x - (collider.width / 2);
         collider.y = position.y - (collider.height / 2) + COLLIDER_Y_OFFSET;
+        collider2.x = position.x - (collider2.width / 2);
+        collider2.y = position.y - (collider2.height / 2) + COLLIDER_2_Y_OFFSET;
         switch (bossPhase)
         {
         case PRE_FIGHT:
@@ -178,19 +191,20 @@ public:
                 if (stepsElapsed % 40 == 0)
                 {
                     Vector2 _pos = {position.x - 20.1f, position.y - 14.8f};
-                    part1GlowSteps = 20;
-                    part4GlowSteps = 20;
-                    const Vector2 _leftCorner = {position.x - 60, position.y - 28.5f};
-                    fireSpread(_pos, Vector2Normalize({_leftCorner.x - _pos.x, _leftCorner.y - _pos.y + 3}));
+                    const Vector2 _leftCorner = {position.x - 30, position.y - 28.5f};
+                    //fireSpread(_pos, Vector2Normalize({_leftCorner.x - _pos.x, _leftCorner.y - _pos.y + 3}));
                     _pos.x = position.x + 20.1f;
-                    const Vector2 _rightCorner = {position.x + 60, position.y - 28.5f};
-                    fireSpread(_pos, Vector2Normalize({_rightCorner.x - _pos.x, _rightCorner.y - _pos.y + 3}));
+                    const Vector2 _rightCorner = {position.x + 30, position.y - 28.5f};
+                    //fireSpread(_pos, Vector2Normalize({_rightCorner.x - _pos.x, _rightCorner.y - _pos.y + 3}));
                 }
                 if (stepsElapsed % PHASE_1_FIRE_RATE == 0)
                 {
-                    if (++currentSmallPart >= 11)
+                    if (++currentSmallPart >= 30)
                         currentSmallPart = 0;
-                    fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 240 - 120) / 1000), static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 240 - 120) / 5000));
+                    else if (currentSmallPart == 1)
+                        SoundHandler::PlaySound(SOUNDS::BANG_2);
+                    if (currentSmallPart < 20)
+                        fireSmallPartShot(currentSmallPart % 10, 0, 0);
                     //fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 1000, static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 5000);
                 }
                 break;
@@ -200,15 +214,13 @@ public:
                 if (stepsElapsed % PHASE_2_FIRE_RATE == 0)
                 {
                     if (currentSmallPart-- == 0)
-                        currentSmallPart = 10;
+                        currentSmallPart = 9;
                     fireSmallPartShot(currentSmallPart);
                 }
 
                 if (stepsElapsed % 60 == 0)
                 {
                     Vector2 _pos = {position.x - 20.1f, position.y - 14.8f};
-                    part1GlowSteps = 20;
-                    part4GlowSteps = 20;
                     const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
                     fireBurst(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
                     _pos.x = position.x + 20.1f;
@@ -227,8 +239,6 @@ public:
                 if (stepsElapsed % 60 == 0)
                 {
                     Vector2 _pos = {position.x - 20.1f, position.y - 14.8f};
-                    part1GlowSteps = 20;
-                    part4GlowSteps = 20;
                     const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
                     fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
                     _pos.x = position.x + 20.1f;
@@ -256,15 +266,11 @@ public:
                     const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
                     if (stepsElapsed % 80 == 0)
                     {
-                        part2GlowSteps = 20;
-                        part3GlowSteps = 20;
                         fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
                         _pos.x = position.x + 15;
                         fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
                     } else if (stepsElapsed % 80 == 3)
                     {
-                        part2GlowSteps = 20;
-                        part3GlowSteps = 20;
                         fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
                         _pos.x = position.x + 15;
                         fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
@@ -273,12 +279,10 @@ public:
                 if (stepsElapsed % 140 == 0)
                 {
                     Vector2 _pos = {position.x - 20.1f, position.y - 14.8f};
-                    part1GlowSteps = 20;
                     const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
                     fireBurst(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}), true);
                 } else if (stepsElapsed % 140 == 50)
                 {Vector2 _pos = {position.x + 20.1f, position.y - 14.8f};
-                    part4GlowSteps = 20;
                     const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
                     fireBurst(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}), true);
                 }
@@ -286,7 +290,10 @@ public:
             break;
         }
         checkPlayerCollision();
+        checkPlayerCollision(collider2);
         if (checkPlayerBulletCollision())
+            takeDamage();
+        if (checkPlayerBulletCollision(collider2))
             takeDamage();
         return true;
     }
@@ -299,10 +306,16 @@ public:
         const SpriteParametres opts = {.i=BOSS_2_RING, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour};
         SpriteHandler::QueueMyAnimatedSprite(opts);
         SpriteHandler::QueueMyStaticSprite({.i=BOSS_2_BASE, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour});
+        for (int i = 0; i < currentSmallPartsGlowSteps.size(); i++)
+        {
+            int j = --currentSmallPartsGlowSteps[i];
+            if (j > 0)
+                SpriteHandler::QueueMyStaticSprite({.i=BOSS_2_SMALL_PART_GLOW, .pos = Vector2Add(position, smallPartOffsets[i]), .l = LAYER_GROUNDED});
+        }
     }
 
 
-    void SetPhase(const BOSS_1_PHASES _newPhase)
+    void SetPhase(const BOSS_2_PHASES _newPhase)
     {
         bossPhase = _newPhase;
         initPhase(_newPhase);

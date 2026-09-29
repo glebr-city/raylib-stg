@@ -27,7 +27,7 @@ protected:
             doMainFireThisTime = !doMainFireThisTime;
             SoundHandler::PlaySound(THUMP_1);
             Vector2 bulletSpawnPos = {position.x, position.y};
-            Vector2 pinkBulletDirection = Vector2Normalize(Vector2Subtract({playerFinalPos.x - 1, playerFinalPos.y}, bulletSpawnPos));
+            Vector2 pinkBulletDirection = Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, bulletSpawnPos));
             RNGHandler::StepSeed();
             pinkBulletDirection = Vector2Rotate(pinkBulletDirection, (static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 31) - 15)) / 100);
             bulletPool2->spawn().spawn(bulletSpawnPos, pinkBulletDirection, PINK);
@@ -37,7 +37,6 @@ protected:
                 bulletPool1->spawn().spawn(bulletSpawnPos, Vector2Normalize(Vector2Subtract({playerFinalPos.x - 1.2f, playerFinalPos.y}, bulletSpawnPos)), mainShotColour);
                 bulletSpawnPos = {position.x + 6, position.y};
                 bulletPool1->spawn().spawn(bulletSpawnPos, Vector2Normalize(Vector2Subtract({playerFinalPos.x + 1.2f, playerFinalPos.y}, bulletSpawnPos)), mainShotColour);
-
             }
         }
     }

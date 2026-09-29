@@ -45,7 +45,7 @@ private:
         SpawnedEnemies::spawnEnemy(boss1);
     }
 public:
-    explicit Boss1Phase1(std::string _phaseName = "Boss1Phase1", const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss1::BOSS_1_PHASES _bossPhase = PHASE_1_BOSS_PHASE) : PhaseHelper(std::move(_phaseName))
+    explicit Boss1Phase1(std::string _phaseName = "Boss1Phase1", const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss1::BOSS_1_PHASES _bossPhase = PHASE_1_BOSS_PHASE) : PhaseHelper(std::move(_phaseName), {0, -770}, {0, 0}, DIAGONAL_TANK_BACKGROUND)
     {
         maxHealth = _maxHealth;
         maxTimer = _maxTimer;
@@ -55,8 +55,8 @@ public:
 
     void InitPhase() override
     {
-        BackgroundHandler::SetScrollVector({0, 0});
-        BackgroundHandler::SetBackgroundPosition({0, -770});
+        BackgroundHandler::SetScrollVector(defaultScrollVector);
+        BackgroundHandler::SetBackgroundPosition(defaultBackgroundPosition);
         attemptFindingBoss1();
         bossHealth = boss1->GetHealth();
         boss1->SetPhase(Boss1::PRE_FIGHT);
