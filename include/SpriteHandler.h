@@ -55,6 +55,7 @@ typedef enum {
     STAGE_2_BACKGROUND,
     BOSS_2_BASE,
     BOSS_2_SMALL_PART_GLOW,
+    BOSS_2_CROSS_GLOW,
 
     STATIC_SPRITE_COUNT
 } STATIC_SPRITES;
@@ -158,6 +159,7 @@ private:
         std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/stage2Background.png"), {120,1980}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss2BaseSpriteSheet.png"), {62,93}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss2SmallPartGlow.png"), {3,3}}),
+        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss2CrossGlow.png"), {5,7}}),
     };
 }
     static void DrawMyStaticSprite(const SpriteParametres& opts);

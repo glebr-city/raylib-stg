@@ -105,6 +105,9 @@ add_executable(raylib_stg src/main.cpp
         include/Boss2Automaton.h
         include/Boss2AutomatonPinkBullet.h
         include/Boss2SmallBullet.h
+        include/phases/Boss2Phase2.h
+        include/Boss2CrossBullet1.h
+        include/SimpleBullet2VariableSpeed.h
 )
 
 target_sources(raylib_stg

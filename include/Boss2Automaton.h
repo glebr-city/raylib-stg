@@ -6,6 +6,7 @@
 #define RAYLIB_STG_BOSS2AUTOMATON_H
 #include "Boss2AutomatonPinkBullet.h"
 #include "RNGHandler.h"
+#include "SimpleBullet2VariableSpeed.h"
 
 struct Boss2AutomatonState //Based heavily on Enemy1State.
 {
@@ -21,6 +22,7 @@ class Boss2Automaton : public Enemy //Copying Enemy1Base... perhaps not the best
 {
 private:
     const u_int PHASE_1_FIRE_RATE = 30;
+    const u_int PHASE_2_FIRE_RATE = 100;
     bool isDisabled = false;
 public:
     typedef enum
@@ -28,6 +30,8 @@ public:
         PRE_FIGHT = 0,
         PHASE_1_AUTOMATON_1,
         PHASE_1_AUTOMATON_2,
+        PHASE_2_AUTOMATON_1,
+        PHASE_2_AUTOMATON_2,
         PHASE_2,
         PHASE_3,
         PHASE_4,
@@ -38,6 +42,8 @@ private:
         std::vector<Boss2AutomatonState>{{}},
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}},
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}},
     };
 
     const std::vector<int> phaseHealth{
@@ -52,8 +58,9 @@ protected:
     static constexpr ANIMATED_SPRITES sprite = BOSS_2_AUTOMATON;
     BOSS_2_AUTOMATON_PHASES currentPhase = PRE_FIGHT;
     std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>> pinkBulletPool;
+    std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>> variableSpeedBulletPool;
     u_int elapsedSteps;
-    std::vector<Boss2AutomatonState> stateVector;
+    std::vector<Boss2AutomatonState> stateVector = {{.speed = 0}};
     u_int currentStateIndex = 0;
     float currentSpeed = 0;
     u_int elapsedStepsInState = 0;
@@ -62,12 +69,22 @@ protected:
     virtual void shootPinkRandomBullets()
     {
         const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
-        Vector2 bulletSpawnPos = {position.x, position.y};
-        Vector2 pinkBulletDirection = Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, bulletSpawnPos));
+        Vector2 pinkBulletDirection = Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, position));
         RNGHandler::StepSeed();
         pinkBulletDirection = Vector2Rotate(pinkBulletDirection, (static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 31) - 15)) / 50);
-        pinkBulletPool->spawn().spawn(bulletSpawnPos, pinkBulletDirection, PINK);
+        pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
     }
+
+    virtual void shootVariableSpeedBullet(const float _speed, const float _rotation = 0, Color _col = PINK)
+    {
+        const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
+        const Vector2 pinkBulletDirection = Vector2Rotate(Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, position)), _rotation);
+        //RNGHandler::StepSeed();
+        //pinkBulletDirection = Vector2Rotate(pinkBulletDirection, (static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 31) - 15)) / 50);
+        variableSpeedBulletPool->spawn().spawn(_speed, position, pinkBulletDirection, _col);
+    }
+
+
 
     void initPhase(const BOSS_2_AUTOMATON_PHASES _newPhase)
     {
@@ -77,51 +94,93 @@ protected:
         case PRE_FIGHT:
             isDisabled = true;
             stateVector = phaseVectors[PRE_FIGHT];
-            return;
+            break;
         case PHASE_1_AUTOMATON_1:
             position = {-10, 15};
             stateVector = phaseVectors[PHASE_1_AUTOMATON_1];
             isDisabled = false;
-            return;
+            break;
         case PHASE_1_AUTOMATON_2:
             position = {130, 15};
             stateVector = phaseVectors[PHASE_1_AUTOMATON_2];
             isDisabled = false;
-            return;
+            break;
+        case PHASE_2_AUTOMATON_1:
+            stateVector = phaseVectors[PHASE_2_AUTOMATON_1];
+            isDisabled = false;
+            break;
+        case PHASE_2_AUTOMATON_2:
+            stateVector = phaseVectors[PHASE_2_AUTOMATON_2];
+            isDisabled = false;
+            break;
         default:
-            return;
+            break;
         }
+        currentStateIndex = 0;
+        enterNewState(0);
     }
 
     virtual void handleShooting()
     {
-        auto _currentState = stateVector[currentStateIndex];
-        if (_currentState.fireRate > 0 && elapsedSteps % _currentState.fireRate == 0)
-        {
+        const auto _currentState = stateVector[currentStateIndex];
             switch (currentPhase)
             {
             case PRE_FIGHT:
                 return;
             case PHASE_1_AUTOMATON_1:
-                SoundHandler::PlaySound(THUMP_1);
-                shootPinkRandomBullets();
-                shootPinkRandomBullets();
-                return;
             case PHASE_1_AUTOMATON_2:
-                SoundHandler::PlaySound(THUMP_1);
-                shootPinkRandomBullets();
-                shootPinkRandomBullets();
+                if (elapsedSteps % _currentState.fireRate == 0)
+                {
+                    SoundHandler::PlaySound(THUMP_1);
+                    shootPinkRandomBullets();
+                    shootPinkRandomBullets();
+                }
                 return;
-            default:
-                return;
+            case PHASE_2_AUTOMATON_1:
+            case PHASE_2_AUTOMATON_2:
+                const float movementDirection = -std::copysignf( 0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
+                const auto stepThing = elapsedSteps % _currentState.fireRate;
+                const Color bulletColour = { static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(109 - stepThing * 3), static_cast<u_char>(194 - stepThing * 3), 255 };
+                if (stepThing == 0)
+                {
+                    shootVariableSpeedBullet(0.8f, 0, bulletColour);
+                } else if (stepThing == 6)
+                {
+                    shootVariableSpeedBullet(0.9f, 0.1f * movementDirection, bulletColour);
+                } else if (stepThing == 13)
+                {
+                    shootVariableSpeedBullet(1.0f, 0.2f * movementDirection, bulletColour);
+                } else if (stepThing == 16)
+                {
+                    shootVariableSpeedBullet(1.1f, 0.3f * movementDirection, bulletColour);
+                } else if (stepThing == 19)
+                {
+                    shootVariableSpeedBullet(1.2f, 0.4f * movementDirection, bulletColour);
+                } else if (stepThing == 22)
+                {
+                    shootVariableSpeedBullet(1.3f, 0.5f * movementDirection, bulletColour);
+                } else if (stepThing == 25)
+                {
+                    shootVariableSpeedBullet(1.4f, 0.4f * movementDirection, bulletColour);
+                }else if (stepThing == 28)
+                {
+                    shootVariableSpeedBullet(1.5f, 0.3f * movementDirection, bulletColour);
+                } else if (stepThing == 31)
+                {
+                    shootVariableSpeedBullet(1.6f, 0, bulletColour);
+                }
+                break;
+            //default:
+                //return;
             }
+        return;
         }
-    }
 
 public:
 
-    Boss2Automaton(const std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>>& _pinkBulletPool, const uint _scoreValue = 2000) : Enemy(_scoreValue) {
+    Boss2Automaton(const std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>>& _pinkBulletPool, const std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>>& _variableSpeedPool, const uint _scoreValue = 2000) : Enemy(_scoreValue) {
         pinkBulletPool = _pinkBulletPool;
+        variableSpeedBulletPool = _variableSpeedPool;
         elapsedSteps = -1;
         position = {0, 0};
         collider = {0, 0, 10, 10};
@@ -140,7 +199,7 @@ public:
         if (--currentFlashDuration > 0 && GlobalVariables::currentStep() % 40 > 25)
             drawnColour = RED;
         int yOffset = 0;
-        if (elapsedSteps % stateVector[currentStateIndex].fireRate < 10)
+        if (stateVector[currentStateIndex].fireRate > 0 && elapsedSteps % stateVector[currentStateIndex].fireRate < 10)
             yOffset = 1;
         SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .yOffset = yOffset, .l = LAYER_ENEMY, .col=drawnColour});
     }

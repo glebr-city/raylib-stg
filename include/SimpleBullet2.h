@@ -20,7 +20,7 @@ public:
         color = col;
     }
 
-    bool doPhysics() override
+    virtual bool doPhysics() override
     {
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();
@@ -33,7 +33,7 @@ public:
         return true;
     }
 
-    void spawn(const Vector2 pos, const Vector2 dir, const Color col)
+    virtual void spawn(const Vector2 pos, const Vector2 dir, const Color col)
     {
         direction = dir;
         color = col;
