@@ -35,6 +35,12 @@ public:
         PHASE_4,
         PHASE_DEFEAT
     }BOSS_2_PHASES;
+
+    typedef enum {
+        LOW = 0,
+        MIDDLE,
+        HIGH
+    } PHASE_3_FIRE_SEGMENTS;
 private:
     Rectangle collider2; //Due to the boss' shape, a second collider is required!
     std::shared_ptr<Boss2Automaton> automaton1;
@@ -125,6 +131,41 @@ private:
         crossBullet1Pool->spawn().spawn(Vector2Add(position, crossOffsets[_currentCross]), Vector2Normalize(Vector2{tempX * 0.015f + 0 * std::signbit(tempX), 1}), shotColour);
     }
 
+    void firePhase3SmallPartShot(PHASE_3_FIRE_SEGMENTS _segment) {
+        Vector2 rotation;
+        switch (_segment){
+            case LOW:
+                for (int j = 0; j < 4; j++) {
+                    for (int i = 6; i < 10; i++) {
+                        rotation = Vector2Normalize({(smallPartOffsets[i].x + j) / 30, (1 - static_cast<float>(j) / 3)});
+                        Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
+                        currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
+                        smallBulletPool->spawn().spawn(_currentBulletSpawnPos, rotation, PARTS_COLOUR);
+                    }
+                }
+                break;
+            case MIDDLE:
+                for (int j = 4; j < 6; j++) {
+                    rotation = Vector2Normalize({smallPartOffsets[j].x / 30, 1});
+                    for (int i = 4; i < 6; i++) {
+                        const Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
+                        currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
+                        smallBulletPool->spawn().spawn(_currentBulletSpawnPos, rotation, PARTS_COLOUR);
+                    }
+                }
+                break;
+                case HIGH:
+                rotation = Vector2Normalize({smallPartOffsets[0].x / 30, 1});
+                for (int i = 0; i < 4; i++) {
+                    Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
+                    currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
+                    smallBulletPool->spawn().spawn(_currentBulletSpawnPos, Vector2Normalize({smallPartOffsets[i].x / 20, 1}), PARTS_COLOUR);
+                }
+            default:
+                break;
+        }
+    };
+
     void initPhase(const BOSS_2_PHASES _newPhase)
     {
         switch (_newPhase)
@@ -137,7 +178,7 @@ private:
             }
             break;
         case PRE_FIGHT:
-            movementVector.x = 0;
+            movementVector = Vector2Zeros;
             automaton1->SetPhase(Boss2Automaton::PRE_FIGHT);
             automaton2->SetPhase(Boss2Automaton::PRE_FIGHT);
             break;
@@ -250,10 +291,10 @@ public:
                     fireSmallPartShot(9 - currentSmallPart, _maxRotation);
                 }
 
-                if (position.y < 39.5f)
+                if (position.y < 39.4f)
                 {
                     movementVector.y = 0;
-                    position.y = 40;
+                    position.y = 39.5f;
                 } else if (position.y > 60.5f)
                 {
                     if (position.y < 62)
@@ -280,22 +321,14 @@ public:
                 }
             }
             break;
-        case PHASE_3:
+        case PHASE_3: {
+            if (stepsElapsed % PHASE_3_FIRE_RATE == 0)
             {
-                if (stepsElapsed % PHASE_3_FIRE_RATE == 0)
-                {
-                    smallPartsGlowSteps = 24;
-                    for (int i = 0; i < 10; i++)
-                        fireSmallPartShot(i, 1);
-                }
-                if (stepsElapsed % 60 == 0)
-                {
-                    Vector2 _pos = {position.x - 20.1f, position.y - 14.8f};
-                    const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-                    fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
-                    _pos.x = position.x + 20.1f;
-                    fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
-                }
+                firePhase3SmallPartShot(LOW);
+            } else if (stepsElapsed % PHASE_3_FIRE_RATE == 5)
+                firePhase3SmallPartShot(MIDDLE);
+            else if (stepsElapsed % PHASE_3_FIRE_RATE == 10)
+                firePhase3SmallPartShot(HIGH);
             }
             break;
         case PHASE_4:

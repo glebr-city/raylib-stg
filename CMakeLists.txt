@@ -1,4 +1,5 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
+cmake_policy(SET CMP0076 NEW)
 project(raylib_stg)
 add_executable(raylib_stg src/main.cpp
         include/StepThinker.h
@@ -108,6 +109,7 @@ add_executable(raylib_stg src/main.cpp
         include/phases/Boss2Phase2.h
         include/Boss2CrossBullet1.h
         include/SimpleBullet2VariableSpeed.h
+        include/phases/Boss2Phase3.h
 )
 
 target_sources(raylib_stg
@@ -117,8 +119,6 @@ target_sources(raylib_stg
 
 set(CMAKE_CXX_STANDARD 26)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-cmake_policy(SET CMP0076 NEW)
 
 
 

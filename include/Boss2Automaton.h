@@ -75,7 +75,7 @@ protected:
         pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
     }
 
-    virtual void shootVariableSpeedBullet(const float _speed, const float _rotation = 0, Color _col = PINK)
+    virtual void shootVariableSpeedBullet(const float _speed, const float _rotation, Color _col)
     {
         const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
         const Vector2 pinkBulletDirection = Vector2Rotate(Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, position)), _rotation);
@@ -150,22 +150,22 @@ protected:
                 } else if (stepThing == 13)
                 {
                     shootVariableSpeedBullet(1.0f, 0.2f * movementDirection, bulletColour);
-                } else if (stepThing == 16)
+                } else if (stepThing == 14)
                 {
                     shootVariableSpeedBullet(1.1f, 0.3f * movementDirection, bulletColour);
-                } else if (stepThing == 19)
+                } else if (stepThing == 15)
                 {
                     shootVariableSpeedBullet(1.2f, 0.4f * movementDirection, bulletColour);
-                } else if (stepThing == 22)
+                } else if (stepThing == 16)
                 {
                     shootVariableSpeedBullet(1.3f, 0.5f * movementDirection, bulletColour);
-                } else if (stepThing == 25)
+                } else if (stepThing == 17)
                 {
                     shootVariableSpeedBullet(1.4f, 0.4f * movementDirection, bulletColour);
-                }else if (stepThing == 28)
+                }else if (stepThing == 18)
                 {
                     shootVariableSpeedBullet(1.5f, 0.3f * movementDirection, bulletColour);
-                } else if (stepThing == 31)
+                } else if (stepThing == 19)
                 {
                     shootVariableSpeedBullet(1.6f, 0, bulletColour);
                 }
