@@ -32,7 +32,8 @@ public:
         PHASE_1_AUTOMATON_2,
         PHASE_2_AUTOMATON_1,
         PHASE_2_AUTOMATON_2,
-        PHASE_2,
+        PRE_PHASE_3_AUTOMATON_1,
+        PRE_PHASE_3_AUTOMATON_2,
         PHASE_3,
         PHASE_4,
         PHASE_DEFEAT
@@ -44,10 +45,15 @@ private:
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}},
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}},
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {5, 5}, .speed = 70}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {115, 5}, .speed = 70}},
     };
 
     const std::vector<int> phaseHealth{
         0,
+        20,
+        20,
+        20,
         20,
         20,
         20,
@@ -113,6 +119,18 @@ protected:
             stateVector = phaseVectors[PHASE_2_AUTOMATON_2];
             isDisabled = false;
             break;
+        case PRE_PHASE_3_AUTOMATON_1:
+            isDisabled = true;
+            stateVector = phaseVectors[PRE_PHASE_3_AUTOMATON_1];
+            break;
+        case PRE_PHASE_3_AUTOMATON_2:
+            isDisabled = true;
+            stateVector = phaseVectors[PRE_PHASE_3_AUTOMATON_2];
+            break;
+        case PHASE_3:
+            isDisabled = false;
+            SetPhase(PHASE_1_AUTOMATON_1);
+
         default:
             break;
         }

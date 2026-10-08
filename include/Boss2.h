@@ -24,13 +24,14 @@ public:
     constexpr static Color CROSS_SHOT_COLOUR = {200, 0, 59, 255};
     constexpr static uint8_t PHASE_1_FIRE_RATE = 3;
     constexpr static uint8_t PHASE_2_FIRE_RATE = 16;
-    constexpr static uint8_t PHASE_3_FIRE_RATE = 76;
+    constexpr static uint8_t PHASE_3_FIRE_RATE = 60;
     constexpr static uint8_t PHASE_4_FIRE_RATE = 24;
     typedef enum
     {
         PRE_FIGHT = 0,
         PHASE_1,
         PHASE_2,
+        PRE_PHASE_3,
         PHASE_3,
         PHASE_4,
         PHASE_DEFEAT
@@ -131,35 +132,62 @@ private:
         crossBullet1Pool->spawn().spawn(Vector2Add(position, crossOffsets[_currentCross]), Vector2Normalize(Vector2{tempX * 0.015f + 0 * std::signbit(tempX), 1}), shotColour);
     }
 
-    void firePhase3SmallPartShot(PHASE_3_FIRE_SEGMENTS _segment) {
+    void firePhase3SmallPartShot(const PHASE_3_FIRE_SEGMENTS _segment) {
         Vector2 rotation;
+        RNGHandler::StepSeed();
+        float yValue = (1 - ((RNGHandler::GetSeed() % 100) * 0.005f));
         switch (_segment){
             case LOW:
-                for (int j = 0; j < 4; j++) {
-                    for (int i = 6; i < 10; i++) {
-                        rotation = Vector2Normalize({(smallPartOffsets[i].x + j) / 30, (1 - static_cast<float>(j) / 3)});
-                        Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
-                        currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
-                        smallBulletPool->spawn().spawn(_currentBulletSpawnPos, rotation, PARTS_COLOUR);
+                SoundHandler::PlaySound(SOUNDS::BANG_2);
+            for (int m = 1; m > -2; m -= 2)
+            {
+                for (int l = 0; l < 2; l++)
+                {
+                    for (int j = 0; j < 4; j++) {
+                        for (int i = 6; i < 10; i++) {
+                            rotation = Vector2Normalize({(smallPartOffsets[i].x + j) / 30 * l, (m * yValue - static_cast<float>(j) / 3)});
+                            if (rotation == Vector2Zeros)
+                                rotation = Vector2{0, 1};
+                            Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
+                            currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
+                            smallBulletPool->spawn().spawn(_currentBulletSpawnPos, rotation, PARTS_COLOUR);
+                        }
                     }
                 }
+            }
                 break;
             case MIDDLE:
-                for (int j = 4; j < 6; j++) {
-                    rotation = Vector2Normalize({smallPartOffsets[j].x / 30, 1});
-                    for (int i = 4; i < 6; i++) {
-                        const Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
-                        currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
-                        smallBulletPool->spawn().spawn(_currentBulletSpawnPos, rotation, PARTS_COLOUR);
+                SoundHandler::PlaySound(SOUNDS::BANG_1);
+            for (int m = 1; m > -2; m -= 2)
+            {
+                for (int l = 0; l < 2; l++)
+                {
+                    for (int k = 1; k < 6; k++)
+                    {
+                        for (int j = 4; j < 6; j++) {
+                            rotation = Vector2Normalize({smallPartOffsets[j].x / (30 * static_cast<float>(k) / 10) * l, m * yValue});
+                            for (int i = 4; i < 6; i++) {
+                                const Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
+                                currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
+                                smallBulletPool->spawn().spawn(_currentBulletSpawnPos, rotation, PARTS_COLOUR);
+                            }
+                        }
                     }
                 }
+            }
                 break;
-                case HIGH:
-                rotation = Vector2Normalize({smallPartOffsets[0].x / 30, 1});
-                for (int i = 0; i < 4; i++) {
-                    Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
-                    currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
-                    smallBulletPool->spawn().spawn(_currentBulletSpawnPos, Vector2Normalize({smallPartOffsets[i].x / 20, 1}), PARTS_COLOUR);
+            case HIGH:
+                SoundHandler::PlaySound(SOUNDS::BANG_2);
+                for (int m = 1; m > -2; m -= 2)
+                {
+                    for (int l = 0; l < 2; l++)
+                    {
+                        for (int i = 0; i < 4; i++) {
+                            Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[i]);
+                            currentSmallPartsGlowSteps[i] = smallPartsGlowSteps;
+                            smallBulletPool->spawn().spawn(_currentBulletSpawnPos, Vector2Normalize({smallPartOffsets[i].x / 20 * l, m * yValue}), PARTS_COLOUR);
+                        }
+                    }
                 }
             default:
                 break;
@@ -168,6 +196,7 @@ private:
 
     void initPhase(const BOSS_2_PHASES _newPhase)
     {
+        stepsElapsed = -1;
         switch (_newPhase)
         {
         case PHASE_1:
@@ -190,8 +219,14 @@ private:
             automaton1->SetPhase(Boss2Automaton::PHASE_2_AUTOMATON_1);
             automaton2->SetPhase(Boss2Automaton::PHASE_2_AUTOMATON_2);
             break;
+        case PRE_PHASE_3:
+            movementVector = Vector2Zeros;
+            automaton1->SetPhase(Boss2Automaton::PRE_PHASE_3_AUTOMATON_1);
+            automaton2->SetPhase(Boss2Automaton::PRE_PHASE_3_AUTOMATON_2);
         case PHASE_3:
-            movementVector.x = -0.1f;
+            movementVector.x = 0;
+            automaton1->SetPhase(Boss2Automaton::PHASE_3);
+            automaton2->SetPhase(Boss2Automaton::PHASE_3);
             break;
         case PHASE_4:
             if (position.x > 60)
@@ -228,7 +263,7 @@ public:
         crossBullet1Pool = std::make_shared<PoolingVector<Boss2CrossBullet1>>(100);
         automatonPinkBulletPool = std::make_shared<PoolingVector<Boss2AutomatonPinkBullet>>(300);;
         automatonVariableSpeedBulletPool = std::make_shared<PoolingVector<SimpleBullet2VariableSpeed>>(100);
-        smallBulletPool = std::make_shared<PoolingVector<Boss2SmallBullet>>(100);
+        smallBulletPool = std::make_shared<PoolingVector<Boss2SmallBullet>>(500);
         simpleBullet1SlowPool = std::make_shared<PoolingVector<SimpleBullet1Slow>>(100);
         simpleBullet1FastPool = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(150);
         GlobalPools::AddPools({smallBulletPool, simpleBullet1SlowPool, simpleBullet1FastPool, automatonPinkBulletPool, automatonVariableSpeedBulletPool, crossBullet1Pool});
@@ -321,13 +356,16 @@ public:
                 }
             }
             break;
+        case PRE_PHASE_3:
+            position = Vector2MoveTowards(position, BackgroundHandler::GetRelativePos(Vector2(60, -1900)), 0.5f);
+            break;
         case PHASE_3: {
             if (stepsElapsed % PHASE_3_FIRE_RATE == 0)
             {
                 firePhase3SmallPartShot(LOW);
-            } else if (stepsElapsed % PHASE_3_FIRE_RATE == 5)
+            } else if (stepsElapsed % PHASE_3_FIRE_RATE == 15)
                 firePhase3SmallPartShot(MIDDLE);
-            else if (stepsElapsed % PHASE_3_FIRE_RATE == 10)
+            else if (stepsElapsed % PHASE_3_FIRE_RATE == 30)
                 firePhase3SmallPartShot(HIGH);
             }
             break;
