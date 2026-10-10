@@ -24,7 +24,6 @@ private:
     }
 
     static void doPhysics() {
-        const std::array<Vector2, 2> playerPosAndMovement = PlayerHandler::GetPlayer()->GetPosAndMovement();
         scoreItemPool.doPhysics();
     }
     static void spawn(const Vector2 _position) {

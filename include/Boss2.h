@@ -24,7 +24,7 @@ public:
     constexpr static Color CROSS_SHOT_COLOUR = {200, 0, 59, 255};
     constexpr static uint8_t PHASE_1_FIRE_RATE = 3;
     constexpr static uint8_t PHASE_2_FIRE_RATE = 16;
-    constexpr static uint8_t PHASE_3_FIRE_RATE = 60;
+    constexpr static uint8_t PHASE_3_FIRE_RATE = 90;
     constexpr static uint8_t PHASE_4_FIRE_RATE = 24;
     typedef enum
     {
@@ -158,6 +158,13 @@ private:
                 break;
             case MIDDLE:
                 SoundHandler::PlaySound(SOUNDS::BANG_1);
+                /*for (int a = 4; a < 6; a++) { //Fire aimed shots at the middle of the screen
+                    const Vector2 _currentBulletSpawnPos = Vector2Add(position, smallPartOffsets[a]);
+                    Vector2 aimedRotation = Vector2Normalize(Vector2Subtract(Vector2{static_cast<float>(57 + (a - 3) * 2), 180}, _currentBulletSpawnPos));
+                    const float extraRotation = std::clamp(Vector2Angle(aimedRotation, Vector2Normalize(Vector2Subtract(PlayerHandler::GetPlayer()->GetFinalPos(), _currentBulletSpawnPos))), -0.1f, 0.1f);
+                    aimedRotation = Vector2Rotate(aimedRotation, extraRotation);
+                    smallBulletPool->spawn().spawn(_currentBulletSpawnPos, aimedRotation, {255, 40, 40, 255});
+                }*/
             for (int m = 1; m > -2; m -= 2)
             {
                 for (int l = 0; l < 2; l++)
@@ -223,8 +230,9 @@ private:
             movementVector = Vector2Zeros;
             automaton1->SetPhase(Boss2Automaton::PRE_PHASE_3_AUTOMATON_1);
             automaton2->SetPhase(Boss2Automaton::PRE_PHASE_3_AUTOMATON_2);
+                break;
         case PHASE_3:
-            movementVector.x = 0;
+            movementVector.x = 0.02f;
             automaton1->SetPhase(Boss2Automaton::PHASE_3);
             automaton2->SetPhase(Boss2Automaton::PHASE_3);
             break;
@@ -359,15 +367,16 @@ public:
         case PRE_PHASE_3:
             position = Vector2MoveTowards(position, BackgroundHandler::GetRelativePos(Vector2(60, -1900)), 0.5f);
             break;
-        case PHASE_3: {
+        case PHASE_3:
+                if (position.x >= 62 || position.x <= 58)
+                    movementVector.x = -movementVector.x;
             if (stepsElapsed % PHASE_3_FIRE_RATE == 0)
             {
                 firePhase3SmallPartShot(LOW);
-            } else if (stepsElapsed % PHASE_3_FIRE_RATE == 15)
+            } else if (stepsElapsed % PHASE_3_FIRE_RATE == 21)
                 firePhase3SmallPartShot(MIDDLE);
-            else if (stepsElapsed % PHASE_3_FIRE_RATE == 30)
+            else if (stepsElapsed % PHASE_3_FIRE_RATE == 42)
                 firePhase3SmallPartShot(HIGH);
-            }
             break;
         case PHASE_4:
             {

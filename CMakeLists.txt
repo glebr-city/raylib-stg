@@ -110,6 +110,7 @@ add_executable(raylib_stg src/main.cpp
         include/Boss2CrossBullet1.h
         include/SimpleBullet2VariableSpeed.h
         include/phases/Boss2Phase3.h
+        include/phases/Boss2Phase4.h
 )
 
 target_sources(raylib_stg

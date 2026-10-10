@@ -77,21 +77,31 @@ protected:
         speed = 0;
         position = _position;
 
-        int divided = static_cast<int>(std::floor(static_cast<double>(_value) / 10));
+        const int divided = static_cast<int>(std::floor(static_cast<double>(_value) * 0.1));
         value = divided;
+
+        valueSprite = DARK_SMALL;
         if (divided <= 5) {
-            valueSprite = DARK_SMALL;
-        } else if (divided <= 10) {
-            valueSprite = DARK_MEDIUM;
-        } else if (divided <= 20) {
-            valueSprite = DARK_LARGE;
-        } else if (divided <= 30) {
-            valueSprite = LIGHT_SMALL;
-        } else if (divided <= 40) {
-            valueSprite = LIGHT_MEDIUM;
-        } else {
-            valueSprite = LIGHT_LARGE;
+            return;
         }
+        if (divided <= 10) {
+            valueSprite = DARK_MEDIUM;
+            return;
+        }
+        if (divided <= 20) {
+            valueSprite = DARK_LARGE;
+            return;
+        }
+        if (divided <= 30) {
+            valueSprite = LIGHT_SMALL;
+            return;
+        }
+        if (divided <= 40) {
+            valueSprite = LIGHT_MEDIUM;
+            return;
+        }
+        valueSprite = LIGHT_LARGE;
+        return;
     }
 };
 #endif //RAYLIB_STG_SCOREITEM_H

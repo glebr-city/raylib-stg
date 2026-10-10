@@ -23,6 +23,8 @@ class Boss2Automaton : public Enemy //Copying Enemy1Base... perhaps not the best
 private:
     const u_int PHASE_1_FIRE_RATE = 30;
     const u_int PHASE_2_FIRE_RATE = 100;
+    float currentPhase3TurretRotation = 0;
+    const float maxPhase3TurretRotation = 6.2831853072f;
     bool isDisabled = false;
 public:
     typedef enum
@@ -45,8 +47,9 @@ private:
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 15}, .speed = 50, .fireRate = PHASE_1_FIRE_RATE, .slowAtDesiredPos = false}},
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}},
         std::vector<Boss2AutomatonState>{{.desiredPos = {60, 25}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {0, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {3, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {60, 5}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {120, 40}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = true}, {.desiredPos = {117, 15}, .speed = 50, .fireRate = PHASE_2_FIRE_RATE, .slowAtDesiredPos = false}},
-        std::vector<Boss2AutomatonState>{{.desiredPos = {5, 5}, .speed = 70}},
-        std::vector<Boss2AutomatonState>{{.desiredPos = {115, 5}, .speed = 70}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {5, 5}, .speed = 150}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {115, 5}, .speed = 150}},
+        std::vector<Boss2AutomatonState>{{.speed = 0, .fireRate=15}},
     };
 
     const std::vector<int> phaseHealth{
@@ -72,6 +75,20 @@ protected:
     u_int elapsedStepsInState = 0;
     bool hasStartedSlowing = false;
 
+
+    virtual void shootPhase3PinkBullets() {
+        const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
+        Vector2 pinkBulletDirection = Vector2Rotate({-0.70711, -0.70711}, currentPhase3TurretRotation);
+        RNGHandler::StepSeed();
+        pinkBulletDirection = Vector2Rotate(pinkBulletDirection, (static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 31) - 15)) / 500);
+        pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
+        pinkBulletDirection = {-pinkBulletDirection.x, pinkBulletDirection.y};
+        pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
+        pinkBulletDirection = {pinkBulletDirection.x, -pinkBulletDirection.y};
+        pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
+        pinkBulletDirection = {-pinkBulletDirection.x, pinkBulletDirection.y};
+        pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
+    }
     virtual void shootPinkRandomBullets()
     {
         const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
@@ -129,7 +146,8 @@ protected:
             break;
         case PHASE_3:
             isDisabled = false;
-            SetPhase(PHASE_1_AUTOMATON_1);
+            stateVector = phaseVectors[PHASE_3];
+                break;
 
         default:
             break;
@@ -138,65 +156,68 @@ protected:
         enterNewState(0);
     }
 
-    virtual void handleShooting()
-    {
+    virtual void handleShooting() {
         const auto _currentState = stateVector[currentStateIndex];
-            switch (currentPhase)
-            {
+        switch (currentPhase) {
             case PRE_FIGHT:
-                return;
+                break;
             case PHASE_1_AUTOMATON_1:
             case PHASE_1_AUTOMATON_2:
-                if (elapsedSteps % _currentState.fireRate == 0)
-                {
+                if (elapsedSteps % _currentState.fireRate == 0) {
                     SoundHandler::PlaySound(THUMP_1);
                     shootPinkRandomBullets();
                     shootPinkRandomBullets();
                 }
-                return;
+                break;
+            case PHASE_3:
+                if (elapsedSteps % _currentState.fireRate == 0) {
+                    shootPhase3PinkBullets();
+                    RNGHandler::StepSeed();
+                    currentPhase3TurretRotation += 0.15 + (RNGHandler::GetSeed() % 100 * 0.00125);
+
+                    if (currentPhase3TurretRotation > maxPhase3TurretRotation)
+                        currentPhase3TurretRotation = 0;
+                }
+                break;
             case PHASE_2_AUTOMATON_1:
             case PHASE_2_AUTOMATON_2:
-                const float movementDirection = -std::copysignf( 0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
+                const float movementDirection = -std::copysignf(
+                    0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
                 const auto stepThing = elapsedSteps % _currentState.fireRate;
-                const Color bulletColour = { static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(109 - stepThing * 3), static_cast<u_char>(194 - stepThing * 3), 255 };
-                if (stepThing == 0)
-                {
+                const Color bulletColour = {
+                    static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(109 - stepThing * 3),
+                    static_cast<u_char>(194 - stepThing * 3), 255
+                };
+                if (stepThing == 0) {
                     shootVariableSpeedBullet(0.8f, 0, bulletColour);
-                } else if (stepThing == 6)
-                {
+                } else if (stepThing == 6) {
                     shootVariableSpeedBullet(0.9f, 0.1f * movementDirection, bulletColour);
-                } else if (stepThing == 13)
-                {
+                } else if (stepThing == 13) {
                     shootVariableSpeedBullet(1.0f, 0.2f * movementDirection, bulletColour);
-                } else if (stepThing == 14)
-                {
+                } else if (stepThing == 14) {
                     shootVariableSpeedBullet(1.1f, 0.3f * movementDirection, bulletColour);
-                } else if (stepThing == 15)
-                {
+                } else if (stepThing == 15) {
                     shootVariableSpeedBullet(1.2f, 0.4f * movementDirection, bulletColour);
-                } else if (stepThing == 16)
-                {
+                } else if (stepThing == 16) {
                     shootVariableSpeedBullet(1.3f, 0.5f * movementDirection, bulletColour);
-                } else if (stepThing == 17)
-                {
+                } else if (stepThing == 17) {
                     shootVariableSpeedBullet(1.4f, 0.4f * movementDirection, bulletColour);
-                }else if (stepThing == 18)
-                {
+                } else if (stepThing == 18) {
                     shootVariableSpeedBullet(1.5f, 0.3f * movementDirection, bulletColour);
-                } else if (stepThing == 19)
-                {
+                } else if (stepThing == 19) {
                     shootVariableSpeedBullet(1.6f, 0, bulletColour);
                 }
                 break;
-            //default:
+
+                //default:
                 //return;
-            }
-        return;
         }
+        return;
+    }
 
 public:
 
-    Boss2Automaton(const std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>>& _pinkBulletPool, const std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>>& _variableSpeedPool, const uint _scoreValue = 2000) : Enemy(_scoreValue) {
+    Boss2Automaton(const std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>>& _pinkBulletPool, const std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>>& _variableSpeedPool, const uint _scoreValue = 4000) : Enemy(_scoreValue) {
         pinkBulletPool = _pinkBulletPool;
         variableSpeedBulletPool = _variableSpeedPool;
         elapsedSteps = -1;
