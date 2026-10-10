@@ -20,7 +20,7 @@ public:
         color = col;
     }
 
-    virtual bool doPhysics() override
+    bool doPhysics() override
     {
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();

@@ -111,6 +111,8 @@ add_executable(raylib_stg src/main.cpp
         include/SimpleBullet2VariableSpeed.h
         include/phases/Boss2Phase3.h
         include/phases/Boss2Phase4.h
+        include/Boss2Phase4SuperCrossHelper.h
+        include/Boss2Phase4SuperCrossSimpleBullet2.h
 )
 
 target_sources(raylib_stg

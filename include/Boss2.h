@@ -7,8 +7,10 @@
 #include "Boss.h"
 #include "Boss2Automaton.h"
 #include "Boss2CrossBullet1.h"
+#include "Boss2Phase4SuperCrossHelper.h"
 #include "Boss2SmallBullet.h"
 
+class Boss2Phase4SuperCrossSimpleBullet2;
 class Boss2AutomatonPinkBullet;
 class Boss1FastBurstBullet;
 class SimpleBullet1Slow;
@@ -25,7 +27,7 @@ public:
     constexpr static uint8_t PHASE_1_FIRE_RATE = 3;
     constexpr static uint8_t PHASE_2_FIRE_RATE = 16;
     constexpr static uint8_t PHASE_3_FIRE_RATE = 90;
-    constexpr static uint8_t PHASE_4_FIRE_RATE = 24;
+    constexpr static uint8_t PHASE_4_FIRE_RATE = 120;
     typedef enum
     {
         PRE_FIGHT = 0,
@@ -52,6 +54,7 @@ private:
     std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>> automatonPinkBulletPool;
     std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>> automatonVariableSpeedBulletPool;
     std::shared_ptr<PoolingVector<Boss2CrossBullet1>> crossBullet1Pool;
+    std::shared_ptr<PoolingVector<Boss2Phase4SuperCrossSimpleBullet2>> superCrossBulletPool;
     BOSS_2_PHASES bossPhase = PRE_FIGHT;
     static constexpr std::array<Vector2, 11> smallPartOffsets = {
         Vector2(-8.5, 7),
@@ -71,13 +74,21 @@ private:
         Vector2(11.5, -3),
         Vector2(23.5, -16),
     };
+    static constexpr std::array<Vector2, 4> superCrossOffsets = {
+        Vector2(-11.5, -23),
+        Vector2(11.5, -23),
+        Vector2(-6.5, -11),
+        Vector2(6.5, -11),
+    };
     std::array<int, 11> currentSmallPartsGlowSteps{};
     std::array<int, 4> currentCrossGlowSteps{};
+    std::array<int, 4> currentSuperCrossGlowSteps{};
     uint stepsElapsed = 0;
     uint8_t currentSmallPart = 0;
     uint8_t currentCross = 0;
     int smallPartsGlowSteps = 15; //Glow for this many steps after firing
     int crossGlowSteps = 15; //Glow for this many steps after firing
+    int superCrossGlowSteps = 15; //Glow for this many steps after firing
     int baseSpriteYOffset = 0;
     Color drawnColour = WHITE;
     Vector2 movementVector = {};
@@ -124,7 +135,7 @@ private:
     {
         firePhase2CrossShot(currentCross);
     }
-    void firePhase2CrossShot(const uint_fast8_t _currentCross = 4)
+    void firePhase2CrossShot(const uint_fast8_t _currentCross)
     {
         currentCrossGlowSteps[_currentCross] = crossGlowSteps;
         float tempX = crossOffsets[_currentCross].x;
@@ -201,6 +212,14 @@ private:
         }
     };
 
+    void firePhase4SuperCrossShot(const int superCrossIndex)
+    {
+        currentSuperCrossGlowSteps[superCrossIndex] = superCrossGlowSteps;
+        auto _newSuperCrossShotHelper = Boss2Phase4SuperCrossHelper{superCrossBulletPool};
+        const Vector2 spawnPos = position + superCrossOffsets[superCrossIndex];
+        _newSuperCrossShotHelper.spawn(spawnPos, Vector2Normalize(Vector2Subtract(PlayerHandler::GetPlayer()->GetFinalPos(), spawnPos)), PARTS_COLOUR);
+    }
+
     void initPhase(const BOSS_2_PHASES _newPhase)
     {
         stepsElapsed = -1;
@@ -237,10 +256,7 @@ private:
             automaton2->SetPhase(Boss2Automaton::PHASE_3);
             break;
         case PHASE_4:
-            if (position.x > 60)
-                movementVector.x = -0.3f;
-            else if (position.x < 60)
-                movementVector.x = 0.3f;
+            position = BackgroundHandler::GetRelativePos(Vector2(60, -1900));
             break;
         case PHASE_DEFEAT:
             {
@@ -274,7 +290,9 @@ public:
         smallBulletPool = std::make_shared<PoolingVector<Boss2SmallBullet>>(500);
         simpleBullet1SlowPool = std::make_shared<PoolingVector<SimpleBullet1Slow>>(100);
         simpleBullet1FastPool = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(150);
-        GlobalPools::AddPools({smallBulletPool, simpleBullet1SlowPool, simpleBullet1FastPool, automatonPinkBulletPool, automatonVariableSpeedBulletPool, crossBullet1Pool});
+        superCrossBulletPool = std::make_shared<PoolingVector<Boss2Phase4SuperCrossSimpleBullet2>>(100);
+
+        GlobalPools::AddPools({smallBulletPool, simpleBullet1SlowPool, simpleBullet1FastPool, automatonPinkBulletPool, automatonVariableSpeedBulletPool, crossBullet1Pool, superCrossBulletPool});
         collider2 = {0, COLLIDER_2_Y_OFFSET, 30, 24};
         automaton1 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool, automatonVariableSpeedBulletPool);
         automaton2 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool, automatonVariableSpeedBulletPool);
@@ -366,7 +384,7 @@ public:
             break;
         case PRE_PHASE_3:
             position = Vector2MoveTowards(position, BackgroundHandler::GetRelativePos(Vector2(60, -1900)), 0.5f);
-            break;
+            return true; //No taking damage!
         case PHASE_3:
                 if (position.x >= 62 || position.x <= 58)
                     movementVector.x = -movementVector.x;
@@ -380,43 +398,25 @@ public:
             break;
         case PHASE_4:
             {
-                SoundHandler::PlaySound(HUM_1, true);
                 if (abs(position.x - 60) < 0.5f)
                 {
                     position.x = 60;
                     movementVector.x = 0;
                 }
+                if (stepsElapsed % PHASE_4_FIRE_RATE > 75)
+                    break;
                 if (stepsElapsed % PHASE_4_FIRE_RATE == 0)
                 {
-                    smallPartsGlowSteps = 24;
-                    for (int i = 0; i < 10; i++)
-                        fireSmallPartShot(i, 0);
-                }
-                if (stepsElapsed % 80 <= 3)
+                    firePhase4SuperCrossShot(0);
+                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 25)
                 {
-                    Vector2 _pos = {position.x - 15, position.y + 7.5f};
-                    const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-                    if (stepsElapsed % 80 == 0)
-                    {
-                        fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
-                        _pos.x = position.x + 15;
-                        fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
-                    } else if (stepsElapsed % 80 == 3)
-                    {
-                        fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
-                        _pos.x = position.x + 15;
-                        fireSpread(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}));
-                    }
-                }
-                if (stepsElapsed % 140 == 0)
+                    firePhase4SuperCrossShot(1);
+                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 50)
                 {
-                    Vector2 _pos = {position.x - 20.1f, position.y - 14.8f};
-                    const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-                    fireBurst(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}), true);
-                } else if (stepsElapsed % 140 == 50)
-                {Vector2 _pos = {position.x + 20.1f, position.y - 14.8f};
-                    const Vector2 _playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-                    fireBurst(_pos, Vector2Normalize({_playerPos.x - _pos.x, _playerPos.y - _pos.y + 3}), true);
+                    firePhase4SuperCrossShot(2);
+                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 75)
+                {
+                    firePhase4SuperCrossShot(3);
                 }
             }
             break;
@@ -450,6 +450,13 @@ public:
             int j = --currentCrossGlowSteps[i];
             if (j > 0)
                 SpriteHandler::QueueMyStaticSprite({.i=BOSS_2_CROSS_GLOW, .pos = Vector2Add(position, crossOffsets[i]), .l = LAYER_GROUNDED, .col = drawnColour});
+        }
+
+        for (int i = 0; i < currentSuperCrossGlowSteps.size(); i++)
+        {
+            int j = --currentSuperCrossGlowSteps[i];
+            if (j > 0)
+                SpriteHandler::QueueMyStaticSprite({.i=BOSS_2_SUPER_CROSS_GLOW, .pos = Vector2Add(position, superCrossOffsets[i]), .l = LAYER_GROUNDED, .col = drawnColour});
         }
     }
 
