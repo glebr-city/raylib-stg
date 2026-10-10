@@ -27,7 +27,7 @@ class GlobalVariables {
 protected:
     static std::unique_ptr<PhaseHelper> currentPhase;
     static const std::array<PhaseRef, PHASE_COUNT> phases;
-    static const std::array<std::shared_ptr<Stage>, 2> stages;
+    static const std::array<std::shared_ptr<Stage>, 3> stages;
     static int currentStageIndex;
     static int currentPhaseIndex; //Within the current stage!
     static RenderTexture2D renderTexture;

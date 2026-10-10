@@ -16,6 +16,7 @@ public:
     typedef enum
     {
         EXPLOSION_SMALL,
+        BOSS_2_EXPLOSION,
 
         EPHEMERA_COUNT
     }EPHEMERAE;
@@ -49,6 +50,10 @@ public:
                 e = std::make_unique<ExplosionSmall>(_pos, _layer);
             }
             break;
+        case BOSS_2_EXPLOSION:
+            {
+                e = std::make_unique<Boss2Explosion>(_pos, _layer);
+            }
         default:
             break;
         }

@@ -59,15 +59,32 @@ public:
 class ExplosionSmall : public Ephemera
 {
     static constexpr STATIC_SPRITES SPRITE = EXPLOSION_SMALL;
-    static constexpr uint_fast16_t MAX_STEPS = 27;
     static constexpr Vector2 SPRITE_SIZE = {10, 10};
+    static constexpr uint_fast16_t MAX_STEPS = 27;
     static constexpr SOUNDS SOUND = EXPLOSION_2;
 public:
     explicit ExplosionSmall(const Vector2 pos, const LAYERS _layer = LAYER_ENEMY) : Ephemera(pos, _layer, MAX_STEPS, SPRITE, SOUND) {}
     void doPreStep() override
     {
-        const float xOffset = static_cast<int>(stepsElapsed / 3) * 10;
-        const Rectangle rect = {xOffset, 0, 10, 10};
+        const float xOffset = static_cast<int>(stepsElapsed / 3) * SPRITE_SIZE.x;
+        const Rectangle rect = {xOffset, 0, SPRITE_SIZE.x, SPRITE_SIZE.y};
+        const SpriteParametres opts = {.i = sprite, .pos = position, .yOffset = 0, .l = layer, .col = WHITE, .corner = false, .rect = rect};
+        Ephemera::doPreStep(opts);
+    }
+};
+
+class Boss2Explosion : public Ephemera
+{
+    static constexpr STATIC_SPRITES SPRITE = BOSS_2_EXPLOSION;
+    static constexpr Vector2 SPRITE_SIZE = {62, 93};
+    static constexpr uint_fast16_t MAX_STEPS = 48;
+    static constexpr SOUNDS SOUND = EXPLOSION_2;
+public:
+    explicit Boss2Explosion(const Vector2 pos, const LAYERS _layer = LAYER_ENEMY) : Ephemera(pos, _layer, MAX_STEPS, SPRITE, SOUND) {}
+    void doPreStep() override
+    {
+        const float xOffset = static_cast<int>(stepsElapsed / 6) * SPRITE_SIZE.x;
+        const Rectangle rect = {xOffset, 0, SPRITE_SIZE.x, SPRITE_SIZE.y};
         const SpriteParametres opts = {.i = sprite, .pos = position, .yOffset = 0, .l = layer, .col = WHITE, .corner = false, .rect = rect};
         Ephemera::doPreStep(opts);
     }

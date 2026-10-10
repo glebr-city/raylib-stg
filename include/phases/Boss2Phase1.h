@@ -13,17 +13,18 @@
 
 class Boss2Phase1 : public PhaseHelper
 {
-    int* bossHealth = nullptr;
-    static constexpr int PHASE_1_HEALTH = 140;
-    static constexpr int PHASE_1_TIME = 3000;
+    static constexpr int PHASE_1_HEALTH = 154;
+    static constexpr int PHASE_1_TIME = 3300;
     static constexpr Boss2::BOSS_2_PHASES PHASE_1_BOSS_PHASE = Boss2::PHASE_1;
-    Boss2::BOSS_2_PHASES bossPhase = Boss2::PHASE_1;
     Boss2::BOSS_2_PHASES preFightPhase = Boss2::PRE_FIGHT;
+protected:
+    int* bossHealth = nullptr;
     int maxHealth = 140;
     int maxTimer = 3000;
     int bossTimer = maxTimer;
-protected:
+    Boss2::BOSS_2_PHASES bossPhase = Boss2::PHASE_1;
     std::shared_ptr<Boss2> boss2 = nullptr;
+    int phaseSpriteDamage = 0;
 private:
     void attemptFindingBoss2()
     {
@@ -42,13 +43,14 @@ private:
         SpawnedEnemies::spawnEnemy(boss2);
     }
 public:
-    explicit Boss2Phase1(std::string _phaseName = "Boss2Phase1", const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss2::BOSS_2_PHASES _bossPhase = PHASE_1_BOSS_PHASE, const Boss2::BOSS_2_PHASES _preFightPhase = Boss2::PRE_FIGHT) : PhaseHelper(std::move(_phaseName), {0, -1800}, {0, 0}, STAGE_2_BACKGROUND)
+    explicit Boss2Phase1(std::string _phaseName = "Boss2Phase1", const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss2::BOSS_2_PHASES _bossPhase = PHASE_1_BOSS_PHASE, const int _spriteDamage = 0, const Boss2::BOSS_2_PHASES _preFightPhase = Boss2::PRE_FIGHT) : PhaseHelper(std::move(_phaseName), {0, -1800}, {0, 0}, STAGE_2_BACKGROUND)
     {
         maxHealth = _maxHealth;
         maxTimer = _maxTimer;
         bossPhase = _bossPhase;
         bossTimer = maxTimer;
         preFightPhase = _preFightPhase;
+        phaseSpriteDamage = _spriteDamage;
     }
 
     void InitPhase() override
@@ -58,7 +60,7 @@ public:
         attemptFindingBoss2();
         bossHealth = boss2->GetHealth();
         boss2->SetPhase(preFightPhase);
-        boss2->SetSpriteDamage(static_cast<uint_fast8_t>(bossPhase) - 1);
+        boss2->SetSpriteDamage(phaseSpriteDamage);
     }
 
     bool doPhysics() override

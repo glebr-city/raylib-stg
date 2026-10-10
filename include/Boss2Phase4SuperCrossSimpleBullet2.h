@@ -14,7 +14,7 @@ protected:
     Vector2 offsetPosition = Vector2Zeros;
 public:
 
-    static constexpr int BULLET_DISTANCE = 7;
+    static constexpr int BULLET_DISTANCE = 8;
     static constexpr std::array<Vector2, 13> BULLET_OFFSETS {Vector2{0, 0},
         {0, BULLET_DISTANCE * 2},
 {BULLET_DISTANCE * -2, BULLET_DISTANCE},{0, BULLET_DISTANCE}, {BULLET_DISTANCE * 2, BULLET_DISTANCE},
@@ -38,7 +38,7 @@ public:
             return false;
         }
         position = Vector2Add(position, direction * speed);
-        currentPositionOffset = Vector2MoveTowards(currentPositionOffset, BULLET_OFFSETS[bulletIndex], (Vector2DistanceSqr(currentPositionOffset, BULLET_OFFSETS[bulletIndex])) * 0.001f + 0.1f);
+        currentPositionOffset = Vector2MoveTowards(currentPositionOffset, BULLET_OFFSETS[bulletIndex], (Vector2DistanceSqr(currentPositionOffset, BULLET_OFFSETS[bulletIndex])) * 0.0005f + 0.075f);
         offsetPosition = Vector2Add(position, currentPositionOffset);
 
         if (offsetPosition.x < -2 || offsetPosition.x > 122 || offsetPosition.y < -100 || offsetPosition.y > 182)

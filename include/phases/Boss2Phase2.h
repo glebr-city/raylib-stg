@@ -8,10 +8,10 @@
 
 class Boss2Phase2 : public Boss2Phase1
 {
-    static constexpr int PHASE_2_HEALTH = 180;
-    static constexpr int PHASE_2_TIME = 3000;
+    static constexpr int PHASE_2_HEALTH = 198;
+    static constexpr int PHASE_2_TIME = 3300;
     static constexpr Boss2::BOSS_2_PHASES PHASE_2_BOSS_PHASE = Boss2::PHASE_2;
 public:
-    Boss2Phase2() : Boss2Phase1("Boss2Phase2", PHASE_2_HEALTH, PHASE_2_TIME, PHASE_2_BOSS_PHASE){};
+    Boss2Phase2() : Boss2Phase1("Boss2Phase2", PHASE_2_HEALTH, PHASE_2_TIME, PHASE_2_BOSS_PHASE, 1){};
 };
 #endif //RAYLIB_STG_BOSS2PHASE2_H

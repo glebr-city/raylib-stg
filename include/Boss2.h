@@ -24,10 +24,15 @@ public:
     constexpr static int maxMovement = 45; //How far, in one direction on the X-axis, may the boss move?
     constexpr static Color PARTS_COLOUR = {183, 0, 0, 255};
     constexpr static Color CROSS_SHOT_COLOUR = {200, 0, 59, 255};
+    constexpr static Color SUPER_CROSS_SHOT_COLOUR = {150, 90, 90, 255};
     constexpr static uint8_t PHASE_1_FIRE_RATE = 3;
     constexpr static uint8_t PHASE_2_FIRE_RATE = 16;
     constexpr static uint8_t PHASE_3_FIRE_RATE = 90;
-    constexpr static uint8_t PHASE_4_FIRE_RATE = 120;
+    constexpr static uint8_t PHASE_4_FIRE_RATE = 150;
+    constexpr static uint8_t PHASE_4_SMALL_PART_FIRE_RATE = 4;
+    constexpr static uint16_t PHASE_4_CROSS_FIRE_RATE = 320;
+    constexpr static int PHASE_5_AUTOMATON_HEALTH = 30;
+
     typedef enum
     {
         PRE_FIGHT = 0,
@@ -35,7 +40,10 @@ public:
         PHASE_2,
         PRE_PHASE_3,
         PHASE_3,
+        PRE_PHASE_4,
         PHASE_4,
+        PRE_PHASE_5,
+        PHASE_5,
         PHASE_DEFEAT
     }BOSS_2_PHASES;
 
@@ -48,6 +56,8 @@ private:
     Rectangle collider2; //Due to the boss' shape, a second collider is required!
     std::shared_ptr<Boss2Automaton> automaton1;
     std::shared_ptr<Boss2Automaton> automaton2;
+    std::shared_ptr<Boss2Automaton> automaton3;
+    std::shared_ptr<Boss2Automaton> automaton4;
     std::shared_ptr<PoolingVector<Boss2SmallBullet>> smallBulletPool;
     std::shared_ptr<PoolingVector<SimpleBullet1Slow>> simpleBullet1SlowPool;
     std::shared_ptr<PoolingVector<Boss1FastBurstBullet>> simpleBullet1FastPool;
@@ -140,7 +150,25 @@ private:
         currentCrossGlowSteps[_currentCross] = crossGlowSteps;
         float tempX = crossOffsets[_currentCross].x;
         Color shotColour{CROSS_SHOT_COLOUR.r, CROSS_SHOT_COLOUR.g, static_cast<unsigned char>(CROSS_SHOT_COLOUR.b + (stepsElapsed % 60 * 5)), CROSS_SHOT_COLOUR.a};
-        crossBullet1Pool->spawn().spawn(Vector2Add(position, crossOffsets[_currentCross]), Vector2Normalize(Vector2{tempX * 0.015f + 0 * std::signbit(tempX), 1}), shotColour);
+        crossBullet1Pool->spawn().spawn(Vector2Add(position, crossOffsets[_currentCross]), Vector2Normalize(Vector2{tempX * 0.015f, 1}), shotColour);
+    }
+
+    void firePhase4CrossShot()
+    {
+        firePhase2CrossShot(currentCross);
+    }
+    void firePhase4CrossShot(const uint_fast8_t _currentCross)
+    {
+        currentCrossGlowSteps[_currentCross] = crossGlowSteps;
+        for (int j = -1; j <= 1; j++)
+        {
+            for (int i = -1; i <= 9; i++)
+            {
+                float tempX = crossOffsets[_currentCross].x * i;
+                Color shotColour{static_cast<unsigned char>(CROSS_SHOT_COLOUR.r - 30 * j), CROSS_SHOT_COLOUR.g, static_cast<unsigned char>(CROSS_SHOT_COLOUR.b - (stepsElapsed % 30 * i)), CROSS_SHOT_COLOUR.a};
+                crossBullet1Pool->spawn().spawn(Vector2Add({position.x, position.y + j * 2 - 3}, crossOffsets[_currentCross]), Vector2Normalize(Vector2{tempX * 0.03f - std::copysignf(0.3f * j, tempX), 1}), shotColour);
+            }
+        }
     }
 
     void firePhase3SmallPartShot(const PHASE_3_FIRE_SEGMENTS _segment) {
@@ -217,7 +245,7 @@ private:
         currentSuperCrossGlowSteps[superCrossIndex] = superCrossGlowSteps;
         auto _newSuperCrossShotHelper = Boss2Phase4SuperCrossHelper{superCrossBulletPool};
         const Vector2 spawnPos = position + superCrossOffsets[superCrossIndex];
-        _newSuperCrossShotHelper.spawn(spawnPos, Vector2Normalize(Vector2Subtract(PlayerHandler::GetPlayer()->GetFinalPos(), spawnPos)), PARTS_COLOUR);
+        _newSuperCrossShotHelper.spawn(spawnPos, Vector2Normalize(Vector2Subtract(PlayerHandler::GetPlayer()->GetFinalPos(), spawnPos)), SUPER_CROSS_SHOT_COLOUR);
     }
 
     void initPhase(const BOSS_2_PHASES _newPhase)
@@ -249,14 +277,46 @@ private:
             movementVector = Vector2Zeros;
             automaton1->SetPhase(Boss2Automaton::PRE_PHASE_3_AUTOMATON_1);
             automaton2->SetPhase(Boss2Automaton::PRE_PHASE_3_AUTOMATON_2);
-                break;
+            break;
         case PHASE_3:
             movementVector.x = 0.02f;
             automaton1->SetPhase(Boss2Automaton::PHASE_3);
             automaton2->SetPhase(Boss2Automaton::PHASE_3);
             break;
+        case PRE_PHASE_4:
+            movementVector = Vector2Zeros;
+            automaton1->SetPhase(Boss2Automaton::PRE_PHASE_4_AUTOMATON_1);
+            automaton2->SetPhase(Boss2Automaton::PRE_PHASE_4_AUTOMATON_2);
+            break;
         case PHASE_4:
-            position = BackgroundHandler::GetRelativePos(Vector2(60, -1900));
+            position = Vector2(60, 25.5f);
+            automaton1->SetPhase(Boss2Automaton::PHASE_4);
+            automaton2->SetPhase(Boss2Automaton::PHASE_4);
+            break;
+        case PRE_PHASE_5:
+            //movementVector = {0, 0.5f};
+            EphemeraHandler::Spawn(position, EphemeraHandler::BOSS_2_EXPLOSION);
+            position = Vector2{60, 300};
+            automaton1->SetPhase(Boss2Automaton::PRE_PHASE_5_AUTOMATON_1);
+            automaton2->SetPhase(Boss2Automaton::PRE_PHASE_5_AUTOMATON_2);
+            break;
+        case PHASE_5:
+            position = Vector2(60, 300);
+            automaton1->spawn(Vector2{-15, 5});
+            automaton2->spawn(Vector2{135, 5});
+            automaton1->SetPhase(Boss2Automaton::PHASE_5_AUTOMATON_1);
+            automaton2->SetPhase(Boss2Automaton::PHASE_5_AUTOMATON_2);
+            automaton3->spawn(Vector2{135, 175});
+            automaton4->spawn(Vector2{-15, 175});
+            automaton3->SetPhase(Boss2Automaton::PHASE_5_AUTOMATON_3);
+            automaton4->SetPhase(Boss2Automaton::PHASE_5_AUTOMATON_4);
+            SpawnedEnemies::spawnEnemy(automaton3);
+            SpawnedEnemies::spawnEnemy(automaton4);
+            automaton1->SetHealth(PHASE_5_AUTOMATON_HEALTH);
+            automaton2->SetHealth(PHASE_5_AUTOMATON_HEALTH);
+            automaton3->SetHealth(PHASE_5_AUTOMATON_HEALTH);
+            automaton4->SetHealth(PHASE_5_AUTOMATON_HEALTH);
+
             break;
         case PHASE_DEFEAT:
             {
@@ -296,6 +356,8 @@ public:
         collider2 = {0, COLLIDER_2_Y_OFFSET, 30, 24};
         automaton1 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool, automatonVariableSpeedBulletPool);
         automaton2 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool, automatonVariableSpeedBulletPool);
+        automaton3 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool, automatonVariableSpeedBulletPool);
+        automaton4 = std::make_shared<Boss2Automaton>(automatonPinkBulletPool, automatonVariableSpeedBulletPool);
         automaton1->spawn(Vector2{-10, 15});
         automaton2->spawn(Vector2{130, 15});
         SpawnedEnemies::spawnEnemy(automaton1);
@@ -396,6 +458,10 @@ public:
             else if (stepsElapsed % PHASE_3_FIRE_RATE == 42)
                 firePhase3SmallPartShot(HIGH);
             break;
+        case PRE_PHASE_4:
+            position = Vector2MoveTowards(position, Vector2{60, 25.5f}, 0.5f);
+            return true; //No taking damage!
+            break;
         case PHASE_4:
             {
                 if (abs(position.x - 60) < 0.5f)
@@ -403,22 +469,57 @@ public:
                     position.x = 60;
                     movementVector.x = 0;
                 }
-                if (stepsElapsed % PHASE_4_FIRE_RATE > 75)
-                    break;
                 if (stepsElapsed % PHASE_4_FIRE_RATE == 0)
                 {
                     firePhase4SuperCrossShot(0);
-                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 25)
+                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 35)
                 {
                     firePhase4SuperCrossShot(1);
-                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 50)
+                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 70)
                 {
                     firePhase4SuperCrossShot(2);
-                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 75)
+                } else if (stepsElapsed % PHASE_4_FIRE_RATE == 105)
                 {
                     firePhase4SuperCrossShot(3);
                 }
+
+                if (stepsElapsed % PHASE_4_CROSS_FIRE_RATE == 0)
+                {
+                    firePhase4CrossShot(0);
+                } else if (stepsElapsed % PHASE_4_CROSS_FIRE_RATE == 80)
+                {
+                    firePhase4CrossShot(2);
+                } else if (stepsElapsed % PHASE_4_CROSS_FIRE_RATE == 160)
+                {
+                    firePhase4CrossShot(1);
+                } else if (stepsElapsed % PHASE_4_CROSS_FIRE_RATE == 240)
+                {
+                    firePhase4CrossShot(3);
+                }
+
+                if (stepsElapsed % PHASE_4_SMALL_PART_FIRE_RATE == 0)
+                {
+                    if (++currentSmallPart >= 30)
+                        currentSmallPart = 0;
+                    else if (currentSmallPart == 1)
+                        SoundHandler::PlaySound(SOUNDS::BANG_2);
+                    float _extraRotation = -0.4f + (currentSmallPart % 2) * 0.8f;
+                    if (currentSmallPart == 0 || currentSmallPart == 7 || currentSmallPart == 12 || currentSmallPart == 18)
+                        _extraRotation = 0.8f;
+                    else if (currentSmallPart == 3 || currentSmallPart == 11 || currentSmallPart == 15)
+                        _extraRotation = -0.8f;
+                    if (currentSmallPart < 20)
+                        fireSmallPartShot(currentSmallPart % 10, 3, _extraRotation);
+                    //fireSmallPartShot(currentSmallPart, 0.75f + static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 1000, static_cast<float>(static_cast<int>(stepsElapsed) % 240 - 120) / 5000);
+                }
             }
+            break;
+        case PRE_PHASE_5:
+            return true;
+            break;
+        case PHASE_5:
+            health = (automaton1->GetHealth() + automaton2->GetHealth() + automaton3->GetHealth() + automaton4->GetHealth());
+            return true;
             break;
         }
         checkPlayerCollision();
@@ -435,9 +536,12 @@ public:
         drawnColour = WHITE;
         if (--currentFlashDuration > 0 && GlobalVariables::currentStep() % 61 > 45)
             drawnColour = RED;
-        const SpriteParametres opts = {.i=BOSS_2_RING, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour};
-        SpriteHandler::QueueMyAnimatedSprite(opts);
-        SpriteHandler::QueueMyStaticSprite({.i=BOSS_2_BASE, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour});
+        if (baseSpriteYOffset < 2)
+        {
+            const SpriteParametres opts = {.i=BOSS_2_RING, .pos=position, .l = LAYER_GROUNDED, .col = drawnColour};
+            SpriteHandler::QueueMyAnimatedSprite(opts);
+        }
+        SpriteHandler::QueueMyStaticSprite({.i=BOSS_2_BASE, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour});
         for (int i = 0; i < currentSmallPartsGlowSteps.size(); i++)
         {
             int j = --currentSmallPartsGlowSteps[i];

@@ -113,6 +113,8 @@ add_executable(raylib_stg src/main.cpp
         include/phases/Boss2Phase4.h
         include/Boss2Phase4SuperCrossHelper.h
         include/Boss2Phase4SuperCrossSimpleBullet2.h
+        include/phases/Boss2Phase5.h
+        include/phases/Stage3Phase1.h
 )
 
 target_sources(raylib_stg

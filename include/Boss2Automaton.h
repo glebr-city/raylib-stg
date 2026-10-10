@@ -4,6 +4,7 @@
 
 #ifndef RAYLIB_STG_BOSS2AUTOMATON_H
 #define RAYLIB_STG_BOSS2AUTOMATON_H
+#include "Boss2.h"
 #include "Boss2AutomatonPinkBullet.h"
 #include "RNGHandler.h"
 #include "SimpleBullet2VariableSpeed.h"
@@ -21,11 +22,15 @@ struct Boss2AutomatonState //Based heavily on Enemy1State.
 class Boss2Automaton : public Enemy //Copying Enemy1Base... perhaps not the best idea, but we shall see.
 {
 private:
-    const u_int PHASE_1_FIRE_RATE = 30;
-    const u_int PHASE_2_FIRE_RATE = 100;
+
     float currentPhase3TurretRotation = 0;
     const float maxPhase3TurretRotation = 6.2831853072f;
     bool isDisabled = false;
+protected:
+    static constexpr float PHASE_5_MOVEMENT_SPEED = 80;
+    static constexpr u_int PHASE_1_FIRE_RATE = 30;
+    static constexpr u_int PHASE_2_FIRE_RATE = 100;
+    static constexpr u_int PHASE_5_FIRE_RATE = 240;
 public:
     typedef enum
     {
@@ -37,7 +42,15 @@ public:
         PRE_PHASE_3_AUTOMATON_1,
         PRE_PHASE_3_AUTOMATON_2,
         PHASE_3,
+        PRE_PHASE_4_AUTOMATON_1,
+        PRE_PHASE_4_AUTOMATON_2,
         PHASE_4,
+        PRE_PHASE_5_AUTOMATON_1,
+        PRE_PHASE_5_AUTOMATON_2,
+        PHASE_5_AUTOMATON_1,
+        PHASE_5_AUTOMATON_2,
+        PHASE_5_AUTOMATON_3,
+        PHASE_5_AUTOMATON_4,
         PHASE_DEFEAT
     }BOSS_2_AUTOMATON_PHASES;
 private:
@@ -50,6 +63,15 @@ private:
         std::vector<Boss2AutomatonState>{{.desiredPos = {5, 5}, .speed = 150}},
         std::vector<Boss2AutomatonState>{{.desiredPos = {115, 5}, .speed = 150}},
         std::vector<Boss2AutomatonState>{{.speed = 0, .fireRate=15}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {5, 5}, .speed = 150}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {115, 5}, .speed = 150}},
+        std::vector<Boss2AutomatonState>{{.speed = 0, .fireRate=60}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {-15, 5}, .speed = 50}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {135, 5}, .speed = 50}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {5, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {115, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {115, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {5, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {115, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {115, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {5, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {5, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {115, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {5, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {5, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {115, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}},
+        std::vector<Boss2AutomatonState>{{.desiredPos = {5, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {5, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {115, 5}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}, {.desiredPos = {115, 175}, .speed = PHASE_5_MOVEMENT_SPEED, .fireRate = PHASE_5_FIRE_RATE, .slowAtDesiredPos = false}},
     };
 
     const std::vector<int> phaseHealth{
@@ -61,6 +83,15 @@ private:
         20,
         20,
         20,
+        20,
+        20,
+        20,
+        30,
+        30,
+        30,
+        30,
+        30,
+        30
     };
 
 protected:
@@ -77,7 +108,6 @@ protected:
 
 
     virtual void shootPhase3PinkBullets() {
-        const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
         Vector2 pinkBulletDirection = Vector2Rotate({-0.70711, -0.70711}, currentPhase3TurretRotation);
         RNGHandler::StepSeed();
         pinkBulletDirection = Vector2Rotate(pinkBulletDirection, (static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 31) - 15)) / 500);
@@ -89,6 +119,15 @@ protected:
         pinkBulletDirection = {-pinkBulletDirection.x, pinkBulletDirection.y};
         pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
     }
+    virtual void shootPhase4PinkBullets()
+    {
+        const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
+        Vector2 pinkBulletDirection = Vector2Normalize(Vector2Subtract({playerFinalPos.x, playerFinalPos.y}, position));
+        RNGHandler::StepSeed();
+        pinkBulletDirection = Vector2Rotate(pinkBulletDirection, (static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 31) - 15)) / 1000);
+        pinkBulletPool->spawn().spawn(position, pinkBulletDirection, PINK);
+    }
+
     virtual void shootPinkRandomBullets()
     {
         const Vector2 playerFinalPos = PlayerHandler::GetPlayer().get()->GetFinalPos();
@@ -105,6 +144,60 @@ protected:
         //RNGHandler::StepSeed();
         //pinkBulletDirection = Vector2Rotate(pinkBulletDirection, (static_cast<float>(static_cast<int>(RNGHandler::GetSeed() % 31) - 15)) / 50);
         variableSpeedBulletPool->spawn().spawn(_speed, position, pinkBulletDirection, _col);
+    }
+
+    void handlePhase2Shooting()
+    {
+        Boss2AutomatonState _currentState = stateVector[currentStateIndex];
+        const float movementDirection = -std::copysignf(
+                    0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
+        const auto stepThing = elapsedSteps % _currentState.fireRate;
+        const Color bulletColour = {
+            static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(109 - stepThing * 3),
+            static_cast<u_char>(194 - stepThing * 3), 255
+        };
+        if (stepThing == 0) {
+            shootVariableSpeedBullet(0.8f, 0, bulletColour);
+        } else if (stepThing == 6) {
+            shootVariableSpeedBullet(0.9f, 0.1f * movementDirection, bulletColour);
+        } else if (stepThing == 13) {
+            shootVariableSpeedBullet(1.0f, 0.2f * movementDirection, bulletColour);
+        } else if (stepThing == 14) {
+            shootVariableSpeedBullet(1.1f, 0.3f * movementDirection, bulletColour);
+        } else if (stepThing == 15) {
+            shootVariableSpeedBullet(1.2f, 0.4f * movementDirection, bulletColour);
+        } else if (stepThing == 16) {
+            shootVariableSpeedBullet(1.3f, 0.5f * movementDirection, bulletColour);
+        } else if (stepThing == 17) {
+            shootVariableSpeedBullet(1.4f, 0.4f * movementDirection, bulletColour);
+        } else if (stepThing == 18) {
+            shootVariableSpeedBullet(1.5f, 0.3f * movementDirection, bulletColour);
+        } else if (stepThing == 19) {
+            shootVariableSpeedBullet(1.6f, 0, bulletColour);
+        }
+    }
+
+    void handlePhase5VariableSpeedShooting()
+    {
+        Boss2AutomatonState _currentState = stateVector[currentStateIndex];
+        const float movementDirection = -std::copysignf(
+                    0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
+        const auto stepThing = elapsedSteps % _currentState.fireRate;
+        const Color bulletColour = {
+            static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(200 - stepThing * 3),
+            static_cast<u_char>(194 - stepThing * 3), 255
+        };
+        if (stepThing == 0) {
+            shootVariableSpeedBullet(0.8f, 0, bulletColour);
+        } else if (stepThing == 13) {
+            shootVariableSpeedBullet(1.0f, 0.2f * movementDirection, bulletColour);
+        } else if (stepThing == 15) {
+            shootVariableSpeedBullet(1.2f, 0.4f * movementDirection, bulletColour);
+        } else if (stepThing == 17) {
+            shootVariableSpeedBullet(1.4f, 0.4f * movementDirection, bulletColour);
+        } else if (stepThing == 19) {
+            shootVariableSpeedBullet(1.6f, 0, bulletColour);
+        }
     }
 
 
@@ -137,10 +230,12 @@ protected:
             isDisabled = false;
             break;
         case PRE_PHASE_3_AUTOMATON_1:
+        case PRE_PHASE_4_AUTOMATON_1:
             isDisabled = true;
             stateVector = phaseVectors[PRE_PHASE_3_AUTOMATON_1];
             break;
         case PRE_PHASE_3_AUTOMATON_2:
+        case PRE_PHASE_4_AUTOMATON_2:
             isDisabled = true;
             stateVector = phaseVectors[PRE_PHASE_3_AUTOMATON_2];
             break;
@@ -148,6 +243,42 @@ protected:
             isDisabled = false;
             stateVector = phaseVectors[PHASE_3];
                 break;
+        case PHASE_4:
+            isDisabled = false;
+            stateVector = phaseVectors[PHASE_4];
+            break;
+        case PRE_PHASE_5_AUTOMATON_1:
+            isDisabled = true;
+            stateVector = phaseVectors[PRE_PHASE_5_AUTOMATON_1];
+            break;
+        case PRE_PHASE_5_AUTOMATON_2:
+            isDisabled = true;
+            stateVector = phaseVectors[PRE_PHASE_5_AUTOMATON_2];
+            break;
+        case PHASE_5_AUTOMATON_1:
+            isDisabled = false;
+            stateVector = phaseVectors[PHASE_5_AUTOMATON_1];
+            currentPhase3TurretRotation = 0;
+            elapsedSteps = 0;
+            break;
+        case PHASE_5_AUTOMATON_2:
+            isDisabled = false;
+            stateVector = phaseVectors[PHASE_5_AUTOMATON_2];
+            currentPhase3TurretRotation = 0;
+            elapsedSteps = 41;
+            break;
+        case PHASE_5_AUTOMATON_3:
+            isDisabled = false;
+            stateVector = phaseVectors[PHASE_5_AUTOMATON_3];
+            currentPhase3TurretRotation = 0;
+            elapsedSteps = 82;
+            break;
+        case PHASE_5_AUTOMATON_4:
+            isDisabled = false;
+            stateVector = phaseVectors[PHASE_5_AUTOMATON_4];
+            currentPhase3TurretRotation = 0;
+            elapsedSteps = 123;
+            break;
 
         default:
             break;
@@ -159,6 +290,7 @@ protected:
     virtual void handleShooting() {
         const auto _currentState = stateVector[currentStateIndex];
         switch (currentPhase) {
+            default:
             case PRE_FIGHT:
                 break;
             case PHASE_1_AUTOMATON_1:
@@ -179,36 +311,41 @@ protected:
                         currentPhase3TurretRotation = 0;
                 }
                 break;
+        case PHASE_4:
+            if (elapsedSteps % _currentState.fireRate == 0)
+            {
+                shootPhase4PinkBullets();
+            }
+            break;
+        case PHASE_5_AUTOMATON_1:
+        case PHASE_5_AUTOMATON_2:
+        case PHASE_5_AUTOMATON_3:
+        case PHASE_5_AUTOMATON_4:
+            handlePhase5VariableSpeedShooting();
+            if (elapsedSteps % 80 == 0)
+            {
+                shootPinkRandomBullets();
+            }
+            if (elapsedSteps % 141 == 0) {
+                shootPhase3PinkBullets();
+                RNGHandler::StepSeed();
+                currentPhase3TurretRotation += 0.15f + (RNGHandler::GetSeed() % 100 * 0.00125);
+
+                if (currentPhase3TurretRotation > maxPhase3TurretRotation)
+                    currentPhase3TurretRotation = 0;
+            } else if (elapsedSteps % 141 == 20) {
+                shootPhase3PinkBullets();
+                RNGHandler::StepSeed();
+                currentPhase3TurretRotation += 1 + (RNGHandler::GetSeed() % 100 * 0.00125);
+
+                if (currentPhase3TurretRotation > maxPhase3TurretRotation)
+                    currentPhase3TurretRotation = 0;
+            }
+            break;
             case PHASE_2_AUTOMATON_1:
             case PHASE_2_AUTOMATON_2:
-                const float movementDirection = -std::copysignf(
-                    0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
-                const auto stepThing = elapsedSteps % _currentState.fireRate;
-                const Color bulletColour = {
-                    static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(109 - stepThing * 3),
-                    static_cast<u_char>(194 - stepThing * 3), 255
-                };
-                if (stepThing == 0) {
-                    shootVariableSpeedBullet(0.8f, 0, bulletColour);
-                } else if (stepThing == 6) {
-                    shootVariableSpeedBullet(0.9f, 0.1f * movementDirection, bulletColour);
-                } else if (stepThing == 13) {
-                    shootVariableSpeedBullet(1.0f, 0.2f * movementDirection, bulletColour);
-                } else if (stepThing == 14) {
-                    shootVariableSpeedBullet(1.1f, 0.3f * movementDirection, bulletColour);
-                } else if (stepThing == 15) {
-                    shootVariableSpeedBullet(1.2f, 0.4f * movementDirection, bulletColour);
-                } else if (stepThing == 16) {
-                    shootVariableSpeedBullet(1.3f, 0.5f * movementDirection, bulletColour);
-                } else if (stepThing == 17) {
-                    shootVariableSpeedBullet(1.4f, 0.4f * movementDirection, bulletColour);
-                } else if (stepThing == 18) {
-                    shootVariableSpeedBullet(1.5f, 0.3f * movementDirection, bulletColour);
-                } else if (stepThing == 19) {
-                    shootVariableSpeedBullet(1.6f, 0, bulletColour);
-                }
+                handlePhase2Shooting();
                 break;
-
                 //default:
                 //return;
         }
@@ -254,6 +391,11 @@ public:
             {
                 if (!takeDamage())
                 {
+                    if (currentPhase == PHASE_5_AUTOMATON_1 || currentPhase == PHASE_5_AUTOMATON_2 || currentPhase == PHASE_5_AUTOMATON_3 || currentPhase == PHASE_5_AUTOMATON_4)
+                    {
+                        die();
+                        return false;
+                    }
                     SoundHandler::PlaySound(EXPLOSION_2);
                     ScoreHandler::addScore(3000, true);
                     isDisabled = true;
@@ -323,6 +465,11 @@ public:
     void SetHealth(const int _health)
     {
         health = _health;
+    }
+
+    int GetHealth() const
+    {
+        return health;
     }
 };
 #endif //RAYLIB_STG_BOSS2AUTOMATON_H
