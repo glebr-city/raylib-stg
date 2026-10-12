@@ -91,7 +91,6 @@ add_executable(raylib_stg src/main.cpp
         include/CurrentMainLoopHolder.h
         include/OtherMainLoops.h
         include/phases/Stage2Phase1.h
-        include/Enemy1_2.h
         include/Enemy1_2Bullet1.h
         include/Enemy1_2Bullet2.h
         include/Enemy1.h
@@ -115,6 +114,7 @@ add_executable(raylib_stg src/main.cpp
         include/Boss2Phase4SuperCrossSimpleBullet2.h
         include/phases/Boss2Phase5.h
         include/phases/Stage3Phase1.h
+        include/Enemy1_3.h
 )
 
 target_sources(raylib_stg

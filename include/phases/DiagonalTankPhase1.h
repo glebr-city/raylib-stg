@@ -7,7 +7,6 @@
 #include "Enemy1.h"
 #include "../BigEnemy1.h"
 #include "../DiagonalTank.h"
-#include "../Enemy1.h"
 #include "../GameHandler.h"
 #include "../PhaseHelper.h"
 #include "../SpawnedEnemies.h"
@@ -25,8 +24,8 @@ public:
     {
         diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(55);
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30);
-        bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(100);
-        bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100);
+        bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(200);
+        bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(200);
         BackgroundHandler::SetBackgroundPosition({0, 0});
         BackgroundHandler::SetScrollVector(defaultScrollVector);
         GlobalPools::AddPools({diagonalTankBulletPool, enemy1BulletPool, bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool});
