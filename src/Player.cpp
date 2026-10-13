@@ -78,6 +78,7 @@ void Player::reset(const Vector2 pos) {
     hyperOn = false;
     grazeRadiusFillingSprite = SpriteHandler::getStaticSpriteTexture(PLAYER_GRAZE_FILLING);
     position = pos;
+    finalPos = pos;
 }
 
 void Player::doPreStep() {

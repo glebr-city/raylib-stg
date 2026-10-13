@@ -40,7 +40,7 @@ public:
         position = {0, 0};
         collider = {0, 0, 10, 10};
         stateVector = _stateVector;
-        enterNewState(0);
+        Enemy1Base::enterNewState(0);
     }
 
     void doPostStep() override

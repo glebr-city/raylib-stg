@@ -98,7 +98,7 @@ public:
 
 
 
-    void spawn(const EnemySpawnParametres _params) {
+    virtual void spawn(const EnemySpawnParametres _params) {
         position = _params.pos;
         collider.x += position.x - collider.width / 2;
         collider.y += position.y - collider.height / 2;
