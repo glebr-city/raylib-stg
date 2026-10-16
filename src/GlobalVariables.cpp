@@ -22,6 +22,7 @@
 #include "phases/Stage2Phase4.h"
 #include "phases/Stage2Phase5.h"
 #include "phases/Stage3Phase1.h"
+#include "phases/Stage3Phase2.h"
 
 #if DEBUG_BUILD
 u_int GlobalVariables::maxBullets = 0;
@@ -54,12 +55,13 @@ const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
 {[]() -> PhaseHelper* { return new Boss2Phase4(); }},
 {[]() -> PhaseHelper* { return new Boss2Phase5(); }},
 {[]() -> PhaseHelper* { return new Stage3Phase1(); }},
+{[]() -> PhaseHelper* { return new Stage3Phase2(); }},
     }};
 
 const std::array<std::shared_ptr<Stage>, 3> GlobalVariables::stages = {{
     std::make_shared<Stage>("stage 1", std::vector{DIAGONAL_TANKS, PHASE_2, BOSS_1_PHASE_1, BOSS_1_PHASE_2, BOSS_1_PHASE_3, BOSS_1_PHASE_4}),
     std::make_shared<Stage>("stage 2", std::vector{STAGE_2_PHASE_1, STAGE_2_PHASE_2, STAGE_2_PHASE_3, STAGE_2_PHASE_4, STAGE_2_PHASE_5, BOSS_2_PHASE_1, BOSS_2_PHASE_2, BOSS_2_PHASE_3, BOSS_2_PHASE_4, BOSS_2_PHASE_5}),
-    std::make_shared<Stage>("stage 3", std::vector{STAGE_3_PHASE_1})
+    std::make_shared<Stage>("stage 3", std::vector{STAGE_3_PHASE_1, STAGE_3_PHASE_2})
     }};
 
 PhaseRef GlobalVariables::GetPhase(const PHASES _index)

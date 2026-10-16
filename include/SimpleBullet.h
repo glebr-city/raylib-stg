@@ -20,8 +20,8 @@ public:
 
     bool doPhysics() override
     {
-        const std::array<Vector2, 2> playerPosAndMovement = PlayerHandler::GetPlayer().get()->GetPosAndMovement();
-        return !CheckCollisionCircleLine(position, radius, playerPosAndMovement[0], Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]));
+        const std::shared_ptr<Player> player = PlayerHandler::GetPlayer();
+        return !CheckCollisionCircleLine(position, radius, player->GetPosition(), player->GetFinalPos());
     }
 
     void doPostStep() override

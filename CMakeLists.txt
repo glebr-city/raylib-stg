@@ -119,6 +119,9 @@ add_executable(raylib_stg src/main.cpp
         include/SimpleBullet1VariableSpeed.h
         include/Enemy1_3.h
         include/SimpleBullet2Fast.h
+        include/HomingBullet.h
+        include/HomingBulletHelper.h
+        include/phases/Stage3Phase2.h
 )
 
 target_sources(raylib_stg
