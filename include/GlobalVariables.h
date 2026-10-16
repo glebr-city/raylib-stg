@@ -36,6 +36,9 @@ protected:
     static int screenRotation;
     static int zoomFactor;
     static int titleCardStepsRemaining;
+#if DEBUG_BUILD
+    static u_int maxBullets;
+#endif
 
     static void setCurrentPhase(const PHASES _desiredPhase)
     {
@@ -221,6 +224,18 @@ public:
     {
         titleCardStepsRemaining = _stepsRemaining;
     }
+
+#if DEBUG_BUILD
+    static int GetMaxBullets()
+    {
+        return maxBullets;
+    }
+    static void SetMaxBullets(const u_int _maxBullets)
+    {
+        maxBullets = _maxBullets;
+    }
+#endif
+
 };
 
 #endif //RAYLIB_STG_GLOBALVARIABLES_H

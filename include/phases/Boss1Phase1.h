@@ -14,15 +14,15 @@
 
 class Boss1Phase1 : public PhaseHelper
 {
-    int* bossHealth = nullptr;
     static constexpr int PHASE_1_HEALTH = 140;
     static constexpr int PHASE_1_TIME = 3000;
     static constexpr Boss1::BOSS_1_PHASES PHASE_1_BOSS_PHASE = Boss1::PHASE_1;
+protected:
     Boss1::BOSS_1_PHASES bossPhase = Boss1::PHASE_1;
+    int* bossHealth = nullptr;
     int maxHealth = 140;
     int maxTimer = 3000;
     int bossTimer = maxTimer;
-protected:
     std::shared_ptr<Boss1> boss1 = nullptr;
 private:
     void attemptFindingBoss1()

@@ -7,9 +7,6 @@
 #include "Boss2.h"
 #include "PhaseHelper.h"
 #include "SpawnedEnemies.h"
-#include "Boss1SmallBullet.h"
-#include "SimpleBullet1Slow.h"
-#include "Boss1FastBurstBullet.h"
 
 class Boss2Phase1 : public PhaseHelper
 {

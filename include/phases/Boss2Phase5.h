@@ -5,6 +5,7 @@
 #ifndef RAYLIB_STG_BOSS2PHASE5_H
 #define RAYLIB_STG_BOSS2PHASE5_H
 #include "Boss2Phase1.h"
+#include "GameHandler.h"
 
 class Boss2Phase5 : public Boss2Phase1
 {
@@ -23,6 +24,7 @@ public:
         {
             if (--extraWaitingTime <= 0)
             {
+                SpawnedEnemies::Clear();
                 GameHandler::NextPhase();
                 return false;
             }

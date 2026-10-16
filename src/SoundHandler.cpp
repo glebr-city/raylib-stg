@@ -31,6 +31,7 @@ void SoundHandler::InitSounds()
     sounds.emplace_back("resources/sounds/explosion1.mp3");
     sounds.emplace_back("resources/sounds/explosion1Short.mp3");
     sounds.emplace_back("resources/sounds/explosion2.mp3");
+    sounds.emplace_back("resources/sounds/click1.mp3");
 }
 
 void SoundHandler::SetAllSoundVolume(const float v)

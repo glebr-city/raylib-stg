@@ -24,6 +24,37 @@ protected:
         SpriteHandler::AdvanceAnimation();
     }
 
+#if DEBUG_BUILD
+    static void DrawDebugInfo()
+    {
+        const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
+        const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
+        const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
+        std::stringstream ss;
+        u_int currentBullets = GlobalVariables::GetCurrentPhase()->getNumActive();
+        u_int maxBullets = GlobalVariables::GetMaxBullets();
+        GlobalVariables::SetMaxBullets(std::max(maxBullets, currentBullets));
+
+        ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
+        << "\nFPS: " << GetFPS()
+        << "\nBullet Count: " << GlobalVariables::GetCurrentPhase()->getNumActive()
+        << "\nMax.   Count: " << GlobalVariables::GetMaxBullets()
+        << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
+        << "\nCurrent Graze: \n"
+        << GlobalVariables::GetGrazeMetre()
+        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
+        << " \nStage Coordinates: (" <<
+            std::fixed << std::setprecision(2)
+        << backgroundPos.x << "," << backgroundPos.y << ")"
+            <<"\nPlayer Pos:\n"
+           << "(" << playerPos.x << ", " << playerPos.y << ")"
+           << "\n("
+           << absolutePos.x << ", " << absolutePos.y
+           << ")";
+        DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
+    }
+#endif
+
     virtual void doDrawing() const
     {
         BeginTextureMode(*target);
@@ -54,36 +85,7 @@ protected:
             screenRotation * 90, WHITE);
 
 #if DEBUG_BUILD
-        const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
-        const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-        const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
-        if (IsKeyPressed(KEY_ENTER))
-        {
-            if (GetFPS() > 122)
-            {
-                SetTargetFPS(120);
-            } else
-            {
-                SetTargetFPS(360);
-            }
-        }
-        std::stringstream ss;
-        ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
-        << "\nFPS: " << GetFPS()
-        << "\nBullet Count: " << GlobalVariables::GetCurrentPhase()->getNumActive()
-        << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
-        << "\nCurrent Graze: \n"
-        << GlobalVariables::GetGrazeMetre()
-        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
-        << " \nStage Coordinates: (" <<
-            std::fixed << std::setprecision(2)
-        << backgroundPos.x << "," << backgroundPos.y << ")"
-            <<"\nPlayer Pos:\n"
-           << "(" << playerPos.x << ", " << playerPos.y << ")"
-           << "\n("
-           << absolutePos.x << ", " << absolutePos.y
-           << ")";
-        DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
+        DrawDebugInfo();
 #endif
         EndDrawing();
     }
@@ -139,26 +141,7 @@ protected:
             screenRotation * 90, WHITE);
 
 #if DEBUG_BUILD
-        const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
-        const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-        const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
-        std::stringstream ss;
-        ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
-        << "\nFPS: " << GetFPS()
-        << "\nBullet Count: " << GlobalVariables::GetCurrentPhase()->getNumActive()
-        << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
-        << "\nCurrent Graze: \n"
-        << GlobalVariables::GetGrazeMetre()
-        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
-        << " \nStage Coordinates: (" <<
-            std::fixed << std::setprecision(2)
-        << backgroundPos.x << "," << backgroundPos.y << ")"
-            <<"\nPlayer Pos:\n"
-           << "(" << playerPos.x << ", " << playerPos.y << ")"
-           << "\n("
-           << absolutePos.x << ", " << absolutePos.y
-           << ")";
-        DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
+        DrawDebugInfo();
 #endif
         EndDrawing();
     }
@@ -226,26 +209,7 @@ protected:
             screenRotation * 90, WHITE);
 
 #if DEBUG_BUILD
-        const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
-        const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-        const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
-        std::stringstream ss;
-        ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
-        << "\nFPS: " << GetFPS()
-        << "\nBullet Count: " << GlobalVariables::GetCurrentPhase()->getNumActive()
-        << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
-        << "\nCurrent Graze: \n"
-        << GlobalVariables::GetGrazeMetre()
-        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
-        << " \nStage Coordinates: (" <<
-            std::fixed << std::setprecision(2)
-        << backgroundPos.x << "," << backgroundPos.y << ")"
-            <<"\nPlayer Pos:\n"
-           << "(" << playerPos.x << ", " << playerPos.y << ")"
-           << "\n("
-           << absolutePos.x << ", " << absolutePos.y
-           << ")";
-        DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
+        DrawDebugInfo();
 #endif
         EndDrawing();
     }
@@ -297,26 +261,7 @@ protected:
             screenRotation * 90, WHITE);
 
 #if DEBUG_BUILD
-        const auto backgroundPos = BackgroundHandler::GetBackgroundPosition();
-        const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
-        const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
-        std::stringstream ss;
-        ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
-        << "\nFPS: " << GetFPS()
-        << "\nBullet Count: " << GlobalVariables::GetCurrentPhase()->getNumActive()
-        << " \nSteps Elapsed: " << GlobalVariables::GetCurrentPhase()->getStepsElapsed()
-        << "\nCurrent Graze: \n"
-        << GlobalVariables::GetGrazeMetre()
-        << "\n Current RNG Seed: \n" << RNGHandler::GetSeed()
-        << " \nStage Coordinates: (" <<
-            std::fixed << std::setprecision(2)
-        << backgroundPos.x << "," << backgroundPos.y << ")"
-            <<"\nPlayer Pos:\n"
-           << "(" << playerPos.x << ", " << playerPos.y << ")"
-           << "\n("
-           << absolutePos.x << ", " << absolutePos.y
-           << ")";
-        DrawText(ss.str().c_str(), 0, 100, 30, RAYWHITE);
+        DrawDebugInfo();
 #endif
         EndDrawing();
     }

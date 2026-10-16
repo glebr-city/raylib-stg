@@ -72,7 +72,6 @@ add_executable(raylib_stg src/main.cpp
         include/EphemeraHandler.h
         include/Ephemera.h
         src/EphemeraHandler.cpp
-        include/phases/Boss1Phase5.h
         include/MenuHandler.h
         include/PauseHandler.h
         src/PauseHandler.cpp
@@ -114,9 +113,12 @@ add_executable(raylib_stg src/main.cpp
         include/Boss2Phase4SuperCrossSimpleBullet2.h
         include/phases/Boss2Phase5.h
         include/phases/Stage3Phase1.h
-        include/Enemy1_3.h
         include/Enemy2.h
         include/Enemy2Bullet1.h
+        include/Enemy2_2.h
+        include/SimpleBullet1VariableSpeed.h
+        include/Enemy1_3.h
+        include/SimpleBullet2Fast.h
 )
 
 target_sources(raylib_stg

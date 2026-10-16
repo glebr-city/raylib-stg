@@ -21,7 +21,7 @@ class Enemy1Base : public Enemy
 {
 private:
 protected:
-    static constexpr ANIMATED_SPRITES sprite = ENEMY_1;
+    //static constexpr ANIMATED_SPRITES sprite = ENEMY_1;
     u_int elapsedSteps;
     std::vector<Enemy1State> stateVector;
     u_int currentStateIndex = 0;
@@ -29,13 +29,18 @@ protected:
     u_int elapsedStepsInState = 0;
     bool hasStartedSlowing = false;
 
+    [[nodiscard]] virtual constexpr ANIMATED_SPRITES sprite() const
+    {
+        return ENEMY_1;
+    }
+
     virtual void handleShooting(const Enemy1State currentState)
     {
 
     }
 
 public:
-    Enemy1Base( const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 500) : Enemy(_scoreValue) {
+    Enemy1Base(const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 500) : Enemy(_scoreValue) {
         elapsedSteps = -1;
         position = {0, 0};
         collider = {0, 0, 10, 10};
@@ -46,9 +51,9 @@ public:
     void doPostStep() override
     {
         if (stateVector[currentStateIndex].fireRate == 0)
-            SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_ENEMY});
+            SpriteHandler::QueueMyAnimatedSprite({.i = sprite(), .pos = position, .l = LAYER_ENEMY});
         else
-            SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .yOffset = 1, .l = LAYER_ENEMY});
+            SpriteHandler::QueueMyAnimatedSprite({.i = sprite(), .pos = position, .yOffset = 1, .l = LAYER_ENEMY});
     }
 
     bool doPhysics() override

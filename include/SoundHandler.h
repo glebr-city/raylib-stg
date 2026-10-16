@@ -31,6 +31,7 @@ typedef enum
     EXPLOSION_1,
     EXPLOSION_1_SHORT,
     EXPLOSION_2,
+    CLICK_1,
 
     SOUND_COUNT
 } SOUNDS;

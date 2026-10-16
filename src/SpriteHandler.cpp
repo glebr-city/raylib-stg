@@ -41,7 +41,9 @@ void SpriteHandler::DrawSprites() //Draws queued sprites!
             const int staticSpriteIndex = opts.i;
             const int yOffset = opts.yOffset;
             const Vector2 pos = opts.pos;
-            const Color col = opts.col;
+            Color col = opts.col;
+            if (opts.flashing && GlobalVariables::currentStep() % 31 > 15)
+                col = RED;
             Vector2 spriteSize = staticSprites[staticSpriteIndex]->spriteSize;
             Rectangle spriteRect;
             if (opts.rect.width == 0) //Hacky and with poor performance...
