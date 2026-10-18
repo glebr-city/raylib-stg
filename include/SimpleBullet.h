@@ -32,6 +32,7 @@ public:
     void spawn(const Vector2 _position) override
     {
         position = _position;
+        SetStartOfTickPos();
         hasBeenGrazed = false;
     }
 

@@ -35,6 +35,7 @@ public:
         direction = dir;
         hasBeenGrazed = false;
         color = col;
+        SetStartOfTickPos();
     }
     void doPreStep() override
     {}

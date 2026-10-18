@@ -25,6 +25,7 @@ public:
         position = pos;
         direction = dir;
         color = col;
+        SetStartOfTickPos();
     };
 
     bool doPhysics() override

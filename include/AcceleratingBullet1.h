@@ -35,6 +35,7 @@ public:
         speed = _speed;
         hasBeenGrazed = false;
         color = col;
+        SetStartOfTickPos();
     }
     void doPreStep() override
     {}
