@@ -11,11 +11,11 @@ class SimpleBullet2Fast : public SimpleBullet2
 public:
     bool doPhysics() override
     {
+        position = Vector2Add(position, direction * 3);
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), 15)) {
             DamageHandler::hitPlayer();
             return false;
         }
-        position = Vector2Add(position, direction * 3);
         if (position.x < -2 || position.x > 122 || position.y < -100 || position.y > 182)
             return false;
         SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});

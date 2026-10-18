@@ -40,12 +40,13 @@ public:
     {}
     bool doPhysics() override
     {
+
+        speed += 0.0125f;
+        position = Vector2Add(position, direction * speed);
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();
             return false;
         }
-        speed += 0.0125f;
-        position = Vector2Add(position, direction * speed);
         if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
             return false;
         return true;

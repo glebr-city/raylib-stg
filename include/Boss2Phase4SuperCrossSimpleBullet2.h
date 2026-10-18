@@ -33,11 +33,11 @@ public:
     Boss2Phase4SuperCrossSimpleBullet2() = default;
     bool doPhysics() override
     {
+        position = Vector2Add(position, direction * speed);
         if (CheckCollisionRoundBullet(offsetPosition, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();
             return false;
         }
-        position = Vector2Add(position, direction * speed);
         currentPositionOffset = Vector2MoveTowards(currentPositionOffset, BULLET_OFFSETS[bulletIndex], (Vector2DistanceSqr(currentPositionOffset, BULLET_OFFSETS[bulletIndex])) * 0.0005f + 0.075f);
         offsetPosition = Vector2Add(position, currentPositionOffset);
 
@@ -45,6 +45,11 @@ public:
             return false;
         SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = offsetPosition, .l = LAYER_BULLET_LOW, .col = color});
         return true;
+    }
+
+    void SetStartOfTickPos() override
+    {
+        startOfTickPos = offsetPosition;
     }
 };
 #endif //RAYLIB_STG_BOSS2PHASE4SUPERCROSSSIMPLEBULLET2_H

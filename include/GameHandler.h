@@ -98,12 +98,12 @@ public:
     static void doPhysics() {
         if (shouldSwitchPhase)
             actuallySwitchPhase();
+        GlobalPools::SetStartOfTickPos();
         ScoreItemHandler::doPhysics();
         PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics();
         EphemeraHandler::doPhysics();
         if (GlobalVariables::GetCurrentPhase()->CanSpawnBullets()) {
-            GlobalPools::SetStartOfTickPos();
             GlobalPools::doPhysics();
         }
         GlobalVariables::GetCurrentPhase()->doPhysics();

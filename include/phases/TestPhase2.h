@@ -24,11 +24,11 @@ public:
         if (stepsElapsed % 30 == 0) {
             miscellaneousBulletPool->spawn().spawn(Vector2 {static_cast<float>(60), 1}, Vector2 {0, 1}, RED);
         }
-        if (false && stepsElapsed % 30 == 15) {
+        if (stepsElapsed % 30 == 15) {
             miscellaneousBulletPool->spawn().spawn(Vector2 {static_cast<float>(stepsElapsed % 150), 1}, Vector2 {0, 1}, BLUE);
         }
 
-        if (false && stepsElapsed % 120 == 0) {
+        if (stepsElapsed % 120 == 0) {
             SpawnedEnemies::spawnEnemy(std::make_shared<OrbEnemy1>(orbBulletPool.get()));
         }
         stepsElapsed++;

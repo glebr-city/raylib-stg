@@ -13,7 +13,7 @@ private:
     std::vector<HomingBullet*> bullets;
     std::vector<Vector2> bulletPositions{};
     Vector2 currentDirection{};
-    float maxRotationAngle = 0.1f;
+    float maxRotationAngle = 0.12f;
     float currentSpeed = 1;
     int stepsElapsed = 0;
     public:

@@ -29,11 +29,11 @@ public:
 
     bool doPhysics() override
     {
+        position = Vector2Add(position, direction * speed);
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();
             return false;
         }
-        position = Vector2Add(position, direction * speed);
         if (position.x < -6 || position.x > 126 || position.y < -100 || position.y > 186)
             return false;
         SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});

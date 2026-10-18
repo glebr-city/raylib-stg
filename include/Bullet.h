@@ -11,21 +11,16 @@
 #include "Spawnable.h"
 
 class Bullet : public Spawnable {
-private:
-    Vector2 startOfTickPos = {};
-
 protected:
+    Vector2 startOfTickPos = {};
     int scoreValue = 10;
     static constexpr uint grazeValue = 40;
 
     bool CheckCollisionRoundBullet(const Vector2 _center, const float _radius, const Vector2 p1, Vector2 p2, const int _grazeValue) {
-        const float bulletDX = {_center.x - startOfTickPos.x};
-        const float bulletDY = {_center.y - startOfTickPos.y};
-        p2.x += bulletDX;
-        p2.y += bulletDY;
+        p2.x += _center.x - startOfTickPos.x;
+        p2.y += _center.y - startOfTickPos.y;
         const float dx = p1.x - p2.x;
         const float dy = p1.y - p2.y;
-        std::cout << dx << " " << dy << " " << bulletDY << std::endl;
         float dx2;
         float dy2;
 
