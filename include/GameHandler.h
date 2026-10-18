@@ -102,8 +102,10 @@ public:
         PlayerBullets::getPlayerBullets()->doPhysics();
         SpawnedEnemies::doPhysics();
         EphemeraHandler::doPhysics();
-        if (GlobalVariables::GetCurrentPhase()->CanSpawnBullets())
+        if (GlobalVariables::GetCurrentPhase()->CanSpawnBullets()) {
+            GlobalPools::SetStartOfTickPos();
             GlobalPools::doPhysics();
+        }
         GlobalVariables::GetCurrentPhase()->doPhysics();
         GlobalVariables::GetCurrentPhase()->tickStep();
         PlayerHandler::GetPlayer().get()->doPhysics();

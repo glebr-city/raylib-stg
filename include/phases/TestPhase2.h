@@ -14,28 +14,28 @@ private:
     std::shared_ptr<PoolingVector<SimpleBullet1>> miscellaneousBulletPool;
     int stepsElapsed{};
 public:
-    TestPhase2() : PhaseHelper(std::vector<std::shared_ptr<IPoolingVector>>()) {
-        phaseName = "TestPhase2";
+    TestPhase2() : PhaseHelper("TestPhase2") {
         orbBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(200, 30);
         miscellaneousBulletPool = std::make_shared<PoolingVector<SimpleBullet1>>(200, 5);
-        phasePools.push_back(miscellaneousBulletPool);
-        phasePools.push_back(orbBulletPool);
+        GlobalPools::AddPools({miscellaneousBulletPool, orbBulletPool});
     }
 
-    bool doPhysics(Player *_player) override {
+    bool doPhysics() override {
         if (stepsElapsed % 30 == 0) {
-            miscellaneousBulletPool->spawn().spawn(Vector2 {static_cast<float>(stepsElapsed % 150), 1}, Vector2 {0, 1}, RED);
+            miscellaneousBulletPool->spawn().spawn(Vector2 {static_cast<float>(60), 1}, Vector2 {0, 1}, RED);
         }
-        if (stepsElapsed % 30 == 15) {
+        if (false && stepsElapsed % 30 == 15) {
             miscellaneousBulletPool->spawn().spawn(Vector2 {static_cast<float>(stepsElapsed % 150), 1}, Vector2 {0, 1}, BLUE);
         }
 
-        if (stepsElapsed % 120 == 0) {
+        if (false && stepsElapsed % 120 == 0) {
             SpawnedEnemies::spawnEnemy(std::make_shared<OrbEnemy1>(orbBulletPool.get()));
         }
         stepsElapsed++;
-        return PhaseHelper::doPhysics(_player);
+        return PhaseHelper::doPhysics();
     }
+    void enemyKilled(u_int _id) override{};
+    void enemyDespawned(u_int _id) override{};
 };
 
 

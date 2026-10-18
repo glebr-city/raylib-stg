@@ -11,7 +11,7 @@
 class SimpleBullet1 : public SimpleBullet{
 protected:
     static constexpr float radius = 3;
-    static constexpr float speed = 1;
+    static constexpr float speed = 100;
     uint grazeValue = 20;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 direction{};
@@ -40,11 +40,11 @@ public:
     {}
     bool doPhysics() override
     {
+        position = Vector2Add(position, direction * speed);
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();
             return false;
         }
-        position = Vector2Add(position, direction * speed);
         if (position.x < -2 || position.x > 122 || position.y < -1000 || position.y > 182)
             return false;
         return true;

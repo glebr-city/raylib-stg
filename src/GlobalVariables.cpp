@@ -23,6 +23,8 @@
 #include "phases/Stage2Phase5.h"
 #include "phases/Stage3Phase1.h"
 #include "phases/Stage3Phase2.h"
+#include "phases/TestPhase1.h"
+#include "phases/TestPhase2.h"
 
 #if DEBUG_BUILD
 u_int GlobalVariables::maxBullets = 0;
@@ -54,7 +56,7 @@ const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
 {[]() -> PhaseHelper* { return new Boss2Phase3(); }},
 {[]() -> PhaseHelper* { return new Boss2Phase4(); }},
 {[]() -> PhaseHelper* { return new Boss2Phase5(); }},
-{[]() -> PhaseHelper* { return new Stage3Phase1(); }},
+{[]() -> PhaseHelper* { return new TestPhase2(); }},
 {[]() -> PhaseHelper* { return new Stage3Phase2(); }},
     }};
 

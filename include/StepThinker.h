@@ -23,6 +23,8 @@ public:
         std::cout << "!!! StepThinker::getPosition() always returns {0, 0} !";
         return Vector2{};
     }
+
+    virtual void SetStartOfTickPos() {}
 };
 
 

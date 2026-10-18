@@ -26,7 +26,7 @@ public:
         SpriteHandler::QueueMyAnimatedSprite({sprite, position});
     }
 
-    bool doPhysics(std::array<Vector2, 2> playerPosAndMovement) override {
+    bool doPhysics() override {
         elapsedSteps++;
         if (checkPlayerBulletCollision()) {
             return false;
@@ -35,9 +35,8 @@ public:
         if (position.x > 125)
             return false;
         collider.x = position.x;
-        Vector2 playerFinalPos = Vector2Add(playerPosAndMovement[0], playerPosAndMovement[1]);
         if (elapsedSteps % 31 == 0) {
-            bulletPool->spawn().spawn(position, Vector2Normalize(playerFinalPos - position));
+            bulletPool->spawn().spawn(position, Vector2Normalize(Vector2Subtract(PlayerHandler::GetPlayer()->GetFinalPos(), position)), RED);
         }
         return true;
     }

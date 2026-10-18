@@ -15,6 +15,7 @@
 class IPoolingVector {
 public:
     virtual ~IPoolingVector() = default;
+    virtual void SetStartOfTickPos() = 0;
     virtual void doPreStep() = 0;
     virtual void doPhysics() = 0;
     virtual void doPostStep() = 0;
@@ -23,6 +24,7 @@ public:
     virtual void setNumActive(std::size_t i) = 0;
     virtual std::vector<Vector2> getActivePositions() = 0;
     virtual int getValue() = 0;
+
 };
 template<typename T>
 class PoolingVector : public IPoolingVector{
@@ -79,6 +81,11 @@ class PoolingVector : public IPoolingVector{
 
 		    std::for_each(this->storage.begin(), this->storage.begin() + num_active, [](auto& elem){elem.doPostStep();});
 		}
+    void SetStartOfTickPos() final
+        {
+
+            std::for_each(this->storage.begin(), this->storage.begin() + num_active, [](auto& elem){elem.SetStartOfTickPos();});
+        }
 
 		void doPhysics() final {
       auto i = 0UL;  

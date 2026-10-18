@@ -39,6 +39,12 @@ public:
         }
     }
 
+    static void SetStartOfTickPos() {
+        for (const auto& pool : *GlobalPools::GetPools()) {
+            pool->SetStartOfTickPos();
+        }
+    }
+
     static void doPhysics()
     {
         for (const auto& pool : *GlobalPools::GetPools()) {
