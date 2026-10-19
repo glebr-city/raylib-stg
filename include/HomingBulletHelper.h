@@ -13,7 +13,8 @@ private:
     std::vector<HomingBullet*> bullets;
     std::vector<Vector2> bulletPositions{};
     Vector2 currentDirection{};
-    float maxRotationAngle = 0.12f;
+    static constexpr float maxRotationAngle = 0.12f;
+    float currentMaxRotationAngle = maxRotationAngle;
     float currentSpeed = 1;
     int stepsElapsed = 0;
     public:
@@ -49,12 +50,13 @@ private:
         }
         const Vector2 leadBulletPos = bulletPositions.at(0);
         const float desiredRotationAngle = Vector2Angle(currentDirection, Vector2Normalize(Vector2Subtract(playerFinalPos, leadBulletPos)));
-        if (std::abs(desiredRotationAngle) > maxRotationAngle)
-            currentDirection = Vector2Rotate(currentDirection, std::copysign(maxRotationAngle, desiredRotationAngle));
+        if (std::abs(desiredRotationAngle) > currentMaxRotationAngle)
+            currentDirection = Vector2Rotate(currentDirection, std::copysign(currentMaxRotationAngle, desiredRotationAngle));
         else
             currentDirection = Vector2Rotate(currentDirection, desiredRotationAngle);
         bulletPositions.at(0) = Vector2Add(leadBulletPos, currentSpeed * currentDirection);
         bullets.at(0)->SetPosition(bulletPositions.at(0));
+        currentMaxRotationAngle -= 0.0003f;
         currentSpeed += 0.02f;
 
         if (!GlobalVariables::GetCurrentPhase()->CanSpawnBullets())
