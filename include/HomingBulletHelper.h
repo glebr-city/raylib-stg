@@ -17,6 +17,8 @@ private:
     float currentMaxRotationAngle = maxRotationAngle;
     float currentSpeed = 1;
     int stepsElapsed = 0;
+    bool shouldDespawn = false;
+    int despawnTimer = 120;
     public:
     HomingBulletHelper(std::shared_ptr<PoolingVector<HomingBullet>> _bulletPool) {
         bulletPool = _bulletPool;
@@ -36,28 +38,43 @@ private:
                 bullets[i]->SetPosition(bulletPositions.at(i));
             }
         }
-        if (!bullets.at(0)->CheckPosition()) {
-            bullets.at(0)->despawn();
+        const Vector2 leadBulletPos = bulletPositions.at(0);
+        if (!shouldDespawn) {
+            const float desiredRotationAngle = Vector2Angle(currentDirection, Vector2Normalize(Vector2Subtract(playerFinalPos, leadBulletPos)));
+            if (std::abs(desiredRotationAngle) > currentMaxRotationAngle)
+                currentDirection = Vector2Rotate(currentDirection, std::copysign(currentMaxRotationAngle, desiredRotationAngle));
+            else
+                currentDirection = Vector2Rotate(currentDirection, desiredRotationAngle);
+        }
+        bulletPositions.at(0) = Vector2Add(leadBulletPos, currentSpeed * currentDirection);
+        bullets.at(0)->SetPosition(bulletPositions.at(0));
+        currentMaxRotationAngle -= 0.0005f;
+        currentSpeed += 0.025f;
+
+        if (shouldDespawn) {
+            if (despawnTimer-- == 0) {
+                for (size_t i = 0; i < bullets.size() - 1; i++) {
+                    bullets.at(i)->despawn();
+                }
+                bullets.clear();
+                return false;
+            }
+        } else if (!bullets.at(0)->CheckPosition()) {
+            shouldDespawn = true;
+            return true;
+            bullets.at(bullets.size() - 1)->despawn();
             if (bullets.size() == 1) {
                 bullets.erase(bullets.begin());
                 return false;
             }
-            for (size_t i = bulletPositions.size() - 1; i > 0; i--) {
-                bulletPositions[i] = bulletPositions.at(i - 1);
+            for (size_t i = 0; i < bulletPositions.size() - 1; i++) {
+                //std::cout << "(" << bulletPositions[i].x << ", " <<bulletPositions[i].x << ") (" << bulletPositions.at(i - 1).x << ", " << bulletPositions.at(i - 1).y << ")" << std::endl;
+                bulletPositions[i] = bulletPositions.at(i + 1);
             }
-            bullets.erase(bullets.begin());
+            bullets.erase(bullets.end() - 1);
             bulletPositions.pop_back();
         }
-        const Vector2 leadBulletPos = bulletPositions.at(0);
-        const float desiredRotationAngle = Vector2Angle(currentDirection, Vector2Normalize(Vector2Subtract(playerFinalPos, leadBulletPos)));
-        if (std::abs(desiredRotationAngle) > currentMaxRotationAngle)
-            currentDirection = Vector2Rotate(currentDirection, std::copysign(currentMaxRotationAngle, desiredRotationAngle));
-        else
-            currentDirection = Vector2Rotate(currentDirection, desiredRotationAngle);
-        bulletPositions.at(0) = Vector2Add(leadBulletPos, currentSpeed * currentDirection);
-        bullets.at(0)->SetPosition(bulletPositions.at(0));
-        currentMaxRotationAngle -= 0.0003f;
-        currentSpeed += 0.02f;
+
 
         if (!GlobalVariables::GetCurrentPhase()->CanSpawnBullets())
             return false;
@@ -74,6 +91,8 @@ private:
         currentSpeed = 1;
         position = _params.pos;
     };
+
+    void doPostStep() override{};
 
     void spawn(const Vector2 _position) override {
         spawn(EnemySpawnParametres{_position});

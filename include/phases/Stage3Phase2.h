@@ -23,9 +23,9 @@ public:
     };
 
     bool doPhysics() override {
-        if (stepsElapsed == 0) {
+        if (stepsElapsed % 60 == 0) {
             HomingBulletHelper newHomingBulletHelper{homingBulletPool};
-            newHomingBulletHelper.spawn({{60, 30}});
+            newHomingBulletHelper.spawn({{static_cast<float>(stepsElapsed % 600) * 0.2f, 0}});
             SpawnedEnemies::spawnEnemy(std::make_shared<HomingBulletHelper>(std::move(newHomingBulletHelper)));
         }
         return PhaseHelper::doPhysics();
