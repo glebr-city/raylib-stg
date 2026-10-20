@@ -48,7 +48,7 @@ private:
         }
         bulletPositions.at(0) = Vector2Add(leadBulletPos, currentSpeed * currentDirection);
         bullets.at(0)->SetPosition(bulletPositions.at(0));
-        currentMaxRotationAngle -= 0.0005f;
+        currentMaxRotationAngle -= 0.00065f;
         currentSpeed += 0.025f;
 
         if (shouldDespawn) {
@@ -62,17 +62,6 @@ private:
         } else if (!bullets.at(0)->CheckPosition()) {
             shouldDespawn = true;
             return true;
-            bullets.at(bullets.size() - 1)->despawn();
-            if (bullets.size() == 1) {
-                bullets.erase(bullets.begin());
-                return false;
-            }
-            for (size_t i = 0; i < bulletPositions.size() - 1; i++) {
-                //std::cout << "(" << bulletPositions[i].x << ", " <<bulletPositions[i].x << ") (" << bulletPositions.at(i - 1).x << ", " << bulletPositions.at(i - 1).y << ")" << std::endl;
-                bulletPositions[i] = bulletPositions.at(i + 1);
-            }
-            bullets.erase(bullets.end() - 1);
-            bulletPositions.pop_back();
         }
 
 

@@ -122,6 +122,7 @@ add_executable(raylib_stg src/main.cpp
         include/HomingBullet.h
         include/HomingBulletHelper.h
         include/phases/Stage3Phase2.h
+        include/Enemy1_4.h
 )
 
 target_sources(raylib_stg
