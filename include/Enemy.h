@@ -131,14 +131,13 @@ public:
         currentFlashDuration = HIT_FLASH_DURATION;
     }
 
-    void die()
-    {
+    void die() const {
         ScoreHandler::addScore(scoreValue);
         GlobalVariables::GetCurrentPhase()->enemyKilled(id);
         EphemeraHandler::Spawn(position, deathInfo.t, deathInfo.l);
     }
 
-    virtual void despawn()
+    void despawn() override
     {
         //GlobalVariables::GetCurrentPhase()->enemyDespawned(id);
     }

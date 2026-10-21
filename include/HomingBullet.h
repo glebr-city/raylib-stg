@@ -10,12 +10,12 @@ class HomingBullet : public SimpleBullet {
 private:
     static constexpr float bulletRadius = 1;
     public:
-    HomingBullet() : SimpleBullet(15, {}, BULLET_SMALL_2_MONOCHROME) {
+    HomingBullet() : SimpleBullet(15, {}, BULLET_SMALL_2_MONOCHROME, LAYER_BULLET_HIGH) {
 
     }
 
     bool doPhysics() override {
-        if (CheckCollisionRoundBullet(position, bulletRadius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
+        if (CheckCollisionRoundBullet(position, bulletRadius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), 10)) {
             DamageHandler::hitPlayer();
             return false;
         }

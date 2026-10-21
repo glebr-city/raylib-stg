@@ -24,7 +24,8 @@ private:
         bulletPool = _bulletPool;
     };
     bool doPhysics() override {
-
+        if (!GlobalVariables::GetCurrentPhase()->CanSpawnBullets())
+            return false;
         const Vector2 playerFinalPos = PlayerHandler::GetPlayer()->GetFinalPos();
         if (stepsElapsed++ % 5 == 0) {
             if (bullets.size() < 5) {
@@ -48,8 +49,8 @@ private:
         }
         bulletPositions.at(0) = Vector2Add(leadBulletPos, currentSpeed * currentDirection);
         bullets.at(0)->SetPosition(bulletPositions.at(0));
-        currentMaxRotationAngle -= 0.00065f;
-        currentSpeed += 0.025f;
+        currentMaxRotationAngle = std::max(currentMaxRotationAngle - 0.00075f, 0.0f);
+        currentSpeed += 0.035f;
 
         if (shouldDespawn) {
             if (despawnTimer-- == 0) {
@@ -63,10 +64,6 @@ private:
             shouldDespawn = true;
             return true;
         }
-
-
-        if (!GlobalVariables::GetCurrentPhase()->CanSpawnBullets())
-            return false;
         return true;
     }
 

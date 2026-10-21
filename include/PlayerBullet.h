@@ -46,7 +46,7 @@ public:
     }
 
     bool doPhysics() override {
-        if (position.y < -6) {
+        if (position.y < -3) {
             return false;
         }
         position.y -= ySpeed;

@@ -115,7 +115,7 @@ class Stage3Phase1 : public PhaseHelper
 
     bool doPhysics() override
     {
-        if (stepsElapsed > 2400)
+        if (stepsElapsed > 2340)
         {
             GameHandler::NextPhase();
             return false;

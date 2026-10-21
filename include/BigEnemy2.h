@@ -57,8 +57,6 @@ private:
         if (shotsFired == 0)
         {
             setRandomRotation();
-            const float fireRateFraction = static_cast<float>(elapsedStepsInState) / static_cast<float>(currentState.fireRate);
-            //bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), randomRotation), YELLOW, 1 + fireRateFraction);
         }
         if (elapsedStepsInState % currentState.fireRate == 0)
         {

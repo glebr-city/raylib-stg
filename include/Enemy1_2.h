@@ -11,8 +11,8 @@
 class Enemy1_2 : public Enemy1Base
 {
     static constexpr int ENEMY_1_2_HEALTH = 4;
-    static inline const ANIMATED_SPRITES sprite = ENEMY_1_2;
-    static inline const Color mainShotColour = { 200, 80, 130, 255 };
+    static constexpr ANIMATED_SPRITES sprite = ENEMY_1_2;
+    static constexpr Color mainShotColour = { 200, 80, 130, 255 };
     private:
     bool doMainFireThisTime = false;
     std::shared_ptr<PoolingVector<Enemy1_2Bullet1>> bulletPool1;
@@ -51,7 +51,7 @@ protected:
 
     void doPostStep() override
     {
-        Color spriteColour = WHITE;
+        auto spriteColour = WHITE;
         if (currentFlashDuration-- > 0 && elapsedSteps % 61 <= 30)
             spriteColour = RED;
         if (stateVector[currentStateIndex].fireRate == 0)
