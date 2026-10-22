@@ -7,6 +7,7 @@
 #include <array>
 #include <cstdint>
 #include <vector>
+#include <SoundData.h>
 
 #include "raylib/raylib.h"
 
@@ -32,6 +33,7 @@ typedef enum
     EXPLOSION_1_SHORT,
     EXPLOSION_2,
     CLICK_1,
+    MAGIC_1,
 
     SOUND_COUNT
 } SOUNDS;
@@ -43,7 +45,29 @@ private:
     static float soundVolume;
     static std::vector<SoundData> sounds;
     public:
-    static void InitSounds(); //Run at the start of the game
+    static void InitSounds() //Run at the start of the game
+    {
+        sounds.reserve(SOUND_COUNT);
+        sounds.emplace_back("resources/sounds/thump1.mp3");
+        sounds.emplace_back("resources/sounds/hum1.mp3");
+        sounds.emplace_back("resources/sounds/slide1.mp3");
+        sounds.emplace_back("resources/sounds/slide2.mp3");
+        sounds.emplace_back("resources/sounds/slide3.mp3");
+        sounds.emplace_back("resources/sounds/slide4.mp3");
+        sounds.emplace_back("resources/sounds/bang1.mp3");
+        sounds.emplace_back("resources/sounds/bang2.mp3");
+        sounds.emplace_back("resources/sounds/playerHit.mp3");
+        sounds.emplace_back("resources/sounds/playerHyper.mp3");
+        sounds.emplace_back("resources/sounds/playerHyper2.mp3");
+        sounds.emplace_back("resources/sounds/playerHyper3.mp3");
+        sounds.emplace_back("resources/sounds/playerGraze1.mp3");
+        sounds.emplace_back("resources/sounds/playerGraze2.mp3");
+        sounds.emplace_back("resources/sounds/explosion1.mp3");
+        sounds.emplace_back("resources/sounds/explosion1Short.mp3");
+        sounds.emplace_back("resources/sounds/explosion2.mp3");
+        sounds.emplace_back("resources/sounds/click1.mp3");
+        sounds.emplace_back("resources/sounds/magic1.mp3");
+    }
     static void SetAllSoundVolume(float v); //It doesn't seem to work?
     static void SetAllSoundPause(bool p);
     static size_t PlaySound(SOUNDS i, bool loop = false);

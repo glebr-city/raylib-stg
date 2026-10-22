@@ -9,7 +9,7 @@
 class HomingBullet : public SimpleBullet {
 private:
     static constexpr float bulletRadius = 1;
-    static constexpr Color bulletColour = {99, 155, 255, 255};
+    static constexpr Color bulletColour = {20, 50, 255, 255};
     public:
     HomingBullet() : SimpleBullet(15, {}, BULLET_SMALL_2_MONOCHROME, LAYER_BULLET_HIGH) {
         color = bulletColour;

@@ -26,7 +26,7 @@ class Enemy1_4 : public Enemy1Base
     {
         if (currentState.fireRate > 0 && elapsedSteps % currentState.fireRate == 0)
         {
-            SoundHandler::PlaySound(THUMP_1);
+            SoundHandler::PlaySound(MAGIC_1);
             auto newHomingBulletHelper = std::make_shared<HomingBulletHelper>(bulletPool);
             newHomingBulletHelper->spawn({.pos={position.x, position.y - 7}});
             SpawnedEnemies::spawnEnemy(std::move(newHomingBulletHelper));

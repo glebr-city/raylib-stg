@@ -11,28 +11,6 @@
 float SoundHandler::soundVolume = 1;
 
 std::vector<SoundData> SoundHandler::sounds = {};
-void SoundHandler::InitSounds()
-{
-    sounds.reserve(SOUND_COUNT);
-    sounds.emplace_back("resources/sounds/thump1.mp3");
-    sounds.emplace_back("resources/sounds/hum1.mp3");
-    sounds.emplace_back("resources/sounds/slide1.mp3");
-    sounds.emplace_back("resources/sounds/slide2.mp3");
-    sounds.emplace_back("resources/sounds/slide3.mp3");
-    sounds.emplace_back("resources/sounds/slide4.mp3");
-    sounds.emplace_back("resources/sounds/bang1.mp3");
-    sounds.emplace_back("resources/sounds/bang2.mp3");
-    sounds.emplace_back("resources/sounds/playerHit.mp3");
-    sounds.emplace_back("resources/sounds/playerHyper.mp3");
-    sounds.emplace_back("resources/sounds/playerHyper2.mp3");
-    sounds.emplace_back("resources/sounds/playerHyper3.mp3");
-    sounds.emplace_back("resources/sounds/playerGraze1.mp3");
-    sounds.emplace_back("resources/sounds/playerGraze2.mp3");
-    sounds.emplace_back("resources/sounds/explosion1.mp3");
-    sounds.emplace_back("resources/sounds/explosion1Short.mp3");
-    sounds.emplace_back("resources/sounds/explosion2.mp3");
-    sounds.emplace_back("resources/sounds/click1.mp3");
-}
 
 void SoundHandler::SetAllSoundVolume(const float v)
 {
