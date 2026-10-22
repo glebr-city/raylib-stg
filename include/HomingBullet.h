@@ -9,9 +9,10 @@
 class HomingBullet : public SimpleBullet {
 private:
     static constexpr float bulletRadius = 1;
+    static constexpr Color bulletColour = {99, 155, 255, 255};
     public:
     HomingBullet() : SimpleBullet(15, {}, BULLET_SMALL_2_MONOCHROME, LAYER_BULLET_HIGH) {
-
+        color = bulletColour;
     }
 
     bool doPhysics() override {
@@ -20,6 +21,11 @@ private:
             return false;
         }
         return true;
+    };
+
+    void spawn(const Vector2 _position) override
+    {
+        SimpleBullet::spawn(_position);
     };
 
     [[nodiscard]] bool CheckPosition() const {

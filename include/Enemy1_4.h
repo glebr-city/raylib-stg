@@ -41,7 +41,10 @@ class Enemy1_4 : public Enemy1Base
         if (stateVector[currentStateIndex].fireRate == 0)
             SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_ENEMY, .col = spriteColour});
         else
+        {
             SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .yOffset = 1, .l = LAYER_ENEMY, .col = spriteColour});
+            SpriteHandler::QueueMyAnimatedSprite({.i = ENEMY_1_4_ORB, .pos = Vector2Add(position, {0, -7}), .l = LAYER_ENEMY, .col = spriteColour});
+        }
     }
 };
 #endif //RAYLIB_STG_ENEMY1_4_H

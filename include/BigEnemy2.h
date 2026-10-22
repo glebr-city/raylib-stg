@@ -13,7 +13,7 @@ private:
     static inline const int SCORE_VALUE = 2000;
     static inline const ANIMATED_SPRITES sprite = BIG_ENEMY_2;
     static constexpr uint8_t maxHealth = 13;
-    static constexpr uint_fast8_t maxShots = 20;
+    static constexpr uint_fast8_t maxShots = 15;
     static constexpr uint8_t maxCooldown = 30;
     int currentCooldown = 0;
     uint8_t humIndex = 254;

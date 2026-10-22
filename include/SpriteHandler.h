@@ -37,6 +37,7 @@ typedef enum {
     ENEMY_1_3,
     BULLET_SMALL_2_MONOCHROME,
     ENEMY_1_4,
+    ENEMY_1_4_ORB,
 
     ANIMATED_SPRITE_COUNT,
 } ANIMATED_SPRITES;
@@ -151,6 +152,7 @@ private:
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/enemy1_3SpriteSheet.png"), Rectangle {0,0,12,10}, 30}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/tinyBullet2SpriteSheet.png"), Rectangle {0,0,5,5}, 2}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/enemy1_4SpriteSheet.png"), Rectangle {0,0,14,14}, 30}),
+       std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/enemy1_4OrbSpriteSheet.png"), Rectangle {0,0,6,6}, 6}),
 
    };
     staticSprites = {

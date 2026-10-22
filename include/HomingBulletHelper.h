@@ -13,9 +13,9 @@ private:
     std::vector<HomingBullet*> bullets;
     std::vector<Vector2> bulletPositions{};
     Vector2 currentDirection{};
-    static constexpr float maxRotationAngle = 0.12f;
+    static constexpr float maxRotationAngle = 0.11f;
     float currentMaxRotationAngle = maxRotationAngle;
-    float currentSpeed = 1;
+    float currentSpeed = 1.25f;
     int stepsElapsed = 0;
     bool shouldDespawn = false;
     int despawnTimer = 120;
@@ -74,7 +74,7 @@ private:
         bullets.at(0)->spawn(_params.pos);
         bulletPositions.emplace_back(_params.pos);
         currentDirection = Vector2Normalize(Vector2Subtract(PlayerHandler::GetPlayer()->GetFinalPos(), _params.pos));
-        currentSpeed = 1;
+        currentSpeed = 1.25f;
         position = _params.pos;
     };
 

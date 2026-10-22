@@ -51,7 +51,9 @@ public:
     };
 
     bool doPhysics() override {
-        if (stepsElapsed > 1200) {
+        if (stepsElapsed == 1170) {
+            SpawnedEnemies::Clear();
+            GlobalPools::Clear();
             GameHandler::NextPhase();
             return false;
         }
