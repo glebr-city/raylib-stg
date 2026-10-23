@@ -120,6 +120,8 @@ public:
             currentStateIndex = newStateIndex;
         else
             currentStateIndex = 0;
+        if (currentSpeed > stateVector[currentStateIndex].speed)
+            currentSpeed = stateVector[currentStateIndex].speed;
         return true;
     }
 };

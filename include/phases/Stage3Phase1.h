@@ -44,7 +44,6 @@ class Stage3Phase1 : public PhaseHelper
                     newEnemy2.spawn({.pos = {static_cast<float>(135), static_cast<float>(i * 5)}});
                     SpawnedEnemies::spawnEnemy(std::make_shared<Enemy2>(std::move(newEnemy2)));
                 }
-
                 for (int i = 0; i < 3; i++)
                 {
                     const std::vector<Enemy2State> newEnemy2StateVector{
