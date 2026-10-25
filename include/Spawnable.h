@@ -21,7 +21,7 @@ public:
     {
         position = _pos;
     }
-    virtual int GetScoreValue()
+    virtual u_int GetScoreValue()
     {
         return 10;
     }

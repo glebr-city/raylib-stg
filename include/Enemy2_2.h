@@ -5,9 +5,10 @@
 #ifndef RAYLIB_STG_ENEMY2_2_H
 #define RAYLIB_STG_ENEMY2_2_H
 #include "Enemy2.h"
+#include "Enemy2Base.h"
 #include "SimpleBullet1VariableSpeed.h"
 
-class Enemy2_2 : public Enemy2
+class Enemy2_2 : public Enemy2Base
 {
 protected:
     std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>> bullet1Pool;
@@ -31,7 +32,7 @@ protected:
     }
 
     public:
-    Enemy2_2(const std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>> _bullet1Pool, const std::vector<Enemy2State>& _stateVector, const uint _scoreValue = 500) : Enemy2(std::make_shared<PoolingVector<Enemy2Bullet1>>(2), _stateVector, _scoreValue)
+    Enemy2_2(const std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>>& _bullet1Pool, const std::vector<Enemy2State>& _stateVector, const uint _scoreValue = 500) : Enemy2Base(_stateVector, _scoreValue)
     {
         bullet1Pool = _bullet1Pool;
         health = Enemy2_2::getMaxHealth();
@@ -94,7 +95,7 @@ protected:
 
     bool enterNewState(const u_int newStateIndex) override
     {
-        if (!Enemy2::enterNewState(newStateIndex))
+        if (!Enemy2Base::enterNewState(newStateIndex))
             return false;
         if (stateVector[currentStateIndex].desiredPos.x < position.x)
             shootingLeft = true;

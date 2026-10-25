@@ -13,7 +13,7 @@
 class Bullet : public Spawnable {
 protected:
     Vector2 startOfTickPos = {};
-    int scoreValue = 10;
+    u_int scoreValue;
     static constexpr uint grazeValue = 40;
 
     bool CheckCollisionRoundBullet(const Vector2 _center, const float _radius, const Vector2 p1, Vector2 p2, const int _grazeValue) {
@@ -54,8 +54,8 @@ public:
 
     Bullet() = default;
 
-    Bullet(const int _scoreValue, const Vector2 _pos) : Spawnable(_pos) {
-        scoreValue = _scoreValue;
+    Bullet(const u_int _scoreValue, const Vector2 _pos) : Spawnable(_pos), scoreValue(_scoreValue) {
+        std::cout << "_scoreValue = " << _scoreValue << std::endl;
     }
 
     void spawn(const Vector2 _position) override {
@@ -71,7 +71,7 @@ public:
         scoreValue = _scoreValue;
     }
 
-    int GetScoreValue() override {
+    u_int GetScoreValue() override {
         return scoreValue;
     }
 

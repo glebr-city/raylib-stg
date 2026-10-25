@@ -12,18 +12,18 @@ class SimpleBullet1 : public SimpleBullet{
 protected:
     static constexpr float radius = 3;
     static constexpr float speed = 100;
-    uint grazeValue = 20;
+    u_int grazeValue = 20;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Vector2 direction{};
 
 public:
     using StepThinker::doPhysics;
-    SimpleBullet1(const Vector2 _pos = {}, const uint _grazeValue = 20) : SimpleBullet(_grazeValue, _pos, sprite, LAYER_BULLET_LOW), grazeValue(20)
+    SimpleBullet1(const Vector2 _pos = {}, const u_int _grazeValue = 20) : SimpleBullet(_grazeValue, _pos, sprite, LAYER_BULLET_LOW)
     {
         grazeValue = _grazeValue;
     };
 
-    SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(grazeValue, pos)
+    SimpleBullet1(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 20) : SimpleBullet(_grazeValue, pos)
     {
         direction = dir;
         color = col;

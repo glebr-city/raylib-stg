@@ -111,10 +111,11 @@ class PhaseHelper : public StepThinker {
 
     void cancelBullets() { //Clear bullets AND spawn score items.
         for (const auto& pooling_vector : *GlobalPools::GetPools()) {
+            const int value = pooling_vector->getValue();
             for (const auto& pos : pooling_vector->getActivePositions()) {
                 if (pos.x < -2 || pos.x > 122 || pos.y < -2 || pos.y > 182)
                     continue;
-                ScoreItemHandler::spawn(pos, pooling_vector->getValue());
+                ScoreItemHandler::spawn(pos, value);
             }
             pooling_vector->setNumActive(0);
         }

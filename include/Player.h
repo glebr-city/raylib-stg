@@ -13,8 +13,8 @@ class PlayerBullet;
 
 class Player : public StepThinker{
 private:
-    void startHyper();
-    void endHyper();
+    static void startHyper();
+    static void endHyper();
     void setFinalPos();
 
 public:
