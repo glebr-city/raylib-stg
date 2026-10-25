@@ -44,10 +44,10 @@ private:
             SoundHandler::PlayAnySound({PLAYER_GRAZE_1, PLAYER_GRAZE_2}, true, 0);
             return;
         }
-        if (currentGrazeMetre + i < maxGrazeMetre)
+        if (currentGrazeMetre + i*100 < maxGrazeMetre)
         {
             SoundHandler::PlayAnySound({PLAYER_GRAZE_1, PLAYER_GRAZE_2}, true, 0);
-            currentGrazeMetre = currentGrazeMetre + i;
+            currentGrazeMetre = currentGrazeMetre + i*100;
             return;
         }
         currentGrazeMetre = maxGrazeMetre;

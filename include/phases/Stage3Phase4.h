@@ -73,11 +73,20 @@ private:
     }
     void spawnEnemy1_4Wave2(const bool right, const u_int spawnDelay=0) {
         const auto spawnPos = Vector2(-15+150*right, 15*right);
-        const std::vector cornerEnemy1_4StateVector{Enemy1State{.duration=spawnDelay+1}, {.desiredPos=Vector2(8 + 104 * right, 12+15*right), .speed=100, .slowAtDesiredPos=false},
+        const std::vector newEnemy1_4StateVector{Enemy1State{.duration=spawnDelay+1}, {.desiredPos=Vector2(8 + 104 * right, 12+15*right), .speed=100, .slowAtDesiredPos=false},
             {.desiredPos=Vector2(130-140*right, 12+15*right), .speed=100, .fireRate=120, .despawn=true, .slowAtDesiredPos=false},};
-        Enemy1_4 newEnemy1_4{homingBulletPool, cornerEnemy1_4StateVector};
+        Enemy1_4 newEnemy1_4{homingBulletPool, newEnemy1_4StateVector};
         newEnemy1_4.spawn({.pos=spawnPos});
         SpawnedEnemies::spawnEnemy(std::make_unique<Enemy1_4>(std::move(newEnemy1_4)));
+    }
+
+    void spawnEnemy2_2Wave2(const bool right, const u_int spawnDelay=0) {
+        const auto spawnPos = Vector2(-15+150*right, 15*right);
+        const std::vector newEnemy2_2StateVector{Enemy2State{.duration=spawnDelay+1}, {.desiredPos=Vector2(8 + 104 * right, 12+15*right), .speed=100, .slowAtDesiredPos=false},
+            {.desiredPos=Vector2(130-140*right, 12+15*right), .speed=100, .shotCount=5, .burstWaitTime=60, .despawn=true, .slowAtDesiredPos=false},};
+        Enemy2_2 newEnemy2_2{enemy2_2Bullet1Pool, newEnemy2_2StateVector};
+        newEnemy2_2.spawn({.pos=spawnPos});
+        SpawnedEnemies::spawnEnemy(std::make_unique<Enemy2_2>(std::move(newEnemy2_2)));
     }
 public:
     Stage3Phase4() : PhaseHelper("Stage3Phase4") {
@@ -109,8 +118,22 @@ public:
                 spawnEnemy1_4Wave2(j, cornerEnemy1_4RespawnTime+30*i+160*j);
             }
             spawnEnemy1_2Wave2(j,wave2Delay+120+j*120);
+            spawnEnemy2_2Wave2(j, 300+cornerEnemy1_4RespawnTime+160*j);
+            spawnEnemy1_4Wave2(j, 360+cornerEnemy1_4RespawnTime+160*j);
         }
     }
+
+    bool doPhysics() override
+    {
+        if (stepsElapsed == 1200)
+        {
+            SpawnedEnemies::Clear();
+            GlobalPools::Clear();
+            GameHandler::NextPhase();
+            return false;
+        }
+        return PhaseHelper::doPhysics();
+    };
     void enemyKilled(const u_int _id) override {
         if (_id == 1 && stepsElapsed < cornerEnemy1_4RespawnTime) {
             spawnCornerEnemy1_4(false, 1);

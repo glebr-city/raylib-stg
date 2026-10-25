@@ -54,6 +54,7 @@ protected:
         }
         const float distanceSQ = Vector2DistanceSqr(position, playerFinalPos);
         if (distanceSQ < speed * speed) {
+            std::cout << "Score item value: " << value * scoreItemMultiplier << std::endl;
             ScoreHandler::addScore(std::max(10, value * scoreItemMultiplier), false);
             return false;
         }
@@ -71,8 +72,6 @@ protected:
     }
 
     void spawn(const Vector2 _position, const u_int _value) override {
-        int xAsInt = static_cast<int>(std::floor(_position.x));
-        int yAsInt = static_cast<int>(std::floor(_position.y));
         currentAntiGravity = 1;
         speed = 0;
         position = _position;

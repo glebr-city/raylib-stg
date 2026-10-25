@@ -11,7 +11,7 @@ class SimpleBullet2Fast : public SimpleBullet2
 public:
     bool doPhysics() override
     {
-        position = Vector2Add(position, direction * 3);
+        position = Vector2Add(position, direction * 3.25f);
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), 15)) {
             DamageHandler::hitPlayer();
             return false;
