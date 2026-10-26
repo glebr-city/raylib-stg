@@ -99,7 +99,7 @@ private:
     int smallPartsGlowSteps = 15; //Glow for this many steps after firing
     int crossGlowSteps = 15; //Glow for this many steps after firing
     int superCrossGlowSteps = 15; //Glow for this many steps after firing
-    int baseSpriteYOffset = 0;
+    int baseSpriteYOffset = 0; //Used for damage sprites
     Color drawnColour = WHITE;
     Vector2 movementVector = {};
 
@@ -531,7 +531,7 @@ public:
         return true;
     }
 
-    void doPostStep()
+    void doPostStep() override
     {
         drawnColour = WHITE;
         if (--currentFlashDuration > 0 && GlobalVariables::currentStep() % 61 > 45)

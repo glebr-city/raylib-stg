@@ -128,6 +128,7 @@ add_executable(raylib_stg src/main.cpp
         include/phases/Stage3Phase5.h
         include/Enemy2Base.h
         include/phases/Boss3Phase1.h
+        include/Boss3.h
 )
 
 target_sources(raylib_stg

@@ -64,6 +64,7 @@ typedef enum {
     STAGE_3_BACKGROUND,
     ENEMY_2,
     ENEMY_2_2,
+    BOSS_3_BASE,
 
     STATIC_SPRITE_COUNT
 } STATIC_SPRITES;
@@ -177,6 +178,7 @@ private:
         std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/stage3Background.png"), Vector2{0, 0}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/enemy2SpriteSheet.png"), Vector2{14,11}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/enemy2_2SpriteSheet.png"), Vector2{14,14}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss3BaseSpriteSheet.png"), Vector2{26,32}}),
     };
 }
     static void DrawMyStaticSprite(const SpriteParametres& opts);
