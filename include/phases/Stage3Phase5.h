@@ -30,8 +30,9 @@ private:
             for (int j=1; j<21; j++)
             {
                 const int i = std::min(j, 10);
+                const int extraDelay = std::max((j - 10) * 3, 0);
                 const auto spawnPos = Vector2(-15+150*right, 15*right);
-                const std::vector newEnemy2_2StateVector{Enemy2State{.duration=j*Enemy2_2Wave1SpawnDelay+1}, {.desiredPos=Vector2(8 + i +(104 - 2*i) * right, 15*right), .speed=static_cast<float>(100+20*i), .shotCount=3, .burstWaitTime=30-2*i, .slowAtDesiredPos=false},
+                const std::vector newEnemy2_2StateVector{Enemy2State{.duration=j*Enemy2_2Wave1SpawnDelay+extraDelay+1}, {.desiredPos=Vector2(8 + i +(104 - 2*i) * right, 15*right), .speed=static_cast<float>(100+20*i), .shotCount=3, .burstWaitTime=30-2*i, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(60+i-2*i*right, 15*right), .speed=static_cast<float>(70+20*i), .shotCount=3, .burstWaitTime=40, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .duration=30, .shotCount=1, .burstWaitTime=20-i, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .shotCount=3, .burstWaitTime=40, .despawn=true, .slowAtDesiredPos=false},};
@@ -43,12 +44,12 @@ private:
     void spawnEnemy1_3Wave2()
     {
         for (int right=0; right<=1; right++)
-            for (int j=1; j<15; j+=6)
+            for (int j=1; j<15; j+=3)
             {
                 const int i = std::min(j, 10);
                 const auto spawnPos = Vector2(-15+150*right, 15*right);
-                const std::vector newEnemy1_3StateVector{Enemy1State{.duration=j*Enemy2_2Wave1SpawnDelay+1+wave2Delay+Enemy2_2Wave1SpawnDelay*right*1[p]}, {.desiredPos=Vector2(8 + (104) * right, 15*right), .speed=static_cast<float>(100+20*i), .fireRate=120, .slowAtDesiredPos=false},
-                    {.desiredPos=Vector2(60+i-2*i*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=120, .despawn=false, .slowAtDesiredPos=false},
+                const std::vector newEnemy1_3StateVector{Enemy1State{.duration=j*Enemy2_2Wave1SpawnDelay+1+wave2Delay+Enemy2_2Wave1SpawnDelay*right*1}, {.desiredPos=Vector2(15 + (90) * right, 15*right), .speed=static_cast<float>(100+20*i), .slowAtDesiredPos=false},
+                    {.desiredPos=Vector2(60, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=120, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .duration=30, .fireRate=120, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=120, .despawn=true, .slowAtDesiredPos=false},};
                 Enemy1_3 newEnemy1_3{enemy1_3Bullet1Pool, newEnemy1_3StateVector};
@@ -64,7 +65,7 @@ private:
             {
                 const int i = std::min(j, 10);
                 const auto spawnPos = Vector2(-15+150*right, 60);
-                const std::vector newEnemy1_3StateVector{Enemy1State{.duration=j*Enemy2_2Wave1SpawnDelay+1+wave3Delay}, {.desiredPos=Vector2(8 + (104) * right, 15*right), .speed=static_cast<float>(100+20*i), .fireRate=60, .slowAtDesiredPos=false},
+                const std::vector newEnemy1_3StateVector{Enemy1State{.duration=j*Enemy2_2Wave1SpawnDelay+1+wave3Delay}, {.desiredPos=Vector2(15 + (90) * right, 15*right), .speed=static_cast<float>(100+20*i), .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(60+i-2*i*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=60, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .duration=30, .fireRate=60, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=60, .despawn=true, .slowAtDesiredPos=false},};
@@ -81,7 +82,8 @@ private:
             for (int i = -1; i <= 1; i += 2)
             {
                 auto newEnemy2StateVector1 = std::vector{Enemy2State{.duration = wave3Delay+1+row * 180},{.desiredPos = {static_cast<float>(60 + (i * 50)), 150}, .speed = 40, .shotCount=1, .shotWaitTime=5, .burstWaitTime=90, .despawn = false, .slowAtDesiredPos = false},
-                    {.desiredPos = {static_cast<float>(60 + (i * 50)), 190}, .speed = 40, .despawn = true, .slowAtDesiredPos = false},};
+                {.desiredPos = {static_cast<float>(60 + (i * 50)), 160}, .speed = 40, .slowAtDesiredPos = false},
+                {.desiredPos = {static_cast<float>(60 + (i * 50)), 190}, .speed = 40, .shotCount=50, .shotWaitTime=5, .burstWaitTime=90, .despawn = true, .slowAtDesiredPos = false},};
                 auto newEnemy2 = std::make_unique<Enemy2>(enemy2Bullet1Pool, newEnemy2StateVector1);
                 newEnemy2->spawn(Vector2(60 + i * 50, -20));
                 SpawnedEnemies::spawnEnemy(std::move(newEnemy2));
@@ -95,7 +97,9 @@ private:
             {
                 const int i = j;//std::min(j, 10);
                 const auto spawnPos = Vector2(-15+150*right, 10*right);
-                const std::vector newEnemy2StateVector{Enemy2State{.duration=j*Enemy2Wave3SpawnDelay+1+wave3Delay}, {.desiredPos=Vector2(8 + i +(104 - 2*i) * right, 10*right), .speed=static_cast<float>(100+20*i), .shotCount=1, .burstWaitTime=60-2*i, .lockAngle=false, .slowAtDesiredPos=false},
+                const std::vector newEnemy2StateVector{Enemy2State{.duration=j*Enemy2Wave3SpawnDelay+1+wave3Delay},
+                    {.desiredPos=Vector2(8 + i +(104 - 2*i) * right, 10*right), .speed=static_cast<float>(50), .slowAtDesiredPos=false},
+                    {.desiredPos=Vector2(9 + i +(103 - 2*i) * right, 10*right), .speed=static_cast<float>(100+5*i), .shotCount=1, .burstWaitTime=60-2*i, .lockAngle=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 10*right), .speed=static_cast<float>(70+20*i), .shotCount=1, .burstWaitTime=40, .lockAngle=false, .despawn=true, .slowAtDesiredPos=false},};
                 Enemy2 newEnemy2{enemy2Bullet1Pool, newEnemy2StateVector};
                 newEnemy2.spawn({.pos=spawnPos});
@@ -119,6 +123,18 @@ public:
         spawnEnemy2Wave3_2();
         spawnEnemy1_3Wave3();
     };
+    bool doPhysics() override
+    {
+        if (stepsElapsed == 3400)
+        {
+            SpawnedEnemies::Clear();
+            GlobalPools::Clear();
+            GameHandler::NextPhase();
+            return false;
+        }
+        return PhaseHelper::doPhysics();
+    };
+
     void enemyKilled(u_int _id) override{};
     void enemyDespawned(u_int _id) override{};
 };

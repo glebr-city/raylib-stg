@@ -60,7 +60,7 @@ private:
         GlobalVariables::GetCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const uint_fast8_t _desiredStage = 2, const uint_fast8_t _desiredPhaseIndex = 4) {
+    static void RestartGame(const uint_fast8_t _desiredStage = 2, const uint_fast8_t _desiredPhaseIndex = 0) {
         desiredStage = _desiredStage;
         GlobalVariables::SetCurrentStage(_desiredStage);
         desiredPhase = GlobalVariables::GetCurrentStage()->GetPhase(_desiredPhaseIndex);

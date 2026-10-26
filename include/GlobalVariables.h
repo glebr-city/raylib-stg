@@ -4,11 +4,15 @@
 
 #ifndef RAYLIB_STG_GLOBALVARIABLES_H
 #define RAYLIB_STG_GLOBALVARIABLES_H
+#include <array>
+#include <cmath>
 #include <cstdint>
 #include <memory>
 
 #include "PhaseHelper.h"
+#include "raylib.h"
 #include "Stage.h"
+
 
 class PhaseHelper;
 struct PhaseRef;
@@ -18,39 +22,34 @@ inline const int gameHeight = 180;
 inline const int bulletSealRadius = 22; //Grounded enemies may not fire from this distance to the player.
 inline const int bulletSealRadiusSQ = bulletSealRadius * bulletSealRadius; //Grounded enemies may not fire from this distance to the player.
 
-
-
-
-
-
 class GlobalVariables {
 protected:
-    static std::unique_ptr<PhaseHelper> currentPhase;
-    static const std::array<PhaseRef, PHASE_COUNT> phases;
-    static const std::array<std::shared_ptr<Stage>, 3> stages;
-    static int currentStageIndex;
-    static int currentPhaseIndex; //Within the current stage!
     static RenderTexture2D renderTexture;
     static int renderTextureFilter;
     static int effectVolume;
     static int screenRotation;
     static int zoomFactor;
     static int titleCardStepsRemaining;
-#if DEBUG_BUILD
-    static u_int maxBullets;
-#endif
+    static std::unique_ptr<PhaseHelper> currentPhase;
+    static int currentStageIndex;
+    static int currentPhaseIndex; //Within the current stage!
+
+    static const std::array<std::shared_ptr<Stage>, 3> stages;
 
     static void setCurrentPhase(const PHASES _desiredPhase)
     {
         PhaseHelper* newPhase = GetPhase(_desiredPhase).initPhase();
         currentPhase = std::unique_ptr<PhaseHelper>(newPhase);
     }
-public:
+#if DEBUG_BUILD
+    static u_int maxBullets;
+#endif
 
+
+public:
+    static const std::array<PhaseRef, PHASE_COUNT> phases;
     //static std::array<PhaseRef, 2> getPhaseList(){return {};};
 
-
-    static PhaseRef GetPhase(const PHASES _index);
 
 
     static void SetCurrentPhase(const uint8_t _desiredPhaseIndex)
@@ -65,8 +64,6 @@ public:
         currentPhaseIndex = static_cast<int>(i);
         setCurrentPhase(stages.at(currentStageIndex)->GetPhase(static_cast<int>(i)));
     }
-
-    static std::uint_fast32_t& currentStep();
 
     static void NextPhase()
     {
@@ -94,13 +91,7 @@ public:
         currentStageIndex = _desiredStageIndex;
     }
 
-    static void NextStage() //Increments current stage and switches to its first phase.
-    {
-        currentStageIndex = (currentStageIndex + 1) % stages.size();
-        currentPhaseIndex = 0;
-        DestroyCurrentPhase();
-        setCurrentPhase(stages.at(currentStageIndex)->GetPhase(0));
-    }
+
 
     static int GetCurrentStageIndex()
     {
@@ -110,6 +101,19 @@ public:
     static std::shared_ptr<Stage> GetCurrentStage() {
         return stages.at(currentStageIndex);
     }
+
+    static void NextStage() //Increments current stage and switches to its first phase.
+    {
+        currentStageIndex = (currentStageIndex + 1) % stages.size();
+        currentPhaseIndex = 0;
+        DestroyCurrentPhase();
+        setCurrentPhase(stages.at(currentStageIndex)->GetPhase(0));
+    }
+    static PhaseRef GetPhase(const PHASES _index)
+    {
+        return phases[_index];
+    }
+    static std::uint_fast32_t& currentStep();
 
     static int GetGrazeMetre() {
         return currentGrazeMetre;
@@ -202,7 +206,7 @@ public:
         letterboxSize.y = ((screenHeight) - (gameHeight * zoomFactor)) / 2;
         const int x = round(letterboxSize.x);
         const int y = round(letterboxSize.y);
-        return {static_cast<int>(zoomFactor), x, y};
+        return {(zoomFactor), x, y};
     }
 
     static int* GetZoomFactor()
