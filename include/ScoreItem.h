@@ -20,7 +20,7 @@ enum VALUESPRITE {
     LIGHT_LARGE = 40
 };
 
-inline const int scoreItemMultiplier = 50;
+inline constexpr int scoreItemMultiplier = 20;
 
 class ScoreItem : public Spawnable {
 protected:
@@ -54,7 +54,6 @@ protected:
         }
         const float distanceSQ = Vector2DistanceSqr(position, playerFinalPos);
         if (distanceSQ < speed * speed) {
-            std::cout << "Score item value: " << value * scoreItemMultiplier << std::endl;
             ScoreHandler::addScore(std::max(10, value * scoreItemMultiplier), false);
             return false;
         }

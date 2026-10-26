@@ -48,7 +48,7 @@ private:
         }
     }
 
-    void spawnEnemy1_3Wave2(const u_int spawnDelay, const int i, const bool right, const u_int _id = 0) {
+    void spawnEnemy1_3Wave2(const u_int spawnDelay, const int i, const bool right) {
         if (!right) {
             const std::vector newEnemy1_3StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(20 + i * 5, 10 + i * 20), .speed = 60},
                              {.desiredPos = Vector2{-10, 195}, .speed = 120, .duration=120, .fireRate = 60, .slowAtDesiredPos=false},
@@ -56,7 +56,7 @@ private:
             };
 
             Enemy1_3 newEnemy1_3{enemy1_3Bullet1Pool, newEnemy1_3StateVector};
-            newEnemy1_3.spawn({.pos = Vector2(-15, 30 + i * 5), .id=_id});
+            newEnemy1_3.spawn({.pos = Vector2(-15, 30 + i * 5)});
             SpawnedEnemies::spawnEnemy(std::make_shared<Enemy1_3>(std::move(newEnemy1_3)));
             return;
         } else {
@@ -66,7 +66,7 @@ private:
             };
 
             Enemy1_3 newEnemy1_3{enemy1_3Bullet1Pool, newEnemy1_3StateVector};
-            newEnemy1_3.spawn({.pos = Vector2(135, 90 - i * 5), .id= _id});
+            newEnemy1_3.spawn({.pos = Vector2(135, 90 - i * 5)});
             SpawnedEnemies::spawnEnemy(std::make_shared<Enemy1_3>(std::move(newEnemy1_3)));
             return;
         }

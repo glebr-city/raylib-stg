@@ -55,7 +55,6 @@ public:
     Bullet() = default;
 
     Bullet(const u_int _scoreValue, const Vector2 _pos) : Spawnable(_pos), scoreValue(_scoreValue) {
-        std::cout << "_scoreValue = " << _scoreValue << std::endl;
     }
 
     void spawn(const Vector2 _position) override {

@@ -6,8 +6,6 @@
 #define RAYLIB_STG_CURRENTMAINLOOPHOLDER_H
 #include <cstddef>
 
-#include "MainLoop.h"
-
 typedef enum
 {
     DEFAULT_MAIN_LOOP = 0,

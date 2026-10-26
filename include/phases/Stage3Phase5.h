@@ -11,8 +11,11 @@ class Stage3Phase5 : public PhaseHelper
 private:
     static constexpr u_int Enemy2_2Wave1SpawnDelay = 75; //How many frames shall pass between every enemy?
     static constexpr u_int wave2Delay = 600;
+    static constexpr u_int wave3Delay = wave2Delay + 1000;
+    static constexpr u_int Enemy2Wave3SpawnDelay = 300; //How many frames shall pass between every enemy?
     std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>> enemy2_2Bullet1Pool;
     std::shared_ptr<PoolingVector<SimpleBullet2Fast>> enemy1_3Bullet1Pool;
+    std::shared_ptr<PoolingVector<Enemy2Bullet1>> enemy2Bullet1Pool;
     void spawnEnemy1_3Wave1()
     {
         const std::vector<Enemy1State> newEnemy1StateVector{
@@ -40,11 +43,11 @@ private:
     void spawnEnemy1_3Wave2()
     {
         for (int right=0; right<=1; right++)
-            for (int j=1; j<15; j+=3)
+            for (int j=1; j<15; j+=6)
             {
                 const int i = std::min(j, 10);
                 const auto spawnPos = Vector2(-15+150*right, 15*right);
-                const std::vector newEnemy1_3StateVector{Enemy1State{.duration=j*Enemy2_2Wave1SpawnDelay+1+wave2Delay}, {.desiredPos=Vector2(8 + (104) * right, 15*right), .speed=static_cast<float>(100+20*i), .fireRate=120, .slowAtDesiredPos=false},
+                const std::vector newEnemy1_3StateVector{Enemy1State{.duration=j*Enemy2_2Wave1SpawnDelay+1+wave2Delay+Enemy2_2Wave1SpawnDelay*right*1[p]}, {.desiredPos=Vector2(8 + (104) * right, 15*right), .speed=static_cast<float>(100+20*i), .fireRate=120, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(60+i-2*i*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=120, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .duration=30, .fireRate=120, .despawn=false, .slowAtDesiredPos=false},
                     {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=120, .despawn=true, .slowAtDesiredPos=false},};
@@ -53,18 +56,68 @@ private:
                 SpawnedEnemies::spawnEnemy(std::make_unique<Enemy1_3>(std::move(newEnemy1_3)));
             }
     }
+
+    void spawnEnemy1_3Wave3()
+    {
+        for (int right=0; right<=1; right++)
+            for (int j=1; j<23; j+=1)
+            {
+                const int i = std::min(j, 10);
+                const auto spawnPos = Vector2(-15+150*right, 60);
+                const std::vector newEnemy1_3StateVector{Enemy1State{.duration=j*Enemy2_2Wave1SpawnDelay+1+wave3Delay}, {.desiredPos=Vector2(8 + (104) * right, 15*right), .speed=static_cast<float>(100+20*i), .fireRate=60, .slowAtDesiredPos=false},
+                    {.desiredPos=Vector2(60+i-2*i*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=60, .despawn=false, .slowAtDesiredPos=false},
+                    {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .duration=30, .fireRate=60, .despawn=false, .slowAtDesiredPos=false},
+                    {.desiredPos=Vector2(130-140*right, 15*right), .speed=static_cast<float>(70+20*i), .fireRate=60, .despawn=true, .slowAtDesiredPos=false},};
+                Enemy1_3 newEnemy1_3{enemy1_3Bullet1Pool, newEnemy1_3StateVector};
+                newEnemy1_3.spawn({.pos=spawnPos});
+                SpawnedEnemies::spawnEnemy(std::make_unique<Enemy1_3>(std::move(newEnemy1_3)));
+            }
+    }
+
+    void spawnEnemy2Wave3()
+    {
+        for (int row = 0; row < 7; row++)
+        {
+            for (int i = -1; i <= 1; i += 2)
+            {
+                auto newEnemy2StateVector1 = std::vector{Enemy2State{.duration = wave3Delay+1+row * 180},{.desiredPos = {static_cast<float>(60 + (i * 50)), 150}, .speed = 40, .shotCount=1, .shotWaitTime=5, .burstWaitTime=90, .despawn = false, .slowAtDesiredPos = false},
+                    {.desiredPos = {static_cast<float>(60 + (i * 50)), 190}, .speed = 40, .despawn = true, .slowAtDesiredPos = false},};
+                auto newEnemy2 = std::make_unique<Enemy2>(enemy2Bullet1Pool, newEnemy2StateVector1);
+                newEnemy2->spawn(Vector2(60 + i * 50, -20));
+                SpawnedEnemies::spawnEnemy(std::move(newEnemy2));
+            }
+        }
+    }
+    void spawnEnemy2Wave3_2()
+    {
+        for (int right=0; right<=1; right++)
+            for (int j=1; j<5; j++)
+            {
+                const int i = j;//std::min(j, 10);
+                const auto spawnPos = Vector2(-15+150*right, 10*right);
+                const std::vector newEnemy2StateVector{Enemy2State{.duration=j*Enemy2Wave3SpawnDelay+1+wave3Delay}, {.desiredPos=Vector2(8 + i +(104 - 2*i) * right, 10*right), .speed=static_cast<float>(100+20*i), .shotCount=1, .burstWaitTime=60-2*i, .lockAngle=false, .slowAtDesiredPos=false},
+                    {.desiredPos=Vector2(130-140*right, 10*right), .speed=static_cast<float>(70+20*i), .shotCount=1, .burstWaitTime=40, .lockAngle=false, .despawn=true, .slowAtDesiredPos=false},};
+                Enemy2 newEnemy2{enemy2Bullet1Pool, newEnemy2StateVector};
+                newEnemy2.spawn({.pos=spawnPos});
+                SpawnedEnemies::spawnEnemy(std::make_unique<Enemy2>(std::move(newEnemy2)));
+            }
+    }
 public:
     Stage3Phase5() : PhaseHelper("Stage3Phase5")
     {
         enemy2_2Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed>>(400);
-        enemy1_3Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet2Fast>>(7);
-        GlobalPools::AddPools({enemy2_2Bullet1Pool, enemy1_3Bullet1Pool});
+        enemy1_3Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet2Fast>>(127);
+        enemy2Bullet1Pool = std::make_shared<PoolingVector<Enemy2Bullet1>>(400);
+        GlobalPools::AddPools({enemy2_2Bullet1Pool, enemy1_3Bullet1Pool, enemy2Bullet1Pool});
     }
     void InitPhase() override
     {
         spawnEnemy1_3Wave1();
         spawnEnemy2_2Wave1();
         spawnEnemy1_3Wave2();
+        spawnEnemy2Wave3();
+        spawnEnemy2Wave3_2();
+        spawnEnemy1_3Wave3();
     };
     void enemyKilled(u_int _id) override{};
     void enemyDespawned(u_int _id) override{};
