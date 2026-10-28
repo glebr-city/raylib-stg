@@ -53,7 +53,7 @@ public:
         HIGH
     } PHASE_3_FIRE_SEGMENTS;
 private:
-    Rectangle collider2; //Due to the boss' shape, a second collider is required!
+    Rectangle collider2{}; //Due to the boss' shape, a second collider is required!
     std::shared_ptr<Boss2Automaton> automaton1;
     std::shared_ptr<Boss2Automaton> automaton2;
     std::shared_ptr<Boss2Automaton> automaton3;

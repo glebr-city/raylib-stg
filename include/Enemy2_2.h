@@ -4,7 +4,6 @@
 
 #ifndef RAYLIB_STG_ENEMY2_2_H
 #define RAYLIB_STG_ENEMY2_2_H
-#include "Enemy2.h"
 #include "Enemy2Base.h"
 #include "SimpleBullet1VariableSpeed.h"
 

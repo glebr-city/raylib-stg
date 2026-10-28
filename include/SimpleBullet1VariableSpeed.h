@@ -13,7 +13,7 @@ protected:
 public:
     SimpleBullet1VariableSpeed(const Vector2 pos = {}, const Vector2 dir = {}, const Color col = YELLOW) : SimpleBullet1(pos, dir, col)
     {
-
+        grazeValue = 40;
     }
     /*void spawn(Vector2 _position) override = 0;
     void spawn(Vector2 _position, u_int _scoreValue) override = 0;

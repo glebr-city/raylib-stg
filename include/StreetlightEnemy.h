@@ -60,13 +60,13 @@ public:
         if (stepsElapsed % 80 == 0)
         {
             SoundHandler::PlaySound(BANG_1);
-            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection, GREEN);
             aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection, GREEN);
             aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection, GREEN);
             aimingDirection = Vector2Rotate(aimingDirection, 0.5 * PI);
-            bulletPool->spawn().spawn(firingPosition, aimingDirection);
+            bulletPool->spawn().spawn(firingPosition, aimingDirection, GREEN);
             aimingDirection = Vector2Rotate(aimingDirection, 0.25 * PI);
         } else if (stepsElapsed % 80 == 30)
         {

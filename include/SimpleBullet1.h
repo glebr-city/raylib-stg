@@ -29,7 +29,7 @@ public:
         color = col;
         grazeValue = _grazeValue;
     }
-    void spawn(const Vector2 pos, const Vector2 dir, const Color col = GREEN)
+    virtual void spawn(const Vector2 pos, const Vector2 dir, const Color col)
     {
         position = pos;
         direction = dir;
