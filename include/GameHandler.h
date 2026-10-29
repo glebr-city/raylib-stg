@@ -29,8 +29,9 @@ private:
         DamageHandler::Reset();
         SoundHandler::StopAllSounds();
         GlobalVariables::currentStep() = 0;
+        GlobalVariables::ResetContinues();
         GlobalPools::Clear();
-        PlayerHandler::GetPlayer().get()->reset(Vector2 {60, 140});
+        Player::reset(Vector2 {60, 140}, true);
         hitsTaken = 0;
         SpawnedEnemies::Clear();
         GlobalVariables::SetGrazeMetre(0);
@@ -80,6 +81,7 @@ public:
         if (shouldRestartGame)
             actuallyRestartGame();
         BackgroundHandler::ScrollBackground();
+        std::cout << GlobalVariables::GetContinues() << std::endl;
         RNGHandler::StepSeed();
         ScoreItemHandler::doPreStep();
         EphemeraHandler::doPreStep();

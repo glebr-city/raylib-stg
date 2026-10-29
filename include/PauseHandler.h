@@ -25,7 +25,10 @@ private:
         }
         isPaused = _p;
         SoundHandler::SetAllSoundPause(_p);
-        CurrentMainLoopHolder::SetMainLoop(_p);
+        if (!_p)
+            CurrentMainLoopHolder::SetMainLoop(CurrentMainLoopHolder::GetPreviousMainLoopIndex());
+        else
+            CurrentMainLoopHolder::SetMainLoop(PAUSED_MAIN_LOOP);
     }
 
     static void TogglePause()

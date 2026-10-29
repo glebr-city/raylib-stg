@@ -34,6 +34,7 @@ typedef enum
     EXPLOSION_2,
     CLICK_1,
     MAGIC_1,
+    PLAYER_RESURRECTION,
 
     SOUND_COUNT
 } SOUNDS;
@@ -67,6 +68,7 @@ private:
         sounds.emplace_back("resources/sounds/explosion2.mp3");
         sounds.emplace_back("resources/sounds/click1.mp3");
         sounds.emplace_back("resources/sounds/magic1.mp3");
+        sounds.emplace_back("resources/sounds/playerResurrection.mp3");
     }
     static void SetAllSoundVolume(float v); //It doesn't seem to work?
     static void SetAllSoundPause(bool p);

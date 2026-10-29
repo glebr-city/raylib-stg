@@ -75,9 +75,21 @@ std::array<Vector2, 2> Player::GetPosAndMovement() { //Used by bullets to perfor
     return std::array<Vector2, 2>{ position, Vector2Scale(inputVector, *currentSpeed) };
 }
 
-void Player::reset(const Vector2 pos) {
+void Player::reset(const Vector2 pos, const bool _resurrect) {
+    if (_resurrect)
+        isDead = false;
+    hyperOn = false;
+    grazeRadiusFillingSprite = SpriteHandler::getStaticSpriteTexture(PLAYER_GRAZE_FILLING);
+    position = pos;
+    finalPos = pos;
+}
+
+void Player::respawn(const Vector2 pos) {
+    SoundHandler::PlaySound(PLAYER_RESURRECTION);
     hyperOn = false;
     isDead = false;
+    LifeHandler::resetLives();
+    DamageHandler::playerRespawn();
     grazeRadiusFillingSprite = SpriteHandler::getStaticSpriteTexture(PLAYER_GRAZE_FILLING);
     position = pos;
     finalPos = pos;
@@ -221,6 +233,10 @@ void Player::getHit() {
     {
         EphemeraHandler::Spawn(position, EphemeraHandler::EXPLOSION_SMALL, LAYER_PLAYER);
         isDead = true;
+        position = {-20000, -20000};
+        GlobalVariables::SetContinuePromptStepsRemaining(1200);
+        GlobalVariables::ResetDeadPlayerStepsRemaining();
+        CurrentMainLoopHolder::SetMainLoop(DEAD_PLAYER_MAIN_LOOP);
         //GameHandler::RestartGame();
         return;
     }

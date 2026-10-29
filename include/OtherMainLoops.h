@@ -296,4 +296,153 @@ public:
         doDrawing();
     };
 };
+
+class ContinuePromptMainLoop : public MoreCompleteMainLoop
+{
+protected:
+    void doDrawing() const override
+    {
+
+        InputHandler::UpdateInputsMenu();
+        BeginTextureMode(*target);
+        BeginScissorMode(0, 0, gameWidth, gameHeight); //To fix bleed in the bilinear filter...
+        ClearBackground(BLACK);
+        SpriteHandler::DrawSprites();
+        DrawRectangle(0, 0, gameWidth, gameHeight, {30, 30, 30, 100});
+        DrawText("continue ?", 33, 30, 0, WHITE);
+        std::string countdownText = std::to_string(GlobalVariables::GetContinuePromptStepsRemaining() * 100 / 120);
+        if (countdownText.length() > 2)
+            countdownText.insert(countdownText.length() - 2, ".");
+        else
+            countdownText.insert(0, "0.");
+        DrawText(countdownText.c_str(), 41, 130, 20, WHITE);
+        EndScissorMode();
+        EndTextureMode();
+        BeginDrawing();
+        ClearBackground(BLACK);
+        Vector2 realScreenSize = {static_cast<float>(gameWidth * *zoomFactor), static_cast<float>(gameHeight * *zoomFactor)};
+        Vector2 realScreenCentre = {static_cast<float>(GetScreenWidth() / 2), static_cast<float>(GetScreenHeight() / 2)};
+        const int screenRotation = GlobalVariables::GetScreenRotation();
+        if (screenRotation == 0 || screenRotation == 2)
+            DrawRectangleLines(realScreenCentre.x-realScreenSize.x / 2 - 1, realScreenCentre.y-realScreenSize.y / 2 - 1, realScreenSize.x + 2, realScreenSize.y + 2, DARKGRAY);
+        else
+            DrawRectangleLines(realScreenCentre.x-realScreenSize.y / 2 - 1, realScreenCentre.y-realScreenSize.x / 2 - 1, realScreenSize.y + 2, realScreenSize.x + 2, DARKGRAY);
+        DrawTexturePro(target->texture,
+            {0, 0, static_cast<float>(target->texture.width), static_cast<float>(-target->texture.height)},
+            {static_cast<float>(GetScreenWidth() / 2), static_cast<float>(GetScreenHeight() / 2), realScreenSize.x, realScreenSize.y},
+            {static_cast<float>(target->texture.width * *zoomFactor / 2), static_cast<float>(target->texture.height * *zoomFactor / 2)},
+            screenRotation * 90, WHITE);
+
+#if DEBUG_BUILD
+        DrawDebugInfo();
+#endif
+        EndDrawing();
+    }
+public:
+    void DoMainLoop() const final
+    {
+        if (IsWindowResized())
+            GlobalVariables::AdjustLetterbox();
+        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
+            GameHandler::RestartGame();
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_FIRE))
+        {
+            ScoreHandler::resetScore();
+            LifeHandler::resetLives();
+            Player::respawn();
+            GlobalVariables::SetContinuePromptStepsRemaining(1200);
+            GlobalVariables::IncrementContinues();
+            CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP);
+            return;
+        }
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            ///DEBUG_highFramerate = !DEBUG_highFramerate;
+            //DEBUG_highFramerate ? SetTargetFPS(360) : SetTargetFPS(120);
+        }
+        if (IsKeyPressed(KEY_ESCAPE))
+            CloseWindow();
+
+        if (GlobalVariables::GetContinuePromptStepsRemaining() <= 0)
+        {
+            SoundHandler::SetAllSoundPause(false);
+            CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP);
+            CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP); //Doing it twice to set both the current and the previous loop. It makes sense!!
+            GameHandler::RestartGame();
+            return;
+        }
+        GlobalVariables::DecrementContinuePromptStepsRemaining();
+        doDrawing();
+    };
+};
+
+class DeadPlayerMainLoop : public MoreCompleteMainLoop
+{
+protected:
+    void doDrawing() const override
+    {
+
+        InputHandler::UpdateInputsMenu();
+        BeginTextureMode(*target);
+        BeginScissorMode(0, 0, gameWidth, gameHeight); //To fix bleed in the bilinear filter...
+        ClearBackground(BLACK);
+        SpriteHandler::DrawSprites();
+        EndScissorMode();
+        EndTextureMode();
+        BeginDrawing();
+        ClearBackground(BLACK);
+        Vector2 realScreenSize = {static_cast<float>(gameWidth * *zoomFactor), static_cast<float>(gameHeight * *zoomFactor)};
+        Vector2 realScreenCentre = {static_cast<float>(GetScreenWidth() / 2), static_cast<float>(GetScreenHeight() / 2)};
+        const int screenRotation = GlobalVariables::GetScreenRotation();
+        if (screenRotation == 0 || screenRotation == 2)
+            DrawRectangleLines(realScreenCentre.x-realScreenSize.x / 2 - 1, realScreenCentre.y-realScreenSize.y / 2 - 1, realScreenSize.x + 2, realScreenSize.y + 2, DARKGRAY);
+        else
+            DrawRectangleLines(realScreenCentre.x-realScreenSize.y / 2 - 1, realScreenCentre.y-realScreenSize.x / 2 - 1, realScreenSize.y + 2, realScreenSize.x + 2, DARKGRAY);
+        DrawTexturePro(target->texture,
+            {0, 0, static_cast<float>(target->texture.width), static_cast<float>(-target->texture.height)},
+            {static_cast<float>(GetScreenWidth() / 2), static_cast<float>(GetScreenHeight() / 2), realScreenSize.x, realScreenSize.y},
+            {static_cast<float>(target->texture.width * *zoomFactor / 2), static_cast<float>(target->texture.height * *zoomFactor / 2)},
+            screenRotation * 90, WHITE);
+
+#if DEBUG_BUILD
+        DrawDebugInfo();
+#endif
+        EndDrawing();
+    }
+public:
+    void DoMainLoop() const final
+    {
+        if (IsWindowResized())
+            GlobalVariables::AdjustLetterbox();
+        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
+            GameHandler::RestartGame();
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))
+        {
+            PauseHandler::SetPause(true);
+            MenuHandler::OpenMenu();
+        } else
+        {
+            doStep();
+        }
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            ///DEBUG_highFramerate = !DEBUG_highFramerate;
+            //DEBUG_highFramerate ? SetTargetFPS(360) : SetTargetFPS(120);
+        }
+        if (IsKeyPressed(KEY_ESCAPE))
+            CloseWindow();
+
+        if (GlobalVariables::GetDeadPlayerStepsRemaining() <= 0)
+        {
+            SoundHandler::SetAllSoundPause(false);
+            GlobalVariables::ResetDeadPlayerStepsRemaining();
+            CurrentMainLoopHolder::SetMainLoop(CONTINUE_PROMPT_MAIN_LOOP);
+            return;
+        }
+        GlobalVariables::DecrementDeadPlayerStepsRemaining();
+        doDrawing();
+    };
+};
 #endif //RAYLIB_STG_OTHERMAINLOOPS_H

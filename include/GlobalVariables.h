@@ -30,9 +30,13 @@ protected:
     static int screenRotation;
     static int zoomFactor;
     static int titleCardStepsRemaining;
+    static int continuePromptStepsRemaining;
     static std::unique_ptr<PhaseHelper> currentPhase;
     static int currentStageIndex;
     static int currentPhaseIndex; //Within the current stage!
+    static uint8_t continuesUsed;
+    static int deadPlayerStepsRemaining;
+    static constexpr int maxDeadPlayerStepsRemaining = 120;
 
     static const std::array<std::shared_ptr<Stage>, 3> stages;
 
@@ -90,8 +94,6 @@ public:
     {
         currentStageIndex = _desiredStageIndex;
     }
-
-
 
     static int GetCurrentStageIndex()
     {
@@ -229,8 +231,54 @@ public:
         titleCardStepsRemaining = _stepsRemaining;
     }
 
+    static int GetContinuePromptStepsRemaining()
+    {
+        return continuePromptStepsRemaining;
+    }
+
+    static void DecrementContinuePromptStepsRemaining()
+    {
+        continuePromptStepsRemaining--;
+    }
+
+    static void SetContinuePromptStepsRemaining(const int _stepsRemaining)
+    {
+        continuePromptStepsRemaining = _stepsRemaining;
+    }
+
+    static void IncrementContinues()
+    {
+        if (continuesUsed < 255)
+            continuesUsed++;
+    }
+
+    static int GetContinues()
+    {
+        return continuesUsed;
+    }
+
+    static void ResetContinues()
+    {
+        continuesUsed = 0;
+    }
+
+    static int GetDeadPlayerStepsRemaining()
+    {
+        return deadPlayerStepsRemaining;
+    }
+
+    static void DecrementDeadPlayerStepsRemaining()
+    {
+        deadPlayerStepsRemaining--;
+    }
+
+    static void ResetDeadPlayerStepsRemaining()
+    {
+        deadPlayerStepsRemaining = maxDeadPlayerStepsRemaining;
+    }
+
 #if DEBUG_BUILD
-    static int GetMaxBullets()
+    static u_int GetMaxBullets()
     {
         return maxBullets;
     }

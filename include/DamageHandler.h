@@ -4,7 +4,6 @@
 
 #ifndef RAYLIB_STG_DAMAGEHANDLER_H
 #define RAYLIB_STG_DAMAGEHANDLER_H
-#include <algorithm>
 
 #include "GlobalVariables.h"
 #include "GrazeConstants.h"
@@ -29,10 +28,13 @@ private:
             return;
         stepHit = GlobalVariables::currentStep();
         hitsTaken++;
-
+        if (LifeHandler::getCurrentLives() > 0)
+            GlobalVariables::GetCurrentPhase()->hitPlayer();
         Player::getHit();
-        if (LifeHandler::getCurrentLives() <= 0)
-            return;
+    }
+    static void playerRespawn()
+    {
+        stepHit = GlobalVariables::currentStep();
         GlobalVariables::GetCurrentPhase()->hitPlayer();
     }
 

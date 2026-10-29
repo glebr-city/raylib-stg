@@ -15,12 +15,13 @@ class Player : public StepThinker{
 private:
     static void startHyper();
     static void endHyper();
-    void setFinalPos();
+    static void setFinalPos();
 
 public:
     Player(Vector2 pos);
 
-    static void reset(const Vector2 pos = {60, 140});
+    static void reset(Vector2 pos = {60, 140}, bool _resurrect=false);
+    static void respawn(Vector2 pos = {60, 140});
 
     void doPreStep() override;
 
@@ -29,9 +30,9 @@ public:
     void doPostStep() override;
 
     Vector2 GetPosition() override;
-    Vector2 GetMovement();
-    Vector2 GetFinalPos();
-    bool GetHyperOn();
+    static Vector2 GetMovement();
+    static Vector2 GetFinalPos();
+    static bool GetHyperOn();
     static std::array<Vector2, 2> GetPosAndMovement();
     static void getHit();
     static bool GetIsDead();
