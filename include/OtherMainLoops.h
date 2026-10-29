@@ -239,6 +239,7 @@ class TitleCardMainLoop : public MoreCompleteMainLoop
 protected:
     void doDrawing() const override
     {
+        InputHandler::UpdateInputsMenu();
         BeginTextureMode(*target);
         BeginScissorMode(0, 0, gameWidth, gameHeight); //To fix bleed in the bilinear filter...
         ClearBackground(BLACK);
@@ -268,10 +269,16 @@ protected:
 public:
     void DoMainLoop() const final
     {
+        SpriteHandler::ClearQueues();
         if (IsWindowResized())
             GlobalVariables::AdjustLetterbox();
         if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
             GameHandler::RestartGame();
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))
+        {
+            PauseHandler::SetPause(true);
+            MenuHandler::OpenMenu();
         }
         if (IsKeyPressed(KEY_ENTER))
         {
