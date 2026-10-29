@@ -17,10 +17,10 @@
 class PhaseHelper;
 struct PhaseRef;
 inline int currentGrazeMetre = 0;
-inline const int gameWidth = 120;
-inline const int gameHeight = 180;
-inline const int bulletSealRadius = 22; //Grounded enemies may not fire from this distance to the player.
-inline const int bulletSealRadiusSQ = bulletSealRadius * bulletSealRadius; //Grounded enemies may not fire from this distance to the player.
+inline constexpr int gameWidth = 120;
+inline constexpr int gameHeight = 180;
+inline constexpr int bulletSealRadius = 22; //Grounded enemies may not fire from this distance to the player.
+inline constexpr int bulletSealRadiusSQ = bulletSealRadius * bulletSealRadius; //Grounded enemies may not fire from this distance to the player.
 
 class GlobalVariables {
 protected:

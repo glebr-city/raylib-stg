@@ -20,7 +20,12 @@ private:
 
     static void SetPlayer(const std::shared_ptr<Player>& p)
     {
-        player = std::move(p);
+        player = p;
+    }
+
+    static void RemovePlayer()
+    {
+        player.reset();
     }
 };
 #endif //RAYLIB_STG_PLAYERHANDLER_H

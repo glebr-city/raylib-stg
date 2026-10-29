@@ -53,6 +53,7 @@ public:
         color.g = stepsElapsed * 2;
         color.b = 255 - stepsElapsed;
         if (stepsElapsed >= stepsToExplode) {
+            SoundHandler::PlaySound(SOUNDS::THUMP_1);
             Vector2 shotDirection = Vector2Rotate({0, 1}, (RNGHandler::GetSeed() % 230 - 115) * 0.0136590984939);
             for (int i = 0; i < 3; i++) {
                 shotDirection = Vector2Rotate(shotDirection, 2.09439510239);

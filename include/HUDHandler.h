@@ -6,6 +6,7 @@
 #define RAYLIB_STG_HUDHANDLER_H
 #include <string>
 
+#include "GlobalVariables.h"
 #include "LifeHandler.h"
 #include "raylib/raylib.h"
 #include "ScoreHandler.h"

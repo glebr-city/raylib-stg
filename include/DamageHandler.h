@@ -8,6 +8,7 @@
 
 #include "GlobalVariables.h"
 #include "GrazeConstants.h"
+#include "LifeHandler.h"
 #include "PhaseHelper.h"
 #include "Player.h"
 #include "PlayerHandler.h"
@@ -22,11 +23,16 @@ private:
     public:
 
     static void hitPlayer() {
+        if (Player::GetIsDead())
+            return;
         if (GlobalVariables::currentStep() - stepHit < mercyInvincibilityDuration)
             return;
         stepHit = GlobalVariables::currentStep();
         hitsTaken++;
+
         Player::getHit();
+        if (LifeHandler::getCurrentLives() <= 0)
+            return;
         GlobalVariables::GetCurrentPhase()->hitPlayer();
     }
 
@@ -36,6 +42,8 @@ private:
 
 
     static void grazePlayer(int i) {
+        if (Player::GetIsDead())
+            return;
         ScoreHandler::addScore(static_cast<u_int>(i * 0.25 * ScoreHandler::getMultiplier()));
         if (PlayerHandler::GetPlayer()->GetHyperOn())
             i = static_cast<int>(i * 0.5f);

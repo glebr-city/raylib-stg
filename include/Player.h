@@ -20,7 +20,7 @@ private:
 public:
     Player(Vector2 pos);
 
-    void reset(const Vector2 pos = {60, 140});
+    static void reset(const Vector2 pos = {60, 140});
 
     void doPreStep() override;
 
@@ -32,8 +32,9 @@ public:
     Vector2 GetMovement();
     Vector2 GetFinalPos();
     bool GetHyperOn();
-    std::array<Vector2, 2> GetPosAndMovement();
+    static std::array<Vector2, 2> GetPosAndMovement();
     static void getHit();
+    static bool GetIsDead();
 };
 
 

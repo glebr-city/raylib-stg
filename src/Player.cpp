@@ -39,6 +39,7 @@ ANIMATED_SPRITES grazeRadiusFilledSprite = PLAYER_GRAZE_FILLED;
 ANIMATED_SPRITES hyperAuraSprite = PLAYER_HYPER_AURA;
 constexpr int hyperCostRate = 7; //How much graze metre to lose on every SECOND step in Hyper Mode.
 bool hyperOn = false;
+bool isDead = false;
 
 Player::Player(const Vector2 pos) {
     hyperRingRect.x = 6300;
@@ -76,6 +77,7 @@ std::array<Vector2, 2> Player::GetPosAndMovement() { //Used by bullets to perfor
 
 void Player::reset(const Vector2 pos) {
     hyperOn = false;
+    isDead = false;
     grazeRadiusFillingSprite = SpriteHandler::getStaticSpriteTexture(PLAYER_GRAZE_FILLING);
     position = pos;
     finalPos = pos;
@@ -109,6 +111,9 @@ void Player::doPreStep() {
         wishToShoot = true;
     }
 
+    if (isDead)
+        return;
+
     if (--currentFireCooldown <= 0 && wishToShoot) {
         wishToShoot = false;
         if (hyperOn) {
@@ -136,7 +141,6 @@ void Player::doPreStep() {
     }
     if (hyperOn)
     {
-
         //Draw the hyper effect
         ScoreHandler::setMultiplier(1 + std::min(9.0, (currentGrazeMetre) * 0.0055));
         float xOffset = static_cast<float>(GlobalVariables::currentStep() % 31) / 4;
@@ -173,6 +177,8 @@ bool Player::doPhysics() {
 
 void Player::doPostStep()
 {
+    if (isDead)
+        return;
     SpriteHandler::QueueMyAnimatedSprite({.i=PLAYER_HYPER_RING, .pos=Vector2 {position.x - 90, position.y - 90}, .l=LAYER_PLAYER, .col=currentHyperRingColour, .corner = true, .rect=hyperRingRect});
     SpriteHandler::QueueMyStaticSprite({.i = PLAYER_GRAZE_RADIUS, .pos = position, .l = LAYER_PLAYER});
     const float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * grazeDiametre);
@@ -203,10 +209,19 @@ void Player::endHyper() {
     ScoreHandler::setMultiplier(1);
 }
 
+bool Player::GetIsDead()
+{
+    return isDead;
+}
+
 void Player::getHit() {
+    if (isDead)
+        return;
     if (!LifeHandler::canSpawnPlayer())
     {
-        GameHandler::RestartGame();
+        EphemeraHandler::Spawn(position, EphemeraHandler::EXPLOSION_SMALL, LAYER_PLAYER);
+        isDead = true;
+        //GameHandler::RestartGame();
         return;
     }
     SoundHandler::PlaySound(PLAYER_HIT);
