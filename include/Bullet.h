@@ -50,6 +50,32 @@ protected:
     }
 
 public:
+    static bool CheckCollisionRoundBullet(const Vector2 _center, const Vector2 startOfTickPos, const float _radius, const Vector2 p1, Vector2 p2) {
+        p2.x += _center.x - startOfTickPos.x;
+        p2.y += _center.y - startOfTickPos.y;
+        const float dx = p1.x - p2.x;
+        const float dy = p1.y - p2.y;
+        float dx2;
+        float dy2;
+
+        if ((std::fabsf(dx) + std::fabsf(dy)) <= FLT_EPSILON) {
+            dx2 = (p1.x - _center.x);
+            dy2 = (p1.y - _center.y);
+        } else {
+            const float lengthSQ = ((dx * dx) + (dy * dy));
+            float dotProduct = (((_center.x - p1.x) * (p2.x - p1.x)) + ((_center.y - p1.y) * (p2.y - p1.y))) / (
+                                   lengthSQ);
+            if (dotProduct > 1.0f) dotProduct = 1.0f;
+            else if (dotProduct < 0.0f) dotProduct = 0.0f;
+            dx2 = (p1.x - (dotProduct * (dx))) - _center.x;
+            dy2 = (p1.y - (dotProduct * (dy))) - _center.y;
+        }
+        const float distanceSQ = ((dx2 * dx2) + (dy2 * dy2));
+        const float radiusSQ = _radius * _radius;
+
+        return (distanceSQ <= radiusSQ);
+    }
+
     bool doPhysics() override = 0;
 
     Bullet() = default;

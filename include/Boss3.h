@@ -65,13 +65,16 @@ private:
             case PHASE_3:
                 phase3CurrentRotation =  (RNGHandler::GetSeed() % 354) * 0.001f;
                 if (phase3Pool == nullptr) {
-                    phase3Pool = std::make_shared<PoolingVector<Boss3Phase3Bullet1>>(2000);
+                    phase3Pool = std::make_shared<PoolingVector<Boss3Phase3Bullet1>>(200);
                     GlobalPools::AddPool(phase3Pool);
                 }
                 if (acceleratingBullet2Pool == nullptr) {
                     acceleratingBullet2Pool = std::make_shared<PoolingVector<AcceleratingBullet2>>(500);
                     GlobalPools::AddPool(acceleratingBullet2Pool);
                 }
+                break;
+            case PHASE_4:
+                phase3FiredBullets.clear();
             case PHASE_DEFEAT:
                 break;
             default:
@@ -158,9 +161,11 @@ public:
                     if (phase3FiredBullets.at(firedBullet)->GetHasStopped()) {
                         Boss3Phase3Explosive newExplosive{acceleratingBullet2Pool};
                         const Vector2 explosivePos = phase3FiredBullets.at(firedBullet)->GetPosition();
-                        const Vector2 explosiveMovementDirection = Vector2Rotate(Vector2Normalize(explosivePos-position), RNGHandler::GetSeed() % 1000 - 500 * 0.025f);
+                        //const Vector2 explosiveMovementDirection = Vector2Rotate(Vector2Normalize(explosivePos-position), RNGHandler::GetSeed() % 1000 - 500 * 0.00001f);
+                        const Vector2 explosiveMovementDirection = Vector2Normalize(explosivePos-position);
                         newExplosive.spawn(explosivePos, explosiveMovementDirection, phase3BulletColour);
-                        SpawnedEnemies::spawnEnemy(std::make_shared<Enemy>(std::move(newExplosive)));
+                        SpawnedEnemies::spawnEnemy(std::make_shared<Boss3Phase3Explosive>(std::move(newExplosive)));
+                        phase3FiredBullets.erase(phase3FiredBullets.begin() + firedBullet);
                     } else if (phase3FiredBullets.at(firedBullet)->GetHasDespawned())
                         phase3FiredBullets.erase(phase3FiredBullets.begin() + firedBullet);
                 }
@@ -168,9 +173,9 @@ public:
                         for (int j=-1;j<=1;j+=2) {
                             const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, j)), phase3CurrentRotation);
                             for (int i = 0; i < 1; i++) {
-                                const int stepToStop = RNGHandler::GetSeed() % 3 * 10 + RNGHandler::GetSeed() % 5 * 100 + RNGHandler::GetSeed() % 6 + RNGHandler::GetSeed() % 10;
+                                const int stepToStop = 2 + RNGHandler::GetSeed() % 3 * 10 + RNGHandler::GetSeed() % 5 * 50 + RNGHandler::GetSeed() % 6;
                                 Boss3Phase3Bullet1* newBullet = &phase3Pool->spawn();
-                                newBullet->spawn(stepToStop, position, shotDirection, phase3BulletColour);
+                                newBullet->spawn(stepToStop, Vector2Add(position, shotDirection * 3), shotDirection, phase3BulletColour);
                                 phase3FiredBullets.emplace_back(newBullet);
                             }
                         }

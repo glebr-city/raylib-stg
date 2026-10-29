@@ -109,11 +109,7 @@ public:
     {
         spawn(EnemySpawnParametres{_position});
     }
-
-    void spawn(Vector2 _position, u_int _scoreValue) override
-    {
-        spawn(EnemySpawnParametres{_position});
-    }
+    
 
 
     virtual bool takeDamage() // Return false to kill the enemy.

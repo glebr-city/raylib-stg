@@ -6,27 +6,47 @@
 #define RAYLIB_STG_BOSS3PHASE3EXPLOSIVE_H
 #include "AcceleratingBullet2.h"
 #include "Enemy.h"
-#include "SimpleBullet1.h"
 
-class Boss3Phase3Explosive : public SimpleBullet1 {
+class Boss3Phase3Explosive : public Enemy {
 private:
-    std::shared_ptr<PoolingVector<AcceleratingBullet2>> acceleratingBullet2Pool;
-protected:
     float currentSpeed = 0;
     static constexpr float speed = 2;
     static constexpr float decelerationRate = 0.05f;
     static constexpr u_int stepsToExplode = 120;
+    static constexpr float radius = 3;
+    bool hasBeenGrazed = false;
+    Vector2 direction{};
+    Vector2 startOfTickPos{};
     int stepsElapsed = 0;
+    Color color{};
+    const std::shared_ptr<PoolingVector<AcceleratingBullet2>> acceleratingBullet2Pool;
+
+    void setStartOfTickPos() {
+        startOfTickPos = position;
+    }
 public:
-    Boss3Phase3Explosive(
-    const std::shared_ptr<PoolingVector<AcceleratingBullet2>> &_acceleratingBullet2Pool) : SimpleBullet1(), acceleratingBullet2Pool(_acceleratingBullet2Pool) {}
-    void spawn(const Vector2 pos, const Vector2 dir, const Color col) override {
-        SimpleBullet1::spawn(pos, dir, col);
+    void spawn(const Vector2 _position, const Vector2 _direction, const Color _col) {
+        Enemy::spawn({.pos=_position});
+        direction = _direction;
         stepsElapsed = 0;
         currentSpeed = speed;
+        setStartOfTickPos();
+        color = _col;
+    }
+    void spawn(const EnemySpawnParametres _params) override {
+        std::cout << "Boss3Phase3Explosive should not spawn like this!" << std::endl;
+        throw std::runtime_error("Boss3Phase3Explosive should not spawn like this!");
+        Enemy::spawn(_params);
+        stepsElapsed = 0;
+        currentSpeed = speed;
+        setStartOfTickPos();
+        color = {10, 10, 255, 255};
     }
 
     bool doPhysics() override {
+        if (!GlobalVariables::GetCurrentPhase()->CanSpawnBullets())
+            return false;
+        setStartOfTickPos();
         stepsElapsed++;
         currentSpeed = std::max(0.2f, currentSpeed - decelerationRate);
         color.r = stepsElapsed * 2;
@@ -36,13 +56,12 @@ public:
             Vector2 shotDirection = Vector2Rotate({0, 1}, (RNGHandler::GetSeed() % 230 - 115) * 0.0136590984939);
             for (int i = 0; i < 3; i++) {
                 shotDirection = Vector2Rotate(shotDirection, 2.09439510239);
-                acceleratingBullet2Pool->spawn().spawn(position, shotDirection, GREEN, 0);
+                acceleratingBullet2Pool->spawn().spawn(Vector2Add(position, shotDirection * 2), shotDirection, GREEN, 0);
             }
             return false;
         }
-
         position = Vector2Add(position, direction * currentSpeed);
-        if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
+        if (Bullet::CheckCollisionRoundBullet(position, startOfTickPos, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos())) {
             DamageHandler::hitPlayer();
             return false;
         }
@@ -50,6 +69,14 @@ public:
             return false;
         }
         return true;
+    }
+
+    Boss3Phase3Explosive(const std::shared_ptr<PoolingVector<AcceleratingBullet2>>& _acceleratingBullet2Pool) :
+    acceleratingBullet2Pool(_acceleratingBullet2Pool) {}
+
+    void doPostStep() override
+    {
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos= position, .l = LAYER_BULLET_HIGH, .col = color});
     }
 };
 #endif //RAYLIB_STG_BOSS3PHASE3EXPLOSIVE_H

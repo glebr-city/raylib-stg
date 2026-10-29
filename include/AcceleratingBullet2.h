@@ -42,7 +42,7 @@ public:
     bool doPhysics() override
     {
 
-        speed += 0.0125f;
+        speed += 0.0025f + std::min(0.01f, speed * 0.02f);
         position = Vector2Add(position, direction * speed);
         if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer().get()->GetPosition(), PlayerHandler::GetPlayer().get()->GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();

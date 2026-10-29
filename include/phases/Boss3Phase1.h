@@ -78,8 +78,10 @@ public:
         if (*bossHealth <= 0)
         {
             SoundHandler::PlaySound(EXPLOSION_1);
+            SpawnedEnemies::Clear();
+            SpawnedEnemies::spawnEnemy(boss3);
             cancelBullets();
-            ScoreHandler::addScore(10000, false);
+            ScoreHandler::addScore(20000, false);
             GameHandler::NextPhase();
             return false;
         }
