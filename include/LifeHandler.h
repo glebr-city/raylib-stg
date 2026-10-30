@@ -9,8 +9,8 @@
 class LifeHandler {
 private:
     static int currentLives;
-    static constexpr int maxLives = 2;
-    static constexpr int startingLives = 2;
+    static constexpr int maxLives = 9;
+    static constexpr int startingLives = 9;
 public:
     static void resetLives() {
         currentLives = startingLives;

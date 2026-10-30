@@ -37,6 +37,7 @@ protected:
     static uint8_t continuesUsed;
     static int deadPlayerStepsRemaining;
     static constexpr int maxDeadPlayerStepsRemaining = 120;
+    static bool isWatchingReplay;
 
     static const std::array<std::shared_ptr<Stage>, 3> stages;
 
@@ -275,6 +276,16 @@ public:
     static void ResetDeadPlayerStepsRemaining()
     {
         deadPlayerStepsRemaining = maxDeadPlayerStepsRemaining;
+    }
+
+    static bool GetIsWatchingReplay()
+    {
+        return isWatchingReplay;
+    }
+
+    static void SetIsWatchingReplay(const bool _isWatchingReplay)
+    {
+        isWatchingReplay = _isWatchingReplay;
     }
 
 #if DEBUG_BUILD

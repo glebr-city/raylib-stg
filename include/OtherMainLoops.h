@@ -16,6 +16,7 @@ protected:
     static void doStep()
     {
         InputHandler::UpdateInputs();
+        ReplayHandler::RecordStep();
         SpriteHandler::ClearQueues();
         GameHandler::doPreStep();
         GameHandler::doPhysics();

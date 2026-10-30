@@ -9,6 +9,7 @@
 #include "LifeHandler.h"
 #include "PauseHandler.h"
 #include "PlayerHandler.h"
+#include "ReplayHandler.h"
 #include "RNGHandler.h"
 #include "SoundHandler.h"
 #include "SpawnedEnemies.h"
@@ -23,6 +24,7 @@ private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
         RNGHandler::InitSeed();
+        ReplayHandler::Init();
         PlayerHandler::SetPlayer(std::make_shared<Player>(Vector2{60, 140}));
         PlayerBullets::clearPlayerBullets();
         LifeHandler::resetLives();
@@ -81,7 +83,6 @@ public:
         if (shouldRestartGame)
             actuallyRestartGame();
         BackgroundHandler::ScrollBackground();
-        std::cout << GlobalVariables::GetContinues() << std::endl;
         RNGHandler::StepSeed();
         ScoreItemHandler::doPreStep();
         EphemeraHandler::doPreStep();
