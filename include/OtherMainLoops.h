@@ -16,7 +16,7 @@ protected:
     static void doStep()
     {
         InputHandler::UpdateInputs();
-        ReplayHandler::recordStep();
+        ReplayHandler::DoStep();
         SpriteHandler::ClearQueues();
         GameHandler::doPreStep();
         GameHandler::doPhysics();
@@ -98,6 +98,7 @@ public:
         InitWindow(1280, 1280, "raylib");
         SetWindowMinSize(gameWidth * 2, gameHeight * 2);
         InitAudioDevice();
+        InputHandler::Init();
         SpriteHandler::InitSprites(); //Need to initialise this after the window.
         SoundHandler::InitSounds();
         GlobalVariables::InitRenderTexture(gameWidth, gameHeight);

@@ -137,6 +137,10 @@ add_executable(raylib_stg src/main.cpp
         include/Boss3Phase3Explosive.h
         include/ReplayHandler.h
         src/ReplayHandler.cpp
+        include/OtherInputHandlers.h
+        include/CurrentInputHandlerHolder.h
+        include/IInputHandler.h
+        src/IInputHandler.cpp
 )
 
 target_sources(raylib_stg
