@@ -39,6 +39,8 @@ protected:
     static constexpr int maxDeadPlayerStepsRemaining = 120;
     static bool isWatchingReplay;
 
+    static std::array<bool, 7> currentReplayInputs;
+
     static const std::array<std::shared_ptr<Stage>, 3> stages;
 
     static void setCurrentPhase(const PHASES _desiredPhase)
@@ -286,6 +288,14 @@ public:
     static void SetIsWatchingReplay(const bool _isWatchingReplay)
     {
         isWatchingReplay = _isWatchingReplay;
+    }
+
+    static std::array<bool, 7> GetCurrentReplayInputs() {
+        return currentReplayInputs;
+    }
+
+    static void SetCurrentReplayInputs(const std::array<bool, 7> _newInputs) {
+        currentReplayInputs = _newInputs;
     }
 
 #if DEBUG_BUILD
