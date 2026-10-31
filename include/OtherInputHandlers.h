@@ -7,6 +7,7 @@
 #include <array>
 #include <memory>
 
+#include "GlobalVariables.h"
 #include "IInputHandler.h"
 #include "raylib.h"
 
@@ -78,7 +79,6 @@ protected:
         }
         return false;
     }
-
     bool CheckInputsDown(const INPUTS i) override {
         for (const auto& j : getGameInput(i)->keys)
         {
@@ -199,9 +199,9 @@ protected:
 };
 
 class ReplayInputHandler : public IInputHandler {
-public:
-
 protected:
+    uint8_t lastFrameInputs = 0;
+    uint8_t currentInputs = 0;
     void UpdateInputVector() override
     {
         if (CheckInputsPressed(INPUT_LEFT))
@@ -254,58 +254,26 @@ protected:
     }
 
     bool CheckInputsPressed(const INPUTS i) override {
-        for (const auto& j : getGameInput(i)->keys)
-        {
-            if (j.d && !j.l)
-                return true;
-        }
-        for (const auto& j : getGameInput(i)->buttons)
-        {
-            if (j.d && !j.l)
-                return true;
-        }
-        return false;
+        if (i > 6)
+            return false;
+        return (currentInputs >> i & 1) & ~(lastFrameInputs >> i & 1);
     }
 
     bool CheckInputsDown(const INPUTS i) override {
-        for (const auto& j : getGameInput(i)->keys)
-        {
-            if (j.d)
-                return true;
-        }
-        for (const auto& j : getGameInput(i)->buttons)
-        {
-            if (j.d)
-                return true;
-        }
-        return false;
+        if (i > 6)
+            return false;
+        return (currentInputs >> i & 1);
     }
-    bool CheckInputsDown(int i) override {
-        for (const auto& j : getGameInput(static_cast<INPUTS>(i))->keys)
-        {
-            if (j.d)
-                return true;
-        }
-        for (const auto& j : getGameInput(static_cast<INPUTS>(i))->buttons)
-        {
-            if (j.d)
-                return true;
-        }
-        return false;
+    bool CheckInputsDown(const int i) override {
+        if (i > 6)
+            return false;
+        return (currentInputs >> i & 1);
     }
 
     bool CheckInputsReleased(const INPUTS i) override {
-        for (const auto& j : getGameInput(i)->keys)
-        {
-            if (!j.d && j.l)
-                return true;
-        }
-        for (const auto& j : getGameInput(i)->buttons)
-        {
-            if (!j.d && j.l)
-                return true;
-        }
-        return false;
+        if (i > 6)
+            return false;
+        return ~(currentInputs >> i & 1) & (lastFrameInputs >> i & 1);
     }
 
     void UpdateInputsMenu() override
@@ -354,29 +322,8 @@ protected:
 
     void UpdateInputs() override
     {
-        for (int j = 0; j < INPUT_COUNT; j++)
-        {
-            for (auto& k: gameInputs.at(j)->keys)
-            {
-                k.l = k.d;
-                k.d = IsKeyDown(k.k);
-            }
-
-            for (auto& k: gameInputs.at(j)->buttons)
-            {
-                k.l = k.d;
-                k.d = false;
-                int i = -1;
-                while (IsGamepadAvailable(++i))
-                {
-                    if (IsGamepadButtonDown(i, k.b))
-                    {
-                        k.d = true;
-                        break;
-                    }
-                }
-            }
-        }
+        lastFrameInputs = currentInputs;
+        currentInputs = GlobalVariables::GetCurrentReplayInputs();
         UpdateInputVector();
     }
 

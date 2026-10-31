@@ -11,6 +11,7 @@
 #include <iostream>
 #include <string>
 
+#include "GlobalVariables.h"
 #include "InputHandler.h"
 
 class ReplayHandler
@@ -22,7 +23,7 @@ private:
     static u_int16_t stepsWithoutChange;
     static std::vector<u_int16_t> currentReplayData;
     static bool DEBUG_readingFromFile;
-    static u_int8_t currentInputs;
+    static size_t currentReplayDatumIndex;
 private:
     static void appendCurrentReplayData(const u_int8_t _currentInputs)
     {
@@ -37,6 +38,7 @@ private:
         outf << "";
         outf.close();
         outf.open(currentReplayPath, std::ios::app);
+        currentReplayData[0] = currentReplayData[0] - (1 << 7);
         for (uint16_t newData : currentReplayData)
         {
             uint DEBUG_input = (newData) % 128;
@@ -65,7 +67,7 @@ private:
         std::cout << "Replay data point count: " << dataPointCount << std::endl;
         uint16_t readData = 0;
         std::string strInput{};
-        int i = 0;
+        size_t i = 0;
         while (true)
         {
             if (inf.eof())
@@ -92,6 +94,7 @@ private:
             i++;
         }
         inf.close();
+        readStep();
         std::cout << "Current replay data size: " << currentReplayData.size() << std::endl;
         //while (std::get())
           //  std::cout << strInput << '\n';
@@ -106,18 +109,20 @@ private:
         if (DEBUG_readingFromFile)
             return;
         if (IsKeyPressed(KEY_J))
+        {
             readFromFile(0);
+        }
         else if (IsKeyPressed(KEY_L))
             writeToFile();
         else {
-            currentInputs =
-                (InputHandler::CheckInputsDown(INPUT_LEFT)  << 0)  |
+            uint8_t currentInputs = (InputHandler::CheckInputsDown(INPUT_LEFT)  << 0)  |
                     (InputHandler::CheckInputsDown(INPUT_RIGHT)  << 1)  |
                         (InputHandler::CheckInputsDown(INPUT_UP)  << 2)  |
                             (InputHandler::CheckInputsDown(INPUT_DOWN)  << 3)  |
-                                (InputHandler::CheckInputsDown(INPUT_FIRE)  << 4)  |
-                                    (InputHandler::CheckInputsDown(INPUT_FOCUS)  << 5)  |
-                                        (InputHandler::CheckInputsDown(INPUT_HYPER)  << 6);
+                                (InputHandler::CheckInputsDown(INPUT_FOCUS)  << 4)  |
+                                    (InputHandler::CheckInputsDown(INPUT_HYPER)  << 5)  |
+                                        (InputHandler::CheckInputsDown(INPUT_FIRE)  << 6);
+            GlobalVariables::SetCurrentReplayInputs(currentInputs);
             if (currentInputs != lastInputs || stepsWithoutChange == 511)
             {
                 appendCurrentReplayData(lastInputs);
@@ -129,11 +134,11 @@ private:
 
     static void readStep() {
         ///TODO!!
-        /*///if (stepsWithoutChange-- <= 1) {
-            for (int i = 0; i < 7; i++) {
-                InputHandler::SetInputs() {}
-            }
-        }*/
+        if (stepsWithoutChange-- <= 1 && currentReplayDatumIndex < currentReplayData.size()) {
+            GlobalVariables::SetCurrentReplayInputs(currentReplayData.at(currentReplayDatumIndex));
+            stepsWithoutChange = (currentReplayData.at(currentReplayDatumIndex) >> 7);
+            currentReplayDatumIndex++;
+        }
     }
     public:
     static void Init()
@@ -168,6 +173,7 @@ private:
         outf.close();*/
         currentReplayPath = filePath;
         std::cout << "Current replay path: " << currentReplayPath << std::endl;
+        readFromFile(0);
     }
 
     static void DoStep() {

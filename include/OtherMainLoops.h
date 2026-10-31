@@ -16,6 +16,10 @@ protected:
     static void doStep()
     {
         InputHandler::UpdateInputs();
+        if (InputHandler::CheckInputsPressed(INPUT_LEFT))
+            std::cout << "Left down: " << static_cast<int>(GlobalVariables::currentStep()) << std::endl;
+        if (InputHandler::CheckInputsReleased(INPUT_LEFT))
+            std::cout << "Left up: " << static_cast<int>(GlobalVariables::currentStep()) << std::endl;
         ReplayHandler::DoStep();
         SpriteHandler::ClearQueues();
         GameHandler::doPreStep();

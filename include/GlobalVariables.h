@@ -39,7 +39,7 @@ protected:
     static constexpr int maxDeadPlayerStepsRemaining = 120;
     static bool isWatchingReplay;
 
-    static std::array<bool, 7> currentReplayInputs;
+    static uint8_t currentReplayInputs;
 
     static const std::array<std::shared_ptr<Stage>, 3> stages;
 
@@ -290,12 +290,12 @@ public:
         isWatchingReplay = _isWatchingReplay;
     }
 
-    static std::array<bool, 7> GetCurrentReplayInputs() {
+    static uint8_t GetCurrentReplayInputs() {
         return currentReplayInputs;
     }
 
-    static void SetCurrentReplayInputs(const std::array<bool, 7> _newInputs) {
-        currentReplayInputs = _newInputs;
+    static void SetCurrentReplayInputs(const uint8_t _newInputs) {
+        currentReplayInputs = (_newInputs) & ~(1 << 7);
     }
 
 #if DEBUG_BUILD

@@ -17,8 +17,8 @@ private:
     static IInputHandler* currentInputHandler;
 public:
     static void Init() {
-        currentInputHandler = new DefaultInputHandler();
-
+        currentInputHandler = new ReplayInputHandler();
+        //GlobalVariables::SetCurrentReplayInputs(64);
     }
     static auto GetGameInputList() {
         return IInputHandler::GetGameInputList();

@@ -48,6 +48,7 @@ int GlobalVariables::continuePromptStepsRemaining = 0;
 int GlobalVariables::deadPlayerStepsRemaining = 0;
 bool GlobalVariables::isWatchingReplay = false;
 uint8_t GlobalVariables::continuesUsed = 0;
+uint8_t GlobalVariables::currentReplayInputs = 0;
 const std::array<PhaseRef, PHASE_COUNT> GlobalVariables::phases = {{
     {[]() -> PhaseHelper* { return new DiagonalTankPhase1(); }},
     {[]() -> PhaseHelper* { return new Phase2(); }},
