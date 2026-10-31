@@ -25,6 +25,13 @@ private:
         shouldRestartGame = false;
         RNGHandler::InitSeed();
         ReplayHandler::Init();
+        if (InputHandler::GetCurrentInputHandlerIndex() == REPLAY_INPUT_HANDLER)
+            InputHandler::SetInputHandler(DEFAULT_INPUT_HANDLER);
+        else if (InputHandler::GetCurrentInputHandlerIndex() == DEFAULT_INPUT_HANDLER)
+        {
+            InputHandler::SetInputHandler(REPLAY_INPUT_HANDLER);
+            ReplayHandler::ReadFromFile(0);
+        }
         PlayerHandler::SetPlayer(std::make_shared<Player>(Vector2{60, 140}));
         PlayerBullets::clearPlayerBullets();
         LifeHandler::resetLives();
@@ -63,7 +70,7 @@ private:
         GlobalVariables::GetCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const uint_fast8_t _desiredStage = 2, const uint_fast8_t _desiredPhaseIndex = 8) {
+    static void RestartGame(const uint_fast8_t _desiredStage = 1, const uint_fast8_t _desiredPhaseIndex = 5) {
         desiredStage = _desiredStage;
         GlobalVariables::SetCurrentStage(_desiredStage);
         desiredPhase = GlobalVariables::GetCurrentStage()->GetPhase(_desiredPhaseIndex);

@@ -38,7 +38,10 @@ private:
         outf << "";
         outf.close();
         outf.open(currentReplayPath, std::ios::app);
-        currentReplayData[0] = currentReplayData[0] - (1 << 7);
+        const uint8_t firstStepsWithoutChange = currentReplayData[0] >> 7;
+        std::cout << "First step without change: " << static_cast<int>(firstStepsWithoutChange) << std::endl;
+        if (firstStepsWithoutChange > 0)
+            currentReplayData[0] = currentReplayData[0] - (1 << 7);
         for (uint16_t newData : currentReplayData)
         {
             uint DEBUG_input = (newData) % 128;
@@ -47,8 +50,8 @@ private:
         }
         outf.close();
     }
-
-    static void readFromFile(const uint16_t _replayIndex)
+public:
+    static void ReadFromFile(const uint16_t _replayIndex)
     {
         currentReplayData.clear();
         currentReplayPath = replayPath + std::to_string(_replayIndex);
@@ -101,21 +104,23 @@ private:
         for (auto data: currentReplayData) {
             uint input = (data) % 128;
             uint length = (data >> 7);
-            std::cout << "Input: " <<
-                "Left: "<< (input&1) << " Right: " << (input>>1&1) << " Up: " << (input>>2&1) << " Length: " << length << std::endl;
+            /*std::cout << "Input: " <<
+                "Left: "<< (input&1) << " Right: " << (input>>1&1) << " Up: " << (input>>2&1) << " Length: " << length << std::endl;*/
         }
     }
+
+private:
     static void recordStep() {
         if (DEBUG_readingFromFile)
             return;
         if (IsKeyPressed(KEY_J))
         {
-            readFromFile(0);
+            ReadFromFile(0);
         }
         else if (IsKeyPressed(KEY_L))
             writeToFile();
         else {
-            uint8_t currentInputs = (InputHandler::CheckInputsDown(INPUT_LEFT)  << 0)  |
+            const uint8_t currentInputs = (InputHandler::CheckInputsDown(INPUT_LEFT)  << 0)  |
                     (InputHandler::CheckInputsDown(INPUT_RIGHT)  << 1)  |
                         (InputHandler::CheckInputsDown(INPUT_UP)  << 2)  |
                             (InputHandler::CheckInputsDown(INPUT_DOWN)  << 3)  |
@@ -143,6 +148,7 @@ private:
     public:
     static void Init()
     {
+        DEBUG_readingFromFile = false;
         currentReplayData.clear();
         replayPath = "./userdata/replays/replay";
         u_int16_t i = -1;
@@ -161,7 +167,7 @@ private:
             std::cout << std::endl;
             inf.close();
         }
-        std::string filePath = replayPath + std::to_string(i);
+        const std::string filePath = replayPath + std::to_string(i);
         /*std::ofstream outf{filePath, std::ios::out};
         // If we couldn't open the output file stream for writing
         if (!outf)
@@ -173,7 +179,7 @@ private:
         outf.close();*/
         currentReplayPath = filePath;
         std::cout << "Current replay path: " << currentReplayPath << std::endl;
-        readFromFile(0);
+        //readFromFile(0);
     }
 
     static void DoStep() {

@@ -138,7 +138,6 @@ add_executable(raylib_stg src/main.cpp
         include/ReplayHandler.h
         src/ReplayHandler.cpp
         include/OtherInputHandlers.h
-        include/CurrentInputHandlerHolder.h
         include/IInputHandler.h
         src/IInputHandler.cpp
 )

@@ -3,7 +3,9 @@
 //
 #include <InputHandler.h>
 
-IInputHandler* InputHandler::currentInputHandler = nullptr;
+
+std::array<IInputHandler*, INPUT_HANDLER_COUNT> InputHandler::inputHandlers{};
+INPUT_HANDLERS InputHandler::currentInputHandler = DEFAULT_INPUT_HANDLER;
 
 
 //std::array<std::shared_ptr<std::array<std::shared_ptr<GameInput>, 3>({})>, INPUT_COUNT> IInputHandler::gameInputs =  {
