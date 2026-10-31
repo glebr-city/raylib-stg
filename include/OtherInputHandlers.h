@@ -237,6 +237,13 @@ protected:
         }
     }
     public:
+    void Reset() override
+    {
+        IInputHandler::Reset();
+        lastFrameInputs = 127;
+        currentInputs = 0;
+        UpdateInputVector();
+    }
 
     bool CheckInputsPressedMenu(const INPUTS i) override
     {

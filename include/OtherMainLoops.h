@@ -156,7 +156,7 @@ protected:
     {
         if (IsWindowResized())
             GlobalVariables::AdjustLetterbox();
-        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
+        if (InputHandler::CheckInputsPressedMenu(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
         if (IsKeyPressed(KEY_ENTER))
@@ -224,7 +224,7 @@ public:
     {
         if (IsWindowResized())
             GlobalVariables::AdjustLetterbox();
-        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
+        if (InputHandler::CheckInputsPressedMenu(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
         if (IsKeyPressed(KEY_ENTER))
@@ -278,7 +278,7 @@ public:
         SpriteHandler::ClearQueues();
         if (IsWindowResized())
             GlobalVariables::AdjustLetterbox();
-        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
+        if (InputHandler::CheckInputsPressedMenu(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
         if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))
@@ -356,7 +356,7 @@ public:
     {
         if (IsWindowResized())
             GlobalVariables::AdjustLetterbox();
-        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
+        if (InputHandler::CheckInputsPressedMenu(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
         if (InputHandler::CheckInputsPressedMenu(INPUT_FIRE))
@@ -428,7 +428,7 @@ public:
     {
         if (IsWindowResized())
             GlobalVariables::AdjustLetterbox();
-        if (InputHandler::CheckInputsPressed(INPUT_RESTART)) {
+        if (InputHandler::CheckInputsPressedMenu(INPUT_RESTART)) {
             GameHandler::RestartGame();
         }
         if (InputHandler::CheckInputsPressedMenu(INPUT_MENU))

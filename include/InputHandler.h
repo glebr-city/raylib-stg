@@ -91,7 +91,10 @@ public:
 
     static void SetInputHandler(const INPUT_HANDLERS newHandler)
     {
+        if (currentInputHandler == newHandler)
+            return;
         currentInputHandler = newHandler;
+        inputHandlers[currentInputHandler]->Reset();
     }
     static void SetInputHandler(const size_t newHandler)
     {

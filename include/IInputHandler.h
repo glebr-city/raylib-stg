@@ -83,6 +83,24 @@ protected:
 
     public:
 
+    virtual void Reset()
+    {
+        for (int i = 0; i < INPUT_COUNT; i++)
+        {
+            for (auto& j : getGameInput(static_cast<INPUTS>(i))->keys)
+            {
+                j.d = false;
+                j.l = true;
+            }
+            for (auto& j : getGameInput(static_cast<INPUTS>(i))->buttons)
+            {
+                j.d = false;
+                j.l = true;
+            }
+        }
+        UpdateInputVector();
+    }
+
     static auto GetGameInputList() {
         return &gameInputs;
     }

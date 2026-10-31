@@ -38,21 +38,24 @@ private:
         outf << "";
         outf.close();
         outf.open(currentReplayPath, std::ios::app);
-        const uint8_t firstStepsWithoutChange = currentReplayData[0] >> 7;
-        std::cout << "First step without change: " << static_cast<int>(firstStepsWithoutChange) << std::endl;
-        if (firstStepsWithoutChange > 0)
-            currentReplayData[0] = currentReplayData[0] - (1 << 7);
+        //const uint8_t firstStepsWithoutChange = currentReplayData[0] >> 7;
+        //std::cout << "First step without change: " << static_cast<int>(firstStepsWithoutChange) << std::endl;
+        //if (false && firstStepsWithoutChange > 0)
+        //    currentReplayData[0] = currentReplayData[0] - (1 << 7);
         for (uint16_t newData : currentReplayData)
         {
             uint DEBUG_input = (newData) % 128;
             uint DEBUG_length = (newData >> 7);
             outf.write(reinterpret_cast<const char*>(&newData), sizeof(newData));
         }
+
         outf.close();
     }
 public:
+
     static void ReadFromFile(const uint16_t _replayIndex)
     {
+        currentReplayDatumIndex = 0;
         currentReplayData.clear();
         currentReplayPath = replayPath + std::to_string(_replayIndex);
 
@@ -104,8 +107,8 @@ public:
         for (auto data: currentReplayData) {
             uint input = (data) % 128;
             uint length = (data >> 7);
-            /*std::cout << "Input: " <<
-                "Left: "<< (input&1) << " Right: " << (input>>1&1) << " Up: " << (input>>2&1) << " Length: " << length << std::endl;*/
+            std::cout << "Input: " <<
+                "Left: "<< (input&1) << " Right: " << (input>>1&1) << " Up: " << (input>>2&1) << " Length: " << length << std::endl;
         }
     }
 
@@ -150,6 +153,7 @@ private:
     {
         DEBUG_readingFromFile = false;
         currentReplayData.clear();
+        stepsWithoutChange = 0;
         replayPath = "./userdata/replays/replay";
         u_int16_t i = -1;
         while (++i < UINT16_MAX)

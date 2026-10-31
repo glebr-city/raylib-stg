@@ -23,6 +23,7 @@ class GameHandler {
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
+        GlobalVariables::currentStep() = 0;
         RNGHandler::InitSeed();
         ReplayHandler::Init();
         if (InputHandler::GetCurrentInputHandlerIndex() == REPLAY_INPUT_HANDLER)
@@ -37,7 +38,6 @@ private:
         LifeHandler::resetLives();
         DamageHandler::Reset();
         SoundHandler::StopAllSounds();
-        GlobalVariables::currentStep() = 0;
         GlobalVariables::ResetContinues();
         GlobalPools::Clear();
         Player::reset(Vector2 {60, 140}, true);
