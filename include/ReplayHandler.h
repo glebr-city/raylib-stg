@@ -148,29 +148,25 @@ public:
     }
 
 private:
-    static void recordStep() {
+    static void recordStep()
+    {
         if (isReadingFromFile)
             return;
-        if (IsKeyPressed(KEY_J))
+
+        const uint8_t currentInputs = (InputHandler::CheckInputsDown(INPUT_LEFT) << 0) |
+            (InputHandler::CheckInputsDown(INPUT_RIGHT) << 1) |
+            (InputHandler::CheckInputsDown(INPUT_UP) << 2) |
+            (InputHandler::CheckInputsDown(INPUT_DOWN) << 3) |
+            (InputHandler::CheckInputsDown(INPUT_FOCUS) << 4) |
+            (InputHandler::CheckInputsDown(INPUT_HYPER) << 5) |
+            (InputHandler::CheckInputsDown(INPUT_FIRE) << 6);
+        GlobalVariables::SetCurrentReplayInputs(currentInputs);
+        if (currentInputs != lastInputs || stepsWithoutChange == 511)
         {
-            ReadFromFile(0);
+            appendCurrentReplayData(lastInputs);
+            lastInputs = currentInputs;
         }
-        else {
-            const uint8_t currentInputs = (InputHandler::CheckInputsDown(INPUT_LEFT)  << 0)  |
-                    (InputHandler::CheckInputsDown(INPUT_RIGHT)  << 1)  |
-                        (InputHandler::CheckInputsDown(INPUT_UP)  << 2)  |
-                            (InputHandler::CheckInputsDown(INPUT_DOWN)  << 3)  |
-                                (InputHandler::CheckInputsDown(INPUT_FOCUS)  << 4)  |
-                                    (InputHandler::CheckInputsDown(INPUT_HYPER)  << 5)  |
-                                        (InputHandler::CheckInputsDown(INPUT_FIRE)  << 6);
-            GlobalVariables::SetCurrentReplayInputs(currentInputs);
-            if (currentInputs != lastInputs || stepsWithoutChange == 511)
-            {
-                appendCurrentReplayData(lastInputs);
-                lastInputs = currentInputs;
-            }
-            stepsWithoutChange++;
-        }
+        stepsWithoutChange++;
     }
 
     static void readStep() {
