@@ -155,8 +155,6 @@ private:
         {
             ReadFromFile(0);
         }
-        else if (IsKeyPressed(KEY_L))
-            WriteToFile();
         else {
             const uint8_t currentInputs = (InputHandler::CheckInputsDown(INPUT_LEFT)  << 0)  |
                     (InputHandler::CheckInputsDown(INPUT_RIGHT)  << 1)  |
