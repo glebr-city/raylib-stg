@@ -24,8 +24,8 @@ bool rightDown = false;
 bool upDown = false;
 bool downDown = false;
 
-Vector2 position;
-Vector2 finalPos{}; //Calculated during preStep, applied during doPhysics.
+Vector2 position{60, 140};
+Vector2 finalPos{60, 140}; //Calculated during preStep, applied during doPhysics.
 Vector2 inputVector {0, 0};
 Rectangle playerRect = {0.0f, 0.0f, 13.0f, 13.0f};
 constexpr int grazeLostOnHit = 800;

@@ -10,6 +10,8 @@
 #include <fstream>
 #include <iostream>
 #include <string>
+#include <sys/stat.h>
+#include <ctime>
 
 #include "GlobalVariables.h"
 #include "InputHandler.h"
@@ -34,6 +36,29 @@ private:
 
     static void writeToFile()
     {
+        time_t timestamp = time(nullptr);
+        tm datetime = *localtime(&timestamp);
+        char dateTimeChar[50];
+        strftime(dateTimeChar, 50, "%Y-%m-%d_%H-%M-%S", &datetime);
+        std::stringstream ss;
+        ss << "./userdata/replays/" << dateTimeChar << ".sceshreplay";
+        currentReplayPath = ss.str();
+        std::ifstream nameTestFile{currentReplayPath};
+        if (nameTestFile)
+            for (u_int32_t i = 0; i < UINT32_MAX; i++)
+            {
+                nameTestFile.close();
+                nameTestFile.clear();
+                std::stringstream ss2;
+                ss2 << "./userdata/replays/" << dateTimeChar << "_" << std::to_string(i) << ".sceshreplay";
+                currentReplayPath = ss2.str();
+                nameTestFile.open(currentReplayPath);
+                if (!nameTestFile)
+                    break;
+            }
+
+
+
         std::ofstream outf{currentReplayPath, std::ios::out};
         outf << "";
         outf.close();
@@ -48,6 +73,7 @@ private:
             uint DEBUG_length = (newData >> 7);
             outf.write(reinterpret_cast<const char*>(&newData), sizeof(newData));
         }
+        std::cout << "Replay written! Data points: " << currentReplayData.size() << std::endl;
 
         outf.close();
     }
@@ -57,19 +83,22 @@ public:
     {
         currentReplayDatumIndex = 0;
         currentReplayData.clear();
-        currentReplayPath = replayPath + std::to_string(_replayIndex);
+        std::string tempReplayPath = replayPath + std::to_string(_replayIndex) + ".sceshreplay";
+        currentReplayPath = tempReplayPath;
+        std::cout << "Replay path: " << tempReplayPath << std::endl;
 
-        std::ifstream inf{replayPath + std::to_string(_replayIndex)};
+        std::ifstream inf{tempReplayPath};
         if (inf.fail())
         {
             inf.close();
+            currentReplayData.emplace_back(128);
             std::cerr << "Replay file could not be opened!" << std::endl;
             return;
         }
         DEBUG_readingFromFile = true;
-        std::cout << "File exists: " << replayPath << std::to_string(_replayIndex) << std::endl;
-        const size_t dataPointCount = std::filesystem::file_size(currentReplayPath) / sizeof(u_int16_t);
-        currentReplayData.resize(dataPointCount);
+        std::cout << "File exists: " << tempReplayPath << std::endl;
+        const size_t dataPointCount = std::filesystem::file_size(tempReplayPath) / sizeof(u_int16_t);
+        currentReplayData.resize(dataPointCount + 1);
         std::cout << "Replay data point count: " << dataPointCount << std::endl;
         uint16_t readData = 0;
         std::string strInput{};
@@ -104,6 +133,7 @@ public:
         std::cout << "Current replay data size: " << currentReplayData.size() << std::endl;
         //while (std::get())
           //  std::cout << strInput << '\n';
+        currentReplayData.emplace_back(128);
         for (auto data: currentReplayData) {
             uint input = (data) % 128;
             uint length = (data >> 7);
@@ -148,30 +178,59 @@ private:
             currentReplayDatumIndex++;
         }
     }
-    public:
+    static std::vector<const char*> findReplayFiles()
+    {
+        // This structure would distinguish a file from a
+        // directory
+        struct stat sb;
+        std::vector<const char*> returnVector{};
+        // Looping until all the items of the directory are
+        // exhausted
+        for (const auto& entry : std::filesystem::directory_iterator(replayPath)) {
+
+            // Converting the path to const char * in the
+            // subsequent lines
+            std::string outfilename_str = entry.path().string();
+            const char* path = outfilename_str.c_str();
+
+            // Testing whether the path points to a
+            // non-directory or not If it does, displays path
+            if (stat(path, &sb) == 0 && !(sb.st_mode & S_IFDIR))
+            {
+                if (outfilename_str.substr(outfilename_str.length() - 12) != ".sceshreplay")
+                    continue;
+                std ::cout << path << std::endl;
+                returnVector.emplace_back(path);
+            }
+        }
+        return returnVector;
+    }
+public:
     static void Init()
     {
         DEBUG_readingFromFile = false;
         currentReplayData.clear();
         stepsWithoutChange = 0;
-        replayPath = "./userdata/replays/replay";
+        std::filesystem::create_directory("./userdata/replays");
+        replayPath = "./userdata/replays/";
+        findReplayFiles();
         u_int16_t i = -1;
         while (++i < UINT16_MAX)
         {
-            std::ifstream inf{replayPath + std::to_string(i)};
+            std::ifstream inf{replayPath + "replay" + std::to_string(i)};
             if (inf.fail())
             {
                 inf.close();
                 break;
             }
-            std::cout << "File exists: " << replayPath << std::to_string(i) << std::endl;
+            std::cout << "File exists: " << replayPath << "replay" << std::to_string(i) << std::endl;
             std::string strInput{};
             while (std::getline(inf, strInput))
                 std::cout << strInput << '\n';
             std::cout << std::endl;
             inf.close();
         }
-        const std::string filePath = replayPath + std::to_string(i);
+        const std::string filePath = replayPath + "replay" + std::to_string(i);
         /*std::ofstream outf{filePath, std::ios::out};
         // If we couldn't open the output file stream for writing
         if (!outf)

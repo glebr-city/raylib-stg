@@ -25,7 +25,7 @@ private:
 public:
     static void Init() {
         inputHandlers = {new DefaultInputHandler(), new ReplayInputHandler()};
-        SetInputHandler(DEFAULT_INPUT_HANDLER);
+        SetInputHandler(REPLAY_INPUT_HANDLER);
     }
 
     static auto GetGameInputList() {

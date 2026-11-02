@@ -363,7 +363,7 @@ public:
         {
             ScoreHandler::resetScore();
             LifeHandler::resetLives();
-            Player::respawn();
+            Player::respawn(PlayerHandler::GetPlayer()->GetPosition());
             GlobalVariables::SetContinuePromptStepsRemaining(1200);
             GlobalVariables::IncrementContinues();
             CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP);
