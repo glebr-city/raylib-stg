@@ -11,3 +11,5 @@ u_int16_t ReplayHandler::stepsWithoutChange = 0;
 size_t ReplayHandler::currentReplayDatumIndex = 0;
 std::vector<u_int16_t> ReplayHandler::currentReplayData{};
 bool ReplayHandler::DEBUG_readingFromFile = false;
+
+std::vector<std::string> ReplayHandler::replayFilePaths{};

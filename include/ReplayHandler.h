@@ -26,6 +26,7 @@ private:
     static std::vector<u_int16_t> currentReplayData;
     static bool DEBUG_readingFromFile;
     static size_t currentReplayDatumIndex;
+    static std::vector<std::string> replayFilePaths;
 private:
     static void appendCurrentReplayData(const u_int8_t _currentInputs)
     {
@@ -78,67 +79,69 @@ private:
         outf.close();
     }
 public:
-
-    static void ReadFromFile(const uint16_t _replayIndex)
-    {
+    static void ReadFromFile(const uint16_t _replayIndex) {
         currentReplayDatumIndex = 0;
         currentReplayData.clear();
-        std::string tempReplayPath = replayPath + std::to_string(_replayIndex) + ".sceshreplay";
-        currentReplayPath = tempReplayPath;
-        std::cout << "Replay path: " << tempReplayPath << std::endl;
-
-        std::ifstream inf{tempReplayPath};
-        if (inf.fail())
-        {
-            inf.close();
+        if (replayFilePaths.empty()) {
             currentReplayData.emplace_back(128);
-            std::cerr << "Replay file could not be opened!" << std::endl;
-            return;
-        }
-        DEBUG_readingFromFile = true;
-        std::cout << "File exists: " << tempReplayPath << std::endl;
-        const size_t dataPointCount = std::filesystem::file_size(tempReplayPath) / sizeof(u_int16_t);
-        currentReplayData.resize(dataPointCount + 1);
-        std::cout << "Replay data point count: " << dataPointCount << std::endl;
-        uint16_t readData = 0;
-        std::string strInput{};
-        size_t i = 0;
-        while (true)
-        {
-            if (inf.eof())
-                break;
-            std::ifstream::char_type thing;
-            inf.read(&thing, 1);
-            if (inf.eof())
-                break;
-            auto low = static_cast<uint8_t>(thing);
-            inf.read(&thing, 1);
-            if (inf.eof())
-                break;
-            auto high = static_cast<uint8_t>(thing);
+            std::cout << "There are no replay files!" << std::endl;
+        } else {
+            const auto tempReplayPath = replayFilePaths.at(_replayIndex);
+            currentReplayPath = tempReplayPath;
+            std::cout << "Replay path: " << tempReplayPath << std::endl;
 
-            readData = (low) | (high << 8);
-            //readData = low * 2 + high;
-            //uint8_t low = inf.read(reinterpret_cast<std::istream::char_type *>(&low), 1).get();
-            //uint8_t high = inf.read(reinterpret_cast<std::istream::char_type *>(&low), 1).get();
-            //readData = low | (high << 8);
-            //readData = inf.read(reinterpret_cast<char*>(&readData), sizeof(readData)).get();
-            if (inf.eof())
-                break;
-            currentReplayData[i] = readData;
-            i++;
+            std::ifstream inf{tempReplayPath};
+            if (inf.fail()) {
+                inf.close();
+                currentReplayData.emplace_back(128);
+                std::cerr << "Replay file could not be opened!" << std::endl;
+                return;
+            }
+            DEBUG_readingFromFile = true;
+            std::cout << "File exists: " << tempReplayPath << std::endl;
+            const size_t dataPointCount = std::filesystem::file_size(tempReplayPath) / sizeof(u_int16_t);
+            currentReplayData.resize(dataPointCount + 1);
+            std::cout << "Replay data point count: " << dataPointCount << std::endl;
+            uint16_t readData = 0;
+            std::string strInput{};
+            size_t i = 0;
+            while (true) {
+                if (inf.eof())
+                    break;
+                std::ifstream::char_type thing;
+                inf.read(&thing, 1);
+                if (inf.eof())
+                    break;
+                auto low = static_cast<uint8_t>(thing);
+                inf.read(&thing, 1);
+                if (inf.eof())
+                    break;
+                auto high = static_cast<uint8_t>(thing);
+
+                readData = (low) | (high << 8);
+                //readData = low * 2 + high;
+                //uint8_t low = inf.read(reinterpret_cast<std::istream::char_type *>(&low), 1).get();
+                //uint8_t high = inf.read(reinterpret_cast<std::istream::char_type *>(&low), 1).get();
+                //readData = low | (high << 8);
+                //readData = inf.read(reinterpret_cast<char*>(&readData), sizeof(readData)).get();
+                if (inf.eof())
+                    break;
+                currentReplayData[i] = readData;
+                i++;
+            }
+            inf.close();
         }
-        inf.close();
         readStep();
         std::cout << "Current replay data size: " << currentReplayData.size() << std::endl;
         //while (std::get())
-          //  std::cout << strInput << '\n';
+        //  std::cout << strInput << '\n';
         currentReplayData.emplace_back(128);
         for (auto data: currentReplayData) {
             uint input = (data) % 128;
             uint length = (data >> 7);
             std::cout << "Input: " <<
-                "Left: "<< (input&1) << " Right: " << (input>>1&1) << " Up: " << (input>>2&1) << " Length: " << length << std::endl;
+                    "Left: " << (input & 1) << " Right: " << (input >> 1 & 1) << " Up: " << (input >> 2 & 1) <<
+                    " Length: " << length << std::endl;
         }
     }
 
@@ -178,12 +181,12 @@ private:
             currentReplayDatumIndex++;
         }
     }
-    static std::vector<const char*> findReplayFiles()
+    static std::vector<std::string> findReplayFiles()
     {
         // This structure would distinguish a file from a
         // directory
         struct stat sb;
-        std::vector<const char*> returnVector{};
+        std::vector<std::string> returnVector{};
         // Looping until all the items of the directory are
         // exhausted
         for (const auto& entry : std::filesystem::directory_iterator(replayPath)) {
@@ -200,7 +203,7 @@ private:
                 if (outfilename_str.substr(outfilename_str.length() - 12) != ".sceshreplay")
                     continue;
                 std ::cout << path << std::endl;
-                returnVector.emplace_back(path);
+                returnVector.emplace_back(outfilename_str);
             }
         }
         return returnVector;
@@ -213,7 +216,7 @@ public:
         stepsWithoutChange = 0;
         std::filesystem::create_directory("./userdata/replays");
         replayPath = "./userdata/replays/";
-        findReplayFiles();
+        replayFilePaths = findReplayFiles();
         u_int16_t i = -1;
         while (++i < UINT16_MAX)
         {

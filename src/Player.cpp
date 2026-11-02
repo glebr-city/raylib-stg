@@ -76,6 +76,8 @@ std::array<Vector2, 2> Player::GetPosAndMovement() { //Used by bullets to perfor
 }
 
 void Player::reset(const Vector2 pos, const bool _resurrect) {
+    currentFireCooldown = fireCooldown - 24;
+    wishToShoot = false;
     if (_resurrect)
         isDead = false;
     hyperOn = false;
@@ -85,6 +87,8 @@ void Player::reset(const Vector2 pos, const bool _resurrect) {
 }
 
 void Player::respawn(const Vector2 pos) {
+    currentFireCooldown = fireCooldown - 24;
+    wishToShoot = false;
     SoundHandler::PlaySound(PLAYER_RESURRECTION);
     hyperOn = false;
     isDead = false;
@@ -196,7 +200,8 @@ void Player::doPostStep()
     const float tempHeight = floor(static_cast<float>(currentGrazeMetre) / maxGrazeMetre * grazeDiametre);
     const float tempX = currentGrazeMetre >= maxGrazeMetre ? grazeDiametre : 0;
     if (GlobalVariables::GetGrazeMetre() < maxGrazeMetre)
-        SpriteHandler::QueueMyStaticSprite({.i=PLAYER_GRAZE_FILLING, .pos=Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, .col=WHITE, .corner=true, .rect=Rectangle{tempX, grazeDiametre - tempHeight, grazeDiametre, tempHeight}});
+        SpriteHandler::QueueMyStaticSprite({.i=PLAYER_GRAZE_FILLING,
+            .pos=Vector2 {position.x - grazeRadius, position.y + grazeRadius - tempHeight}, .col=WHITE, .corner=true, .rect=Rectangle{tempX, grazeDiametre - tempHeight, grazeDiametre, tempHeight}});
     else
         SpriteHandler::QueueMyAnimatedSprite({grazeRadiusFilledSprite, position});
     SpriteHandler::QueueMyAnimatedSprite({PLAYER,  position, static_cast<int>(-inputVector.x), LAYER_PLAYER,}); //Counting on digital movement only.
