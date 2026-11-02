@@ -347,6 +347,57 @@ public:
     {
         return true;
     }
+};
 
+class ReplayOption : public MenuOption {
+public:
+    ReplayOption(const std::string& _text = "replays") : MenuOption(_text){}
+    bool PressOK() override
+    {
+        return true;
+    };
+    MENUS GetDesiredMenu() override
+    {
+        return MENU_REPLAYS;
+    }
+};
+
+class EndReplayOption : public MenuOption {
+public:
+    EndReplayOption() : MenuOption("end replay"){}
+    bool PressOK() override
+    {
+        ReplayHandler::StopReadingFromFile();
+        InputHandler::SetInputHandler(DEFAULT_INPUT_HANDLER);
+        GameHandler::RestartGame();
+        PauseHandler::SetPause(true);
+        SpriteHandler::ClearQueues();
+        return true;
+    };
+    MENUS GetDesiredMenu() override
+    {
+        return MENU_MAIN;
+    }
+};
+
+class ReplayFileOption : public MenuOption
+{
+private:
+    const uint16_t index;
+public:
+    ReplayFileOption(const uint16_t _index, const std::string &text) : MenuOption(text), index(_index) {};
+    bool PressOK() override
+    {
+        GameHandler::RestartGame();
+        InputHandler::SetInputHandler(REPLAY_INPUT_HANDLER);
+        ReplayHandler::ReadFromFile(index);
+        PauseHandler::SetPause(false);
+        return false;
+    }
+
+    MENUS GetDesiredMenu() override
+    {
+        return MENU_MAIN;
+    }
 };
 #endif //RAYLIB_STG_MENUOPTIONS_H

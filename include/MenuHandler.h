@@ -26,6 +26,7 @@ public:
     {
         menus = {
             std::make_unique<MainMenu>(),
+            std::make_unique<ReplayMenu>(),
             std::make_unique<ControlMenu>(),
             std::make_unique<ControlMenuGamepad>(),
             std::make_unique<ControlDeviceSelectionMenu>(),
@@ -50,7 +51,7 @@ public:
 
     static void SwitchMenu(const MENUS _menu)
     {
-        if (_menu == selectedMenu)
+        if (false && _menu == selectedMenu)
             return;
         selectedMenu = _menu;
         OpenMenu();

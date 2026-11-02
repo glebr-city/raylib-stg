@@ -248,6 +248,10 @@ public:
     {
         continuePromptStepsRemaining = _stepsRemaining;
     }
+    static void DeclineContinue()
+    {
+        continuePromptStepsRemaining = std::max(0, continuePromptStepsRemaining - 120);
+    }
 
     static void IncrementContinues()
     {

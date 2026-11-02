@@ -6,5 +6,5 @@
 
 #include <string>
 std::string ScoreHandler::scoreStr = "0";
-u_long ScoreHandler::currentScore = 100000000000;
+uint32_t ScoreHandler::currentScore = 100000000000;
 float ScoreHandler::currentMultiplier = 1;

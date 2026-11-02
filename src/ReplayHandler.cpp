@@ -7,9 +7,9 @@
 std::string ReplayHandler::currentReplayPath;
 std::string ReplayHandler::replayPath;
 u_int8_t ReplayHandler::lastInputs = 0;
-u_int16_t ReplayHandler::stepsWithoutChange = 0;
+int32_t ReplayHandler::stepsWithoutChange = 0;
 size_t ReplayHandler::currentReplayDatumIndex = 0;
 std::vector<u_int16_t> ReplayHandler::currentReplayData{};
-bool ReplayHandler::DEBUG_readingFromFile = false;
+bool ReplayHandler::isReadingFromFile = false;
 
 std::vector<std::string> ReplayHandler::replayFilePaths{};

@@ -4,12 +4,13 @@
 
 #ifndef RAYLIB_STG_SCOREHANDLER_H
 #define RAYLIB_STG_SCOREHANDLER_H
+#include <cstdint>
 #include <string>
 
 class ScoreHandler {
   private:
   static std::string scoreStr;
-  static u_long currentScore;
+  static uint32_t currentScore;
   static float currentMultiplier;
   static void setString() {
     scoreStr = std::to_string(currentScore);

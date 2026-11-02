@@ -369,6 +369,10 @@ public:
             CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP);
             return;
         }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_HYPER)) {
+            SoundHandler::PlaySound(EXPLOSION_1_SHORT);
+            GlobalVariables::DeclineContinue();
+        }
         if (IsKeyPressed(KEY_ENTER))
         {
             ///DEBUG_highFramerate = !DEBUG_highFramerate;

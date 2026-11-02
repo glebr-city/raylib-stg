@@ -32,6 +32,7 @@ public:
     {
         menuOptions.emplace_back(std::make_unique<ResumeOption>());
         menuOptions.emplace_back(std::make_unique<RestartOption>());
+        menuOptions.emplace_back(std::make_unique<ReplayOption>());
         menuOptions.emplace_back(std::make_unique<ControlMenuEnterOption>());
         menuOptions.emplace_back(std::make_unique<SoundVolumeOption>());
         menuOptions.emplace_back(std::make_unique<ScreenFilterOption>());
@@ -89,7 +90,69 @@ public:
     void OpenMenu() override
     {
         selectedOption = 0;
+
+        menuOptions.erase(menuOptions.begin()+2);
+        if (ReplayHandler::GetIsReadingFromFile()) {
+            menuOptions.insert(menuOptions.begin()+2, std::make_unique<EndReplayOption>());
+        } else {
+            menuOptions.insert(menuOptions.begin()+2, std::make_unique<ReplayOption>());
+        }
     }
+};
+
+class ReplayMenu : public Menu {
+public:
+    void InitMenu() override{};
+    void OpenMenu() override {
+        menuOptions.clear();
+        ReplayHandler::FindReplayFiles();
+        const auto replayFilePaths = ReplayHandler::GetReplayFilePaths();
+        if (replayFilePaths->empty())
+            return;
+        uint16_t i = 0;
+        for (auto replayFilePath : *replayFilePaths) {
+            menuOptions.emplace_back(std::make_unique<ReplayFileOption>(i, "replay" + std::to_string(i)));
+            i++;
+        }
+    }
+
+    bool HandleMenu() override{
+        DrawRectangle(0, 0, gameWidth, gameHeight, {30, 30, 30, 100});
+        if (menuOptions.empty())
+            DrawText("no replays found", 0, 10, 10, {255, 255, 255, 100});
+        for (int i = 0; i < menuOptions.size(); i++)
+        {
+            if (i == selectedOption)
+                DrawText(menuOptions.at(i)->GetText().c_str(), 0, 10 + i*10, 10, WHITE);
+            else
+                DrawText(menuOptions.at(i)->GetText().c_str(), 0, 10 + i*10, 10, {255, 255, 255, 100});
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_DOWN))
+        {
+            SoundHandler::PlaySound(THUMP_1);
+            if (selectedOption++ >= menuOptions.size() - 1)
+                selectedOption = 0;
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_UP)) {
+            SoundHandler::PlaySound(THUMP_1);
+            if (selectedOption-- == 0)
+                selectedOption = menuOptions.size() - 1;
+        }
+        if (InputHandler::CheckInputsPressedMenu(INPUT_FIRE))
+        {
+            if (menuOptions.empty())
+                return true;
+            menuOptions.at(selectedOption)->PressOK();
+            desiredMenu = menuOptions.at(selectedOption)->GetDesiredMenu();
+            return false;
+        }
+
+        if (InputHandler::CheckInputsPressedMenu(INPUT_HYPER) || InputHandler::CheckInputsPressedMenu(INPUT_MENU))
+        {
+            return false;
+        }
+        return true;
+    };
 };
 
 class ControlDeviceSelectionMenu : public Menu

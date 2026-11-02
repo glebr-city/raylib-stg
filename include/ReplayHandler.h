@@ -22,9 +22,9 @@ private:
     static std::string currentReplayPath;
     static std::string replayPath;
     static u_int8_t lastInputs;
-    static u_int16_t stepsWithoutChange;
+    static int32_t stepsWithoutChange;
     static std::vector<u_int16_t> currentReplayData;
-    static bool DEBUG_readingFromFile;
+    static bool isReadingFromFile;
     static size_t currentReplayDatumIndex;
     static std::vector<std::string> replayFilePaths;
 private:
@@ -97,7 +97,7 @@ public:
                 std::cerr << "Replay file could not be opened!" << std::endl;
                 return;
             }
-            DEBUG_readingFromFile = true;
+            isReadingFromFile = true;
             std::cout << "File exists: " << tempReplayPath << std::endl;
             const size_t dataPointCount = std::filesystem::file_size(tempReplayPath) / sizeof(u_int16_t);
             currentReplayData.resize(dataPointCount + 1);
@@ -144,10 +144,15 @@ public:
                     " Length: " << length << std::endl;
         }
     }
+    static void RestartReplay() {
+        currentReplayDatumIndex = 0;
+        stepsWithoutChange = 0;
+        readStep();
+    }
 
 private:
     static void recordStep() {
-        if (DEBUG_readingFromFile)
+        if (isReadingFromFile)
             return;
         if (IsKeyPressed(KEY_J))
         {
@@ -181,7 +186,8 @@ private:
             currentReplayDatumIndex++;
         }
     }
-    static std::vector<std::string> findReplayFiles()
+public:
+    static void FindReplayFiles()
     {
         // This structure would distinguish a file from a
         // directory
@@ -206,34 +212,24 @@ private:
                 returnVector.emplace_back(outfilename_str);
             }
         }
-        return returnVector;
+        replayFilePaths = returnVector;
     }
-public:
+
+    static void StopReadingFromFile() {
+        isReadingFromFile = false;
+        Init();
+    }
     static void Init()
     {
-        DEBUG_readingFromFile = false;
-        currentReplayData.clear();
-        stepsWithoutChange = 0;
+        if (!isReadingFromFile) {
+            currentReplayData.clear();
+            stepsWithoutChange = 0;
+        } else {
+            RestartReplay();
+        }
         std::filesystem::create_directory("./userdata/replays");
         replayPath = "./userdata/replays/";
-        replayFilePaths = findReplayFiles();
-        u_int16_t i = -1;
-        while (++i < UINT16_MAX)
-        {
-            std::ifstream inf{replayPath + "replay" + std::to_string(i)};
-            if (inf.fail())
-            {
-                inf.close();
-                break;
-            }
-            std::cout << "File exists: " << replayPath << "replay" << std::to_string(i) << std::endl;
-            std::string strInput{};
-            while (std::getline(inf, strInput))
-                std::cout << strInput << '\n';
-            std::cout << std::endl;
-            inf.close();
-        }
-        const std::string filePath = replayPath + "replay" + std::to_string(i);
+        FindReplayFiles();
         /*std::ofstream outf{filePath, std::ios::out};
         // If we couldn't open the output file stream for writing
         if (!outf)
@@ -243,13 +239,10 @@ public:
             outf.close();
         }
         outf.close();*/
-        currentReplayPath = filePath;
-        std::cout << "Current replay path: " << currentReplayPath << std::endl;
-        //readFromFile(0);
     }
 
     static void DoStep() {
-        if (!DEBUG_readingFromFile)
+        if (!isReadingFromFile)
             recordStep();
         else
             readStep();
@@ -259,6 +252,14 @@ public:
     static void FinishReplay()
     {
         writeToFile();
+    }
+
+    static std::vector<std::string> *GetReplayFilePaths() {
+    return &replayFilePaths;
+    };
+
+    static bool GetIsReadingFromFile() {
+        return isReadingFromFile;
     }
 };
 #endif //RAYLIB_STG_REPLAYHANDLER_H
