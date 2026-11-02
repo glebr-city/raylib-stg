@@ -90,12 +90,12 @@ public:
     void OpenMenu() override
     {
         selectedOption = 0;
-
-        menuOptions.erase(menuOptions.begin()+2);
+        menuOptions.erase(menuOptions.begin()+2, menuOptions.begin()+4);
         if (ReplayHandler::GetIsReadingFromFile()) {
             menuOptions.insert(menuOptions.begin()+2, std::make_unique<EndReplayOption>());
         } else {
             menuOptions.insert(menuOptions.begin()+2, std::make_unique<ReplayOption>());
+            menuOptions.insert(menuOptions.begin()+3, std::make_unique<SaveReplayOption>());
         }
     }
 };

@@ -379,6 +379,19 @@ public:
         return MENU_MAIN;
     }
 };
+class SaveReplayOption : public MenuOption {
+public:
+    SaveReplayOption() : MenuOption("save replay"){}
+    bool PressOK() override
+    {
+        ReplayHandler::WriteToFile();
+        return true;
+    };
+    MENUS GetDesiredMenu() override
+    {
+        return MENU_MAIN;
+    }
+};
 
 class ReplayFileOption : public MenuOption
 {

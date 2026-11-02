@@ -178,4 +178,4 @@ target_link_options(raylib_stg PUBLIC
         -Wl,--gc-sections
 )
 
-target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=true)
+target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=false)

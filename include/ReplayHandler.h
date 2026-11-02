@@ -35,7 +35,8 @@ private:
         stepsWithoutChange = 0;
     }
 
-    static void writeToFile()
+public:
+    static void WriteToFile()
     {
         time_t timestamp = time(nullptr);
         tm datetime = *localtime(&timestamp);
@@ -57,9 +58,6 @@ private:
                 if (!nameTestFile)
                     break;
             }
-
-
-
         std::ofstream outf{currentReplayPath, std::ios::out};
         outf << "";
         outf.close();
@@ -78,7 +76,6 @@ private:
 
         outf.close();
     }
-public:
     static void ReadFromFile(const uint16_t _replayIndex) {
         currentReplayDatumIndex = 0;
         currentReplayData.clear();
@@ -159,7 +156,7 @@ private:
             ReadFromFile(0);
         }
         else if (IsKeyPressed(KEY_L))
-            writeToFile();
+            WriteToFile();
         else {
             const uint8_t currentInputs = (InputHandler::CheckInputsDown(INPUT_LEFT)  << 0)  |
                     (InputHandler::CheckInputsDown(INPUT_RIGHT)  << 1)  |
@@ -251,7 +248,7 @@ public:
 
     static void FinishReplay()
     {
-        writeToFile();
+        WriteToFile();
     }
 
     static std::vector<std::string> *GetReplayFilePaths() {
