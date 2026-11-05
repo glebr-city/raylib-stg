@@ -6,6 +6,7 @@
 #define RAYLIB_STG_BOSS3_H
 #include "AcceleratingBullet2.h"
 #include "Boss.h"
+#include "Boss3ColourShiftBullet.h"
 #include "Boss3Phase3Bullet1.h"
 #include "Boss3Phase3Explosive.h"
 #include "SimpleBullet1VariableSpeed.h"
@@ -33,6 +34,7 @@ private:
     float phase2CurrentRotation = 0;
     float phase3CurrentRotation = 0;
     std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>> simpleBullet1VariableSpeedPool;
+    std::shared_ptr<PoolingVector<Boss3ColourShiftBullet>> colourShiftBulletPool;
     std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>> simpleBullet2VariableSpeedPool;
     std::shared_ptr<PoolingVector<AcceleratingBullet2>> acceleratingBullet2Pool;
     std::shared_ptr<PoolingVector<Boss3Phase3Bullet1>> phase3Pool;
@@ -50,12 +52,20 @@ private:
                     simpleBullet1VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed>>(500);
                     GlobalPools::AddPool(simpleBullet1VariableSpeedPool);
                 }
+                if (colourShiftBulletPool == nullptr) {
+                    colourShiftBulletPool = std::make_shared<PoolingVector<Boss3ColourShiftBullet>>(100);
+                    GlobalPools::AddPool(colourShiftBulletPool);
+                }
                 break;
             case PHASE_2:
                 phase2CurrentRotation =  (RNGHandler::GetSeed() % 354) * 0.001f;
                 if (simpleBullet1VariableSpeedPool == nullptr) {
                     simpleBullet1VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed>>(500);
                     GlobalPools::AddPool(simpleBullet1VariableSpeedPool);
+                }
+                if (colourShiftBulletPool == nullptr) {
+                    colourShiftBulletPool = std::make_shared<PoolingVector<Boss3ColourShiftBullet>>(100);
+                    GlobalPools::AddPool(colourShiftBulletPool);
                 }
                 if (simpleBullet2VariableSpeedPool == nullptr) {
                     simpleBullet2VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet2VariableSpeed>>(500);
@@ -113,7 +123,7 @@ public:
                         for (int i = -1; i < 2; i++) {
                             for (int j = 0; j < 30; j++) {
                                 const float rotation = j * 0.209439510239 + i * 0.05;
-                                simpleBullet1VariableSpeedPool->spawn().spawn(1.5f + (i * 0.1f), Vector2(position.x+i*3 - k, position.y + i*3 + k), Vector2Rotate(startingVector, rotation), GREEN);
+                                colourShiftBulletPool->spawn().spawn(1.5f + (i * 0.1f), Vector2(position.x+i*3 - k, position.y + i*3 + k), Vector2Rotate(startingVector, rotation), BLUE);
                             }
                         }
                     }
@@ -129,7 +139,7 @@ public:
                         const Vector2 sidewaysVector = Vector2Rotate(shotDirection, 1.57079632679);
                         for (int i = -2; i <= 2; i+=2) {
                             const Vector2 shotPosition = Vector2Add(position, i*2*sidewaysVector);
-                            simpleBullet1VariableSpeedPool->spawn().spawn(1.7f, shotPosition, shotDirection, GREEN);
+                            colourShiftBulletPool->spawn().spawn(1.7f, shotPosition, shotDirection, BLUE);
                         }
                     }
                     if (stepsElapsed % 30 == 0) {
@@ -180,6 +190,11 @@ public:
                         }
                         phase3CurrentRotation += 0.06f;
                     }
+                checkPlayerCollision();
+                if (checkPlayerBulletCollision())
+                    takeDamage();
+                return true;
+            case PHASE_4:
                 checkPlayerCollision();
                 if (checkPlayerBulletCollision())
                     takeDamage();

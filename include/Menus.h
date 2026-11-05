@@ -91,11 +91,13 @@ public:
     {
         selectedOption = 0;
         menuOptions.erase(menuOptions.begin()+2, menuOptions.begin()+4);
+        menuOptions.insert(menuOptions.begin()+2, std::make_unique<ReplayOption>());
+        menuOptions.insert(menuOptions.begin()+3, std::make_unique<EndReplayOption>());
+        menuOptions.insert(menuOptions.begin()+4, std::make_unique<SaveReplayOption>());
         if (ReplayHandler::GetIsReadingFromFile()) {
-            menuOptions.insert(menuOptions.begin()+2, std::make_unique<EndReplayOption>());
+            menuOptions.erase(menuOptions.begin()+4);
         } else {
-            menuOptions.insert(menuOptions.begin()+2, std::make_unique<ReplayOption>());
-            menuOptions.insert(menuOptions.begin()+3, std::make_unique<SaveReplayOption>());
+            menuOptions.erase(menuOptions.begin()+3, menuOptions.begin()+4);
         }
     }
 };

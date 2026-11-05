@@ -19,7 +19,7 @@ public:
     void spawn(Vector2 _position, u_int _scoreValue) override = 0;
     void spawn(const Vector2 pos, const Vector2 dir, const Color col) override = 0;*/
 
-    void spawn(const float _speed, Vector2 pos, const Vector2 dir, const Color col)
+    virtual void spawn(const float _speed, Vector2 pos, const Vector2 dir, const Color col)
     {
         speed = _speed;
         position = pos;
@@ -37,8 +37,11 @@ public:
         }
         if (position.x < -6 || position.x > 126 || position.y < -100 || position.y > 186)
             return false;
-        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
         return true;
+    }
+
+    void doPostStep() override {
+        SpriteHandler::QueueMyAnimatedSprite({.i = sprite, .pos = position, .l = LAYER_BULLET_LOW, .col = color});
     }
 };
 #endif //RAYLIB_STG_SIMPLEBULLET1VARIABLESPEED_H

@@ -140,6 +140,7 @@ add_executable(raylib_stg src/main.cpp
         include/OtherInputHandlers.h
         include/IInputHandler.h
         src/IInputHandler.cpp
+        include/Boss3ColourShiftBullet.h
 )
 
 target_sources(raylib_stg

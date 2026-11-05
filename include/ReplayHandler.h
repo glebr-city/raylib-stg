@@ -68,8 +68,6 @@ public:
         //    currentReplayData[0] = currentReplayData[0] - (1 << 7);
         for (uint16_t newData : currentReplayData)
         {
-            uint DEBUG_input = (newData) % 128;
-            uint DEBUG_length = (newData >> 7);
             outf.write(reinterpret_cast<const char*>(&newData), sizeof(newData));
         }
         std::cout << "Replay written! Data points: " << currentReplayData.size() << std::endl;
