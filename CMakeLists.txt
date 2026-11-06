@@ -141,6 +141,7 @@ add_executable(raylib_stg src/main.cpp
         include/IInputHandler.h
         src/IInputHandler.cpp
         include/Boss3ColourShiftBullet.h
+        include/RadialBullet1.h
 )
 
 target_sources(raylib_stg
@@ -179,4 +180,4 @@ target_link_options(raylib_stg PUBLIC
         -Wl,--gc-sections
 )
 
-target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=false)
+target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=true)

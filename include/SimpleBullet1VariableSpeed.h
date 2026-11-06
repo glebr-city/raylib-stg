@@ -19,7 +19,7 @@ public:
     void spawn(Vector2 _position, u_int _scoreValue) override = 0;
     void spawn(const Vector2 pos, const Vector2 dir, const Color col) override = 0;*/
 
-    virtual void spawn(const float _speed, Vector2 pos, const Vector2 dir, const Color col)
+    virtual void spawn(const float _speed, const Vector2 pos, const Vector2 dir, const Color col)
     {
         speed = _speed;
         position = pos;
@@ -31,7 +31,7 @@ public:
     bool doPhysics() override
     {
         position = Vector2Add(position, direction * speed);
-        if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), PlayerHandler::GetPlayer()->GetFinalPos(), grazeValue)) {
+        if (CheckCollisionRoundBullet(position, radius, PlayerHandler::GetPlayer()->GetPosition(), Player::GetFinalPos(), grazeValue)) {
             DamageHandler::hitPlayer();
             return false;
         }
