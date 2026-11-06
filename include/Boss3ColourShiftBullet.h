@@ -11,6 +11,9 @@ private:
     static constexpr Vector4 finalColour = {0, 228, 48, 255 };
     Vector4 colourVector{};
     public:
+    Boss3ColourShiftBullet() {
+        grazeValue = 80;
+    }
     void spawn(const float speed, const Vector2 pos, const Vector2 dir, const Color col) override {
         SimpleBullet1VariableSpeed::spawn(speed, pos, dir, col);
         colourVector = Vector4(color.r, color.g, color.b, color.a);

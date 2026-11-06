@@ -16,10 +16,6 @@ protected:
     static void doStep()
     {
         InputHandler::UpdateInputs();
-        if (InputHandler::CheckInputsPressed(INPUT_LEFT))
-            std::cout << "Left down: " << static_cast<int>(GlobalVariables::currentStep()) << std::endl;
-        if (InputHandler::CheckInputsReleased(INPUT_LEFT))
-            std::cout << "Left up: " << static_cast<int>(GlobalVariables::currentStep()) << std::endl;
         ReplayHandler::DoStep();
         SpriteHandler::ClearQueues();
         GameHandler::doPreStep();
@@ -302,7 +298,10 @@ public:
         if (GlobalVariables::GetTitleCardStepsRemaining() <= 0)
         {
             SoundHandler::SetAllSoundPause(false);
-            CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP);
+            if (Player::GetIsDead())
+                CurrentMainLoopHolder::SetMainLoop(CONTINUE_PROMPT_MAIN_LOOP);
+            else
+                CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP);
             return;
         }
         GlobalVariables::DecrementTitleCardStepsRemaining();

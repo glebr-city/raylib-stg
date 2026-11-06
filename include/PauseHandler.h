@@ -10,11 +10,10 @@
 #include "SoundHandler.h"
 
 
-class PauseHandler
-{
+class PauseHandler {
 private:
     static bool isPaused;
-    public:
+public:
 
     static void SetPause(const bool _p)
     {
@@ -25,8 +24,13 @@ private:
         }
         isPaused = _p;
         SoundHandler::SetAllSoundPause(_p);
-        if (!_p)
-            CurrentMainLoopHolder::SetMainLoop(CurrentMainLoopHolder::GetPreviousMainLoopIndex());
+        if (!_p) {
+            auto previousMainLoop = CurrentMainLoopHolder::GetPreviousMainLoopIndex();
+            if (previousMainLoop == PAUSED_MAIN_LOOP)
+                CurrentMainLoopHolder::SetMainLoop(DEFAULT_MAIN_LOOP);
+            else
+                CurrentMainLoopHolder::SetMainLoop(CurrentMainLoopHolder::GetPreviousMainLoopIndex());
+        }
         else
             CurrentMainLoopHolder::SetMainLoop(PAUSED_MAIN_LOOP);
     }

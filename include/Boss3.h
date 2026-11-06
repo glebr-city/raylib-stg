@@ -23,10 +23,13 @@ public:
         PRE_PHASE_3,
         PHASE_3,
         PHASE_4,
+        PRE_PHASE_5,
+        PHASE_5,
         PHASE_DEFEAT
     }BOSS_3_PHASES;
 private:
     static constexpr Color phase3BulletColour = {30, 30, 255, 255};
+    static constexpr int phase5OffsetDistance = 25;
     Color drawnColour = WHITE;
     int baseSpriteYOffset = 0; //Used for damage sprites
     BOSS_3_PHASES bossPhase = PRE_FIGHT;
@@ -35,7 +38,10 @@ private:
     float phase2CurrentRotation = 0;
     float phase3CurrentRotation = 0;
     float phase4CurrentRotation = 0;
+    float phase5CurrentRotation = 0;
     Vector2 phase4MovementVector{};
+    Vector2 phase4MovementTarget{};
+    Vector2 phase5CurrentOffsetDirection{};
     bool phase4CounterClockwise = false;
     std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>> simpleBullet1VariableSpeedPool;
     std::shared_ptr<PoolingVector<Boss3ColourShiftBullet>> colourShiftBulletPool;
@@ -43,73 +49,83 @@ private:
     std::shared_ptr<PoolingVector<AcceleratingBullet2>> acceleratingBullet2Pool;
     std::shared_ptr<PoolingVector<Boss3Phase3Bullet1>> phase3Pool;
     std::vector<Boss3Phase3Bullet1*> phase3FiredBullets;
-    std::shared_ptr<PoolingVector<RadialBullet1>> phase4Pool;
+    std::shared_ptr<PoolingVector<RadialBullet1>> radialBulletPool;
 
-    void initPhase(const BOSS_3_PHASES _newPhase)
-    {
+    void initPhase(const BOSS_3_PHASES _newPhase) {
         stepsElapsed = -1;
-        switch (_newPhase)
-        {
-        case PRE_FIGHT:
-            break;
-        case PHASE_1:
-            phase1CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
-            if (simpleBullet1VariableSpeedPool == nullptr)
-            {
-                simpleBullet1VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed>>(500);
-                GlobalPools::AddPool(simpleBullet1VariableSpeedPool);
-            }
-            if (colourShiftBulletPool == nullptr)
-            {
-                colourShiftBulletPool = std::make_shared<PoolingVector<Boss3ColourShiftBullet>>(100);
-                GlobalPools::AddPool(colourShiftBulletPool);
-            }
-            break;
-        case PHASE_2:
-            phase2CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
-            if (simpleBullet1VariableSpeedPool == nullptr)
-            {
-                simpleBullet1VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed>>(500);
-                GlobalPools::AddPool(simpleBullet1VariableSpeedPool);
-            }
-            if (colourShiftBulletPool == nullptr)
-            {
-                colourShiftBulletPool = std::make_shared<PoolingVector<Boss3ColourShiftBullet>>(100);
-                GlobalPools::AddPool(colourShiftBulletPool);
-            }
-            if (simpleBullet2VariableSpeedPool == nullptr)
-            {
-                simpleBullet2VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet2VariableSpeed>>(500);
-                GlobalPools::AddPool(simpleBullet2VariableSpeedPool);
-            }
-            break;
-        case PHASE_3:
-            phase3CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
-            if (phase3Pool == nullptr)
-            {
-                phase3Pool = std::make_shared<PoolingVector<Boss3Phase3Bullet1>>(200);
-                GlobalPools::AddPool(phase3Pool);
-            }
-            if (acceleratingBullet2Pool == nullptr)
-            {
-                acceleratingBullet2Pool = std::make_shared<PoolingVector<AcceleratingBullet2>>(500);
-                GlobalPools::AddPool(acceleratingBullet2Pool);
-            }
-            break;
-        case PHASE_4:
-            phase4CounterClockwise = false;
-            phase3FiredBullets.clear();
-            phase4MovementVector = {};
-            phase4CurrentRotation = RNGHandler::GetSeed() % 200 * 0.001f;
-            if (phase4Pool == nullptr)
-            {
-                phase4Pool = std::make_shared<PoolingVector<RadialBullet1>>(500);
-                GlobalPools::AddPool(phase4Pool);
-            }
-        case PHASE_DEFEAT:
-            break;
-        default:
-            break;
+        switch (_newPhase) {
+            case PRE_FIGHT:
+                break;
+            case PHASE_1:
+                phase1CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
+                if (simpleBullet1VariableSpeedPool == nullptr) {
+                    simpleBullet1VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed> >(500);
+                    GlobalPools::AddPool(simpleBullet1VariableSpeedPool);
+                }
+                if (colourShiftBulletPool == nullptr) {
+                    colourShiftBulletPool = std::make_shared<PoolingVector<Boss3ColourShiftBullet> >(100);
+                    GlobalPools::AddPool(colourShiftBulletPool);
+                }
+                break;
+            case PHASE_2:
+                phase2CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
+                if (simpleBullet1VariableSpeedPool == nullptr) {
+                    simpleBullet1VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed> >(500);
+                    GlobalPools::AddPool(simpleBullet1VariableSpeedPool);
+                }
+                if (colourShiftBulletPool == nullptr) {
+                    colourShiftBulletPool = std::make_shared<PoolingVector<Boss3ColourShiftBullet> >(100);
+                    GlobalPools::AddPool(colourShiftBulletPool);
+                }
+                if (simpleBullet2VariableSpeedPool == nullptr) {
+                    simpleBullet2VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet2VariableSpeed> >(500);
+                    GlobalPools::AddPool(simpleBullet2VariableSpeedPool);
+                }
+                break;
+            case PHASE_3:
+                phase3CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
+                if (phase3Pool == nullptr) {
+                    phase3Pool = std::make_shared<PoolingVector<Boss3Phase3Bullet1> >(200);
+                    GlobalPools::AddPool(phase3Pool);
+                }
+                if (acceleratingBullet2Pool == nullptr) {
+                    acceleratingBullet2Pool = std::make_shared<PoolingVector<AcceleratingBullet2> >(500);
+                    GlobalPools::AddPool(acceleratingBullet2Pool);
+                }
+                break;
+            case PHASE_4:
+                phase4CounterClockwise = false;
+                phase3FiredBullets.clear();
+                phase4MovementVector = {};
+                phase4CurrentRotation = RNGHandler::GetSeed() % 200 * 0.001f;
+                if (radialBulletPool == nullptr) {
+                    radialBulletPool = std::make_shared<PoolingVector<RadialBullet1> >(500);
+                    GlobalPools::AddPool(radialBulletPool);
+                }
+                break;
+            case PRE_PHASE_5:
+                phase5CurrentOffsetDirection = {0, -1};
+                break;
+            case PHASE_5:
+                phase3CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
+                phase5CurrentOffsetDirection = {0, -1};
+                phase5CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
+                if (simpleBullet1VariableSpeedPool == nullptr) {
+                    simpleBullet1VariableSpeedPool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed> >(500);
+                    GlobalPools::AddPool(simpleBullet1VariableSpeedPool);
+                }
+                if (colourShiftBulletPool == nullptr) {
+                    colourShiftBulletPool = std::make_shared<PoolingVector<Boss3ColourShiftBullet> >(100);
+                    GlobalPools::AddPool(colourShiftBulletPool);
+                }
+                if (radialBulletPool == nullptr) {
+                    radialBulletPool = std::make_shared<PoolingVector<RadialBullet1> >(500);
+                    GlobalPools::AddPool(radialBulletPool);
+                }
+            case PHASE_DEFEAT:
+                break;
+            default:
+                break;
         }
     }
 public:
@@ -192,33 +208,45 @@ public:
                     if (phase3FiredBullets.at(firedBullet)->GetHasStopped()) {
                         Boss3Phase3Explosive newExplosive{acceleratingBullet2Pool};
                         const Vector2 explosivePos = phase3FiredBullets.at(firedBullet)->GetPosition();
-                        const Vector2 explosiveMovementDirection = Vector2Normalize(explosivePos-position);
+                        const Vector2 explosiveMovementDirection = Vector2Normalize(explosivePos - position);
                         newExplosive.spawn(explosivePos, explosiveMovementDirection, phase3BulletColour);
                         SpawnedEnemies::spawnEnemy(std::make_shared<Boss3Phase3Explosive>(std::move(newExplosive)));
                         phase3FiredBullets.erase(phase3FiredBullets.begin() + firedBullet);
                     } else if (phase3FiredBullets.at(firedBullet)->GetHasDespawned())
                         phase3FiredBullets.erase(phase3FiredBullets.begin() + firedBullet);
                 }
-                    if (stepsElapsed % 4 == 0) {
-                        for (int j=-1;j<=1;j+=2) {
-                            const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, j)), phase3CurrentRotation);
-                            for (int i = 0; i < 1; i++) {
-                                const int stepToStop = 2 + RNGHandler::GetSeed() % 3 * 10 + RNGHandler::GetSeed() % 4 * 50 + RNGHandler::GetSeed() % 6;
-                                Boss3Phase3Bullet1* newBullet = &phase3Pool->spawn();
-                                newBullet->spawn(stepToStop, Vector2Add(position, shotDirection * 3), shotDirection, phase3BulletColour);
-                                phase3FiredBullets.emplace_back(newBullet);
-                            }
+                if (stepsElapsed % 4 == 0) {
+                    for (int j = -1; j <= 1; j += 2) {
+                        const Vector2 shotDirection = Vector2Rotate(
+                            Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, j)),
+                            phase3CurrentRotation);
+                        for (int i = 0; i < 1; i++) {
+                            const int stepToStop =
+                                    2 + RNGHandler::GetSeed() % 3 * 10 + RNGHandler::GetSeed() % 4 * 50 +
+                                    RNGHandler::GetSeed() % 6;
+                            Boss3Phase3Bullet1 *newBullet = &phase3Pool->spawn();
+                            newBullet->spawn(stepToStop, Vector2Add(position, shotDirection * 3), shotDirection,
+                                             phase3BulletColour);
+                            phase3FiredBullets.emplace_back(newBullet);
                         }
-                        phase3CurrentRotation += 0.06f;
                     }
+                    phase3CurrentRotation += 0.06f;
+                }
                 checkPlayerCollision();
                 if (checkPlayerBulletCollision())
                     takeDamage();
                 return true;
             case PHASE_4:
-            if (stepsElapsed % 900 > 700)
+                if (stepsElapsed % 900 == 650) {
+                    if (!phase4CounterClockwise) {
+                        phase4MovementTarget = {60, 60};
+                    } else {
+                        phase4MovementTarget = {60, 120};
+                    }
+                }
+            if (stepsElapsed % 900 > 650)
             {
-                position = Vector2MoveTowards(position, {60, 60}, 2);
+                position = Vector2MoveTowards(position, phase4MovementTarget, 2);
                 if (stepsElapsed % 900 == 750 || stepsElapsed % 900 == 800)
                 {
                     if (stepsElapsed % 900 == 800)
@@ -227,9 +255,11 @@ public:
                     for (int j = -1; j <= 1; j += 2)
                     {
                         for (int i = 0; i < 24; i++) {
+                            if (i % 3 == 0)
+                                continue;
                             const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, 1)), phase4CurrentRotation);
                             const Color bulletColour = {static_cast<u_char>(i * 5), static_cast<u_char>(i * 10), 200, 255};
-                            phase4Pool->spawn().spawn(0.1f + (i * 0.05f), j * (0.025f - i * 0.001f), position, shotDirection, bulletColour);
+                            radialBulletPool->spawn().spawn(0.5f + (i * 0.03f), j * (0.02f - i * 0.001f), position, shotDirection, bulletColour);
                             phase4CurrentRotation += 1.0471975512;
                         }
                     }
@@ -256,7 +286,7 @@ public:
                             float angularSpeed = -0.02f + (i * 0.005f);
                             if (phase4CounterClockwise)
                                 angularSpeed *= -1;
-                            phase4Pool->spawn().spawn(0.4f + (i * 0.2f), angularSpeed, position, shotDirection, bulletColour);
+                            radialBulletPool->spawn().spawn(0.4f + (i * 0.2f), angularSpeed, position, shotDirection, bulletColour);
                         }
                         if (phase4CounterClockwise)
                             phase4CurrentRotation -= 0.812930168743;
@@ -265,6 +295,68 @@ public:
                     }
                 }
             }
+                checkPlayerCollision();
+                if (checkPlayerBulletCollision())
+                    takeDamage();
+                return true;
+            case PRE_PHASE_5:
+                if (Vector2DistanceSqr(position, {60, 90}) > 1) {
+                    position = Vector2MoveTowards(position, Vector2Add({60, 90}, phase5CurrentOffsetDirection * phase5OffsetDistance), 1);
+                } else {
+                    position = {60, 90};
+                }
+                return true;
+            case PHASE_5:
+                phase5CurrentOffsetDirection = Vector2Rotate(phase5CurrentOffsetDirection, -0.007f);
+                position = Vector2Add({60, 90}, phase5CurrentOffsetDirection * phase5OffsetDistance);
+                if (stepsElapsed % 120 == 50) {
+                    for (int j = 0; j < 4; j++) {
+                        const Vector2 shotDirection = Vector2Rotate(
+                            Vector2Normalize(Vector2(std::sin(stepsElapsed % 120 * 0.0628318530718) * 0.1, 1)),
+                            phase5CurrentRotation);
+                        for (int i = 0; i < 3; i++) {
+                            const Color bulletColour = {
+                                static_cast<u_char>(220 + i * 10), static_cast<u_char>(150 - i * 2), static_cast<u_char>(220 + i * 10), 255
+                            };
+                            simpleBullet1VariableSpeedPool->spawn().spawn(
+                                0.5f + (i * 0.05f), position, shotDirection, bulletColour);
+                        }
+                        phase5CurrentRotation += 1.57079632679;
+                    }
+                    phase5CurrentRotation += 0.3;
+                }
+                if (stepsElapsed % 18 == 0) {
+                    for (int k = -1; k <=1; k += 2) {
+                        for (int j = -1; j <= 1; j += 2) {
+                            const Vector2 shotDirection = Vector2Rotate(
+                                Vector2Normalize(Vector2(std::sin(stepsElapsed % 240 * 0.0628318530718) * 0.1, j)),
+                                phase3CurrentRotation);
+                            radialBulletPool->spawn()
+                            .spawn(0.8f, k * -0.001f, Vector2Add(position, shotDirection * 3),shotDirection,{150, 50, 255, 255});
+                            radialBulletPool->spawn()
+                            .spawn(0.8f, k * -0.001f, Vector2Add(position, shotDirection * 3),Vector2Rotate(shotDirection, 1.57079632679),{150, 50, 255, 255});
+                            simpleBullet1VariableSpeedPool->spawn()
+                            .spawn(0.8f, Vector2Add(position, shotDirection * 3),shotDirection,{150, 50, 255, 255});
+                            simpleBullet1VariableSpeedPool->spawn()
+                            .spawn(0.8f, Vector2Add(position, shotDirection * 3),Vector2Rotate(shotDirection, 1.57079632679),{150, 50, 255, 255});
+                            phase3CurrentRotation -= 0.032f;
+                        }
+                    }
+                }
+
+                if (stepsElapsed % 120 == 0)
+                {
+                    phase4CurrentRotation = RNGHandler::GetSeed() % 200 * 0.0005f;
+                    for (int j = -1; j <= 1; j += 2)
+                    {
+                        for (int i = 0; i < 6; i++) {
+                            const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, 1)), phase4CurrentRotation);
+                            const Color bulletColour = {static_cast<u_char>(150 - i * 5), static_cast<u_char>(100 + i * 25), 50, 255};
+                            radialBulletPool->spawn().spawn(0.5f, j * (0.01f - i * 0.0005f), position, shotDirection, bulletColour);
+                            phase4CurrentRotation += 1.0471975512;
+                        }
+                    }
+                }
                 checkPlayerCollision();
                 if (checkPlayerBulletCollision())
                     takeDamage();

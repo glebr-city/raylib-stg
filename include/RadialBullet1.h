@@ -13,6 +13,9 @@ class RadialBullet1 : public SimpleBullet1VariableSpeed
     uint stepsElapsed = 0;
     Vector2 pivotPosition{};
     public:
+    RadialBullet1() {
+        grazeValue = 60;
+    }
     virtual void spawn(const float _speed, const float _angularSpeed, const Vector2 pos, const Vector2 dir, const Color col)
     {
         SimpleBullet1VariableSpeed::spawn(_speed, pos, dir, col);

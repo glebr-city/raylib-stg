@@ -8,7 +8,7 @@
 
 class Boss3Phase4 : public Boss3Phase1
 {
-    static constexpr int PHASE_4_HEALTH = 150;
+    static constexpr int PHASE_4_HEALTH = 120;
     static constexpr int PHASE_4_TIME = 4800;
     static constexpr Boss3::BOSS_3_PHASES PHASE_4_BOSS_PHASE = Boss3::PHASE_4;
 public:
