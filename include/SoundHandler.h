@@ -16,6 +16,8 @@ class SoundData;
 typedef enum
 {
     THUMP_1 = 0,
+    THUMP_2,
+    THUMP_3,
     HUM_1,
     SLIDE_1,
     SLIDE_2,
@@ -35,6 +37,8 @@ typedef enum
     CLICK_1,
     MAGIC_1,
     PLAYER_RESURRECTION,
+    FINGER_RUB,
+    FINGER_RUB_STRETCHED,
 
     SOUND_COUNT
 } SOUNDS;
@@ -50,6 +54,8 @@ private:
     {
         sounds.reserve(SOUND_COUNT);
         sounds.emplace_back("resources/sounds/thump1.mp3");
+        sounds.emplace_back("resources/sounds/thump2.mp3");
+        sounds.emplace_back("resources/sounds/thump3.mp3");
         sounds.emplace_back("resources/sounds/hum1.mp3");
         sounds.emplace_back("resources/sounds/slide1.mp3");
         sounds.emplace_back("resources/sounds/slide2.mp3");
@@ -69,6 +75,8 @@ private:
         sounds.emplace_back("resources/sounds/click1.mp3");
         sounds.emplace_back("resources/sounds/magic1.mp3");
         sounds.emplace_back("resources/sounds/playerResurrection.mp3");
+        sounds.emplace_back("resources/sounds/fingerRub.mp3");
+        sounds.emplace_back("resources/sounds/fingerRubStretched.mp3");
     }
     static void SetAllSoundVolume(float v); //It doesn't seem to work?
     static void SetAllSoundPause(bool p);

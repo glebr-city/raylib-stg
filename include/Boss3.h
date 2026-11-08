@@ -106,7 +106,7 @@ private:
             case PRE_PHASE_5:
                 phase5CurrentOffsetDirection = {0, -1};
                 break;
-            case PHASE_5:
+        case PHASE_5:
                 phase3CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
                 phase5CurrentOffsetDirection = {0, -1};
                 phase5CurrentRotation = (RNGHandler::GetSeed() % 354) * 0.001f;
@@ -146,7 +146,11 @@ public:
                 return true;
             case PHASE_1:
                 if (stepsElapsed % 130 < 110) {
+                    if (stepsElapsed % 130 == 0)
+                        SoundHandler::PlaySound(SOUNDS::FINGER_RUB_STRETCHED);
                     if (stepsElapsed % 3 == 0) {
+                        if (stepsElapsed % 6 == 0)
+                            SoundHandler::PlaySound(THUMP_3);
                         const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, 1)), phase1CurrentRotation);
                         for (int i = 0; i < 5; i++) {
                             const Color bulletColour = {static_cast<u_char>(i * 30), static_cast<u_char>(i * 30), 255, 255};
@@ -155,6 +159,7 @@ public:
                         phase1CurrentRotation += 0.212930168743;
                     }
                 } else if (stepsElapsed % 130 == 120) {
+                    SoundHandler::PlaySound(SLIDE_1);
                     const Vector2 startingVector = Vector2Rotate({0, 1}, (RNGHandler::GetSeed() % 1000 - 500) * 0.0003);
                     for (int k = 0; k < 2; k++) {
                         for (int i = -1; i < 2; i++) {
@@ -171,6 +176,8 @@ public:
                 return true;
             case PHASE_2:
                     if (stepsElapsed % 40 == 0) {
+                        SoundHandler::PlaySound(THUMP_1);
+                        SoundHandler::PlaySound(BANG_2);
                         Vector2 playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
                         const Vector2 shotDirection = Vector2Normalize({playerPos.x - position.x, playerPos.y - position.y});
                         const Vector2 sidewaysVector = Vector2Rotate(shotDirection, 1.57079632679);
@@ -216,6 +223,8 @@ public:
                         phase3FiredBullets.erase(phase3FiredBullets.begin() + firedBullet);
                 }
                 if (stepsElapsed % 4 == 0) {
+                    if (stepsElapsed % 8 == 0)
+                        SoundHandler::PlaySound(CLICK_1);
                     for (int j = -1; j <= 1; j += 2) {
                         const Vector2 shotDirection = Vector2Rotate(
                             Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, j)),
@@ -249,6 +258,7 @@ public:
                 position = Vector2MoveTowards(position, phase4MovementTarget, 2);
                 if (stepsElapsed % 900 == 750 || stepsElapsed % 900 == 800)
                 {
+                    SoundHandler::PlaySound(FINGER_RUB);
                     if (stepsElapsed % 900 == 800)
                         phase4CounterClockwise = !phase4CounterClockwise;
                     phase4CurrentRotation = RNGHandler::GetSeed() % 200 * 0.0005f;
@@ -277,6 +287,7 @@ public:
                     phase4MovementVector = {};
                 if (stepsElapsed % 200 < 110) {
                     if (stepsElapsed % 10 == 0) {
+                        SoundHandler::PlaySound(SOUNDS::BANG_1);
                         float shotRotation = std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1;
                         if (phase4CounterClockwise)
                             shotRotation *= -1;
@@ -300,16 +311,13 @@ public:
                     takeDamage();
                 return true;
             case PRE_PHASE_5:
-                if (Vector2DistanceSqr(position, {60, 90}) > 1) {
                     position = Vector2MoveTowards(position, Vector2Add({60, 90}, phase5CurrentOffsetDirection * phase5OffsetDistance), 1);
-                } else {
-                    position = {60, 90};
-                }
                 return true;
-            case PHASE_5:
+        case PHASE_5:
                 phase5CurrentOffsetDirection = Vector2Rotate(phase5CurrentOffsetDirection, -0.007f);
                 position = Vector2Add({60, 90}, phase5CurrentOffsetDirection * phase5OffsetDistance);
                 if (stepsElapsed % 120 == 50) {
+                    SoundHandler::PlaySound(SOUNDS::BANG_1);
                     for (int j = 0; j < 4; j++) {
                         const Vector2 shotDirection = Vector2Rotate(
                             Vector2Normalize(Vector2(std::sin(stepsElapsed % 120 * 0.0628318530718) * 0.1, 1)),
@@ -326,6 +334,7 @@ public:
                     phase5CurrentRotation += 0.3;
                 }
                 if (stepsElapsed % 18 == 0) {
+                    SoundHandler::PlaySound(CLICK_1);
                     for (int k = -1; k <=1; k += 2) {
                         for (int j = -1; j <= 1; j += 2) {
                             const Vector2 shotDirection = Vector2Rotate(
@@ -346,6 +355,7 @@ public:
 
                 if (stepsElapsed % 120 == 0)
                 {
+                    SoundHandler::PlaySound(SOUNDS::SLIDE_2);
                     phase4CurrentRotation = RNGHandler::GetSeed() % 200 * 0.0005f;
                     for (int j = -1; j <= 1; j += 2)
                     {
@@ -370,7 +380,8 @@ public:
         drawnColour = WHITE;
         if (--currentFlashDuration > 0 && GlobalVariables::currentStep() % 61 > 45)
             drawnColour = RED;
-        SpriteHandler::QueueMyStaticSprite({.i=BOSS_3_BASE, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i=BOSS_3_TENDRILS, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour});
+        SpriteHandler::QueueMyAnimatedSprite({.i=BOSS_3_BASE, .pos=position, .yOffset=baseSpriteYOffset, .l = LAYER_GROUNDED, .col = drawnColour});
     }
 
     void SetPhase(const BOSS_3_PHASES _newPhase)
