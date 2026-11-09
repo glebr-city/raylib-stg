@@ -18,8 +18,8 @@ public:
     {
         BackgroundHandler::SetBackgroundSprite(defaultBackgroundSprite);
         BackgroundHandler::SetScrollVector(defaultScrollVector);
-        bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(200);
-        bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(200);
+        bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(2000);
+        bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(2000);
 
         enemy1_2BulletPool = std::make_shared<PoolingVector<Enemy1_2Bullet1>>(200);
         enemy1_2BulletPool2 = std::make_shared<PoolingVector<Enemy1_2Bullet2>>(200);

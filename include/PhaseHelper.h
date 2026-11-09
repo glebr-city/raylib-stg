@@ -53,6 +53,7 @@ class PhaseHelper : public StepThinker {
         STATIC_SPRITES defaultBackgroundSprite = DEFAULT_BACKGROUND; //Used when starting from a specific stage.
         Vector2 defaultBackgroundPosition{}; //Scrolling for the background and grounded enemies!
         Vector2 defaultScrollVector{}; //Scrolling for the background and grounded enemies!
+
         u_int stepsElapsed = 0;
 
     public:

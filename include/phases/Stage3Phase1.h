@@ -16,7 +16,8 @@ class Stage3Phase1 : public PhaseHelper
     std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>> enemy2_2Bullet1Pool;
     std::shared_ptr<PoolingVector<SimpleBullet2Fast>> enemy1_3Bullet1Pool;
     public:
-    Stage3Phase1() : PhaseHelper("Stage3Phase1", {}, {0, -0.2f}, STAGE_3_BACKGROUND)
+    static constexpr Vector2 STAGE_3_DEFAULT_SCROLL = {0.2f, - 0.2f};
+    Stage3Phase1() : PhaseHelper("Stage3Phase1", {}, STAGE_3_DEFAULT_SCROLL, DEFAULT_BACKGROUND)
     {
         BackgroundHandler::SetBackgroundSprite(defaultBackgroundSprite);
         BackgroundHandler::SetBackgroundPosition({0, 0});

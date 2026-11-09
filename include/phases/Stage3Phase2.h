@@ -16,7 +16,7 @@ class Stage3Phase2 : public PhaseHelper {
     std::shared_ptr<PoolingVector<Enemy1_2Bullet1>> enemy1_2BulletPool;
     std::shared_ptr<PoolingVector<Enemy1_2Bullet2>> enemy1_2BulletPool2;
 public:
-    Stage3Phase2() : PhaseHelper("Stage3Phase2", {}, {0, -0.2f}, STAGE_3_BACKGROUND) {
+    Stage3Phase2() : PhaseHelper("Stage3Phase2", {}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL, DEFAULT_BACKGROUND) {
         BackgroundHandler::SetBackgroundSprite(defaultBackgroundSprite);
         BackgroundHandler::SetScrollVector(defaultScrollVector);
         homingBulletPool = std::make_shared<PoolingVector<HomingBullet>>(50);

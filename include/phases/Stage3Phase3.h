@@ -16,7 +16,7 @@ class Stage3Phase3 : public PhaseHelper {
     int enemy1_4ToKillForBonusWaveRight = 2;
     static constexpr u_int wave2Delay = 300;
     public:
-    Stage3Phase3() : PhaseHelper("Stage3Phase3", {}, {0, -0.2f}, STAGE_3_BACKGROUND) {
+    Stage3Phase3() : PhaseHelper("Stage3Phase3", {}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL, DEFAULT_BACKGROUND) {
         enemy2Bullet1Pool = std::make_shared<PoolingVector<Enemy2Bullet1>>(300);
         homingBulletPool = std::make_shared<PoolingVector<HomingBullet>>(50);
         enemy1_2BulletPool = std::make_shared<PoolingVector<Enemy1_2Bullet1>>(100);

@@ -40,6 +40,7 @@ typedef enum {
     ENEMY_1_4_ORB,
     BOSS_3_BASE,
     BOSS_3_TENDRILS,
+    STAGE_3_BACKGROUND,
 
     ANIMATED_SPRITE_COUNT,
 } ANIMATED_SPRITES;
@@ -63,7 +64,6 @@ typedef enum {
     BOSS_2_CROSS_GLOW,
     BOSS_2_SUPER_CROSS_GLOW,
     BOSS_2_EXPLOSION,
-    STAGE_3_BACKGROUND,
     ENEMY_2,
     ENEMY_2_2,
 
@@ -157,6 +157,7 @@ private:
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/enemy1_4OrbSpriteSheet.png"), Rectangle {0,0,6,6}, 6}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/boss3BaseSpriteSheet.png"), Rectangle {0,0,26,32}, 6}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/boss3TendrilsSpriteSheet.png"), Rectangle {0,0,26,32}, 12}),
+        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite {LoadTexture("resources/sprites/stage3BackgroundSpriteSheet.png"), Rectangle {0,0,360,360}, 120}),
 
    };
     staticSprites = {
@@ -178,7 +179,6 @@ private:
         std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss2CrossGlow.png"), {5,7}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss2SuperCrossGlow.png"), {5,5}}),
         std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss2ExplosionSpriteSheet.png"), {62,93}}),
-        std::make_unique<MyStaticSprite>(MyStaticSprite {LoadTexture("resources/sprites/stage3Background.png"), Vector2{0, 0}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/enemy2SpriteSheet.png"), Vector2{14,11}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/enemy2_2SpriteSheet.png"), Vector2{14,14}}),
     };

@@ -67,7 +67,7 @@ private:
         } else if (elapsedSteps % 10 == 7)
         {
             bulletSpawnPos = {position.x + 7, position.y - 5};
-            bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({1, -1 + -elapsedStepsOffsetThing}), RED);
+            //bullet2Pool->spawn().spawn(bulletSpawnPos, Vector2Normalize({1, -1 + -elapsedStepsOffsetThing}), RED);
         }
 
         if (elapsedSteps % currentState.fireRate == 0)
