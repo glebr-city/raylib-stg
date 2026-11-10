@@ -4,24 +4,40 @@
 
 #ifndef RAYLIB_STG_BACKGROUNDHANDLER_H
 #define RAYLIB_STG_BACKGROUNDHANDLER_H
+#include <cstdint>
+
+#include "Background.h"
 #include "raylib/raylib.h"
 #include "raymath.h"
+#include "Spawnable.h"
 #include "SpriteHandler.h"
+#include "StepThinker.h"
+
+
 
 class BackgroundHandler
 {
 private:
-    static STATIC_SPRITES backgroundSprite;
+    static std::unique_ptr<Background> currentBackground;
+    static BACKGROUNDS currentBackgroundIndex;
     static Vector2 currentScrollVector; //Scrolling for the background and grounded enemies!
     static Vector2 currentBackgroundPosition;
+    static const std::array<BackgroundRef, BACKGROUND_COUNT> backgrounds;
+
 public:
+    static BackgroundRef GetBackground(const BACKGROUNDS _desiredBackground)
+    {
+        return backgrounds[_desiredBackground];
+    }
     static STATIC_SPRITES GetBackgroundSprite()
     {
-        return backgroundSprite;
+        return currentBackground->GetBackgroundSprite();
     }
-    static void SetBackgroundSprite(const STATIC_SPRITES newBackgroundSprite)
+    static void SetBackground(const BACKGROUNDS _desiredBackground)
     {
-        backgroundSprite = newBackgroundSprite;
+        currentBackgroundIndex = _desiredBackground;
+        Background* newBackground = GetBackground(_desiredBackground).initBackground();
+        currentBackground = std::unique_ptr<Background>(newBackground);
     }
     static Vector2 GetBackgroundPosition()
     {

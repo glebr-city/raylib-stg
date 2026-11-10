@@ -13,7 +13,6 @@ TestPhase1::TestPhase1() : PhaseHelper("TestPhase1", {0, 0.2f}) {
     darkPurplePool = std::make_shared<PoolingVector<SimpleBullet1>>(2000, 5);
     GlobalPools::AddPools({movingDarkPurplePool, darkPurplePool});
     BackgroundHandler::SetScrollVector(defaultScrollVector);
-    BackgroundHandler::SetBackgroundSprite({});
 }
 
 bool TestPhase1::doPhysics() {

@@ -20,7 +20,7 @@ private:
     std::shared_ptr<PoolingVector<SimpleBullet1>> bigEnemy1Bullet2Pool;
     bool switchEarly = false;
 public:
-    DiagonalTankPhase1() : PhaseHelper("Diagonal Tanks", {}, {0, -0.2f}, DIAGONAL_TANK_BACKGROUND)
+    DiagonalTankPhase1() : PhaseHelper("Diagonal Tanks", {}, {0, -0.2f}, BACKGROUND_STAGE_1)
     {
         diagonalTankBulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(55);
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30);
@@ -34,7 +34,7 @@ public:
 
     void InitPhase() override
     {
-        BackgroundHandler::SetBackgroundSprite(DIAGONAL_TANK_BACKGROUND);
+        BackgroundHandler::SetBackground(BACKGROUND_STAGE_1);
         clearBullets();
         std::vector<Enemy1State> enemy1StateVector = {{.desiredPos = {100, 20}, .speed = 100,}, {.desiredPos = {50, 20}, .speed = 100, .fireRate = 30}, {.desiredPos = {190, 20}, .speed = 100, .fireRate = 30, .despawn = true},};
         std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);

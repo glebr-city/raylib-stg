@@ -7,6 +7,7 @@
 #include <array>
 #include <utility>
 
+#include "Background.h"
 #include "GlobalPools.h"
 #include "Player.h"
 #include "PoolingVector.h"
@@ -50,6 +51,7 @@ class PhaseHelper : public StepThinker {
         const std::string phaseName; //Phase name. For debug purposes?
         bool playerHit = false;
         int currentWaitSteps = 0; //Don't spawn bullets for a while after a hyper.
+        BACKGROUNDS background = BACKGROUNDS::BACKGROUND_STAGE_1;
         STATIC_SPRITES defaultBackgroundSprite = DEFAULT_BACKGROUND; //Used when starting from a specific stage.
         Vector2 defaultBackgroundPosition{}; //Scrolling for the background and grounded enemies!
         Vector2 defaultScrollVector{}; //Scrolling for the background and grounded enemies!
@@ -57,11 +59,10 @@ class PhaseHelper : public StepThinker {
         u_int stepsElapsed = 0;
 
     public:
-        PhaseHelper(std::string _phaseName = "Unnamed Phase", const Vector2 _defaultBackgroundPosition = {}, const Vector2 _defaultScrollVector = {}, const STATIC_SPRITES _defaultBackgroundSprite = DEFAULT_BACKGROUND) : phaseName(std::move(_phaseName))
+        PhaseHelper(std::string _phaseName = "Unnamed Phase", const Vector2 _defaultBackgroundPosition = {}, const Vector2 _defaultScrollVector = {}, const BACKGROUNDS _background = BACKGROUND_STAGE_1) : phaseName(std::move(_phaseName)), background(_background)
         {
             defaultBackgroundPosition = _defaultBackgroundPosition;
             defaultScrollVector = _defaultScrollVector;
-            defaultBackgroundSprite = _defaultBackgroundSprite;
         }
 
         virtual void InitPhase(){} //Called late into switching phases / restarting the game.
@@ -144,6 +145,11 @@ class PhaseHelper : public StepThinker {
     virtual void tickStep()
     {
         stepsElapsed++;
+    }
+
+    [[nodiscard]] BACKGROUNDS GetBackground() const
+    {
+        return background;
     }
 
     [[nodiscard]] STATIC_SPRITES getDefaultBackgroundSprite() const

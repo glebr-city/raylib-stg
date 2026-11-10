@@ -143,6 +143,8 @@ add_executable(raylib_stg src/main.cpp
         include/Boss3ColourShiftBullet.h
         include/RadialBullet1.h
         include/phases/Boss3Phase5.h
+        include/OtherBackgrounds.h
+        include/Background.h
 )
 
 target_sources(raylib_stg

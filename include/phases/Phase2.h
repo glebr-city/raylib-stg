@@ -20,14 +20,14 @@ private:
     bool bigEnemySpawned = false;
     bool extraBigEnemyAlive = false;
 public:
-    Phase2() : PhaseHelper("Phase2", {0, -240}, {0, -0.2f}, DIAGONAL_TANK_BACKGROUND)
+    Phase2() : PhaseHelper("Phase2", {0, -240}, {0, -0.2f}, BACKGROUND_STAGE_1)
     {
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(30);
         streetlightBulletPool = std::make_shared<PoolingVector<SimpleBullet1Fast>>(60);
         bigEnemy1Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet3>>(100);
         bigEnemy1Bullet2Pool = std::make_shared<PoolingVector<SimpleBullet1>>(100);
         GlobalPools::AddPools({enemy1BulletPool, streetlightBulletPool, bigEnemy1Bullet1Pool, bigEnemy1Bullet2Pool});
-        BackgroundHandler::SetBackgroundSprite(defaultBackgroundSprite);
+        BackgroundHandler::SetBackground(background);
         BackgroundHandler::SetScrollVector(defaultScrollVector);
 
     }

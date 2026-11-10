@@ -43,7 +43,7 @@ private:
         HUDHandler::endBoss();
         GlobalVariables::SetCurrentPhase(desiredPhase);
         BackgroundHandler::SetBackgroundPosition(GlobalVariables::GetCurrentPhase()->getDefaultBackgroundPosition());
-        BackgroundHandler::SetBackgroundSprite(GlobalVariables::GetCurrentPhase()->getDefaultBackgroundSprite());
+        BackgroundHandler::SetBackground(GlobalVariables::GetCurrentPhase()->GetBackground());
         BackgroundHandler::SetScrollVector(GlobalVariables::GetCurrentPhase()->getDefaultScrollVector());
         GlobalVariables::GetCurrentPhase()->InitPhase();
     }

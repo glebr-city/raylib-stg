@@ -39,7 +39,7 @@ private:
         SpawnedEnemies::spawnEnemy(boss3);
     }
 public:
-    explicit Boss3Phase1(std::string _phaseName = "Boss3Phase1", const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss3::BOSS_3_PHASES _bossPhase = PHASE_1_BOSS_PHASE, const int _spriteDamage = 0, const Boss3::BOSS_3_PHASES _preFightPhase = Boss3::PRE_FIGHT) : PhaseHelper(std::move(_phaseName), {0, -680}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL, DEFAULT_BACKGROUND)
+    explicit Boss3Phase1(std::string _phaseName = "Boss3Phase1", const int _maxHealth = PHASE_1_HEALTH, const int _maxTimer = PHASE_1_TIME, const Boss3::BOSS_3_PHASES _bossPhase = PHASE_1_BOSS_PHASE, const int _spriteDamage = 0, const Boss3::BOSS_3_PHASES _preFightPhase = Boss3::PRE_FIGHT) : PhaseHelper(std::move(_phaseName), {0, -680}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL, BACKGROUND_STAGE_3)
     {
         maxHealth = _maxHealth;
         maxTimer = _maxTimer;

@@ -61,13 +61,13 @@ private:
         SpawnedEnemies::spawnEnemy(std::move(newEnemy2));
     }
 public:
-    Stage2Phase4() : PhaseHelper("Stage2Phase4", {0, -890}, {0, -0.2f}, STAGE_2_BACKGROUND)
+    Stage2Phase4() : PhaseHelper("Stage2Phase4", {0, -890}, {0, -0.2f}, BACKGROUND_STAGE_2)
     {
         enemy1_2BulletPool = std::make_shared<PoolingVector<Enemy1_2Bullet1>>(120);
         enemy1_2BulletPool2 = std::make_shared<PoolingVector<Enemy1_2Bullet2>>(120);
         enemy1BulletPool = std::make_shared<PoolingVector<SimpleBullet2>>(120);
         streetlightBulletPool = std::make_shared<PoolingVector<SimpleBullet1Fast>>(60);
-        BackgroundHandler::SetBackgroundSprite(defaultBackgroundSprite);
+        BackgroundHandler::SetBackground(background);
         BackgroundHandler::SetScrollVector(defaultScrollVector);
 
         bigEnemy2Bullet2Pool = std::make_shared<PoolingVector<AcceleratingBullet1>>(300);

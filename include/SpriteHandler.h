@@ -99,13 +99,13 @@ struct MyStaticSprite{
 };
 
 struct SpriteParametres {
-    int i; //The index of the sprite in its respective array.
+    int i{}; //The index of the sprite in its respective array.
     Vector2 pos = Vector2(0, 0);
     int yOffset = 0; //The yOffset on the sprite sheet, measured in rows.
     LAYERS l = LAYER_BULLET; //The sprite's layer; 0 is the background.
     Color col = WHITE;
     bool corner = false; //centre pivot by default, otherwise, top-left corner.
-    Rectangle rect; //Optional!
+    Rectangle rect{}; //Optional!
     bool flashing = false; //For damage animations!
 };
 
