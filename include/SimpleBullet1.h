@@ -31,6 +31,7 @@ public:
     }
     virtual void spawn(const Vector2 pos, const Vector2 dir, const Color col)
     {
+        position = Vector2Add({}, {});
         position = pos;
         direction = dir;
         hasBeenGrazed = false;

@@ -83,6 +83,7 @@ public:
         if (shouldRestartGame)
             actuallyRestartGame();
         BackgroundHandler::ScrollBackground();
+        BackgroundHandler::DoPreStep();
         RNGHandler::StepSeed();
         ScoreItemHandler::doPreStep();
         EphemeraHandler::doPreStep();

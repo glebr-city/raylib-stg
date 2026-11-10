@@ -15,7 +15,10 @@ class Stage2Background : public Background
 };
 class Stage3Background : public Background
 {
-    public:
-    Stage3Background() : Background(DEFAULT_BACKGROUND) {};
+public:
+    Stage3Background() : Background(DEFAULT_BACKGROUND, std::vector<BackgroundElementBase*>({
+        new AnimatedBackgroundElement(STAGE_3_BACKGROUND)}))
+    {
+    };
 };
 #endif //RAYLIB_STG_OTHERBACKGROUNDS_H

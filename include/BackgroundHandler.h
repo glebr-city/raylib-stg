@@ -4,15 +4,8 @@
 
 #ifndef RAYLIB_STG_BACKGROUNDHANDLER_H
 #define RAYLIB_STG_BACKGROUNDHANDLER_H
-#include <cstdint>
-
 #include "Background.h"
-#include "raylib/raylib.h"
 #include "raymath.h"
-#include "Spawnable.h"
-#include "SpriteHandler.h"
-#include "StepThinker.h"
-
 
 
 class BackgroundHandler
@@ -69,7 +62,13 @@ public:
 
     static void ScrollBackground()
     {
+        currentBackground->Scroll(currentScrollVector);
         currentBackgroundPosition = Vector2Add(currentBackgroundPosition, currentScrollVector);
+    }
+
+    static void DoPreStep()
+    {
+        currentBackground->DoPreStep();
     }
 };
 #endif //RAYLIB_STG_BACKGROUNDHANDLER_H
