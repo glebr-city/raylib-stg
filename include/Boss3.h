@@ -136,8 +136,6 @@ public:
 
     bool doPhysics() override {
         stepsElapsed++;
-        const Vector2 _scrollVector = BackgroundHandler::GetScrollVector();
-        position -= _scrollVector;
         collider.x = position.x - (collider.width / 2);
         collider.y = position.y - (collider.height / 2);
         switch (bossPhase)

@@ -107,7 +107,7 @@ private:
             }
     }
 public:
-    Stage3Phase5() : PhaseHelper("Stage3Phase5", {}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL)
+    Stage3Phase5() : PhaseHelper("Stage3Phase5", {}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL, BACKGROUND_STAGE_3)
     {
         enemy2_2Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed>>(400);
         enemy1_3Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet2Fast>>(127);

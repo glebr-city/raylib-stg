@@ -89,7 +89,7 @@ private:
         SpawnedEnemies::spawnEnemy(std::make_unique<Enemy2_2>(std::move(newEnemy2_2)));
     }
 public:
-    Stage3Phase4() : PhaseHelper("Stage3Phase4", {}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL) {
+    Stage3Phase4() : PhaseHelper("Stage3Phase4", {}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL, BACKGROUND_STAGE_3) {
         homingBulletPool = std::make_shared<PoolingVector<HomingBullet>>(50);
         enemy2_2Bullet1Pool = std::make_shared<PoolingVector<SimpleBullet1VariableSpeed>>(400);
         bigEnemy2Bullet2Pool = std::make_shared<PoolingVector<AcceleratingBullet1>>(150);

@@ -63,6 +63,69 @@ public:
     };
 };
 
+class AnimatedBackgroundSprite : public BackgroundElementBase
+{
+private:
+    static constexpr Vector2 screenCentre = {60, 90};
+protected:
+    const ANIMATED_SPRITES sprite;
+    const Vector2 spriteSize{};
+    const int yOffset;
+public:
+    AnimatedBackgroundSprite(const ANIMATED_SPRITES _sprite = BULLET_1_MONOCHROME, const int _yOffset = 0, const Vector2 _pos = screenCentre, const Vector2 spriteSize = {}, const LAYERS _layer = LAYER_BACKGROUND, const float _scrollSpeedFactor = 1.0f)
+    : BackgroundElementBase(_pos, _layer, _scrollSpeedFactor), sprite(_sprite), spriteSize(spriteSize), yOffset(_yOffset)
+    {};
+    void DoPreStep() override
+    {
+        const Vector2 offsetFromCentre = Vector2Subtract(position, screenCentre);
+        const float xOffsetFromCentre = std::trunc(offsetFromCentre.x / spriteSize.x);
+        const float yOffsetFromCentre = std::trunc(offsetFromCentre.y / spriteSize.y);
+        position.x -= xOffsetFromCentre * spriteSize.x;
+        position.y -= yOffsetFromCentre * spriteSize.y;
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                const Vector2 drawPosition = {position.x + spriteSize.x * x, position.y + spriteSize.y * y};
+                const SpriteParametres opts = {sprite, drawPosition, yOffset, layer};
+                SpriteHandler::QueueMyAnimatedSprite(opts);
+            }
+        }
+    };
+};
+
+class StaticBackgroundSprite : public BackgroundElementBase
+{
+private:
+    static constexpr Vector2 screenCentre = {60, 90};
+protected:
+    const STATIC_SPRITES sprite;
+    const Vector2 spriteSize{};
+    const int yOffset;
+public:
+    StaticBackgroundSprite(const STATIC_SPRITES _sprite = EXPLOSION_SMALL, const int _yOffset = 0, const Vector2 _pos = screenCentre, const Vector2 spriteSize = {}, const LAYERS _layer = LAYER_BACKGROUND, const float _scrollSpeedFactor = 1.0f)
+    : BackgroundElementBase(_pos, _layer, _scrollSpeedFactor), sprite(_sprite), spriteSize(spriteSize), yOffset(_yOffset)
+    {};
+    void DoPreStep() override
+    {
+        const Vector2 offsetFromCentre = Vector2Subtract(position, screenCentre);
+        const float xOffsetFromCentre = std::trunc(offsetFromCentre.x / spriteSize.x);
+        const float yOffsetFromCentre = std::trunc(offsetFromCentre.y / spriteSize.y);
+        position.x -= xOffsetFromCentre * spriteSize.x;
+        position.y -= yOffsetFromCentre * spriteSize.y;
+        for (int x = -1; x <= 1; x++)
+        {
+            for (int y = -1; y <= 1; y++)
+            {
+                const Vector2 drawPosition = {position.x + spriteSize.x * x, position.y + spriteSize.y * y};
+                const SpriteParametres opts = {sprite, drawPosition, yOffset, layer};
+                SpriteHandler::QueueMyStaticSprite(opts);
+            }
+        }
+    };
+};
+
+
 class StaticBackgroundElement : public BackgroundElementBase
 {
 protected:

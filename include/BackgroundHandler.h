@@ -28,6 +28,8 @@ public:
     }
     static void SetBackground(const BACKGROUNDS _desiredBackground)
     {
+        if (currentBackgroundIndex == _desiredBackground)
+            return;
         currentBackgroundIndex = _desiredBackground;
         Background* newBackground = GetBackground(_desiredBackground).initBackground();
         currentBackground = std::unique_ptr<Background>(newBackground);

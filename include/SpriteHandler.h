@@ -66,6 +66,7 @@ typedef enum {
     BOSS_2_EXPLOSION,
     ENEMY_2,
     ENEMY_2_2,
+    STAGE_3_BACKGROUND_CLOUDS,
 
     STATIC_SPRITE_COUNT
 } STATIC_SPRITES;
@@ -75,6 +76,7 @@ inline constexpr int LAYER_COUNT = 9;
 typedef enum
 {
     LAYER_BACKGROUND = 0,
+    LAYER_BACKGROUND_HIGH,
     LAYER_GROUNDED,
     LAYER_ENEMY,
     LAYER_PLAYER,
@@ -157,7 +159,7 @@ private:
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/enemy1_4OrbSpriteSheet.png"), Rectangle {0,0,6,6}, 6}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/boss3BaseSpriteSheet.png"), Rectangle {0,0,26,32}, 6}),
        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite{LoadTexture("resources/sprites/boss3TendrilsSpriteSheet.png"), Rectangle {0,0,26,32}, 12}),
-        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite {LoadTexture("resources/sprites/stage3BackgroundSpriteSheet.png"), Rectangle {0,0,360,360}, 120}),
+        std::make_unique<MyAnimatedSprite>(MyAnimatedSprite {LoadTexture("resources/sprites/stage3BackgroundSpriteSheet.png"), Rectangle {0,0,360,360}, 50}),
 
    };
     staticSprites = {
@@ -181,6 +183,7 @@ private:
         std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/boss2ExplosionSpriteSheet.png"), {62,93}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/enemy2SpriteSheet.png"), Vector2{14,11}}),
        std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/enemy2_2SpriteSheet.png"), Vector2{14,14}}),
+       std::make_unique<MyStaticSprite>(MyStaticSprite{LoadTexture("resources/sprites/stage3BackgroundCloudsSpriteSheet.png"), Vector2{360,360}}),
     };
 }
     static void DrawMyStaticSprite(const SpriteParametres& opts);
