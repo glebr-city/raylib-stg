@@ -18,6 +18,12 @@ private:
     static const std::array<BackgroundRef, BACKGROUND_COUNT> backgrounds;
 
 public:
+    static void InitBackground()
+    {
+        currentBackgroundIndex = BACKGROUND_STAGE_1;
+        Background* newBackground = GetBackground(BACKGROUND_STAGE_1).initBackground();
+        currentBackground = std::unique_ptr<Background>(newBackground);
+    }
     static BackgroundRef GetBackground(const BACKGROUNDS _desiredBackground)
     {
         return backgrounds[_desiredBackground];

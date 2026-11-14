@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.25)
+set(CMAKE_CXX_STANDARD 26)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 cmake_policy(SET CMP0076 NEW)
 project(raylib_stg)
 add_executable(raylib_stg src/main.cpp
@@ -146,6 +149,8 @@ add_executable(raylib_stg src/main.cpp
         include/OtherBackgrounds.h
         include/Background.h
         src/rini.cpp
+        include/GameInput.h
+        include/GameInput.h
 )
 
 target_sources(raylib_stg
@@ -153,8 +158,6 @@ target_sources(raylib_stg
         src/main.cpp
 )
 
-set(CMAKE_CXX_STANDARD 26)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 
@@ -170,6 +173,7 @@ target_include_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/include/raylib
 target_link_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/lib)
 
 target_link_libraries(raylib_stg PRIVATE libraylib.a)
+target_link_libraries(raylib_stg PRIVATE winmm)
 
 add_custom_command(TARGET raylib_stg PRE_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -184,4 +188,4 @@ target_link_options(raylib_stg PUBLIC
         -Wl,--gc-sections
 )
 
-target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=true)
+target_compile_definitions(raylib_stg PRIVATE DEBUG_BUILD=false)

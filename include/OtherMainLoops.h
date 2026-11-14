@@ -106,6 +106,7 @@ public:
         zoomFactor = GlobalVariables::GetZoomFactor();
         ConfigHandler::ReadFile();
         MenuHandler::InitMenus();
+        BackgroundHandler::InitBackground();
         //letterboxSize.x = static_cast<float>(resizeValues[1]);
         //letterboxSize.y = static_cast<float>(resizeValues[2]);
         GameHandler::RestartGame();

@@ -71,11 +71,11 @@ private:
 
         for (int i = 0; i < 5; i++)
         {
-            auto enemy1StateVector3 = std::vector{Enemy1State{.speed = 0, .duration = static_cast<uint>(920 + i * 120)}, {.desiredPos = {130, static_cast<float>(80 + i * 20)}, .speed = 60, .fireRate = 30, .despawn = true}};
+            auto enemy1StateVector3 = std::vector{Enemy1State{.speed = 0, .duration = static_cast<unsigned int>(920 + i * 120)}, {.desiredPos = {130, static_cast<float>(80 + i * 20)}, .speed = 60, .fireRate = 30, .despawn = true}};
             auto newEnemy1 = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector3);
             newEnemy1->spawn(Vector2(-10, static_cast<float>(i * 20)));
             SpawnedEnemies::spawnEnemy(std::move(newEnemy1));
-            auto enemy1StateVector3Mirrored = std::vector{Enemy1State{.speed = 0, .duration = static_cast<uint>(920 + i * 120)}, {.desiredPos = {-10, static_cast<float>(80 + i * 20)}, .speed = 60, .fireRate = 30, .despawn = true}};
+            auto enemy1StateVector3Mirrored = std::vector{Enemy1State{.speed = 0, .duration = static_cast<unsigned int>(920 + i * 120)}, {.desiredPos = {-10, static_cast<float>(80 + i * 20)}, .speed = 60, .fireRate = 30, .despawn = true}};
             auto newEnemy1Mirrored = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector3Mirrored);
             newEnemy1Mirrored->spawn(Vector2(130, static_cast<float>(i * 20)));
             SpawnedEnemies::spawnEnemy(std::move(newEnemy1Mirrored));

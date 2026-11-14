@@ -93,7 +93,7 @@ public:
         {
             for (int i = -1; i <= 1; i += 2)
             {
-                auto newEnemy1_2StateVector1 = std::vector{Enemy1State{.speed = 0, .duration = static_cast<uint>(800 + row * 100)}, {.desiredPos = {static_cast<float>(60 + (i * 50)), 150}, .speed = 70, .fireRate = static_cast<uint>(25 + row * 10), .despawn = false, .slowAtDesiredPos = false}, {.desiredPos = {static_cast<float>(60 + (i * 50)), 190}, .speed = 70, .despawn = true, .slowAtDesiredPos = false},};
+                auto newEnemy1_2StateVector1 = std::vector{Enemy1State{.speed = 0, .duration = static_cast<unsigned int>(800 + row * 100)}, {.desiredPos = {static_cast<float>(60 + (i * 50)), 150}, .speed = 70, .fireRate = static_cast<unsigned int>(25 + row * 10), .despawn = false, .slowAtDesiredPos = false}, {.desiredPos = {static_cast<float>(60 + (i * 50)), 190}, .speed = 70, .despawn = true, .slowAtDesiredPos = false},};
                 auto newEnemy1_2 = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, newEnemy1_2StateVector1);
                 newEnemy1_2->spawn(Vector2(60 + i * 50, -20));
                 SpawnedEnemies::spawnEnemy(std::move(newEnemy1_2));

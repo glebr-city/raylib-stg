@@ -28,6 +28,7 @@ public:
             rini_save(config, "config.ini");
             rini_unload(&config);
             WriteFile();
+            ReadFile();
             return;
         }
         GlobalVariables::SetRenderTextureFilter(rini_get_value(config, "screen_filter"));

@@ -33,7 +33,7 @@
 #include "phases/Stage3Phase5.h"
 
 #if DEBUG_BUILD
-u_int GlobalVariables::maxBullets = 0;
+unsigned int GlobalVariables::maxBullets = 0;
 #endif
 
 std::unique_ptr<PhaseHelper> GlobalVariables::currentPhase = nullptr;

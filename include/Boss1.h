@@ -38,16 +38,16 @@ private:
     BOSS_1_PHASES bossPhase = PRE_FIGHT;
     static constexpr std::array<Vector2, 11> smallPartOffsets = {
         Vector2{-38.0784, 7.98439},
-        Vector2(-34.6784, 13.0844),
-        Vector2(-30.4284, 18.1844),
-        Vector2(-20.2284, 21.5844),
-        Vector2(-11.7284, 20.7344),
-        Vector2(0, 20.7344),
-        Vector2(11.7284, 20.7344),
-        Vector2(20.2284, 21.5844),
-        Vector2(30.4284, 18.1844),
-        Vector2(34.6784, 13.0844),
-        Vector2(38.0784, 7.98439),
+        Vector2{-34.6784, 13.0844},
+        Vector2{-30.4284, 18.1844},
+        Vector2{-20.2284, 21.5844},
+        Vector2{-11.7284, 20.7344},
+        Vector2{0, 20.7344},
+        Vector2{11.7284, 20.7344},
+        Vector2{20.2284, 21.5844},
+        Vector2{30.4284, 18.1844},
+        Vector2{34.6784, 13.0844},
+        Vector2{38.0784, 7.98439},
     };
     unsigned int stepsElapsed = 0;
     uint8_t currentSmallPart = 0;
@@ -136,7 +136,7 @@ private:
                 {
                     //Vector2 direction = Vector2Rotate(Vector2(1, 0), PI/static_cast<float>(i));
                     const float j = i;
-                    const Vector2 direction = Vector2Rotate(Vector2Normalize(Vector2(j / halfOfShotNum, -0.5f - j / halfOfShotNum)), 0.75f);
+                    const Vector2 direction = Vector2Rotate(Vector2Normalize(Vector2{j / halfOfShotNum, -0.5f - j / halfOfShotNum}), 0.75f);
                     simpleBullet1SlowPool->spawn().spawn(spawnPos, direction, {255, 0, 0, 255});
                     simpleBullet1SlowPool->spawn().spawn(Vector2Add(spawnPos, direction * 10), direction, {200, 0, 0, 255});
                     simpleBullet1SlowPool->spawn().spawn(Vector2Add(spawnPos, direction * 20), direction, {145, 0, 0, 255});

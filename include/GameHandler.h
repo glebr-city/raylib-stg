@@ -19,7 +19,7 @@ class GameHandler {
     static bool shouldRestartGame;
     static bool shouldSwitchPhase;
     static PHASES desiredPhase;
-    static uint_fast8_t desiredStage;
+    static int desiredStage;
 private:
     static void actuallyRestartGame() {
         shouldRestartGame = false;
@@ -63,7 +63,7 @@ private:
         GlobalVariables::GetCurrentPhase()->InitPhase();
     }
 public:
-    static void RestartGame(const uint_fast8_t _desiredStage = 2, const uint_fast8_t _desiredPhaseIndex = 0) {
+    static void RestartGame(const int _desiredStage = 0, const int _desiredPhaseIndex = 0) {
         desiredStage = _desiredStage;
         GlobalVariables::SetCurrentStage(_desiredStage);
         desiredPhase = GlobalVariables::GetCurrentStage()->GetPhase(_desiredPhaseIndex);

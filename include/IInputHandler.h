@@ -8,36 +8,12 @@
 #include <string>
 #include <vector>
 
+#include "GameInput.h"
 #include "raylib.h"
 #include "string.h"
 
-struct MyKey
-{
-    KeyboardKey k = KEY_SPACE; //Keys (as on a keyboard).
-    bool d = false; //Down?
-    bool l = false; //Last frame, down?
-    bool md = false; //Menu, down?
-    bool ml = false; //Menu, last frame, down?
-    MyKey(KeyboardKey k = KEY_SPACE,
-    bool d = false,
-    bool l = false,
-    bool md = false,
-    bool ml = false);
-};
 
-struct MyButton
-{
-    GamepadButton b = GAMEPAD_BUTTON_RIGHT_FACE_DOWN; //Buttons (as on a gamepad controller).
-    bool d = false; //Down?
-    bool l = false; //Last frame, down?
-    bool md = false; //Menu, down?
-    bool ml = false; //Menu, last frame, down?
-    MyButton(GamepadButton b = GAMEPAD_BUTTON_RIGHT_FACE_DOWN,
-    bool d = false,
-    bool l = false,
-    bool md = false,
-    bool ml = false);
-};
+
 
 typedef enum
 {
@@ -53,15 +29,6 @@ typedef enum
 
     INPUT_COUNT
 } INPUTS;
-struct GameInput
-{
-    std::string name;
-    std::vector<MyKey> keys;
-    std::vector<MyButton> buttons;
-    GameInput(std::string name,
-    std::vector<MyKey> keys,
-    std::vector<MyButton> buttons);
-};
 class IInputHandler {
 public:
     virtual ~IInputHandler() = default;

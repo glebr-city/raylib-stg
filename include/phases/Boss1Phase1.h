@@ -41,7 +41,7 @@ private:
         auto _pool3 = std::make_shared<PoolingVector<Boss1FastBurstBullet>>(128);
         GlobalPools::AddPools({_pool1, _pool2, _pool3});
         boss1 = std::make_shared<Boss1>(_pool1, _pool2, _pool3);
-        boss1->spawn({.pos=BackgroundHandler::GetRelativePos(Vector2(60, -921.5)), .id = 201});
+        boss1->spawn({.pos=BackgroundHandler::GetRelativePos(Vector2{60, -921.5}), .id = 201});
         SpawnedEnemies::spawnEnemy(boss1);
     }
 public:

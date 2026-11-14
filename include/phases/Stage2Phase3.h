@@ -39,12 +39,12 @@ public:
 
         for (int i = 0; i < 5; i++)
         {
-            std::vector<Enemy1State> enemy1_2StateVector1 = {{.speed = 0, .duration = static_cast<uint>(1 + i * 120)}, {.desiredPos = {60, 30}, .speed = 70, .fireRate = 25, .slowAtDesiredPos = false}, {.desiredPos = {-10, 60}, .speed = 70, .fireRate = 25, .despawn = true, .slowAtDesiredPos = false},};
+            std::vector<Enemy1State> enemy1_2StateVector1 = {{.speed = 0, .duration = static_cast<unsigned int>(1 + i * 120)}, {.desiredPos = {60, 30}, .speed = 70, .fireRate = 25, .slowAtDesiredPos = false}, {.desiredPos = {-10, 60}, .speed = 70, .fireRate = 25, .despawn = true, .slowAtDesiredPos = false},};
             auto newEnemy1_2 = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1_2StateVector1);
             newEnemy1_2->spawn({.pos = {60, -20}});
             SpawnedEnemies::spawnEnemy(std::move(newEnemy1_2));
 
-            std::vector<Enemy1State> enemy1_2StateVector1Mirrored = {{.speed = 0, .duration = static_cast<uint>(61 + i * 120)}, {.desiredPos = {60, 30}, .speed = 70, .fireRate = 25, .slowAtDesiredPos = false}, {.desiredPos = {130, 60}, .speed = 70, .fireRate = 25, .despawn = true, .slowAtDesiredPos = false},};
+            std::vector<Enemy1State> enemy1_2StateVector1Mirrored = {{.speed = 0, .duration = static_cast<unsigned int>(61 + i * 120)}, {.desiredPos = {60, 30}, .speed = 70, .fireRate = 25, .slowAtDesiredPos = false}, {.desiredPos = {130, 60}, .speed = 70, .fireRate = 25, .despawn = true, .slowAtDesiredPos = false},};
             auto newEnemy1_2Mirrored = std::make_unique<Enemy1_2>(enemy1_2BulletPool, enemy1_2BulletPool2, enemy1_2StateVector1Mirrored);
             newEnemy1_2Mirrored->spawn({.pos = {60, -20}});
             SpawnedEnemies::spawnEnemy(std::move(newEnemy1_2Mirrored));
