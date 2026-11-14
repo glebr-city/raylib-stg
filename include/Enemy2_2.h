@@ -31,7 +31,7 @@ protected:
     }
 
     public:
-    Enemy2_2(const std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>>& _bullet1Pool, const std::vector<Enemy2State>& _stateVector, const uint _scoreValue = 500) : Enemy2Base(_stateVector, _scoreValue)
+    Enemy2_2(const std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>>& _bullet1Pool, const std::vector<Enemy2State>& _stateVector, const unsigned int _scoreValue = 500) : Enemy2Base(_stateVector, _scoreValue)
     {
         bullet1Pool = _bullet1Pool;
         health = Enemy2_2::getMaxHealth();
@@ -92,7 +92,7 @@ protected:
         }
     }
 
-    bool enterNewState(const u_int newStateIndex) override
+    bool enterNewState(const unsigned int newStateIndex) override
     {
         if (!Enemy2Base::enterNewState(newStateIndex))
             return false;

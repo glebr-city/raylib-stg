@@ -17,12 +17,12 @@ protected:
 
 public:
     using StepThinker::doPhysics;
-    AcceleratingBullet2(const Vector2 _pos = {}, const uint _grazeValue = 40) : SimpleBullet(_grazeValue, _pos, sprite, LAYER_BULLET_LOW), grazeValue(20)
+    AcceleratingBullet2(const Vector2 _pos = {}, const unsigned int _grazeValue = 40) : SimpleBullet(_grazeValue, _pos, sprite, LAYER_BULLET_LOW), grazeValue(20)
     {
         grazeValue = _grazeValue;
     };
 
-    AcceleratingBullet2(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const uint _grazeValue = 40) : SimpleBullet(grazeValue, pos)
+    AcceleratingBullet2(const Vector2 pos, const Vector2 dir, const Color col = GREEN, const unsigned int _grazeValue = 40) : SimpleBullet(grazeValue, pos)
     {
         direction = dir;
         color = col;

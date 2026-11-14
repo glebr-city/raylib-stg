@@ -6,9 +6,10 @@
 #define RAYLIB_STG_SPRITEHANDLER_H
 #include <array>
 #include <memory>
+#include <string>
 #include <vector>
 
-#include "raylib/raylib.h"
+#include "raylib.h"
 
 
 
@@ -102,7 +103,7 @@ struct MyStaticSprite{
 
 struct SpriteParametres {
     int i{}; //The index of the sprite in its respective array.
-    Vector2 pos = Vector2(0, 0);
+    Vector2 pos = Vector2{};
     int yOffset = 0; //The yOffset on the sprite sheet, measured in rows.
     LAYERS l = LAYER_BULLET; //The sprite's layer; 0 is the background.
     Color col = WHITE;

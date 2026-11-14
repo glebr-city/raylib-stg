@@ -78,7 +78,7 @@ public:
             {
                 for (int i = -1; i <= 1; i += 2)
                 {
-                    const uint fireRate = 30 + row * 2;
+                    const unsigned int fireRate = 30 + row * 2;
                     std::vector<Enemy1State> enemy1StateVector = {Enemy1State{.desiredPos = {static_cast<float>(60 + (10 + 8 * row) * i), 0}, .speed = 70, .slowAtDesiredPos = false}, Enemy1State{.desiredPos = {static_cast<float>(60 + (10 + 10 * row) * i), 15}, .speed = 70, .fireRate = 30, .slowAtDesiredPos = false}, Enemy1State{.desiredPos = Vector2(60 + static_cast<float>(70 * i), 15 + 30 * row), .speed = 120, .fireRate = fireRate, .despawn=true}};
                     std::unique_ptr<Enemy1> newEnemy = std::make_unique<Enemy1>(enemy1BulletPool, enemy1StateVector);
                     newEnemy->spawn({Vector2(60 + 5 * i, -6 - 30 * row)});
@@ -116,12 +116,12 @@ public:
         PhaseHelper::doPreStep();
     }
 
-    void enemyKilled(const u_int _id) override
+    void enemyKilled(const unsigned int _id) override
     {
         if (_id == 10)
             bigEnemy2Killed = true;
     };
-    void enemyDespawned(const u_int _id) override
+    void enemyDespawned(const unsigned int _id) override
     {};
 };
 #endif //RAYLIB_STG_STAGE2PHASE1_H

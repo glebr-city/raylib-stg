@@ -56,7 +56,7 @@ class PhaseHelper : public StepThinker {
         Vector2 defaultBackgroundPosition{}; //Scrolling for the background and grounded enemies!
         Vector2 defaultScrollVector{}; //Scrolling for the background and grounded enemies!
 
-        u_int stepsElapsed = 0;
+        unsigned int stepsElapsed = 0;
 
     public:
         PhaseHelper(std::string _phaseName = "Unnamed Phase", const Vector2 _defaultBackgroundPosition = {}, const Vector2 _defaultScrollVector = {}, const BACKGROUNDS _background = BACKGROUND_STAGE_1) : phaseName(std::move(_phaseName)), background(_background)
@@ -135,13 +135,13 @@ class PhaseHelper : public StepThinker {
     }
 
 
-    u_int getStepsElapsed()
+    unsigned int getStepsElapsed()
     {
         return stepsElapsed;
     }
 
-    virtual void enemyKilled(u_int _id) = 0;
-    virtual void enemyDespawned(u_int _id) = 0;
+    virtual void enemyKilled(unsigned int _id) = 0;
+    virtual void enemyDespawned(unsigned int _id) = 0;
     virtual void tickStep()
     {
         stepsElapsed++;

@@ -49,7 +49,7 @@ protected:
         currentPhase = std::unique_ptr<PhaseHelper>(newPhase);
     }
 #if DEBUG_BUILD
-    static u_int maxBullets;
+    static unsigned int maxBullets;
 #endif
 
 
@@ -303,11 +303,11 @@ public:
     }
 
 #if DEBUG_BUILD
-    static u_int GetMaxBullets()
+    static unsigned int GetMaxBullets()
     {
         return maxBullets;
     }
-    static void SetMaxBullets(const u_int _maxBullets)
+    static void SetMaxBullets(const unsigned int _maxBullets)
     {
         maxBullets = _maxBullets;
     }

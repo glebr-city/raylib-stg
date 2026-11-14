@@ -32,8 +32,8 @@ protected:
         const auto playerPos = PlayerHandler::GetPlayer()->GetFinalPos();
         const auto absolutePos = BackgroundHandler::GetAbsolutePos(playerPos);
         std::stringstream ss;
-        u_int currentBullets = GlobalVariables::GetCurrentPhase()->getNumActive();
-        u_int maxBullets = GlobalVariables::GetMaxBullets();
+        unsigned int currentBullets = GlobalVariables::GetCurrentPhase()->getNumActive();
+        unsigned int maxBullets = GlobalVariables::GetMaxBullets();
         GlobalVariables::SetMaxBullets(std::max(maxBullets, currentBullets));
 
         ss << GlobalVariables::GetCurrentPhase()->getPhaseName()
@@ -116,7 +116,6 @@ public:
 class DefaultMainLoop : public MoreCompleteMainLoop
 {
 protected:
-
     void doDrawing() const override
     {
         BeginTextureMode(*target);

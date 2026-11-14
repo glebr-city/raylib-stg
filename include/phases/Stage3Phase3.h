@@ -14,7 +14,7 @@ class Stage3Phase3 : public PhaseHelper {
     std::shared_ptr<PoolingVector<AcceleratingBullet1>> bigEnemy2Bullet2Pool;
     int enemy1_4ToKillForBonusWaveLeft = 2;
     int enemy1_4ToKillForBonusWaveRight = 2;
-    static constexpr u_int wave2Delay = 300;
+    static constexpr unsigned int wave2Delay = 300;
     public:
     Stage3Phase3() : PhaseHelper("Stage3Phase3", {}, Stage3Phase1::STAGE_3_DEFAULT_SCROLL, BACKGROUND_STAGE_3) {
         enemy2Bullet1Pool = std::make_shared<PoolingVector<Enemy2Bullet1>>(300);
@@ -25,9 +25,9 @@ class Stage3Phase3 : public PhaseHelper {
         GlobalPools::AddPools({enemy2Bullet1Pool, homingBulletPool, enemy1_2BulletPool, enemy1_2BulletPool2, bigEnemy2Bullet2Pool});
     }
 
-    void spawnEnemy1_4Wave1(const u_int spawnDelay, const int i, const bool right, const u_int _id = 0) {
+    void spawnEnemy1_4Wave1(const unsigned int spawnDelay, const int i, const bool right, const unsigned int _id = 0) {
         if (!right) {
-            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(20 + i * 5, 10 + i * 20), .speed = 60},
+            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(20 + i * 5, 10 + i * 20), .speed = 60},
                              {.desiredPos = Vector2{-10, 195}, .speed = 120, .duration=120, .fireRate = 60, .slowAtDesiredPos=false},
                         {.desiredPos = Vector2{-10, 195}, .speed = 120, .despawn = true, .slowAtDesiredPos=false}
             };
@@ -37,7 +37,7 @@ class Stage3Phase3 : public PhaseHelper {
             SpawnedEnemies::spawnEnemy(std::make_shared<Enemy1_4>(std::move(newEnemy1_4)));
             return;
         } else {
-            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(100 - i * 5, 10 + i * 20), .speed = 60},
+            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(100 - i * 5, 10 + i * 20), .speed = 60},
                         {.desiredPos = Vector2{130, 195}, .speed = 120, .duration=120, .fireRate = 60, .slowAtDesiredPos=false},
                         {.desiredPos = Vector2{130, 195}, .speed = 120, .despawn = true, .slowAtDesiredPos=false}
             };
@@ -48,9 +48,9 @@ class Stage3Phase3 : public PhaseHelper {
             return;
         }
     }
-    void spawnEnemy1_4Wave2(const u_int spawnDelay, const int i, const bool right, const u_int _id = 0) {
+    void spawnEnemy1_4Wave2(const unsigned int spawnDelay, const int i, const bool right, const unsigned int _id = 0) {
         if (!right) {
-            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(20 + i * 5, 10 + i * 20), .speed = 60},
+            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(20 + i * 5, 10 + i * 20), .speed = 60},
                              {.desiredPos = Vector2{135, 5}, .speed = 120, .duration=120, .fireRate = 90, .slowAtDesiredPos=false},
                         {.desiredPos = Vector2{135, 5}, .speed = 120, .despawn = true, .slowAtDesiredPos=false}
             };
@@ -60,7 +60,7 @@ class Stage3Phase3 : public PhaseHelper {
             SpawnedEnemies::spawnEnemy(std::make_shared<Enemy1_4>(std::move(newEnemy1_4)));
             return;
         } else {
-            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(100 - i * 5, 10 + i * 20), .speed = 60},
+            const std::vector newEnemy1_4StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(100 - i * 5, 10 + i * 20), .speed = 60},
                         {.desiredPos = Vector2{-15, 5}, .speed = 120, .duration=120, .fireRate = 90, .slowAtDesiredPos=false},
                         {.desiredPos = Vector2{-15, 5}, .speed = 120, .despawn = true, .slowAtDesiredPos=false}
             };
@@ -71,9 +71,9 @@ class Stage3Phase3 : public PhaseHelper {
             return;
         }
     }
-    void spawnEnemy1_2Wave3(const u_int spawnDelay, const int i, const bool right, const u_int _id = 0) {
+    void spawnEnemy1_2Wave3(const unsigned int spawnDelay, const int i, const bool right, const unsigned int _id = 0) {
         if (!right) {
-            const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(10 + i * 5, i * 20), .speed = 60, .fireRate = 15},
+            const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(10 + i * 5, i * 20), .speed = 60, .fireRate = 15},
                              {.desiredPos = Vector2{-20, 195}, .speed = 120, .duration=80, .fireRate = 15, .slowAtDesiredPos=false},
                         {.desiredPos = Vector2{-20, 195}, .speed = 120, .despawn = true, .slowAtDesiredPos=false}
             };
@@ -83,7 +83,7 @@ class Stage3Phase3 : public PhaseHelper {
             SpawnedEnemies::spawnEnemy(std::make_shared<Enemy1_2>(std::move(newEnemy1_2)));
             return;
         } else {
-            const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(110 - i * 5, i * 20), .speed = 60, .fireRate = 15},
+            const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay}, {.desiredPos=Vector2(110 - i * 5, i * 20), .speed = 60, .fireRate = 15},
                         {.desiredPos = Vector2{140, 195}, .speed = 120, .duration=80, .fireRate = 15, .slowAtDesiredPos=false},
                         {.desiredPos = Vector2{140, 195}, .speed = 120, .despawn = true, .slowAtDesiredPos=false}
             };
@@ -95,7 +95,7 @@ class Stage3Phase3 : public PhaseHelper {
         }
     }
 
-    void spawnEnemy1_4Wave3(const u_int spawnDelay)
+    void spawnEnemy1_4Wave3(const unsigned int spawnDelay)
     {
         for (int i = -1; i <= 1; i++)
         {
@@ -106,10 +106,10 @@ class Stage3Phase3 : public PhaseHelper {
         }
     }
     void InitPhase() override {
-            const u_int spawnDelay = 1;
+            const unsigned int spawnDelay = 1;
             for (int i = 0; i < 2; i++)
             {
-                const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay},
+                const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay},
                         {.desiredPos = Vector2{-10, static_cast<float>(9 + i * 6)}, .speed = 70, .fireRate = 15, .despawn = true}
                 };
                 Enemy1_2 newEnemy1_2{enemy1_2BulletPool, enemy1_2BulletPool2, newEnemy1_2StateVector};
@@ -119,7 +119,7 @@ class Stage3Phase3 : public PhaseHelper {
             }
             for (int i = 0; i < 2; i++)
             {
-                const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<u_int>(1 + i * 53)}, {.duration = spawnDelay},
+                const std::vector newEnemy1_2StateVector{Enemy1State{.duration = static_cast<unsigned int>(1 + i * 53)}, {.duration = spawnDelay},
                         {.desiredPos = Vector2{130, static_cast<float>(9 + i * 6)}, .speed = 70, .fireRate = 15, .despawn = true}
                 };
                 Enemy1_2 newEnemy1_2{enemy1_2BulletPool, enemy1_2BulletPool2, newEnemy1_2StateVector};
@@ -155,7 +155,7 @@ class Stage3Phase3 : public PhaseHelper {
         }
         return PhaseHelper::doPhysics();
     }
-    void enemyKilled(const u_int _id) override {
+    void enemyKilled(const unsigned int _id) override {
         if (_id == 1 && stepsElapsed < 600 && --enemy1_4ToKillForBonusWaveLeft == 0) {
             for (int i =0; i < 2; i++) {
                 spawnEnemy1_4Wave2(1, i, false);
@@ -169,6 +169,6 @@ class Stage3Phase3 : public PhaseHelper {
             return;
         }
     };
-    void enemyDespawned(const u_int _id) override{};
+    void enemyDespawned(const unsigned int _id) override{};
 };
 #endif //RAYLIB_STG_STAGE3PHASE3_H

@@ -58,7 +58,7 @@ public:
             GameHandler::NextPhase();
         }
     };
-    void enemyKilled(u_int _id) override {};
-    void enemyDespawned(u_int _id) override {};
+    void enemyKilled(unsigned int _id) override {};
+    void enemyDespawned(unsigned int _id) override {};
 };
 #endif //RAYLIB_STG_STAGE2PHASE3_H

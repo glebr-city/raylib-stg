@@ -93,7 +93,7 @@ private:
     std::array<int, 11> currentSmallPartsGlowSteps{};
     std::array<int, 4> currentCrossGlowSteps{};
     std::array<int, 4> currentSuperCrossGlowSteps{};
-    uint stepsElapsed = 0;
+    unsigned int stepsElapsed = 0;
     uint8_t currentSmallPart = 0;
     uint8_t currentCross = 0;
     int smallPartsGlowSteps = 15; //Glow for this many steps after firing

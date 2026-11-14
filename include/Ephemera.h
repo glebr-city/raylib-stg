@@ -39,7 +39,7 @@ public:
         //SoundHandler::PlaySound(sound);
     }
 
-    void spawn (const Vector2 _position, const u_int scoreValue) override
+    void spawn (const Vector2 _position, const unsigned int scoreValue) override
     {
         spawn(_position);
     }

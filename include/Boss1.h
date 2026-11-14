@@ -37,7 +37,7 @@ private:
     std::shared_ptr<PoolingVector<Boss1FastBurstBullet>> simpleBullet1FastPool;
     BOSS_1_PHASES bossPhase = PRE_FIGHT;
     static constexpr std::array<Vector2, 11> smallPartOffsets = {
-        Vector2(-38.0784, 7.98439),
+        Vector2{-38.0784, 7.98439},
         Vector2(-34.6784, 13.0844),
         Vector2(-30.4284, 18.1844),
         Vector2(-20.2284, 21.5844),
@@ -49,7 +49,7 @@ private:
         Vector2(34.6784, 13.0844),
         Vector2(38.0784, 7.98439),
     };
-    uint stepsElapsed = 0;
+    unsigned int stepsElapsed = 0;
     uint8_t currentSmallPart = 0;
     int part1GlowSteps = 0;
     int part2GlowSteps = 0;

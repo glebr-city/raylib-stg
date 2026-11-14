@@ -51,7 +51,7 @@ public:
             pool->doPhysics();
         }
     }
-    static void RemoveAt(const uint i)
+    static void RemoveAt(const unsigned int i)
     {
         pools.erase(pools.begin() + i);
     }

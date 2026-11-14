@@ -36,7 +36,7 @@ protected:
 
 public:
     Enemy2(const std::shared_ptr<PoolingVector<Enemy2Bullet1>>& _bullet1Pool,
-           const std::vector<Enemy2State>& _stateVector, const uint _scoreValue = 500) : Enemy2Base(
+           const std::vector<Enemy2State>& _stateVector, const unsigned int _scoreValue = 500) : Enemy2Base(
         _stateVector, _scoreValue)
     {
         bullet1Pool = _bullet1Pool;
@@ -50,7 +50,7 @@ public:
         health = getMaxHealth();
     }
 
-    void spawn(const Vector2 _position, const u_int _scoreValue) override
+    void spawn(const Vector2 _position, const unsigned int _scoreValue) override
     {
         spawn({.pos = _position});
         scoreValue = _scoreValue;

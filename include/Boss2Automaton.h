@@ -13,8 +13,8 @@ struct Boss2AutomatonState //Based heavily on Enemy1State.
 {
     Vector2 desiredPos = {};
     float speed = 0; // Movement speed, units per second.
-    u_int duration = 0; // State will end after this many ticks if > 0 .
-    u_int fireRate = 0; // No. of ticks between shots; 0 to not shoot.
+    unsigned int duration = 0; // State will end after this many ticks if > 0 .
+    unsigned int fireRate = 0; // No. of ticks between shots; 0 to not shoot.
     bool despawn = false; // Despawn after completing this state?
     bool slowAtDesiredPos = true; //Should the enemy slow down between states?
 };
@@ -28,9 +28,9 @@ private:
     bool isDisabled = false;
 protected:
     static constexpr float PHASE_5_MOVEMENT_SPEED = 80;
-    static constexpr u_int PHASE_1_FIRE_RATE = 30;
-    static constexpr u_int PHASE_2_FIRE_RATE = 100;
-    static constexpr u_int PHASE_5_FIRE_RATE = 240;
+    static constexpr unsigned int PHASE_1_FIRE_RATE = 30;
+    static constexpr unsigned int PHASE_2_FIRE_RATE = 100;
+    static constexpr unsigned int PHASE_5_FIRE_RATE = 240;
 public:
     typedef enum
     {
@@ -99,11 +99,11 @@ protected:
     BOSS_2_AUTOMATON_PHASES currentPhase = PRE_FIGHT;
     std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>> pinkBulletPool;
     std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>> variableSpeedBulletPool;
-    u_int elapsedSteps;
+    unsigned int elapsedSteps;
     std::vector<Boss2AutomatonState> stateVector = {{.speed = 0}};
-    u_int currentStateIndex = 0;
+    unsigned int currentStateIndex = 0;
     float currentSpeed = 0;
-    u_int elapsedStepsInState = 0;
+    unsigned int elapsedStepsInState = 0;
     bool hasStartedSlowing = false;
 
 
@@ -153,8 +153,8 @@ protected:
                     0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
         const auto stepThing = elapsedSteps % _currentState.fireRate;
         const Color bulletColour = {
-            static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(109 - stepThing * 3),
-            static_cast<u_char>(194 - stepThing * 3), 255
+            static_cast<unsigned char>(255 - stepThing * 3), static_cast<unsigned char>(109 - stepThing * 3),
+            static_cast<unsigned char>(194 - stepThing * 3), 255
         };
         if (stepThing == 0) {
             shootVariableSpeedBullet(0.8f, 0, bulletColour);
@@ -184,8 +184,8 @@ protected:
                     0.2f, Vector2Subtract(stateVector[currentStateIndex].desiredPos, position).x);
         const auto stepThing = elapsedSteps % _currentState.fireRate;
         const Color bulletColour = {
-            static_cast<u_char>(255 - stepThing * 3), static_cast<u_char>(200 - stepThing * 3),
-            static_cast<u_char>(194 - stepThing * 3), 255
+            static_cast<unsigned char>(255 - stepThing * 3), static_cast<unsigned char>(200 - stepThing * 3),
+            static_cast<unsigned char>(194 - stepThing * 3), 255
         };
         if (stepThing == 0) {
             shootVariableSpeedBullet(0.8f, 0, bulletColour);
@@ -354,7 +354,7 @@ protected:
 
 public:
 
-    Boss2Automaton(const std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>>& _pinkBulletPool, const std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>>& _variableSpeedPool, const uint _scoreValue = 4000) : Enemy(_scoreValue) {
+    Boss2Automaton(const std::shared_ptr<PoolingVector<Boss2AutomatonPinkBullet>>& _pinkBulletPool, const std::shared_ptr<PoolingVector<SimpleBullet2VariableSpeed>>& _variableSpeedPool, const unsigned int _scoreValue = 4000) : Enemy(_scoreValue) {
         pinkBulletPool = _pinkBulletPool;
         variableSpeedBulletPool = _variableSpeedPool;
         elapsedSteps = -1;
@@ -441,7 +441,7 @@ public:
         return true;
     }
 
-    virtual bool enterNewState(const u_int newStateIndex)
+    virtual bool enterNewState(const unsigned int newStateIndex)
     {
         hasStartedSlowing = false;
         if (stateVector[currentStateIndex].despawn)

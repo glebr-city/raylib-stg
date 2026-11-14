@@ -84,7 +84,7 @@ private:
         spawn(EnemySpawnParametres{_position});
     };
 
-    void spawn(const Vector2 _position, const u_int _scoreValue) override {
+    void spawn(const Vector2 _position, const unsigned int _scoreValue) override {
         spawn(_position);
     };
 };

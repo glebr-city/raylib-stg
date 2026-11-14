@@ -1,7 +1,7 @@
 #include "BackgroundHandler.h"
 
 #include "OtherBackgrounds.h"
-#include "../include/raylib/raylib.h"
+#include "raylib.h"
 //
 // Created by n on 04/08/2026.
 //

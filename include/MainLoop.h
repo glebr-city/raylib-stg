@@ -15,7 +15,6 @@ public:
 
 
 public:
-    virtual ~IMainLoop() = default;
     virtual void DoMainLoop() const = 0;
 };
 #endif //RAYLIB_STG_MAINLOOP_H

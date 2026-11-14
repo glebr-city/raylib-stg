@@ -11,8 +11,8 @@ struct Enemy1State //Enemy1 can only do a few things, and all of them can be spe
 {
     Vector2 desiredPos = {};
     float speed = 0; // Movement speed, units per second.
-    u_int duration = 0; // State will end after this many ticks if > 0 .
-    u_int fireRate = 0; // No. of ticks between shots; 0 to not shoot.
+    unsigned int duration = 0; // State will end after this many ticks if > 0 .
+    unsigned int fireRate = 0; // No. of ticks between shots; 0 to not shoot.
     bool despawn = false; // Despawn after completing this state?
     bool slowAtDesiredPos = true; //Should the enemy slow down between states?
 };
@@ -22,11 +22,11 @@ class Enemy1Base : public Enemy
 private:
 protected:
     //static constexpr ANIMATED_SPRITES sprite = ENEMY_1;
-    u_int elapsedSteps;
+    unsigned int elapsedSteps;
     std::vector<Enemy1State> stateVector;
-    u_int currentStateIndex = 0;
+    unsigned int currentStateIndex = 0;
     float currentSpeed = 0;
-    u_int elapsedStepsInState = 0;
+    unsigned int elapsedStepsInState = 0;
     bool hasStartedSlowing = false;
 
     [[nodiscard]] virtual constexpr ANIMATED_SPRITES sprite() const
@@ -40,7 +40,7 @@ protected:
     }
 
 public:
-    Enemy1Base(const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 500) : Enemy(_scoreValue) {
+    Enemy1Base(const std::vector<Enemy1State>& _stateVector, const unsigned int _scoreValue = 500) : Enemy(_scoreValue) {
         elapsedSteps = -1;
         position = {0, 0};
         collider = {0, 0, 10, 10};
@@ -108,7 +108,7 @@ public:
         return true;
     }
 
-    virtual bool enterNewState(const u_int newStateIndex)
+    virtual bool enterNewState(const unsigned int newStateIndex)
     {
         hasStartedSlowing = false;
         if (stateVector[currentStateIndex].despawn)

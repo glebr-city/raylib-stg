@@ -94,9 +94,9 @@ private:
             GameHandler::NextPhase();
         }
     }
-    void enemyKilled(u_int _id) override
+    void enemyKilled(unsigned int _id) override
     {}
-    void enemyDespawned(u_int _id) override {};
+    void enemyDespawned(unsigned int _id) override {};
 private:
     void spawnEnemy1_2Wave1()
     {

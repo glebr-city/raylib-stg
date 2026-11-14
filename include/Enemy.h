@@ -12,7 +12,7 @@
 struct EnemySpawnParametres
 {
     Vector2 pos = {};
-    u_int id = 0;
+    unsigned int id = 0;
 };
 
 
@@ -29,17 +29,17 @@ public:
         LAYERS l;
     };
 private:
-    const u_int HIT_FLASH_DURATION = 90;
+    const unsigned int HIT_FLASH_DURATION = 90;
 protected:
     int health = 1;
     static constexpr ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
     Rectangle collider = {}; //The Enemy's collider
-    uint scoreValue = 500;
-    u_int id = 0; //Special IDs for keeping track of specific enemies, used by PhaseHelpers.
+    unsigned int scoreValue = 500;
+    unsigned int id = 0; //Special IDs for keeping track of specific enemies, used by PhaseHelpers.
     int currentFlashDuration = 0;
     EnemyDeathInfo deathInfo = {};
 public:
-    explicit Enemy(const uint _scoreValue = 500, const Rectangle _collider = {}, const int _health = 1, const EnemyDeathInfo _deathInfo = {})
+    explicit Enemy(const unsigned int _scoreValue = 500, const Rectangle _collider = {}, const int _health = 1, const EnemyDeathInfo _deathInfo = {})
     {
         scoreValue = _scoreValue;
         collider = _collider;
@@ -138,7 +138,7 @@ public:
         //GlobalVariables::GetCurrentPhase()->enemyDespawned(id);
     }
 
-     [[nodiscard]] u_int GetID() const
+     [[nodiscard]] unsigned int GetID() const
     {
         return id;
     }

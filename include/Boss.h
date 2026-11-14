@@ -12,7 +12,7 @@ class Boss : public Enemy
 protected:
     int maxHealth = -1;
 public:
-    explicit Boss(const uint _scoreValue = 500, const Rectangle _collider = {}, const int _health = 1) : Enemy(_scoreValue, _collider, _health) {}
+    explicit Boss(const unsigned int _scoreValue = 500, const Rectangle _collider = {}, const int _health = 1) : Enemy(_scoreValue, _collider, _health) {}
 
     void setHealth(const int _maxHealth, const int _health)
     {

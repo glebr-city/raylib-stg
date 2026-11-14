@@ -107,7 +107,7 @@ public:
         return PhaseHelper::doPhysics();
     }
 
-    void enemyKilled(u_int _id) override
+    void enemyKilled(unsigned int _id) override
     {
         switch (_id)
         {
@@ -152,6 +152,6 @@ public:
             break;
         }
     };
-    void enemyDespawned(const u_int _id) override {};
+    void enemyDespawned(const unsigned int _id) override {};
 };
 #endif //RAYLIB_STG_PHASE2_H

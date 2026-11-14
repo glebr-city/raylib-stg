@@ -11,7 +11,7 @@ protected:
     Vector2 position{};
     public:
     virtual void spawn(Vector2 _position) = 0;
-    virtual void spawn(const Vector2 _position, u_int _scoreValue) {
+    virtual void spawn(const Vector2 _position, unsigned int _scoreValue) {
         position = _position;
     }
     virtual void despawn() {};
@@ -23,7 +23,7 @@ public:
     {
         position = _pos;
     }
-    virtual u_int GetScoreValue()
+    virtual unsigned int GetScoreValue()
     {
         return 10;
     }

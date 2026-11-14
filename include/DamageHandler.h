@@ -46,7 +46,7 @@ private:
     static void grazePlayer(int i) {
         if (Player::GetIsDead())
             return;
-        ScoreHandler::addScore(static_cast<u_int>(i * 0.25 * ScoreHandler::getMultiplier()));
+        ScoreHandler::addScore(static_cast<unsigned int>(i * 0.25 * ScoreHandler::getMultiplier()));
         if (PlayerHandler::GetPlayer()->GetHyperOn())
             i = static_cast<int>(i * 0.5f);
         if (currentGrazeMetre >= maxGrazeMetre)

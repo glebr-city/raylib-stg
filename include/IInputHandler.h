@@ -5,9 +5,11 @@
 #ifndef RAYLIB_STG_IINPUTHANDLER_H
 #define RAYLIB_STG_IINPUTHANDLER_H
 #include <memory>
+#include <string>
 #include <vector>
 
 #include "raylib.h"
+#include "string.h"
 
 struct MyKey
 {
@@ -16,6 +18,11 @@ struct MyKey
     bool l = false; //Last frame, down?
     bool md = false; //Menu, down?
     bool ml = false; //Menu, last frame, down?
+    MyKey(KeyboardKey k = KEY_SPACE,
+    bool d = false,
+    bool l = false,
+    bool md = false,
+    bool ml = false);
 };
 
 struct MyButton
@@ -25,6 +32,11 @@ struct MyButton
     bool l = false; //Last frame, down?
     bool md = false; //Menu, down?
     bool ml = false; //Menu, last frame, down?
+    MyButton(GamepadButton b = GAMEPAD_BUTTON_RIGHT_FACE_DOWN,
+    bool d = false,
+    bool l = false,
+    bool md = false,
+    bool ml = false);
 };
 
 typedef enum
@@ -46,6 +58,9 @@ struct GameInput
     std::string name;
     std::vector<MyKey> keys;
     std::vector<MyButton> buttons;
+    GameInput(std::string name,
+    std::vector<MyKey> keys,
+    std::vector<MyButton> buttons);
 };
 class IInputHandler {
 public:

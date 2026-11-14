@@ -9,10 +9,10 @@
 class Stage3Phase5 : public PhaseHelper
 {
 private:
-    static constexpr u_int Enemy2_2Wave1SpawnDelay = 75; //How many frames shall pass between every enemy?
-    static constexpr u_int wave2Delay = 600;
-    static constexpr u_int wave3Delay = wave2Delay + 1000;
-    static constexpr u_int Enemy2Wave3SpawnDelay = 300; //How many frames shall pass between every enemy?
+    static constexpr unsigned int Enemy2_2Wave1SpawnDelay = 75; //How many frames shall pass between every enemy?
+    static constexpr unsigned int wave2Delay = 600;
+    static constexpr unsigned int wave3Delay = wave2Delay + 1000;
+    static constexpr unsigned int Enemy2Wave3SpawnDelay = 300; //How many frames shall pass between every enemy?
     std::shared_ptr<PoolingVector<SimpleBullet1VariableSpeed>> enemy2_2Bullet1Pool;
     std::shared_ptr<PoolingVector<SimpleBullet2Fast>> enemy1_3Bullet1Pool;
     std::shared_ptr<PoolingVector<Enemy2Bullet1>> enemy2Bullet1Pool;
@@ -135,7 +135,7 @@ public:
         return PhaseHelper::doPhysics();
     };
 
-    void enemyKilled(u_int _id) override{};
-    void enemyDespawned(u_int _id) override{};
+    void enemyKilled(unsigned int _id) override{};
+    void enemyDespawned(unsigned int _id) override{};
 };
 #endif //RAYLIB_STG_STAGE3PHASE5_H

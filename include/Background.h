@@ -37,7 +37,7 @@ public:
     {
         position = _position;
     }
-    void spawn(const Vector2 _position, u_int _scoreValue) override
+    void spawn(const Vector2 _position, unsigned int _scoreValue) override
     {
         spawn(_position);
     }

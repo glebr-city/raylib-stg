@@ -33,7 +33,7 @@ private:
     Color drawnColour = WHITE;
     int baseSpriteYOffset = 0; //Used for damage sprites
     BOSS_3_PHASES bossPhase = PRE_FIGHT;
-    uint stepsElapsed = 0;
+    unsigned int stepsElapsed = 0;
     float phase1CurrentRotation = 0;
     float phase2CurrentRotation = 0;
     float phase3CurrentRotation = 0;
@@ -151,7 +151,7 @@ public:
                             SoundHandler::PlaySound(THUMP_3);
                         const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, 1)), phase1CurrentRotation);
                         for (int i = 0; i < 5; i++) {
-                            const Color bulletColour = {static_cast<u_char>(i * 30), static_cast<u_char>(i * 30), 255, 255};
+                            const Color bulletColour = {static_cast<unsigned char>(i * 30), static_cast<unsigned char>(i * 30), 255, 255};
                             simpleBullet1VariableSpeedPool->spawn().spawn(0.4f + (i * 0.3f), position, shotDirection, bulletColour);
                         }
                         phase1CurrentRotation += 0.212930168743;
@@ -189,7 +189,7 @@ public:
                             const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, 1)), phase2CurrentRotation + k * 2.09439510239);
                             const Vector2 spawnPosition = Vector2Add(position, shotDirection * 5);
                             for (int i = 0; i < 7; i++) {
-                                const Color bulletColour = {static_cast<u_char>(i * 20), static_cast<u_char>(i * 20), 255, 255};
+                                const Color bulletColour = {static_cast<unsigned char>(i * 20), static_cast<unsigned char>(i * 20), 255, 255};
                                 for (int j = -i; j < i; j++) {
                                     simpleBullet2VariableSpeedPool->spawn().spawn(1 + (i * 0.1f), spawnPosition, Vector2Rotate(shotDirection, j * 0.06f), bulletColour);
                                 }
@@ -266,7 +266,7 @@ public:
                             if (i % 3 == 0)
                                 continue;
                             const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, 1)), phase4CurrentRotation);
-                            const Color bulletColour = {static_cast<u_char>(i * 5), static_cast<u_char>(i * 10), 200, 255};
+                            const Color bulletColour = {static_cast<unsigned char>(i * 5), static_cast<unsigned char>(i * 10), 200, 255};
                             radialBulletPool->spawn().spawn(0.5f + (i * 0.03f), j * (0.02f - i * 0.001f), position, shotDirection, bulletColour);
                             phase4CurrentRotation += 1.0471975512;
                         }
@@ -291,7 +291,7 @@ public:
                             shotRotation *= -1;
                         const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(shotRotation, 1)), phase4CurrentRotation);
                         for (int i = 0; i < 4; i++) {
-                            const Color bulletColour = {static_cast<u_char>(i * 30), static_cast<u_char>(i * 30), 255, 255};
+                            const Color bulletColour = {static_cast<unsigned char>(i * 30), static_cast<unsigned char>(i * 30), 255, 255};
                             float angularSpeed = -0.02f + (i * 0.005f);
                             if (phase4CounterClockwise)
                                 angularSpeed *= -1;
@@ -322,7 +322,7 @@ public:
                             phase5CurrentRotation);
                         for (int i = 0; i < 3; i++) {
                             const Color bulletColour = {
-                                static_cast<u_char>(220 + i * 10), static_cast<u_char>(150 - i * 2), static_cast<u_char>(220 + i * 10), 255
+                                static_cast<unsigned char>(220 + i * 10), static_cast<unsigned char>(150 - i * 2), static_cast<unsigned char>(220 + i * 10), 255
                             };
                             simpleBullet1VariableSpeedPool->spawn().spawn(
                                 0.5f + (i * 0.05f), position, shotDirection, bulletColour);
@@ -359,7 +359,7 @@ public:
                     {
                         for (int i = 0; i < 6; i++) {
                             const Vector2 shotDirection = Vector2Rotate(Vector2Normalize(Vector2(std::sin(stepsElapsed % 100 * 0.0628318530718) * 0.1, 1)), phase4CurrentRotation);
-                            const Color bulletColour = {static_cast<u_char>(150 - i * 5), static_cast<u_char>(100 + i * 25), 50, 255};
+                            const Color bulletColour = {static_cast<unsigned char>(150 - i * 5), static_cast<unsigned char>(100 + i * 25), 50, 255};
                             radialBulletPool->spawn().spawn(0.5f, j * (0.01f - i * 0.0005f), position, shotDirection, bulletColour);
                             phase4CurrentRotation += 1.0471975512;
                         }

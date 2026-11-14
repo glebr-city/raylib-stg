@@ -89,7 +89,7 @@ public:
         return PhaseHelper::doPhysics();
     };
 
-    void enemyKilled(const u_int _id) override
+    void enemyKilled(const unsigned int _id) override
     {
         switch (_id)
         {
@@ -141,7 +141,7 @@ public:
             break;
         }
     }
-    void enemyDespawned(const u_int _id) override
+    void enemyDespawned(const unsigned int _id) override
     {
         switch (_id)
         {

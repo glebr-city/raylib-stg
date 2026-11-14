@@ -12,7 +12,7 @@ private:
     float currentSpeed = 0;
     static constexpr float speed = 2;
     static constexpr float decelerationRate = 0.05f;
-    static constexpr u_int stepsToExplode = 120;
+    static constexpr unsigned int stepsToExplode = 120;
     static constexpr float radius = 3;
     bool hasBeenGrazed = false;
     Vector2 direction{};

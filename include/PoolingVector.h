@@ -10,7 +10,7 @@
 #include <iterator>
 #include <cstddef>
 
-#include "raylib/raylib.h"
+#include "raylib.h"
 
 class IPoolingVector {
 public:

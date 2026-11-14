@@ -145,6 +145,7 @@ add_executable(raylib_stg src/main.cpp
         include/phases/Boss3Phase5.h
         include/OtherBackgrounds.h
         include/Background.h
+        src/rini.cpp
 )
 
 target_sources(raylib_stg
@@ -163,7 +164,7 @@ set_target_properties(raylib PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/include
         INTERPROCEDURAL_OPTIMIZATION TRUE
 )
-
+target_include_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/build/external/raylib-master/src)
 target_include_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_include_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/include/raylib)
 target_link_directories(raylib_stg PRIVATE ${CMAKE_SOURCE_DIR}/lib)

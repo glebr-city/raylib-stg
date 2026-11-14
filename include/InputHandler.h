@@ -8,7 +8,7 @@
 #include <vector>
 
 #include "OtherInputHandlers.h"
-#include "raylib/raylib.h"
+#include "raylib.h"
 
 typedef enum
 {

@@ -15,7 +15,7 @@ class Enemy1_4 : public Enemy1Base
     static constexpr int ENEMY_1_4_HEALTH = 4;
     const std::shared_ptr<PoolingVector<HomingBullet>> bulletPool;
     public:
-    Enemy1_4(const std::shared_ptr<PoolingVector<HomingBullet>>& _bulletPool, const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 500) :
+    Enemy1_4(const std::shared_ptr<PoolingVector<HomingBullet>>& _bulletPool, const std::vector<Enemy1State>& _stateVector, const unsigned int _scoreValue = 500) :
         Enemy1Base(_stateVector, _scoreValue), bulletPool(_bulletPool)
     {
         collider = {0, 0, 14, 14};

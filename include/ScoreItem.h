@@ -6,7 +6,7 @@
 #define RAYLIB_STG_SCOREITEM_H
 #include <cmath>
 
-#include "raylib/raymath.h"
+#include "raymath.h"
 #include "ScoreHandler.h"
 #include "Spawnable.h"
 #include "SpriteHandler.h"
@@ -70,7 +70,7 @@ protected:
         value = DARK_SMALL;
     }
 
-    void spawn(const Vector2 _position, const u_int _value) override {
+    void spawn(const Vector2 _position, const unsigned int _value) override {
         currentAntiGravity = 1;
         speed = 0;
         position = _position;

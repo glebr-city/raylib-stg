@@ -6,7 +6,7 @@
 #define RAYLIB_STG_STEPTHINKER_H
 #include <iostream>
 
-#include "raylib/raylib.h"
+#include "raylib.h"
 
 
 class StepThinker {

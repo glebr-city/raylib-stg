@@ -8,7 +8,7 @@
 
 #include "GlobalVariables.h"
 #include "LifeHandler.h"
-#include "raylib/raylib.h"
+#include "raylib.h"
 #include "ScoreHandler.h"
 #include "SpriteHandler.h"
 
@@ -34,7 +34,7 @@ private:
         if (bossTimer != nullptr && *bossTimer >= 0)
             timerRatio = static_cast<float>(*bossTimer) / bossMaxTimer;
         const int timerWidth = timerRatio * gameWidth;
-        const Color healthBarColour = {static_cast<u_char>(255 - healthBarRatio * 255), static_cast<u_char>(healthBarRatio * 255), 0, 130};
+        const Color healthBarColour = {static_cast<unsigned char>(255 - healthBarRatio * 255), static_cast<unsigned char>(healthBarRatio * 255), 0, 130};
 
         if (!drawBelow)
         {

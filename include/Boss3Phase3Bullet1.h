@@ -35,7 +35,7 @@ protected:
         std::cout << "Boss3Phase3Bullet1 should not spawn like this!" << std::endl;
         throw;
     };
-    void spawn(Vector2 _position, u_int _scoreValue) override {
+    void spawn(Vector2 _position, unsigned int _scoreValue) override {
         std::cout << "Boss3Phase3Bullet1 should not spawn like this!" << std::endl;
         throw;
     }

@@ -34,7 +34,7 @@ class Stage2Phase5 : public PhaseHelper
     std::shared_ptr<PoolingVector<SimpleBullet2>> enemy1BulletPool;
     std::shared_ptr<PoolingVector<AcceleratingBullet1>> bigEnemy2Bullet2Pool;
     std::shared_ptr<PoolingVector<SimpleBullet1Fast>> streetlightBulletPool;
-    uint startBigEnemy2KillCount = 0;
+    unsigned int startBigEnemy2KillCount = 0;
 private:
     void spawnEnemy1_2Wave1()
     {
@@ -117,12 +117,12 @@ public:
         PhaseHelper::doPreStep();
     }
 
-    void enemyKilled(const u_int _id) override
+    void enemyKilled(const unsigned int _id) override
     {
         if (_id == 1)
             startBigEnemy2KillCount++;
     };
-    void enemyDespawned(const u_int _id) override
+    void enemyDespawned(const unsigned int _id) override
     {};
 };
 #endif //RAYLIB_STG_STAGE2PHASE5_H

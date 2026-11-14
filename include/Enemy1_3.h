@@ -26,7 +26,7 @@ private:
         }
     };
 public:
-    Enemy1_3(const std::shared_ptr<PoolingVector<SimpleBullet2Fast>>& _bulletPool, const std::vector<Enemy1State>& _stateVector, const uint _scoreValue = 500) : Enemy1Base(_stateVector, _scoreValue)
+    Enemy1_3(const std::shared_ptr<PoolingVector<SimpleBullet2Fast>>& _bulletPool, const std::vector<Enemy1State>& _stateVector, const unsigned int _scoreValue = 500) : Enemy1Base(_stateVector, _scoreValue)
     {
         bulletPool = _bulletPool;
     }

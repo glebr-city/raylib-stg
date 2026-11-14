@@ -62,11 +62,11 @@ private:
         {
             float fireRateFraction = static_cast<float>(shotsFired) / static_cast<float>(maxShots);
             shotsFired += 1;
-            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
-            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * -PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
+            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * PI + randomRotation), {253, 249, static_cast<unsigned char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
+            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * -PI + randomRotation), {253, 249, static_cast<unsigned char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
             fireRateFraction = static_cast<float>(shotsFired - 2) / static_cast<float>(maxShots);
-            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
-            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * -PI + randomRotation), {253, 249, static_cast<u_char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
+            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * PI + randomRotation), {253, 249, static_cast<unsigned char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
+            bulletPool->spawn().spawn(bulletSpawnPos, Vector2Rotate(Vector2(0, 1), fireRateFraction * -PI + randomRotation), {253, 249, static_cast<unsigned char>(150 * (1 - fireRateFraction)), 255}, 0.1f + fireRateFraction * 1.5f);
 
         }
     }
@@ -100,7 +100,7 @@ public:
         SpriteHandler::QueueMyAnimatedSprite(spriteParams);
     }
 
-    bool enterNewState(const u_int newStateIndex) override
+    bool enterNewState(const unsigned int newStateIndex) override
     {
         currentCooldown = 0;
         shotsFired = 0;

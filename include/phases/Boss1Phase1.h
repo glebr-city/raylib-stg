@@ -91,8 +91,8 @@ public:
         return PhaseHelper::doPhysics();
     }
 
-    void enemyKilled(u_int _id) override{};
-    void enemyDespawned(u_int _id) override{};
+    void enemyKilled(unsigned int _id) override{};
+    void enemyDespawned(unsigned int _id) override{};
 };
 
 #include "../SpawnedEnemies.h"

@@ -11,7 +11,7 @@
 
 class OrbEnemy1 : public Enemy {
 protected:
-    u_int elapsedSteps = -1;
+    unsigned int elapsedSteps = -1;
     PoolingVector<SimpleBullet2>* bulletPool;
     inline static const ANIMATED_SPRITES sprite = BULLET_1_MONOCHROME;
 public:

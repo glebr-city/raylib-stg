@@ -9,7 +9,7 @@
 #include <vector>
 #include <SoundData.h>
 
-#include "raylib/raylib.h"
+#include "raylib.h"
 
 class SoundData;
 

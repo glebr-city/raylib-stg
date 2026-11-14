@@ -10,7 +10,7 @@ class RadialBullet1 : public SimpleBullet1VariableSpeed
 {
     protected:
     float angularSpeed = 0;
-    uint stepsElapsed = 0;
+    unsigned int stepsElapsed = 0;
     Vector2 pivotPosition{};
     public:
     RadialBullet1() {

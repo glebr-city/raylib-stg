@@ -37,8 +37,8 @@ class ScoreHandler {
     return currentMultiplier;
   }
 
-  static void addScore(const u_int score, const bool useMultiplier = true) {
-    currentScore += useMultiplier ? static_cast<u_long>(currentMultiplier) * static_cast<u_long>(score) : static_cast<u_long>(score);
+  static void addScore(const unsigned int score, const bool useMultiplier = true) {
+    currentScore += useMultiplier ? static_cast<unsigned long>(currentMultiplier) * static_cast<unsigned long>(score) : static_cast<unsigned long>(score);
     setString();
   }
 

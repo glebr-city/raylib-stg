@@ -14,9 +14,9 @@ private:
     std::shared_ptr<PoolingVector<SimpleBullet1Fast>> bulletPool;
     Vector2 aimingDirection;
     static constexpr int firingPositionOffset = -4;
-    static constexpr uint maxHealth = 11;
+    static constexpr unsigned int maxHealth = 11;
     static constexpr Color color2 = {150, 150, 50, 255};
-    uint health = maxHealth;
+    unsigned int health = maxHealth;
     bool hasFired = false; //Start tracking fire cooldowns after the first shot -- ensure synchronisation!!!
     size_t stepsElapsed = 0;
 public:

@@ -4,7 +4,6 @@
 
 #ifndef RAYLIB_STG_REPLAYHANDLER_H
 #define RAYLIB_STG_REPLAYHANDLER_H
-#include <cmath>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
@@ -21,16 +20,16 @@ class ReplayHandler
 private:
     static std::string currentReplayPath;
     static std::string replayPath;
-    static u_int8_t lastInputs;
+    static uint8_t lastInputs;
     static int32_t stepsWithoutChange;
-    static std::vector<u_int16_t> currentReplayData;
+    static std::vector<uint16_t> currentReplayData;
     static bool isReadingFromFile;
     static size_t currentReplayDatumIndex;
     static std::vector<std::string> replayFilePaths;
 private:
-    static void appendCurrentReplayData(const u_int8_t _currentInputs)
+    static void appendCurrentReplayData(const uint8_t _currentInputs)
     {
-        u_int16_t newData = _currentInputs + (stepsWithoutChange << 7);
+        uint16_t newData = _currentInputs + (stepsWithoutChange << 7);
         currentReplayData.emplace_back(newData);
         stepsWithoutChange = 0;
     }
@@ -47,7 +46,7 @@ public:
         currentReplayPath = ss.str();
         std::ifstream nameTestFile{currentReplayPath};
         if (nameTestFile)
-            for (u_int32_t i = 0; i < UINT32_MAX; i++)
+            for (uint32_t i = 0; i < UINT32_MAX; i++)
             {
                 nameTestFile.close();
                 nameTestFile.clear();
@@ -94,7 +93,7 @@ public:
             }
             isReadingFromFile = true;
             std::cout << "File exists: " << tempReplayPath << std::endl;
-            const size_t dataPointCount = std::filesystem::file_size(tempReplayPath) / sizeof(u_int16_t);
+            const size_t dataPointCount = std::filesystem::file_size(tempReplayPath) / sizeof(uint16_t);
             currentReplayData.resize(dataPointCount + 1);
             std::cout << "Replay data point count: " << dataPointCount << std::endl;
             uint16_t readData = 0;
@@ -132,8 +131,8 @@ public:
         //  std::cout << strInput << '\n';
         currentReplayData.emplace_back(128);
         for (auto data: currentReplayData) {
-            uint input = (data) % 128;
-            uint length = (data >> 7);
+            unsigned int input = (data) % 128;
+            unsigned int length = (data >> 7);
             std::cout << "Input: " <<
                     "Left: " << (input & 1) << " Right: " << (input >> 1 & 1) << " Up: " << (input >> 2 & 1) <<
                     " Length: " << length << std::endl;

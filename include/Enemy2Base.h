@@ -10,7 +10,7 @@ struct Enemy2State //Copied and pasted from Enemy1Base for the most part... it s
 {
     Vector2 desiredPos = {};
     float speed = 0; // Movement speed, units per second.
-    u_int duration = 0; // State will end after this many ticks if > 0 .
+    unsigned int duration = 0; // State will end after this many ticks if > 0 .
     int shotCount = 0; //No. of shots per burst; 0 not to shoot.
     int shotWaitTime = 3; // No. of ticks between shots; 0 to not shoot.
     int burstWaitTime = 15; // The enemy aims once for every burst.
@@ -24,14 +24,14 @@ class Enemy2Base : public Enemy
 protected:
     static constexpr int shotGlowTime = 10; //How long to glow for after a shot.
     int currentShotGlowTime = 0;
-    u_int elapsedSteps;
+    unsigned int elapsedSteps;
     std::vector<Enemy2State> stateVector;
     int remainingShots = 0; //How many more times to shoot in this burst?
-    u_int currentStateIndex = 0;
+    unsigned int currentStateIndex = 0;
     int currentShotWaitTime = 0;
     int currentBurstWaitTime = 0;
     float currentSpeed = 0;
-    u_int elapsedStepsInState = 0;
+    unsigned int elapsedStepsInState = 0;
     Vector2 shotDirection = {};
     Vector2 targetPosition = {};
     bool hasStartedSlowing = false;
@@ -91,7 +91,7 @@ protected:
     }
 
 public:
-    Enemy2Base(const std::vector<Enemy2State>& _stateVector, const uint _scoreValue = 500) : Enemy(_scoreValue)
+    Enemy2Base(const std::vector<Enemy2State>& _stateVector, const unsigned int _scoreValue = 500) : Enemy(_scoreValue)
     {
         health = Enemy2Base::getMaxHealth();
         elapsedSteps = -1;
@@ -170,7 +170,7 @@ public:
     }
 
 
-    virtual bool enterNewState(const u_int newStateIndex)
+    virtual bool enterNewState(const unsigned int newStateIndex)
     {
         if (stateVector[currentStateIndex].despawn)
             return false;

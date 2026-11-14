@@ -16,7 +16,7 @@ public:
 
     }
     /*void spawn(Vector2 _position) override = 0;
-    void spawn(Vector2 _position, u_int _scoreValue) override = 0;
+    void spawn(Vector2 _position, unsigned int _scoreValue) override = 0;
     void spawn(const Vector2 pos, const Vector2 dir, const Color col) override = 0;*/
 
     void spawn(const float _speed, Vector2 pos, const Vector2 dir, const Color col)
